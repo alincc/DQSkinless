@@ -1,0 +1,39 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Manager
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+<ion-content>
+	<ion-card>
+		<ion-title>
+			Name
+		</ion-title>
+		<ion-card-content>
+			<p>Doctors: doctor1, doctor2</p>
+			<p>Assistant: assistant1, assistant2</p>
+			<p>Hospital/Clinic: Clinic1</p>
+		</ion-card-content>
+		<ion-row>
+			<ion-col>
+				<button ion-button icon-only clear>
+					<ion-icon name="construct"></ion-icon>
+				</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button icon-only clear>
+					<ion-icon name="trash"></ion-icon>
+				</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button icon-only  clear (click)="go()">
+					<ion-icon name="arrow-forward"></ion-icon>
+				</button>
+			</ion-col>
+		</ion-row>
+	</ion-card>
+	<ion-fab bottom right>
+		<button ion-fab><ion-icon name="add"></ion-icon></button>
+	</ion-fab>
+</ion-content>

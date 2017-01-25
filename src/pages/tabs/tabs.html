@@ -1,0 +1,22 @@
+<ion-menu [content]="sideMenu">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Pages</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <button ion-item (click)="openPage(loginPage)">
+        Login
+      </button>
+      <button ion-item (click)="openPage(signupPage)">
+        Signup
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<ion-tabs #sideMenu>
+  <ion-tab [root]="tab1Root" tabTitle="Schedule" tabIcon="time"></ion-tab>
+  <ion-tab [root]="tab2Root" tabTitle="Patient" tabIcon="pulse"></ion-tab>
+  <ion-tab [root]="tab3Root" tabTitle="Chat" tabIcon="people"></ion-tab>
+</ion-tabs>
