@@ -3,6 +3,8 @@ import { SchedulePage } from '../pages/schedule/schedule.page';
 import { PatientPage } from '../pages/patient/patient.page';
 import { ChatPage } from '../pages/chat/chat.page';
 import { ManagerPage } from '../pages/manager/manager.page';
+import { LoginPage } from '../pages/login/login.page';
+import { NotificationPage } from '../pages/notification/notification.page';
 
 
 export const pages: any[] = [
@@ -11,4 +13,6 @@ export const pages: any[] = [
 	,PatientPage
 	,ChatPage
 	,ManagerPage
+	,LoginPage
+	,NotificationPage
 ]

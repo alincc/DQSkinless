@@ -10,14 +10,15 @@
 </ion-header>
 <ion-content>
 	<ion-card>
-		<ion-title>
-			1. Name of Patient
-		</ion-title>
-		<ion-card-content>
+		<ion-item>
+			<ion-avatar  item-left>
+				<img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
+			</ion-avatar >
+			<h2>1. Name of Patient</h2>
 			<p>Time: - </p>
 			<p>Date: January 31, 2016</p>
 			<p>Hospital/Clinic: Clinic1</p>
-		</ion-card-content>
+		</ion-item>
 		<ion-row>
 			<ion-col width-33 >
 				<button ion-button icon-only clear>
@@ -25,47 +26,47 @@
 					Done
 				</button>
 			</ion-col><ion-col width-33 >
-				<button ion-button icon-only clear>
-					<ion-icon name="swap"></ion-icon>
-					Next
-				</button>
-			</ion-col>
-			<ion-col width-33>
-				<button ion-button icon-only  clear (click)="go()">
-					<ion-icon name="arrow-forward"></ion-icon>
-					View
-				</button>
-			</ion-col>
-		</ion-row>
-	</ion-card>
-	<ion-list>
-		<ion-item-sliding>
-			<button ion-item >
-				<ion-avatar  item-left>
-					<img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
-				</ion-avatar >
-				<h3>2. Name of Patient</h3>
-				<p>Time: - </p>
-				<p>Date: January 31, 2016</p>
-				<p>Hospital/Clinic: Clinic1</p>
+			<button ion-button icon-only clear>
+				<ion-icon name="swap"></ion-icon>
+				Next
 			</button>
-			<ion-item-options side="left">
-				<button ion-button color="danger">
-					<ion-icon name="trash"></ion-icon>
-					Delete
-				</button>
-				<button ion-button color="secondary">
-					<ion-icon name="md-create"></ion-icon>
-					Edit
-				</button>
-				<button ion-button color="secondary">
-					<ion-icon name="medical"></ion-icon>
-					Serve Now
-				</button>
-			</ion-item-options>
-		</ion-item-sliding>
-	</ion-list> 
-	<ion-fab bottom right>
-		<button ion-fab><ion-icon name="add"></ion-icon></button>
-	</ion-fab>
+		</ion-col>
+		<ion-col width-33>
+			<button ion-button icon-only  clear (click)="go()">
+				<ion-icon name="arrow-forward"></ion-icon>
+				View
+			</button>
+		</ion-col>
+	</ion-row>
+</ion-card>
+<ion-list>
+	<ion-item-sliding>
+		<button ion-item >
+			<ion-avatar  item-left>
+				<img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
+			</ion-avatar >
+			<h3>2. Name of Patient</h3>
+			<p>Time: - </p>
+			<p>Date: January 31, 2016</p>
+			<p>Hospital/Clinic: Clinic1</p>
+		</button>
+		<ion-item-options side="left">
+			<button ion-button color="danger">
+				<ion-icon name="trash"></ion-icon>
+				Delete
+			</button>
+			<button ion-button color="secondary">
+				<ion-icon name="md-create"></ion-icon>
+				Edit
+			</button>
+			<button ion-button color="secondary">
+				<ion-icon name="walk"></ion-icon>
+				Serve Now
+			</button>
+		</ion-item-options>
+	</ion-item-sliding>
+</ion-list> 
+<ion-fab bottom right>
+	<button ion-fab><ion-icon name="add"></ion-icon></button>
+</ion-fab>
 </ion-content>

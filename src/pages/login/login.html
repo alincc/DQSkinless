@@ -1,0 +1,19 @@
+<ion-content padding>
+	<form #form="ngForm" (submit)="login()">
+		<ion-list no-lines>
+			<ion-item>
+				<h1>Welcome to Asclepius</h1>
+			</ion-item>
+			<ion-item>
+				<ion-label floating>Username</ion-label>
+				<ion-input type="text"></ion-input>
+			</ion-item>
+
+			<ion-item>
+				<ion-label floating>Password</ion-label>
+				<ion-input type="password"></ion-input>
+			</ion-item>
+		</ion-list>
+		<button ion-button block color="primary"> Login </button>
+	</form>
+</ion-content>

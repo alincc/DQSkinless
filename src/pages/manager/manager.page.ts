@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TabsPage } from '../tabs/tabs';
-import { NavController } from 'ionic-angular';
+import { App } from 'ionic-angular';
 
 
 @Component({
@@ -9,11 +9,9 @@ import { NavController } from 'ionic-angular';
 })
 export class ManagerPage{
 	
-	constructor(private nav: NavController){
-
-	}
+	constructor(private app: App){}
 
 	go(){
-		this.nav.push(TabsPage);
+		this.app.getRootNav().setRoot(TabsPage);
 	}
 }	

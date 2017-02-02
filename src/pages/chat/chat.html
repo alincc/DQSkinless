@@ -1,12 +1,43 @@
 <ion-header>
 	<ion-navbar color="primary">
 		<button ion-button menuToggle>
-	      <ion-icon name="menu"></ion-icon>
-	    </button>
+			<ion-icon name="menu"></ion-icon>
+		</button>
 		<ion-title>
 			Chat
 		</ion-title>
 	</ion-navbar>
 </ion-header>
 <ion-content>
+	<ion-grid>
+		<ion-row>
+			<ion-col offset-10 width-90>
+				<ion-card >
+					<ion-card-header>
+						Me
+					</ion-card-header>
+					<ion-card-content>
+						Let them in
+					</ion-card-content>
+				</ion-card>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col width-90>
+				<ion-card>
+					<ion-card-header>
+						Assistant2
+					</ion-card-header>
+					<ion-card-content>
+						Ok doc!!!
+					</ion-card-content>
+				</ion-card>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
 </ion-content>
+<ion-footer>
+	<form class="form-inline">
+	<ion-input></ion-input> <button ion-button clear icon-only><ion-icon name="send"></ion-icon></button>
+	</form>
+</ion-footer>
