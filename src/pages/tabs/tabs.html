@@ -1,22 +1,21 @@
 <ion-menu [content]="sideMenu">
-  <ion-header color="primary">
-    <ion-toolbar>
-      <ion-title>Pages</ion-title>
-    </ion-toolbar>
-  </ion-header>
   <ion-content>
     <ion-list>
       <img src="https://tribzap2it.files.wordpress.com/2015/10/ken-jeong-dr-ken-abc.jpg">
-      <button ion-item (click)="openManager()">
+      <button ion-item (click)="openManager()" color="secondary">
+        <ion-icon name="contact"></ion-icon>
         Account
       </button>
-      <button ion-item (click)="openManager()">
+      <button ion-item (click)="openManager()" color="secondary">
+        <ion-icon name="browsers"></ion-icon>
         Change Group
       </button>
-      <button ion-item (click)="openManager()">
+      <button ion-item (click)="openManager()" color="secondary">
+        <ion-icon name="cog"></ion-icon>
         Settings
       </button>
-      <button ion-item (click)="logout()">
+      <button ion-item (click)="logout()" color="secondary">
+      <ion-icon name="exit"></ion-icon>
         Log-out
       </button>
     </ion-list>
@@ -24,7 +23,7 @@
 </ion-menu>
 <ion-tabs #sideMenu>
   <ion-tab [root]="notification" tabTitle="Notifications" tabIcon="notifications"></ion-tab>
-  <ion-tab [root]="schedule" tabTitle="Schedule" tabIcon="time"></ion-tab>
-  <ion-tab [root]="patient" tabTitle="Patient" tabIcon="body"></ion-tab>
-  <ion-tab [root]="chat" tabTitle="Chat" tabIcon="chatbubbles"></ion-tab>
+  <ion-tab [root]="schedule" tabTitle="Schedule" tabIcon="time" color="accent"></ion-tab>
+  <ion-tab [root]="patient" tabTitle="Patient" tabIcon="body" color="accent"></ion-tab>
+  <ion-tab [root]="chat" tabTitle="Chat" tabIcon="chatbubbles" color="accent"></ion-tab>
 </ion-tabs>

@@ -1,6 +1,8 @@
 chat-page{
 	.form-inline{
 		display: flex;
-		
+		ion-input{
+			background: $light;
+		}
 	}
 }

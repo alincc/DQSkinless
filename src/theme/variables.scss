@@ -23,27 +23,46 @@ $font-path: "../assets/fonts";
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.
 
+$primary: #424242;
+$primary-light: #BDBDBD;
+$secondary: #E0E0E0;
+$secondary-light: #FAFAFA;
+$accent: #FFC400;
+$accent-light: #FFE57F;
+$dark: #212121;
+$light: #FFFFFF;
+$danger: #F44336;
+
 $colors: (
-  primary:    #387ef5,
-  secondary:  #32db64,
-  danger:     #f53d3d,
-  light:      #f4f4f4,
-  dark:       #222
+  primary:    $primary,
+  primary-light: $primary-light,
+  secondary:  $secondary,
+  secondary-light: $secondary-light,
+  accent: $accent,
+  accent-light: $accent-light,
+  danger:     $danger,
+  light:      $light,
+  dark:       $dark
 );
 
 
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here
-
+$tabs-ios-tab-icon-color: $accent-light;
+$tabs-ios-tab-icon-color-active : $accent;
+$tabs-ios-tab-text-color-active: $accent;
+$tabs-ios-tab-text-color: $accent-light;
 
 
 
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
-
-
+$tabs-md-tab-icon-color-active: $accent;
+$tabs-md-tab-icon-color: $accent-light;
+$tabs-md-tab-text-color-active: $accent;
+$tabs-md-tab-text-color: $accent-light;
 
 
 // App Windows Variables
@@ -61,7 +80,6 @@ $colors: (
 // default are overridden.
 
 @import "ionic.theme.default";
-
 
 // Ionicons
 // --------------------------------------------------
