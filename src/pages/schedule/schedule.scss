@@ -1,0 +1,22 @@
+schedule-page{
+	ion-header{
+		background: $primary;
+		ion-avatar>img{
+			height: 25vw !important;
+			width: 25vw !important;
+			margin-right: 5vw;
+		}
+
+		ion-col{
+			border: solid 0.55px $primary-light;
+			border-top: 0px;
+			border-left: 0px;
+			&:last-child{
+				border-right: 0px;
+			}
+			.button{
+				color: $accent;
+			}
+		}
+	}
+}

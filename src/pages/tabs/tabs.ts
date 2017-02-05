@@ -9,6 +9,7 @@ import { ManagerPage } from '../manager/manager.page';
 import { NotificationPage } from '../notification/notification.page';
 
 @Component({
+	selector: 'tabs',
 	templateUrl: 'tabs.html'
 })
 export class TabsPage {
