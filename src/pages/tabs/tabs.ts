@@ -7,6 +7,7 @@ import { ChatPage } from '../chat/chat.page';
 import { LoginPage } from '../login/login.page';
 import { ManagerPage } from '../manager/manager.page';
 import { NotificationPage } from '../notification/notification.page';
+import { ProfilePage } from '../profile/profile.page';
 
 @Component({
 	selector: 'tabs',
@@ -30,6 +31,10 @@ export class TabsPage {
 
 	openManager(){
 		this.nav.push(ManagerPage);
+	}
+
+	openProfile(){
+		this.nav.push(ProfilePage);
 	}
 
 

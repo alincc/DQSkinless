@@ -1,0 +1,18 @@
+<ion-content>
+	<div class="frame">
+		<ion-row *ngIf="!image">
+			<ion-col width-50>
+				<button ion-button clear (click)="openCamera()">
+					<ion-icon name="camera"></ion-icon>
+					Upload from Camera</button>
+				</ion-col>
+				<ion-col width-50>
+					<button ion-button clear (click)="openAlbum()">
+					<ion-icon name="images"></ion-icon>
+					Upload from Album</button>
+					
+				</ion-col>
+			</ion-row>
+			<img [src]="image" *ngIf="image">
+		</div>
+	</ion-content>

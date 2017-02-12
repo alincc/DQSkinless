@@ -1,0 +1,28 @@
+<ion-header>
+	<ion-navbar color="primary">
+		<ion-title>
+			Registration
+		</ion-title>
+	</ion-navbar>
+	<div class="flow-nav">
+		<div class="checklist " [ngClass]="{'active':step == 1}">	
+			Update Password
+		<div class="registration-arrow"></div>
+		</div>
+		<div class="checklist" [ngClass]="{'active':step == 2}">
+			Update Profile
+		<div class="registration-arrow"></div>
+		</div>
+		<div class="checklist" [ngClass]="{'active':step == 3}">
+			Update Photo
+		<div class="registration-arrow"></div>
+		</div>
+		<div class="checklist" [ngClass]="{'active':step == 4}">
+			Assistant
+		<div class="registration-arrow"></div>
+		</div>
+	</div>
+</ion-header>
+<ion-content>
+<ion-nav [root]="root" [rootParams]="params"></ion-nav>
+</ion-content>

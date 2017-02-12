@@ -1,0 +1,50 @@
+registration-page{
+	.flow-nav{
+		display: inline-flex;
+	    width: 100%;
+	    padding-right: 25px;
+	    .checklist{
+	    	background-color: $secondary;
+	    	flex: 1;
+		    margin-right: -15px;
+		    padding: 10px 10px 10px 50px;
+		    border-top: $light solid 10px;
+		    border-bottom: $light solid 10px;
+		    &:first-child{
+		    	padding-left: 10px;
+		    }
+	    	.registration-arrow{
+	    		border-top: $light solid 10px;
+	    		border-right: $light solid 10px;
+	    		background-color: $secondary;
+			    display: inline-flex;
+			    height: 40px;
+			    width: 40px;
+			    margin-top:-10px;
+			    margin-bottom:-10px;
+			    margin-right:-22.5px;
+			    transform: rotate(45deg);
+			    float: right;
+	    	}
+	    	&.active{
+	    		background-color: $accent;
+	    		.registration-arrow{
+	    			background-color:$accent;
+	    		}
+	    	}
+	    }
+		// ion-col{
+		// 	background-color: $secondary;
+		// 	.registration-arrow{
+		// 		background-color: blue;
+		// 		height: 20px;
+		// 		width: 20px;
+		// 		transform: rotate(45deg);
+		// 	}
+		// 	&[active]{
+		// 		background-color: $accent;
+		// 	}
+		// }
+
+	}
+}

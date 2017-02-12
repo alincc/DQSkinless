@@ -1,0 +1,22 @@
+upload-photo-form{
+	.frame{
+		width: initial !important;
+		margin: 30px;
+		ion-row{
+			border: 3px dashed !important;
+			ion-col:last-child{
+				border-left: 1px dashed;
+			}
+			button{
+				height: 50vh !important;
+				width: 100%;
+				.button-inner{
+				    flex-direction: column;
+					ion-icon{
+						font-size: 8em;
+					}
+				}
+			}
+		}
+	}
+}
