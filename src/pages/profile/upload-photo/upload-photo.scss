@@ -1,9 +1,11 @@
 upload-photo-form{
+	text-align: center;
 	.frame{
 		width: initial !important;
 		margin: 30px;
 		ion-row{
 			border: 3px dashed !important;
+			border-radius: 20px;
 			ion-col:last-child{
 				border-left: 1px dashed;
 			}
@@ -13,7 +15,7 @@ upload-photo-form{
 				.button-inner{
 				    flex-direction: column;
 					ion-icon{
-						font-size: 8em;
+						font-size: 7em;
 					}
 				}
 			}

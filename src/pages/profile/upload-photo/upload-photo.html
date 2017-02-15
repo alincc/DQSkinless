@@ -4,15 +4,19 @@
 			<ion-col width-50>
 				<button ion-button clear (click)="openCamera()">
 					<ion-icon name="camera"></ion-icon>
-					Upload from Camera</button>
-				</ion-col>
-				<ion-col width-50>
-					<button ion-button clear (click)="openAlbum()">
+					From Camera
+				</button>
+			</ion-col>
+			<ion-col width-50>
+				<button ion-button clear (click)="openAlbum()">
 					<ion-icon name="images"></ion-icon>
-					Upload from Album</button>
-					
-				</ion-col>
-			</ion-row>
-			<img [src]="image" *ngIf="image">
-		</div>
-	</ion-content>
+					From Album
+				</button>
+
+			</ion-col>
+		</ion-row>
+		<img [src]="image" *ngIf="image">
+	</div>
+	<button ion-button round large color="danger">Clear</button>
+	<button ion-button round large color="accent">Submit</button>
+</ion-content>

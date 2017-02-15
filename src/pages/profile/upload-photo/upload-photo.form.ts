@@ -11,12 +11,10 @@ export class UploadPhotoForm{
 	constructor(private nav:NavController){}
 
 	public openCamera(){
-		Camera.getPicture({cameraDirection:1,destinationType:2}).then((imageData) => {
+		Camera.getPicture({cameraDirection:1,destinationType:2, correctOrientation:true,encodingType: 0}).then((imageData) => {
 		 // imageData is either a base64 encoded string or a file URI
 		 // If it's base64:
-		 // let base64Image = 'data:image/jpeg;base64,' + imageData;
-		 console.log(imageData);
-		 this.image.imageData;
+		 this.image = 'data:image/jpeg;base64,' + imageData;
 		}, (err) => {
 		 // Handle error
 		});
@@ -30,6 +28,8 @@ export class UploadPhotoForm{
 		      this.image.imageData(results[i]);
 		  }
 		}, (err) => { });
+
 	}
 
 }
+
