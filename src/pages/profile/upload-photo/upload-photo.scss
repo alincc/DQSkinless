@@ -3,9 +3,9 @@ upload-photo-form{
 	.frame{
 		width: initial !important;
 		margin: 30px;
+		border: 3px dashed !important;
+		border-radius: 20px;
 		ion-row{
-			border: 3px dashed !important;
-			border-radius: 20px;
 			ion-col:last-child{
 				border-left: 1px dashed;
 			}
@@ -19,6 +19,9 @@ upload-photo-form{
 					}
 				}
 			}
+		}
+		img{
+			border-radius: 20px;
 		}
 	}
 }

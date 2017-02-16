@@ -13,6 +13,7 @@ import { RegistrationPage } from '../pages/registration/registration.page';
 import { ChangePasswordForm } from '../pages/change-password/form/change-password.form';
 import { ProfileForm } from '../pages/profile/form/profile.form';
 import { UploadPhotoForm } from '../pages/profile/upload-photo/upload-photo.form';
+import { AssistantManagerForm } from '../pages/assistant-manager/assistant-manager.form';
 export const pages: any[] = [
 	TabsPage
 	,SchedulePage
@@ -29,4 +30,5 @@ export const pages: any[] = [
 	,ChangePasswordForm
 	,ProfileForm
 	,UploadPhotoForm
+	,AssistantManagerForm
 ]

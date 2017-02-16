@@ -14,6 +14,6 @@ export class ProfileForm{
 
 	public submit(){
 		this.params.data.parent.step = 3;
-		this.nav.push(UploadPhotoForm);
+		this.nav.push(UploadPhotoForm, {parent: this.params.data.parent});
 	}
 }
