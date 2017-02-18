@@ -2,7 +2,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { ManagerPage } from '../manager/manager.page';
-import { ChangePasswordPage } from '../change-password/change-password.page';
 import { RegistrationPage } from '../registration/registration.page';
 @Component({
 	selector: 'login-page',
@@ -13,6 +12,6 @@ export class LoginPage{
 	constructor(private nav: NavController){}
 
 	public login(){
-		this.nav.setRoot(RegistrationPage);
+		this.nav.setRoot(ManagerPage);
 	}
 }

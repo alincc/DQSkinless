@@ -17,22 +17,33 @@
 			<p>Hospital/Clinic: Clinic1</p>
 		</ion-item>
 		<ion-row>
-			<ion-col width-33 >
+			<ion-col width-33 width-md-25>
 				<button ion-button icon-only clear full>
 					<ion-icon name="thumbs-up" color="accent"></ion-icon>
 					Done
 				</button>
 			</ion-col>
-			<ion-col width-33 >
+			<ion-col width-33 width-md-25>
 				<button ion-button icon-only clear full>
 					<ion-icon name="swap" color="accent"></ion-icon>
 					Next
 				</button>
 			</ion-col>
-			<ion-col width-33>
-				<button ion-button icon-only  clear (click)="go()" full>
+			<ion-col width-33 width-md-0>
+				<button ion-button icon-only clear full (click)="showMore($event)">
+					<ion-icon name="more" color="accent"></ion-icon>
+				</button>
+			</ion-col>
+			<ion-col width-md-25>
+				<button ion-button icon-only  clear  full>
 					<ion-icon name="folder-open" color="accent"></ion-icon>
 					View
+				</button>
+			</ion-col>
+			<ion-col width-md-25>
+				<button ion-button icon-only  clear full>
+					<ion-icon name="eye-off" color="accent"></ion-icon>
+					No-Show
 				</button>
 			</ion-col>
 		</ion-row>

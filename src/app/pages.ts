@@ -1,5 +1,6 @@
 import { TabsPage } from '../pages/tabs/tabs';
 import { SchedulePage } from '../pages/schedule/schedule.page';
+import { MoreMenuPopover } from '../pages/schedule/more.popover';
 import { PatientPage } from '../pages/patient/patient.page';
 import { ChatPage } from '../pages/chat/chat.page';
 import { ManagerPage } from '../pages/manager/manager.page';
@@ -17,6 +18,7 @@ import { AssistantManagerForm } from '../pages/assistant-manager/assistant-manag
 export const pages: any[] = [
 	TabsPage
 	,SchedulePage
+	,MoreMenuPopover
 	,PatientPage
 	,ChatPage
 	,ManagerPage
