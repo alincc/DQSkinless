@@ -1,32 +1,36 @@
-import { TabsPage } from '../pages/tabs/tabs';
-import { SchedulePage } from '../pages/schedule/schedule.page';
-import { PatientPage } from '../pages/patient/patient.page';
-import { ChatPage } from '../pages/chat/chat.page';
-import { ManagerPage } from '../pages/manager/manager.page';
-import { LoginPage } from '../pages/login/login.page';
-import { NotificationPage } from '../pages/notification/notification.page';
-import { ProfilePage } from '../pages/profile/profile.page';
-import { ChangePasswordPage } from '../pages/change-password/change-password.page';
 import { BlankPage } from '../pages/blank/blank.page';
+import { ChatPage } from '../pages/chat/chat.page';
+import { LoginPage } from '../pages/login/login.page';
+import { ManagerPage } from '../pages/manager/manager.page';
+import { NotificationPage } from '../pages/notification/notification.page';
+import { PatientPage } from '../pages/patient/patient.page';
+import { ProfilePage } from '../pages/profile/profile.page';
 import { RegistrationPage } from '../pages/registration/registration.page';
+import { SchedulePage } from '../pages/schedule/schedule.page';
+import { StepOnePage } from '../pages/registration/step-one/step-one.page';
+import { TabsPage } from '../pages/tabs/tabs';
 
-import { ChangePasswordForm } from '../pages/change-password/form/change-password.form';
+
+import { ChangePasswordPage } from '../pages/change-password/change-password.page';
+
 import { ProfileForm } from '../pages/profile/form/profile.form';
 import { UploadPhotoForm } from '../pages/profile/upload-photo/upload-photo.form';
-export const pages: any[] = [
-	TabsPage
-	,SchedulePage
-	,PatientPage
-	,ChatPage
-	,ManagerPage
-	,LoginPage
-	,NotificationPage
-	,ProfilePage
-	,ChangePasswordPage
-	,BlankPage
-	,RegistrationPage
 
-	,ChangePasswordForm
-	,ProfileForm
-	,UploadPhotoForm
+export const pages: any[] = [
+	BlankPage,
+	ChatPage,
+	LoginPage,
+	ManagerPage,
+	NotificationPage,
+	PatientPage,
+	ProfilePage,
+	RegistrationPage,
+	SchedulePage,
+	StepOnePage,
+	TabsPage,
+
+	ChangePasswordPage,
+
+	ProfileForm,
+	UploadPhotoForm
 ]

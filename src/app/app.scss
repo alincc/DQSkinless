@@ -16,4 +16,36 @@
 // automatically applied to the <body> element in the app.
 
 ion-app{
+    
+    ion-item.item-input[field] {
+        display: inline-block;
+        border: 0 0 1px 0 !important;
+        border-color: 1px solid $secondary ;
+        box-shadow: none !important;
+        min-height: 35px !important;
+
+        .select-icon-inner {
+            color: transparent !important;
+        }
+
+        .item-inner {
+            box-shadow: none !important;
+            border: none !important;
+        }
+    }
+
+    ion-item.item-input[field].ng-invalid:not(.item-input-disabled) {
+        display: inline-block;
+        border-bottom-color: $secondary;
+    }
+
+    ion-item.item-input[field].ng-valid.input-has-value:not(.input-has-focus):last-child {
+        display: inline-block;
+        border-bottom-color: $secondary;
+    }
+
+    ion-item.item-input[field].input-has-focus:last-child{
+        display: inline-block;
+        border-bottom-color: $secondary;
+    }
 }

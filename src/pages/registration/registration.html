@@ -6,31 +6,31 @@
 	</ion-navbar>
 	<div class="flow-nav">
 		<div class="checklist " [ngClass]="{'active':step == 1}">
-			<ion-label>	
-			Update Password
+			<ion-label>
+				Update Password
 			</ion-label>
-		<div class="registration-arrow"></div>
+			<div class="registration-arrow"></div>
 		</div>
 		<div class="checklist" [ngClass]="{'active':step == 2}">
 			<ion-label>
-			Update Profile
+				Update Profile
 			</ion-label>
-		<div class="registration-arrow"></div>
+			<div class="registration-arrow"></div>
 		</div>
 		<div class="checklist" [ngClass]="{'active':step == 3}">
 			<ion-label>
-			Update Photo
+				Update Photo
 			</ion-label>
-		<div class="registration-arrow"></div>
+			<div class="registration-arrow"></div>
 		</div>
 		<div class="checklist" [ngClass]="{'active':step == 4}">
 			<ion-label>
-			Assistant
+				Assistant
 			</ion-label>
-		<div class="registration-arrow"></div>
+			<div class="registration-arrow"></div>
 		</div>
 	</div>
 </ion-header>
 <ion-content>
-<ion-nav [root]="root" [rootParams]="params"></ion-nav>
+	<ion-nav [root]="root" [rootParams]="params"></ion-nav>
 </ion-content>

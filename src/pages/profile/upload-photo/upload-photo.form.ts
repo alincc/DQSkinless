@@ -1,34 +1,42 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { Camera, ImagePicker } from 'ionic-native';
+
+import { AssistantForm } from '../assistant/assistant.form';
 
 @Component({
 	selector: 'upload-photo-form',
 	templateUrl: 'upload-photo.html'
 })
-export class UploadPhotoForm{
-	public image:any;
-	constructor(private nav:NavController){}
+export class UploadPhotoForm {
+	public image: any;
+	constructor(private nav: NavController,
+		private params: NavParams) { }
 
-	public openCamera(){
-		Camera.getPicture({cameraDirection:1,destinationType:2, correctOrientation:true,encodingType: 0}).then((imageData) => {
-		 // imageData is either a base64 encoded string or a file URI
-		 // If it's base64:
-		 this.image = 'data:image/jpeg;base64,' + imageData;
+	public openCamera() {
+		Camera.getPicture({ cameraDirection: 1, destinationType: 2, correctOrientation: true, encodingType: 0 }).then((imageData) => {
+			// imageData is either a base64 encoded string or a file URI
+			// If it's base64:
+			this.image = 'data:image/jpeg;base64,' + imageData;
 		}, (err) => {
-		 // Handle error
+			// Handle error
 		});
 	}
 
-	public openAlbum(){
-		ImagePicker.getPictures({maximumImagesCount: 1}).then((results) => {
-		  console.log(results);
-		  for (var i = 0; i < results.length; i++) {
-		      console.log('Image URI: ' + results[i]);
-		      this.image.imageData(results[i]);
-		  }
+	public openAlbum() {
+		ImagePicker.getPictures({ maximumImagesCount: 1 }).then((results) => {
+			console.log(results);
+			for (var i = 0; i < results.length; i++) {
+				console.log('Image URI: ' + results[i]);
+				this.image.imageData(results[i]);
+			}
 		}, (err) => { });
 
+	}
+
+	public submit() {
+		this.params.data.parent.step = 4;
+		this.nav.push(AssistantForm);
 	}
 
 }
