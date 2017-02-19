@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { ProfileForm } from '../../profile/form/profile.form';
+import { StepTwoPage } from '../step-two/step-two.page';
 
 @Component({
     selector: 'step-one',
@@ -15,9 +15,9 @@ export class StepOnePage {
 
     public changePassword(response) {
         if (this.params.data) {
+            console.log(response);
             this.params.data.parent.step = 2;
-            // TODO refactoring
-            this.nav.setRoot(ProfileForm, this.params.data, { animate: true, direction: 'forward' });
+            this.nav.setRoot(StepTwoPage, this.params.data, { animate: true, direction: 'forward' });
         }
     }
 }

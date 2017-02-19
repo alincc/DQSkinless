@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Camera, ImagePicker } from 'ionic-native';
 
-import { AssistantForm } from '../assistant/assistant.form';
-
 @Component({
 	selector: 'upload-photo-form',
 	templateUrl: 'upload-photo.html'
@@ -36,7 +34,6 @@ export class UploadPhotoForm {
 
 	public submit() {
 		this.params.data.parent.step = 4;
-		this.nav.push(AssistantForm);
 	}
 
 }

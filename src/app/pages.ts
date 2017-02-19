@@ -8,12 +8,11 @@ import { ProfilePage } from '../pages/profile/profile.page';
 import { RegistrationPage } from '../pages/registration/registration.page';
 import { SchedulePage } from '../pages/schedule/schedule.page';
 import { StepOnePage } from '../pages/registration/step-one/step-one.page';
+import { StepTwoPage } from '../pages/registration/step-two/step-two.page';
 import { TabsPage } from '../pages/tabs/tabs';
 
 
 import { ChangePasswordPage } from '../pages/change-password/change-password.page';
-
-import { ProfileForm } from '../pages/profile/form/profile.form';
 import { UploadPhotoForm } from '../pages/profile/upload-photo/upload-photo.form';
 
 export const pages: any[] = [
@@ -27,10 +26,10 @@ export const pages: any[] = [
 	RegistrationPage,
 	SchedulePage,
 	StepOnePage,
+	StepTwoPage,
 	TabsPage,
 
 	ChangePasswordPage,
-
-	ProfileForm,
+	
 	UploadPhotoForm
 ]

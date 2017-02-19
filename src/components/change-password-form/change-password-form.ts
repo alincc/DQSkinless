@@ -70,6 +70,5 @@ export class ChangePasswordForm {
 
     submitForm() {
         this.onSubmit.emit(this.changePasswordForm.get('password').value);
-        console.log(this.changePasswordForm.value);
     }
 }
