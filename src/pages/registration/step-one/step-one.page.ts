@@ -8,8 +8,11 @@ import { StepTwoPage } from '../step-two/step-two.page';
 })
 export class StepOnePage {
 
+    private parentNav: NavController;
+
     constructor(private nav: NavController,
         private params: NavParams) {
+            this.parentNav = params.data.parentNav;
             params.data.parent.step = 1;
     }
 

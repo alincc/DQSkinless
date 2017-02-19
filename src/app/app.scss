@@ -17,8 +17,10 @@
 
 ion-app{
     
+    // INPUT FIELDS
     ion-item.item-input[field] {
         display: inline-block;
+        border-bottom: 1px solid $secondary !important;
         box-shadow: none !important;
         min-height: 35px !important;
 
@@ -30,38 +32,19 @@ ion-app{
             box-shadow: none !important;
             border: none !important;
         }
-    }
+    } 
     
-    ion-item.item-input[field].ng-untouched.ng-invalid:not(.item-input-disabled) {
+    ion-app ion-item.item-input[field].ng-pristine.ng-invalid:not(.item-input-disabled){
         display: inline-block;
-        border-bottom-color: $secondary !important;
+        border-bottom: 1px solid $secondary !important;
     }
 
-    ion-item.item-input[field].ng-invalid:not(.item-input-disabled) {
+    ion-item.item-input[field].ng-touched.ng-invalid:not(.item-input-disabled) {
         display: inline-block;
-        border-bottom-color: $danger !important;
-    }
-    
-    ion-item.item-input[field].ng-invalid:not(.item-input-disabled) {
-        display: inline-block;
-        border-bottom-color: $danger !important;
+        border-bottom: 1px solid $danger !important;
     }
 
-    ion-item.item-input[field].ng-valid.input-has-value:not(.input-has-focus):last-child {
-        display: inline-block;
-        border-bottom-color: $secondary !important;
-    }
-
-    ion-item.item-input[field].ng-valid.input-has-focus:last-child{
-        display: inline-block;
-        border-bottom-color: $secondary !important;
-    }
-
-    ion-item.item-input[field].ng-pristine:not.ng-invalid.input-has-focus:last-child{
-        display: inline-block;
-        border-bottom-color: $danger !important;
-    }    
-
+    // DROPDOWN FIELDS
     ion-item.item-select[field] {
         min-height: 35px !important;
 
