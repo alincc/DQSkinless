@@ -1,10 +1,12 @@
 schedule-page{
 	ion-header{
 		background: $primary;
+		ion-item{	
 		ion-avatar>img{
-			height: 25vw !important;
-			width: 25vw !important;
-			margin-right: 5vw;
+				height: 90px !important;
+				width: 90px !important;
+				margin-right: 10px;
+			}
 		}
 
 		ion-col{
@@ -16,6 +18,13 @@ schedule-page{
 			}
 			.button{
 				color: $accent;
+			}
+		}
+	}
+	ion-content{
+		ion-list{
+			button[ion-item]{
+				background-color: $secondary-light;
 			}
 		}
 	}

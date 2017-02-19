@@ -7,59 +7,59 @@
 			Schedule
 		</ion-title>
 	</ion-navbar>
-		<ion-item color="primary">
-			<ion-avatar  item-left>
-				<img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
-			</ion-avatar >
-			<h1>1. Name of Patient</h1>
-			<p>Time: - </p>
-			<p>Date: January 31, 2016</p>
-			<p>Hospital/Clinic: Clinic1</p>
-		</ion-item>
-		<ion-row>
-			<ion-col width-33 width-md-25>
-				<button ion-button icon-only clear full>
-					<ion-icon name="thumbs-up" color="accent"></ion-icon>
-					Done
-				</button>
-			</ion-col>
-			<ion-col width-33 width-md-25>
-				<button ion-button icon-only clear full>
-					<ion-icon name="swap" color="accent"></ion-icon>
-					Next
-				</button>
-			</ion-col>
-			<ion-col width-33 width-md-0>
-				<button ion-button icon-only clear full (click)="showMore($event)">
-					<ion-icon name="more" color="accent"></ion-icon>
-				</button>
-			</ion-col>
-			<ion-col width-md-25>
-				<button ion-button icon-only  clear  full>
-					<ion-icon name="folder-open" color="accent"></ion-icon>
-					View
-				</button>
-			</ion-col>
-			<ion-col width-md-25>
-				<button ion-button icon-only  clear full>
-					<ion-icon name="eye-off" color="accent"></ion-icon>
-					No-Show
-				</button>
-			</ion-col>
-		</ion-row>
+	<ion-item color="primary">
+		<ion-avatar  item-left>
+			<img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
+		</ion-avatar >
+		<h1 color="accent" (click)="view(0)">1. Name of Patient</h1>
+		<p>Time: - </p>
+		<p>Date: January 31, 2016</p>
+		<p>Hospital/Clinic: Clinic1</p>
+	</ion-item>
+	<ion-row>
+		<ion-col width-33 width-md-25>
+			<button ion-button icon-only clear full>
+				<ion-icon name="thumbs-up" color="accent"></ion-icon>
+				Done
+			</button>
+		</ion-col>
+		<ion-col width-33 width-md-25>
+			<button ion-button icon-only clear full>
+				<ion-icon name="swap" color="accent"></ion-icon>
+				Next
+			</button>
+		</ion-col>
+		<ion-col width-33 width-md-0>
+			<button ion-button icon-only clear full (click)="showMore($event)">
+				<ion-icon name="more" color="accent"></ion-icon>
+				More
+			</button>
+		</ion-col>
+		<ion-col width-md-25>
+			<button ion-button icon-only  clear full>
+				<ion-icon name="return-left" color="accent"></ion-icon>
+				Queue Again
+			</button>
+		</ion-col>
+		<ion-col width-md-25>
+			<button ion-button icon-only  clear full>
+				<ion-icon name="eye-off" color="accent"></ion-icon>
+				No-Show
+			</button>
+		</ion-col>
+	</ion-row>
 </ion-header>
-<ion-content>
-	<ion-list>
-		<ion-item-group reorder="true">
-		<ion-item-sliding >
-			<button ion-item >
+<ion-content >
+	<ion-list reorder="true" (ionItemReorder)="reorderItems($event)">
+		<ion-item-sliding *ngFor="let customer of queue;">
+			<button ion-item  (click)="view(0)">
 				<ion-avatar  item-left>
 					<img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
 				</ion-avatar >
-				<h3>2. Name of Patient</h3>
-				<p>Time: - </p>
-				<p>Date: January 31, 2016</p>
-				<p>Hospital/Clinic: Clinic1</p>
+				<h3>{{customer.id}}. {{customer.lName}}, {{customer.fName}}</h3>
+				<p>Time: {{customer.time}} </p>
+				<p>Date: {{customer.date}}</p>
+				<p>Hospital/Clinic: {{customer.clinic}}</p>
 			</button>
 			<ion-item-options side="left">
 				<button ion-button color="danger">
@@ -68,7 +68,6 @@
 				</button>
 			</ion-item-options>
 		</ion-item-sliding>
-		</ion-item-group>
 	</ion-list> 
 	<ion-fab bottom right>
 		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>

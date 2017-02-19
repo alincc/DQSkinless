@@ -8,7 +8,7 @@ import { LoginPage } from '../login/login.page';
 import { ManagerPage } from '../manager/manager.page';
 import { NotificationPage } from '../notification/notification.page';
 import { ProfilePage } from '../profile/profile.page';
-
+import { RootNavController } from '../../services/services';
 @Component({
 	selector: 'tabs',
 	templateUrl: 'tabs.html'
@@ -21,8 +21,10 @@ export class TabsPage {
 
 	root: NavController;
 	constructor(private app : App,
-		private nav: NavController) {
+		private nav: NavController,
+		private rootNav: RootNavController) {
 		this.root = app.getRootNav();
+		this.rootNav.setRootNav(this.nav);
 	}
 
 	logout(){

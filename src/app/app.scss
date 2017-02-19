@@ -15,38 +15,59 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+$grid : 10 20 25 33 50 67 80 90 100;
+
 @media all and (min-device-width: 768px){
+	@each $width in $grid{
+		ion-col[width-md-#{$width}]{
+			flex: #{$width}% !important;
+		}
+	}
+
 	ion-col[width-md-0]{
 		display: none;		
 	}
-	ion-col[width-md-10]{
-		flex: 10% !important;
+}
+
+//
+// @each $color in map-keys($colors){
+// 	h3[color="#{$color}"]{
+// 		color: map-get($colors,$color);
+// 	}
+// }
+
+
+ion-header.minimize{
+	p{
+		display: none;
+		transition: all 0.3s
 	}
-	ion-col[width-md-20]{
-		flex: 20% !important;
+	ion-avatar{
+		display: none;
+		transition: all 0.3s
 	}
-	ion-col[width-md-25]{
-		flex: 25% !important;
+	h1{
+		font-size: .9em;
+		transition: all 0.3s
 	}
-	ion-col[width-md-33]{
-		flex: 33% !important;
+	ion-col{
+		padding-top: 0;
+		padding-bottom: 0;
+		transition: all 0.3s
+		button{
+			marign:0;
+		}
 	}
-	ion-col[width-md-50]{
-		flex: 50% !important;
+}
+ion-content.minimize{
+	.scroll-content{
+		transition: all 0.3s;
 	}
-	ion-col[width-md-67]{
-		flex: 67% !important;
-	}
-	ion-col[width-md-75]{
-		flex: 75% !important;
-	}
-	ion-col[width-md-80]{
-		flex: 80% !important;
-	}
-	ion-col[width-md-90]{
-		flex: 90% !important;
-	}
-	ion-col[width-md-100]{
-		flex: 100% !important;
+}
+
+
+ion-content{
+	.scroll-content{
+		transition: all 0.3s;
 	}
 }

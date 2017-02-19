@@ -2,6 +2,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { SchedulePage } from '../pages/schedule/schedule.page';
 import { MoreMenuPopover } from '../pages/schedule/more.popover';
 import { PatientPage } from '../pages/patient/patient.page';
+import { PatientProfilePage } from '../pages/patient-profile/patient-profile.page';
 import { ChatPage } from '../pages/chat/chat.page';
 import { ManagerPage } from '../pages/manager/manager.page';
 import { LoginPage } from '../pages/login/login.page';
@@ -20,6 +21,7 @@ export const pages: any[] = [
 	,SchedulePage
 	,MoreMenuPopover
 	,PatientPage
+	,PatientProfilePage
 	,ChatPage
 	,ManagerPage
 	,LoginPage
