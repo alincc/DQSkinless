@@ -1,0 +1,21 @@
+<ion-content>
+  Assistant
+  <ion-list>
+    <ion-item *ngFor="let a of assistants">
+      <ion-avatar item-left>
+        <img src="https://tribzap2it.files.wordpress.com/2015/10/ken-jeong-dr-ken-abc.jpg">
+      </ion-avatar>
+      <h2>{{ a }}</h2>
+    </ion-item>
+  </ion-list>
+  <ion-label *ngIf="assistants.length === 0" bottom left>
+    No assistants added.
+  </ion-label>
+  <ion-label bottom left>
+    You have {{ allowableAssistants }} left.
+  </ion-label>
+  <button type="submit" (click)="submitForm()" ion-button round large color="accent"> DONE </button>
+  <!--<ion-fab bottom right>-->
+    <button ion-fab bottom right [disabled]="allowableAssistants === 0" (click)="addAssistant()" color="accent"><ion-icon name="add"></ion-icon></button>
+  <!--</ion-fab>  -->
+</ion-content>

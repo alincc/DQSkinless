@@ -17,8 +17,10 @@ export class ProfileForm {
         this.createForm();
 
         this.errors = {
+            email: '',
             lastName: '',
             firstName: '',
+            middleName: '',
             birthDate: '',
             gender: '',
             address: '',
@@ -28,21 +30,23 @@ export class ProfileForm {
 
     createForm() {
         this.profileForm = this.formBuilder.group({
+            email: [''],
             lastName: ['', Validators.required],
             firstName: ['', Validators.required],
-            middleName: [''],
-            birthDate: ['', Validators.required],
-            gender: ['', Validators.required],
-            address: ['', Validators.required],
-            contactNo: ['', Validators.required],
+            middleName: ['', Validators.required],
+            birthDate: [''],//
+            gender: [''],//, Validators.required
+            address: [''],//, Validators.required
+            contactNo: [''],//, Validators.required
         });
 
         const lastName = this.profileForm.get('lastName');
         const firstName = this.profileForm.get('firstName');
-        const birthDate = this.profileForm.get('birthDate');
-        const gender = this.profileForm.get('gender');
-        const address = this.profileForm.get('address');
-        const contactNo = this.profileForm.get('contactNo');
+        const middleName = this.profileForm.get('middleName');
+        // const birthDate = this.profileForm.get('birthDate');
+        // const gender = this.profileForm.get('gender');
+        // const address = this.profileForm.get('address');
+        // const contactNo = this.profileForm.get('contactNo');
 
         lastName.valueChanges.subscribe(
             newValue => {
@@ -64,43 +68,54 @@ export class ProfileForm {
             }
         );
 
-        birthDate.valueChanges.subscribe(
+        
+        middleName.valueChanges.subscribe(
             newValue => {
-                if (birthDate.hasError('required')) {
-                    this.errors.birthDate = 'Birth Date is required.';
+                if (middleName.hasError('required')) {
+                    this.errors.middleName = 'Middle Name is required.';
                 } else {
-                    this.errors.birthDate = '';
+                    this.errors.middleName = '';
                 }
             }
         );
 
-        gender.valueChanges.subscribe(
-            newValue => {
-                if (gender.hasError('required')) {
-                    this.errors.gender = 'Gender is required.';
-                } else {
-                    this.errors.gender = '';
-                }
-            }
-        );
-        address.valueChanges.subscribe(
-            newValue => {
-                if (address.hasError('required')) {
-                    this.errors.address = 'Address is required.';
-                } else {
-                    this.errors.address = '';
-                }
-            }
-        );
-        contactNo.valueChanges.subscribe(
-            newValue => {
-                if (contactNo.hasError('required')) {
-                    this.errors.contactNo = 'Contact Number is required.';
-                } else {
-                    this.errors.contactNo = '';
-                }
-            }
-        );
+        // birthDate.valueChanges.subscribe(
+        //     newValue => {
+        //         if (birthDate.hasError('required')) {
+        //             this.errors.birthDate = 'Birth Date is required.';
+        //         } else {
+        //             this.errors.birthDate = '';
+        //         }
+        //     }
+        // );
+
+        // gender.valueChanges.subscribe(
+        //     newValue => {
+        //         if (gender.hasError('required')) {
+        //             this.errors.gender = 'Gender is required.';
+        //         } else {
+        //             this.errors.gender = '';
+        //         }
+        //     }
+        // );
+        // address.valueChanges.subscribe(
+        //     newValue => {
+        //         if (address.hasError('required')) {
+        //             this.errors.address = 'Address is required.';
+        //         } else {
+        //             this.errors.address = '';
+        //         }
+        //     }
+        // );
+        // contactNo.valueChanges.subscribe(
+        //     newValue => {
+        //         if (contactNo.hasError('required')) {
+        //             this.errors.contactNo = 'Contact Number is required.';
+        //         } else {
+        //             this.errors.contactNo = '';
+        //         }
+        //     }
+        // );
     }
 
     submitForm() {

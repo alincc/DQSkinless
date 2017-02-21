@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Camera, ImagePicker } from 'ionic-native';
 
 @Component({
-	selector: 'upload-photo-form',
+	selector: 'upload-photo',
 	templateUrl: 'upload-photo.html'
 })
-export class UploadPhotoForm {
+export class UploadPhoto {
+
+	@Output() onSubmit = new EventEmitter();
+
 	public image: any;
 	constructor(private nav: NavController,
 		private params: NavParams) { }
@@ -33,7 +36,7 @@ export class UploadPhotoForm {
 	}
 
 	public submit() {
-		this.params.data.parent.step = 4;
+		this.onSubmit.emit('upload photo');
 	}
 
 }

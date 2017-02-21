@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
-import { ManagerPage } from '../../../pages/manager/manager.page';
+import { StepThreePage } from '../step-three/step-three.page';
 
 @Component({
     selector: 'step-two',
@@ -13,17 +13,15 @@ export class StepTwoPage {
 
     constructor(private nav: NavController,
         private params: NavParams) {
-             this.parentNav = params.data.parentNav;
-            params.data.parent.step = 2;
+        this.parentNav = params.data.parentNav;
+        params.data.parent.step = 2;
     }
 
     public submit(response) {
         if (this.params.data) {
             console.log(response);
-            // TODO refactoring
-            // this.params.data.parent.step = 2;
-            // this.nav.setRoot(ProfileForm, this.params.data, { animate: true, direction: 'forward' });
-            this.parentNav.setRoot(ManagerPage);
+            this.params.data.parent.step = 3;
+            this.nav.setRoot(StepThreePage, this.params.data, { animate: true, direction: 'forward' });
         }
     }
 }
