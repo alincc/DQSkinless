@@ -32,9 +32,13 @@
 	</div>
 </ion-header>
 <ion-content>
+<<<<<<< HEAD
 <ion-nav [root]="root" [rootParams]="params"></ion-nav>
 </ion-content>
 <ion-footer *ngIf="step==4">
 	<button ion-button full color="secondary" (click)="done()">DONE</button>
 </ion-footer>
-
+=======
+	<ion-nav [root]="root" [rootParams]="params"></ion-nav>
+</ion-content>
+>>>>>>> 38f1f7e4b37c1f15b26e972e56cdd351eae64851

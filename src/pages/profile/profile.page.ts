@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { BlankPage } from '../blank/blank.page';
-import { ProfileForm } from './form/profile.form';
+import { ProfileForm } from '../../components/profile-form/profile-form';
 import { AssistantManagerForm } from '../assistant-manager/assistant-manager.form';
 @Component({
 	selector: 'profile-page',

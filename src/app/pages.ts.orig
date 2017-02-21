@@ -1,6 +1,12 @@
+<<<<<<< HEAD
+import { TabsPage } from '../pages/tabs/tabs';
+import { SchedulePage } from '../pages/schedule/schedule.page';
 import { MoreMenuPopover } from '../pages/schedule/more.popover';
+import { PatientPage } from '../pages/patient/patient.page';
 import { PatientProfilePage } from '../pages/patient-profile/patient-profile.page';
+=======
 import { BlankPage } from '../pages/blank/blank.page';
+>>>>>>> 38f1f7e4b37c1f15b26e972e56cdd351eae64851
 import { ChatPage } from '../pages/chat/chat.page';
 import { LoginPage } from '../pages/login/login.page';
 import { ManagerPage } from '../pages/manager/manager.page';
@@ -16,7 +22,28 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { ChangePasswordPage } from '../pages/change-password/change-password.page';
 import { UploadPhotoForm } from '../pages/profile/upload-photo/upload-photo.form';
+<<<<<<< HEAD
 import { AssistantManagerForm } from '../pages/assistant-manager/assistant-manager.form';
+export const pages: any[] = [
+	TabsPage
+	,SchedulePage
+	,MoreMenuPopover
+	,PatientPage
+	,PatientProfilePage
+	,ChatPage
+	,ManagerPage
+	,LoginPage
+	,NotificationPage
+	,ProfilePage
+	,ChangePasswordPage
+	,BlankPage
+	,RegistrationPage
+
+	,ChangePasswordForm
+	,ProfileForm
+	,UploadPhotoForm
+	,AssistantManagerForm
+=======
 
 export const pages: any[] = [
 	BlankPage,
@@ -25,17 +52,15 @@ export const pages: any[] = [
 	ManagerPage,
 	NotificationPage,
 	PatientPage,
-	PatientProfilePage,
 	ProfilePage,
 	RegistrationPage,
 	SchedulePage,
-	MoreMenuPopover,
 	StepOnePage,
 	StepTwoPage,
 	TabsPage,
 
 	ChangePasswordPage,
 	
-	UploadPhotoForm,
-	AssistantManagerForm
+	UploadPhotoForm
+>>>>>>> 38f1f7e4b37c1f15b26e972e56cdd351eae64851
 ]

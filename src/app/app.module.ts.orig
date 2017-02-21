@@ -19,6 +19,10 @@ import { RootNavController } from '../services/services';
     components,
     pages
   ],
+<<<<<<< HEAD
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, RootNavController ]
+=======
+  providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler }]
+>>>>>>> 38f1f7e4b37c1f15b26e972e56cdd351eae64851
 })
 export class AppModule { }

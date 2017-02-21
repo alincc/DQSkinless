@@ -1,25 +1,41 @@
+<<<<<<< HEAD
 import { Component, ViewChild } from '@angular/core';
 import { NavController,Content } from 'ionic-angular';
-import { StepOnePage } from './step-one/step-one.page';
+import { ChangePasswordForm } from '../change-password/form/change-password.form';
 import { ManagerPage } from "../manager/manager.page";
+=======
+import { Component } from '@angular/core';
+import { NavController } from 'ionic-angular';
+import { StepOnePage } from './step-one/step-one.page';
+>>>>>>> 38f1f7e4b37c1f15b26e972e56cdd351eae64851
 
 @Component({
 	selector: 'registration-page',
 	templateUrl: 'registration.html'
 })
-export class RegistrationPage {
+<<<<<<< HEAD
+export class RegistrationPage{
 	@ViewChild(Content) content: Content;
 	public root: any;
 	public params: any;
 	public _step: number;
+	constructor(private nav: NavController){
+		this.root = ChangePasswordForm;
+=======
+export class RegistrationPage {
+	public root: any;
+	public params: any;
+	public step: number;
 
 	constructor(private nav: NavController) {
 		this.root = StepOnePage;
+>>>>>>> 38f1f7e4b37c1f15b26e972e56cdd351eae64851
 		this.params = {
 			parentNav: nav,
 			parent: this
 		};
 	}
+<<<<<<< HEAD
 
 
 	public set step(_step:any){
@@ -41,3 +57,6 @@ export class RegistrationPage {
 
 
 }
+=======
+}
+>>>>>>> 38f1f7e4b37c1f15b26e972e56cdd351eae64851

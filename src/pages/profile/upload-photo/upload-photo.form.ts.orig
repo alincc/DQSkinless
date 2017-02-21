@@ -7,6 +7,7 @@ import { AssistantManagerForm } from '../../assistant-manager/assistant-manager.
 	selector: 'upload-photo-form',
 	templateUrl: 'upload-photo.html'
 })
+<<<<<<< HEAD
 export class UploadPhotoForm{
 	public image:any;
 	constructor(private nav:NavController,
@@ -18,6 +19,18 @@ export class UploadPhotoForm{
 		 // imageData is either a base64 encoded string or a file URI
 		 // If it's base64:
 		 this.image = 'data:image/jpeg;base64,' + imageData;
+=======
+export class UploadPhotoForm {
+	public image: any;
+	constructor(private nav: NavController,
+		private params: NavParams) { }
+
+	public openCamera() {
+		Camera.getPicture({ cameraDirection: 1, destinationType: 2, correctOrientation: true, encodingType: 0 }).then((imageData) => {
+			// imageData is either a base64 encoded string or a file URI
+			// If it's base64:
+			this.image = 'data:image/jpeg;base64,' + imageData;
+>>>>>>> 38f1f7e4b37c1f15b26e972e56cdd351eae64851
 		}, (err) => {
 			// Handle error
 		});
@@ -34,6 +47,7 @@ export class UploadPhotoForm{
 
 	}
 
+<<<<<<< HEAD
 	public clear(){
 		this.image = null;
 	}
@@ -41,6 +55,10 @@ export class UploadPhotoForm{
 	public submit(){
 		this.params.data.parent.step = 4;
 		this.nav.push(AssistantManagerForm, {parent: this.params.data.parent});
+=======
+	public submit() {
+		this.params.data.parent.step = 4;
+>>>>>>> 38f1f7e4b37c1f15b26e972e56cdd351eae64851
 	}
 
 }
