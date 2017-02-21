@@ -9,8 +9,11 @@ import { ManagerPage } from '../../../pages/manager/manager.page';
 })
 export class StepTwoPage {
 
+    private parentNav: NavController;
+
     constructor(private nav: NavController,
         private params: NavParams) {
+             this.parentNav = params.data.parentNav;
             params.data.parent.step = 2;
     }
 
@@ -20,7 +23,7 @@ export class StepTwoPage {
             // TODO refactoring
             // this.params.data.parent.step = 2;
             // this.nav.setRoot(ProfileForm, this.params.data, { animate: true, direction: 'forward' });
-            this.nav.setRoot(ManagerPage);
+            this.parentNav.setRoot(ManagerPage);
         }
     }
 }
