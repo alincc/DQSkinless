@@ -1,0 +1,19 @@
+<ion-header>
+	<ion-toolbar color="primary">
+		<ion-buttons end>
+		<button ion-button color="accent" small>
+			SAVE
+		</button>
+		<button ion-button color="accent" outline small>
+			CANCEL
+		</button>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
+<ion-content>
+	<canvas-whiteboard #canvasWhiteboard class=""
+           [drawButtonClass]="'drawButtonClass'"
+           [clearButtonClass]="'clearButtonClass'"
+           >                    
+    </canvas-whiteboard>
+</ion-content>

@@ -3,6 +3,7 @@ import { Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { LoginPage } from '../pages/login/login.page';
+import { DrawingPad } from '../components/drawing-pad/drawing-pad';
 
 @Component({
   templateUrl: 'app.html'

@@ -4,20 +4,22 @@ import { MyApp } from './app.component';
 import { components } from './components';
 import { pages } from './pages';
 import { RootNavController } from '../services/services';
+import { CanvasWhiteboardModule } from 'ng2-canvas-whiteboard';
 @NgModule({
   declarations: [
     MyApp,
-    components,
-    pages
+    pages,
+    components
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    CanvasWhiteboardModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    components,
-    pages
+    pages,
+    components
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, RootNavController ]
 })
