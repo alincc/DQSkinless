@@ -3,7 +3,16 @@
         <ion-list>
             <div class="row form-group">
                 <ion-item field>
-                    <ion-label in-line>Last Name:</ion-label>
+                    <ion-label in-line>Email:</ion-label>
+                    <ion-input formControlName="email"></ion-input>
+                </ion-item>
+            </div>
+            <div class="error-message" *ngIf="profileForm.get('email').invalid">
+                {{ errors.email }}
+            </div>
+            <div class="row form-group">
+                <ion-item field>
+                    <ion-label in-line>Last Name*:</ion-label>
                     <ion-input formControlName="lastName"></ion-input>
                 </ion-item>
             </div>
@@ -12,7 +21,7 @@
             </div>
             <div class="row form-group">
                 <ion-item field>
-                    <ion-label in-line>First Name:</ion-label>
+                    <ion-label in-line>First Name*:</ion-label>
                     <ion-input formControlName="firstName"></ion-input>
                 </ion-item>
             </div>
@@ -21,9 +30,12 @@
             </div>
             <div class="row form-group">
                 <ion-item field>
-                    <ion-label in-line>Middle Name:</ion-label>
+                    <ion-label in-line>Middle Name*:</ion-label>
                     <ion-input formControlName="middleName"></ion-input>
                 </ion-item>
+            </div>
+            <div class="error-message" *ngIf="profileForm.get('middleName').invalid">
+                {{ errors.middleName }}
             </div>            
             <div class="row form-group">
                 <ion-item field>

@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Camera, ImagePicker } from 'ionic-native';
 import { AssistantManagerForm } from '../../assistant-manager/assistant-manager.form';
 
 @Component({
-	selector: 'upload-photo-form',
+	selector: 'upload-photo',
 	templateUrl: 'upload-photo.html'
 })
+<<<<<<< HEAD:src/pages/profile/upload-photo/upload-photo.form.ts
 export class UploadPhotoForm{
 	public image:any;
 	constructor(private nav:NavController,
@@ -18,6 +19,21 @@ export class UploadPhotoForm{
 		 // imageData is either a base64 encoded string or a file URI
 		 // If it's base64:
 		 this.image = 'data:image/jpeg;base64,' + imageData;
+=======
+export class UploadPhoto {
+
+	@Output() onSubmit = new EventEmitter();
+
+	public image: any;
+	constructor(private nav: NavController,
+		private params: NavParams) { }
+
+	public openCamera() {
+		Camera.getPicture({ cameraDirection: 1, destinationType: 2, correctOrientation: true, encodingType: 0 }).then((imageData) => {
+			// imageData is either a base64 encoded string or a file URI
+			// If it's base64:
+			this.image = 'data:image/jpeg;base64,' + imageData;
+>>>>>>> ddce85e4f16d4434b6272c628492f3f249d1c018:src/components/upload-photo/upload-photo.ts
 		}, (err) => {
 			// Handle error
 		});
@@ -34,6 +50,7 @@ export class UploadPhotoForm{
 
 	}
 
+<<<<<<< HEAD:src/pages/profile/upload-photo/upload-photo.form.ts
 	public clear(){
 		this.image = null;
 	}
@@ -41,6 +58,10 @@ export class UploadPhotoForm{
 	public submit(){
 		this.params.data.parent.step = 4;
 		this.nav.push(AssistantManagerForm, {parent: this.params.data.parent});
+=======
+	public submit() {
+		this.onSubmit.emit('upload photo');
+>>>>>>> ddce85e4f16d4434b6272c628492f3f249d1c018:src/components/upload-photo/upload-photo.ts
 	}
 
 }

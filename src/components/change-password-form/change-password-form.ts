@@ -24,33 +24,34 @@ export class ChangePasswordForm {
 
     createForm() {
         this.changePasswordForm = this.formBuilder.group({
-            password: ['', Validators.required],
-            confirm: ['', Validators.required],
-        },
-            { validator: this.passwordMatcher });
-
-        const password = this.changePasswordForm.get('password');
-        const confirm = this.changePasswordForm.get('confirm');
-
-        password.valueChanges.subscribe(
-            newValue => {
-                if (password.hasError('required')) {
-                    this.errors.password = 'Password is required.';
-                } else {
-                    this.errors.password = '';
-                }
-            }
+            password: [''],//, Validators.required
+            confirm: [''] //, Validators.required
+        }
+        //,{ validator: this.passwordMatcher }
         );
 
-        confirm.valueChanges.subscribe(
-            newValue => {
-                if (confirm.hasError('required')) {
-                    this.errors.confirm = 'Password is required.';
-                } else {
-                    this.errors.confirm = '';
-                }
-            }
-        );
+        // const password = this.changePasswordForm.get('password');
+        // const confirm = this.changePasswordForm.get('confirm');
+
+        // password.valueChanges.subscribe(
+        //     newValue => {
+        //         if (password.hasError('required')) {
+        //             this.errors.password = 'Password is required.';
+        //         } else {
+        //             this.errors.password = '';
+        //         }
+        //     }
+        // );
+
+        // confirm.valueChanges.subscribe(
+        //     newValue => {
+        //         if (confirm.hasError('required')) {
+        //             this.errors.confirm = 'Password is required.';
+        //         } else {
+        //             this.errors.confirm = '';
+        //         }
+        //     }
+        // );
     }
 
     passwordMatcher = (control: AbstractControl): { [key: string]: boolean } => {
