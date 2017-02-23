@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Camera, ImagePicker } from 'ionic-native';
-import { AssistantManagerForm } from '../../assistant-manager/assistant-manager.form';
+// import { AssistantManagerForm } from '../../pages/assistant-manager/assistant-manager.form';
 
 @Component({
 	selector: 'upload-photo',
@@ -43,7 +43,7 @@ export class UploadPhoto {
 
 	public submit(){
 		this.onSubmit.emit('upload photo');
-		this.nav.push(AssistantManagerForm, {parent: this.params.data.parent});
+		// this.nav.push(AssistantManagerForm, {parent: this.params.data.parent});
 	}
 
 }

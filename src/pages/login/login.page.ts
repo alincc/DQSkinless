@@ -12,6 +12,6 @@ export class LoginPage{
 	constructor(private nav: NavController){}
 
 	public login(){
-		this.nav.setRoot(ManagerPage);
+		this.nav.setRoot(RegistrationPage);
 	}
 }

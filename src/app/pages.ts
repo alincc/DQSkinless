@@ -44,6 +44,5 @@ export const pages: any[] = [
 	ChangePasswordPage,
 	
 	
-	UploadPhotoForm,
 	AssistantManagerForm
 ]
