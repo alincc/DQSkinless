@@ -69,47 +69,108 @@ ion-content{
 	.scroll-content{
 		transition: all 0.3s;
 	}
-    
-    // INPUT FIELDS
-    ion-item.item-input[field] {
-        display: inline-block;
-        border-bottom: 1px solid $secondary !important;
-        box-shadow: none !important;
-        min-height: 35px !important;
 
-        .select-icon-inner {
-            color: transparent !important;
-        }
+	.h1 {
+		text-align: left;
+		font-size: $h1;
+		font-weight: bold;
+		margin: 0px;
+	}
 
-        .item-inner {
-            box-shadow: none !important;
-            border: none !important;
-        }
-    } 
-    
-    ion-app ion-item.item-input[field].ng-pristine.ng-invalid:not(.item-input-disabled){
-        display: inline-block;
-        border-bottom: 1px solid $secondary !important;
-    }
+	// Rounded Ion-Inputs
+	ion-item.item-input[round] {
+		display: inline-block;
+		border: 1px solid $primary-light !important;
+		box-shadow: none !important;
+		-webkit-border-radius: 4.4em !important;
+		border-radius: 4.4rem !important;
+		height: 35px !important;
+		min-height: 35px !important;
+		padding-left: 8px;
 
-    ion-item.item-input[field].ng-touched.ng-invalid:not(.item-input-disabled) {
-        display: inline-block;
-        border-bottom: 1px solid $danger !important;
-    }
+		button {
+			border-radius: 4.4rem !important;
+		}
 
-    // DROPDOWN FIELDS
-    ion-item.item-select[field] {
-        min-height: 35px !important;
+		ion-label {
+			display: none;
+		}
 
-        .item-inner {
-            box-shadow: none !important;
-            border: none !important;
-        }
+		.select-icon-inner {
+			color: transparent !important;
+		}
 
-        button {
-		    border-bottom: 1px solid $secondary !important;
-	    }
-    }
+		.item-inner {
+			box-shadow: none !important;
+			border: none !important;
+		}
+
+		input.text-input-ios,
+		textarea.text-input-ios {
+			padding: 0px 5px 0px 5px;
+			margin: 0px 8px 0px 8px;
+		}
+
+		input.text-input-md,
+		textarea.tetext-input-mdxt {
+			margin: 0px 8px 0px 8px;
+		}
+	}
+
+	// Rounded Ion-TextArea
+	ion-item.item-textarea[round], {
+		display: inline-block;
+		height: 60pt !important;
+		min-height: 60pt !important;
+		-webkit-border-radius: 15px !important;
+		border-radius: 15px !important;
+		box-shadow: none !important;
+
+		textarea {
+			height: 41pt !important;
+			min-height: 41pt !important;
+		}
+	}
+
+	// Invalid Rounded Inputs that are not dirty, invalid and not disabled
+	ion-item.item-input[round]:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
+		display: inline-block;
+		border: 1px solid $primary-light !important;
+	}
+
+	// Invalid Rounded Inputs that are invalid and not disabled
+	ion-item.item-input[round].ng-invalid:not(.item-input-disabled) {
+		display: inline-block;
+		border: 1px solid $danger !important;
+	}
+
+	// Disabled Rounded Ion-Input and Ion-TextArea
+	ion-item.item-input-disabled[round] {	
+		display: inline-block;
+		border: 1px solid $primary-light;
+		background-color: $secondary;
+
+		ion-select {
+			div[class=select-text] {
+				color: $primary !important;
+			}
+		}
+
+		.text-input[disabled] {
+			opacity: 1 !important;
+			color: $primary !important;
+			background-color: transparent !important;
+		}
+	}
+
+	// Read-only Ion-Items usually in Forms
+	.read-only {
+		ion-item.item-input[round] {
+			display: inline-block;
+			border: 1px $light !important;
+			background-color: $light !important;
+		}
+	}
 
     .error-message{
 		margin: 5%;
