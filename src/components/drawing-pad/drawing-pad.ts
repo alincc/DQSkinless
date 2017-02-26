@@ -1,56 +1,102 @@
-import { Component, ViewChild } from '@angular/core';
-import { CanvasWhiteboardComponent } from 'ng2-canvas-whiteboard';
-
+import { Component, ViewChild} from '@angular/core';
+import { Content, ViewController, NavParams } from 'ionic-angular';
+import { DIAGRAM } from '../../constants';
 @Component({
 	selector:"drawing-pad",
 	templateUrl: "drawing-pad.html",
-	providers:[ CanvasWhiteboardComponent ]
 })
 export class DrawingPad{
 
-	private coords : any[] = [];
+	private coords : any;
 	private _pendown = false;
+	private canvas : any;
+	@ViewChild('drawingPad')
+	private set childDom( dom: any){
+		this.canvas = dom.nativeElement;
+	}
+	@ViewChild(Content) content: Content;
+	private context;
 
-	public pendown(e){
-		console.log("pendown");
-		var mouseX = e.pageX;
-		var mouseY = e.pageY;
-		this._pendown = true;
-		this.write(mouseX, mouseY,e);
-		// redraw();
+	ngAfterViewInit(){
+		this.context = this.canvas.getContext("2d");
+		this.loadImage();
 	}
 
-	private write(x,y,e){
-		let context = e.target.getContext("2d");
-		context.strokeStyle = "#df4b26";
-		context.lineJoin = "round";
-		context.lineWidth = 5;
+	constructor(
+		private view: ViewController,
+		private params: NavParams){
 
-		if(this.coords.length){
-			let lastCoords = this.coords[this.coords.length-1];
-			context.moveTo(lastCoords.x,lastCoords.y);
-			context.lineTo(x,y);
-		}else{
-			context.moveTo(x,y);
+	}
+
+
+	private loadImage(){
+		let _context = this.context;
+		let _content = this.content;
+		let imageObj = new Image();
+		imageObj.src = DIAGRAM.assets[this.params!.data!.diagram];
+		imageObj.onload = function(){
+			_context.drawImage(imageObj,
+				(_content.contentWidth - imageObj.width)/2,
+				(_content.contentHeight - imageObj.height)/2);
 		}
-
-		context.closePath();
-		context.stroke();
-		this.coords.push({x:x, y:y});
 	}
 
-	public pendrag(e){
+	private pendown(e){
 		e.preventDefault();
-		console.log("drag");
+		console.log("pendown");
+		console.log(e);;
+		this._pendown = true;
+		this.write(e);
+	}
+
+	private pendrag(e){
+		e.preventDefault();
 		if(this._pendown){
-			this.write(e.pageX, e.pageY,e);
+			this.write(e);
 		}
 	}
 
-	public penup(e){
+	private penup(e){
 		console.log("up");
 		this._pendown = false;
+		this.coords = null;
 	}
+
+	private write(e){
+		let offsetTop = this.content.contentTop;
+		let _x , _y;
+		if(e.touches){
+			if(e.touches.length > 1){
+				return;
+			}
+			_x = e.touches[0].clientX + (e.target.parentElement.scrollLeft || 0);
+			_y = e.touches[0].clientY - (offsetTop || 0) + (e.target.parentElement.scrollTop || 0);
+		}else{
+			_x = e.clientX;
+			_y = e.clientY - (offsetTop || 0 )+ (e.target.parentElement.scrollTop || 0);
+		}
+		if(this.coords){
+			this.context.moveTo(this.coords.x,this.coords.y);
+		}else{
+			this.context.moveTo(_x-1,_y+1);
+		}
+		this.context.lineJoin = "round";
+		this.context.lineWidth = 0.3;
+		this.context.lineTo(_x,_y);
+		this.context.stroke();
+		this.coords = {x:_x, y:_y};
+	}
+
+	private cancel(){
+		this.view.dismiss();
+	}
+
+	private save(){
+		let image = this.canvas.toDataURL("image/jpg");
+		this.view.dismiss(image);
+	}
+
+
 
 
 }

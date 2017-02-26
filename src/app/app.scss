@@ -36,84 +36,77 @@
 }
 
 
-ion-header.minimize{
-	p{
-		display: none;
-		transition: all 0.3s
-	}
-	ion-avatar{
-		display: none;
-		transition: all 0.3s
-	}
-	h1{
-		font-size: .9em;
-		transition: all 0.3s
-	}
-	ion-col{
-		padding-top: 0;
-		padding-bottom: 0;
-		transition: all 0.3s
-		button{
-			marign:0;
-		}
-	}
-}
-ion-content.minimize{
-	.scroll-content{
-		transition: all 0.3s;
-	}
-}
-
 
 ion-content{
 	.scroll-content{
 		transition: all 0.3s;
 	}
-    
+
     // INPUT FIELDS
     ion-item.item-input[field] {
-        display: inline-block;
-        border-bottom: 1px solid $secondary !important;
-        box-shadow: none !important;
-        min-height: 35px !important;
+    	display: inline-block;
+    	border-bottom: 1px solid $secondary !important;
+    	box-shadow: none !important;
+    	min-height: 35px !important;
 
-        .select-icon-inner {
-            color: transparent !important;
-        }
+    	.select-icon-inner {
+    		color: transparent !important;
+    	}
 
-        .item-inner {
-            box-shadow: none !important;
-            border: none !important;
-        }
+    	.item-inner {
+    		box-shadow: none !important;
+    		border: none !important;
+    	}
     } 
     
     ion-app ion-item.item-input[field].ng-pristine.ng-invalid:not(.item-input-disabled){
-        display: inline-block;
-        border-bottom: 1px solid $secondary !important;
+    	display: inline-block;
+    	border-bottom: 1px solid $secondary !important;
     }
 
     ion-item.item-input[field].ng-touched.ng-invalid:not(.item-input-disabled) {
-        display: inline-block;
-        border-bottom: 1px solid $danger !important;
+    	display: inline-block;
+    	border-bottom: 1px solid $danger !important;
     }
 
     // DROPDOWN FIELDS
     ion-item.item-select[field] {
-        min-height: 35px !important;
+    	min-height: 35px !important;
 
-        .item-inner {
-            box-shadow: none !important;
-            border: none !important;
-        }
+    	.item-inner {
+    		box-shadow: none !important;
+    		border: none !important;
+    	}
 
-        button {
-		    border-bottom: 1px solid $secondary !important;
-	    }
+    	button {
+    		border-bottom: 1px solid $secondary !important;
+    	}
     }
 
     .error-message{
-		margin: 5%;
-		text-align: left;
-		color: $danger;
+    	margin: 5%;
+    	text-align: left;
+    	color: $danger;
+    }
+}
+
+.control-bar{
+	ion-row{
+		background-color: $primary;
+		button{
+			color: $accent;
+		}
+
+		
 	}
+    &.minimize{
+        ion-row{
+            transition: 3s;
+            position: fixed;
+            z-index: 1;
+            width: 100%;
+            /* top: 0; */
+            top: 45px;
+        }
+    }
 }

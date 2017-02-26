@@ -3,8 +3,8 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { components } from './components';
 import { pages } from './pages';
-import { RootNavController } from '../services/services';
-import { CanvasWhiteboardModule } from 'ng2-canvas-whiteboard';
+import { RootNavController, Storage } from '../services';
+import { LockerModule,Locker } from 'angular2-locker'
 @NgModule({
   declarations: [
     MyApp,
@@ -13,14 +13,16 @@ import { CanvasWhiteboardModule } from 'ng2-canvas-whiteboard';
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    CanvasWhiteboardModule
-  ],
+    LockerModule],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     pages,
     components
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, RootNavController ]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}
+  , RootNavController
+  , Storage
+  , Locker ]
 })
 export class AppModule { }
