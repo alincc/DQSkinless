@@ -22,14 +22,14 @@ export class DrawingPad{
 		let _context = this.context;
 		let _content = this.content;
 		let imageObj = new Image();
-		imageObj.src = DIAGRAM.assets[this.params!.data!.diagram];
 		imageObj.onload = function(){
-			// setTimeout(() => {
+			setTimeout(() => {
 			_context.drawImage(imageObj,
 				(_content.contentWidth - imageObj.width)/2,
 				(_content.contentHeight - imageObj.height)/2);
-		// }, 300)
+		}, 100)
 		}
+		imageObj.src = DIAGRAM.assets[this.params!.data!.diagram];
 	}
 
 	constructor(
