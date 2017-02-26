@@ -15,8 +15,6 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
-<<<<<<< HEAD
-$grid : 10 20 25 33 50 67 80 90 100;
 
 @media all and (min-device-width: 768px){
 	@each $width in $grid{
@@ -30,111 +28,189 @@ $grid : 10 20 25 33 50 67 80 90 100;
 	}
 }
 
-//
-// @each $color in map-keys($colors){
-// 	h3[color="#{$color}"]{
-// 		color: map-get($colors,$color);
-// 	}
-// }
 
-
-ion-header.minimize{
-	p{
-		display: none;
-		transition: all 0.3s
-	}
-	ion-avatar{
-		display: none;
-		transition: all 0.3s
-	}
-	h1{
-		font-size: .9em;
-		transition: all 0.3s
-	}
-	ion-col{
-		padding-top: 0;
-		padding-bottom: 0;
-		transition: all 0.3s
-		button{
-			marign:0;
-		}
+@each $color in map-keys($colors){
+	ion-col[color="#{$color}"]{
+		background-color: map-get($colors,$color);
 	}
 }
-ion-content.minimize{
-	.scroll-content{
-		transition: all 0.3s;
-	}
-}
+
 
 
 ion-content{
 	.scroll-content{
 		transition: all 0.3s;
-=======
-ion-app{
-    
+	}
+
+<<<<<<< HEAD
+    // INPUT FIELDS
     ion-item.item-input[field] {
-        display: inline-block;
-        box-shadow: none !important;
-        min-height: 35px !important;
+    	display: inline-block;
+    	border-bottom: 1px solid $secondary !important;
+    	box-shadow: none !important;
+    	min-height: 35px !important;
 
-        .select-icon-inner {
-            color: transparent !important;
-        }
+    	.select-icon-inner {
+    		color: transparent !important;
+    	}
 
-        .item-inner {
-            box-shadow: none !important;
-            border: none !important;
-        }
-    }
+    	.item-inner {
+    		box-shadow: none !important;
+    		border: none !important;
+    	}
+    } 
     
-    ion-item.item-input[field].ng-untouched.ng-invalid:not(.item-input-disabled) {
-        display: inline-block;
-        border-bottom-color: $secondary !important;
+    ion-app ion-item.item-input[field].ng-pristine.ng-invalid:not(.item-input-disabled){
+    	display: inline-block;
+    	border-bottom: 1px solid $secondary !important;
     }
 
-    ion-item.item-input[field].ng-invalid:not(.item-input-disabled) {
-        display: inline-block;
-        border-bottom-color: $danger !important;
-    }
-    
-    ion-item.item-input[field].ng-invalid:not(.item-input-disabled) {
-        display: inline-block;
-        border-bottom-color: $danger !important;
+    ion-item.item-input[field].ng-touched.ng-invalid:not(.item-input-disabled) {
+    	display: inline-block;
+    	border-bottom: 1px solid $danger !important;
     }
 
-    ion-item.item-input[field].ng-valid.input-has-value:not(.input-has-focus):last-child {
-        display: inline-block;
-        border-bottom-color: $secondary !important;
-    }
-
-    ion-item.item-input[field].ng-valid.input-has-focus:last-child{
-        display: inline-block;
-        border-bottom-color: $secondary !important;
-    }
-
-    ion-item.item-input[field].ng-pristine:not.ng-invalid.input-has-focus:last-child{
-        display: inline-block;
-        border-bottom-color: $danger !important;
-    }    
-
+    // DROPDOWN FIELDS
     ion-item.item-select[field] {
-        min-height: 35px !important;
+    	min-height: 35px !important;
 
-        .item-inner {
-            box-shadow: none !important;
-            border: none !important;
-        }
+    	.item-inner {
+    		box-shadow: none !important;
+    		border: none !important;
+    	}
 
-        button {
-		    border-bottom: 1px solid $secondary !important;
-	    }
+    	button {
+    		border-bottom: 1px solid $secondary !important;
+    	}
     }
+=======
+	.h1 {
+		text-align: left;
+		font-size: $h1;
+		font-weight: bold;
+		margin: 0px;
+	}
+
+	// Rounded Ion-Inputs
+	ion-item.item-input[round] {
+		display: inline-block;
+		border: 1px solid $primary-light !important;
+		box-shadow: none !important;
+		-webkit-border-radius: 4.4em !important;
+		border-radius: 4.4rem !important;
+		height: 35px !important;
+		min-height: 35px !important;
+		padding-left: 8px;
+
+		button {
+			border-radius: 4.4rem !important;
+		}
+
+		ion-label {
+			display: none;
+		}
+
+		.select-icon-inner {
+			color: transparent !important;
+		}
+
+		.item-inner {
+			box-shadow: none !important;
+			border: none !important;
+		}
+
+		input.text-input-ios,
+		textarea.text-input-ios {
+			padding: 0px 5px 0px 5px;
+			margin: 0px 8px 0px 8px;
+		}
+
+		input.text-input-md,
+		textarea.tetext-input-mdxt {
+			margin: 0px 8px 0px 8px;
+		}
+	}
+
+	// Rounded Ion-TextArea
+	ion-item.item-textarea[round], {
+		display: inline-block;
+		height: 60pt !important;
+		min-height: 60pt !important;
+		-webkit-border-radius: 15px !important;
+		border-radius: 15px !important;
+		box-shadow: none !important;
+
+		textarea {
+			height: 41pt !important;
+			min-height: 41pt !important;
+		}
+	}
+
+	// Invalid Rounded Inputs that are not dirty, invalid and not disabled
+	ion-item.item-input[round]:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
+		display: inline-block;
+		border: 1px solid $primary-light !important;
+	}
+
+	// Invalid Rounded Inputs that are invalid and not disabled
+	ion-item.item-input[round].ng-invalid:not(.item-input-disabled) {
+		display: inline-block;
+		border: 1px solid $danger !important;
+	}
+
+	// Disabled Rounded Ion-Input and Ion-TextArea
+	ion-item.item-input-disabled[round] {	
+		display: inline-block;
+		border: 1px solid $primary-light;
+		background-color: $secondary;
+
+		ion-select {
+			div[class=select-text] {
+				color: $primary !important;
+			}
+		}
+
+		.text-input[disabled] {
+			opacity: 1 !important;
+			color: $primary !important;
+			background-color: transparent !important;
+		}
+	}
+
+	// Read-only Ion-Items usually in Forms
+	.read-only {
+		ion-item.item-input[round] {
+			display: inline-block;
+			border: 1px $light !important;
+			background-color: $light !important;
+		}
+	}
+>>>>>>> 0bed003dce4beb5bd30add5f650e02b6921e943f
 
     .error-message{
-		margin: 5%;
-		text-align: left;
-		color: $danger;
->>>>>>> 38f1f7e4b37c1f15b26e972e56cdd351eae64851
+    	margin: 5%;
+    	text-align: left;
+    	color: $danger;
+    }
+}
+
+.control-bar{
+	ion-row{
+		background-color: $primary;
+		button{
+			color: $accent;
+		}
+
+		
 	}
+    &.minimize{
+        ion-row{
+            transition: 3s;
+            position: fixed;
+            z-index: 1;
+            width: 100%;
+            /* top: 0; */
+            top: 45px;
+        }
+    }
 }
