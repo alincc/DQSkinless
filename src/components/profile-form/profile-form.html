@@ -2,87 +2,67 @@
     <form [formGroup]="profileForm" (ngSubmit)="submitForm()" novalidate>
         <ion-list>
             <div class="row form-group">
-                <ion-item field>
-                    <ion-label in-line>Email:</ion-label>
-                    <ion-input formControlName="email"></ion-input>
+                <ion-label class="form-label h1">PRC License *</ion-label>
+                <ion-item round>
+                    <ion-input type="number" formControlName="prc"></ion-input>
                 </ion-item>
-            </div>
-            <div class="error-message" *ngIf="profileForm.get('email').invalid">
-                {{ errors.email }}
-            </div>
-            <div class="row form-group">
-                <ion-item field>
-                    <ion-label in-line>Last Name*:</ion-label>
+                <div class="error-message" *ngIf="profileForm.get('prc').invalid">
+                    {{ errors.prc }}
+                </div>
+                <ion-label class="form-label h1">PTR *</ion-label>
+                <ion-item round>
+                    <ion-input type="number" formControlName="ptr"></ion-input>
+                </ion-item>
+                <div class="error-message" *ngIf="profileForm.get('ptr').invalid">
+                    {{ errors.ptr }}
+                </div>
+                <ion-label class="form-label h1">Email *</ion-label>
+                <ion-item round>
+                    <ion-input type="email" formControlName="email"></ion-input>
+                </ion-item>
+                <div class="error-message" *ngIf="profileForm.get('email').invalid">
+                    {{ errors.email }}
+                </div>
+                <ion-label class="form-label h1">Last Name *</ion-label>
+                <ion-item round>
                     <ion-input formControlName="lastName"></ion-input>
                 </ion-item>
-            </div>
-            <div class="error-message" *ngIf="profileForm.get('lastName').invalid">
-                {{ errors.lastName }}
-            </div>
-            <div class="row form-group">
-                <ion-item field>
-                    <ion-label in-line>First Name*:</ion-label>
+                <div class="error-message" *ngIf="profileForm.get('lastName').invalid">
+                    {{ errors.lastName }}
+                </div>
+                <ion-label class="form-label h1">First Name *</ion-label>
+                <ion-item round>
                     <ion-input formControlName="firstName"></ion-input>
                 </ion-item>
-            </div>
-            <div class="error-message" *ngIf="profileForm.get('firstName').invalid">
-                {{ errors.firstName }}
-            </div>
-            <div class="row form-group">
-                <ion-item field>
-                    <ion-label in-line>Middle Name*:</ion-label>
+                <div class="error-message" *ngIf="profileForm.get('firstName').invalid">
+                    {{ errors.firstName }}
+                </div>
+                <ion-label class="form-label h1">Middle Name</ion-label>
+                <ion-item round>
                     <ion-input formControlName="middleName"></ion-input>
                 </ion-item>
-            </div>
-            <div class="error-message" *ngIf="profileForm.get('middleName').invalid">
-                {{ errors.middleName }}
-            </div>            
-            <div class="row form-group">
-                <ion-item field>
-                    <ion-label in-line>Birth Date:</ion-label>
+                <ion-label class="form-label h1">Birth Date *</ion-label>
+                <ion-item round>
                     <ion-input type="date" formControlName="birthDate"></ion-input>
                 </ion-item>
-            </div>
-            <div class="error-message" *ngIf="profileForm.get('birthDate').invalid">
-                {{ errors.birthDate }}
-            </div>
-            <div class="row form-group">
-                <ion-item field>
-                    <ion-label in-line>Gender:</ion-label>
-                    <!-- <button ion-button icon-only>
-					<ion-icon name="male"></ion-icon>
-                    </button>
-                    <button ion-button icon-only>
-                        <ion-icon name="female"></ion-icon>
-                    </button> -->
-                    <ion-select formControlName="gender">
-                        <ion-option value="M">
-                            <ion-icon name="male"></ion-icon>Male</ion-option>
-                        <ion-option value="F">
-                            <ion-icon name="female"></ion-icon>Female</ion-option>
-                    </ion-select>
-                </ion-item>
-            </div>
-            <div class="error-message" *ngIf="profileForm.get('gender').invalid">
-                {{ errors.gender }}
-            </div>
-            <div class="row form-group">
-                <ion-item field>
-                    <ion-label in-line>Address:</ion-label>
+                <div class="error-message" *ngIf="profileForm.get('birthDate').invalid">
+                    {{ errors.birthDate }}
+                </div>
+                <ion-label class="form-label h1">Gender</ion-label>
+                <ion-list radio-group name="gender" formControlName="gender">
+                    <ion-item *ngFor="let gender of genderList">
+                        <ion-radio color="primary" value="{{ gender.id }}"></ion-radio>
+                        <ion-label>{{ gender.description }}</ion-label>
+                    </ion-item>
+                </ion-list>
+                <ion-label class="form-label h1">Address</ion-label>
+                <ion-item round>
                     <ion-input formControlName="address"></ion-input>
                 </ion-item>
-            </div>
-            <div class="error-message" *ngIf="profileForm.get('address').invalid">
-                {{ errors.address }}
-            </div>
-            <div class="row form-group">
-                <ion-item field>
-                    <ion-label in-line>Contact No:</ion-label>
+                <ion-label class="form-label h1">Contact No.</ion-label>
+                <ion-item round>
                     <ion-input formControlName="contactNo"></ion-input>
                 </ion-item>
-            </div>
-            <div class="error-message" *ngIf="profileForm.get('contactNo').invalid">
-                {{ errors.contactNo }}
             </div>
         </ion-list>
         <button type="submit" ion-button round large color="accent" [disabled]="profileForm.invalid"> Submit </button>

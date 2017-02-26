@@ -1,11 +1,16 @@
 profile-form{
 
-	.form-group{
-		margin: 2%;
-	}
+	form {
 
-	form{
-		text-align: center;
-	}
-		
+		.form-group{
+			margin: 5% 2% 0 2%;
+		}
+
+		.form-label{
+			margin: 2% 0 2% 0;
+		}
+		.form-buttons{
+			text-align: center;
+		}
+	}		
 }

@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { config } from '../../config/config';
+
 import { equalValidator } from '../../shared/equal-validation.directive';
 
 @Component({
@@ -14,8 +16,6 @@ export class ChangePasswordForm implements OnInit {
     private changePasswordForm: FormGroup;
 
     errors: any;
-    password: AbstractControl;
-    confirm: AbstractControl;
 
     constructor(private formBuilder: FormBuilder) {
         this.errors = {
@@ -30,29 +30,33 @@ export class ChangePasswordForm implements OnInit {
 
     createForm() {
         this.changePasswordForm = this.formBuilder.group({
-            password: ['', Validators.required],
-            confirm: ['', [Validators.required, equalValidator('password', false)]]
+            password: ['', [Validators.required, Validators.pattern(config.regex.password)]],
+            confirm: ['', [Validators.required, Validators.pattern(config.regex.password), equalValidator('password', false)]]
         });
 
-        this.password = this.changePasswordForm.get('password');
-        this.confirm = this.changePasswordForm.get('confirm');
+        const password = this.changePasswordForm.get('password');
+        const confirm = this.changePasswordForm.get('confirm');
 
-        this.password.valueChanges.subscribe(
+        password.valueChanges.subscribe(
             newValue => {
-                if (this.password.hasError('required')) {
-                    this.errors.password = 'Password is required.';
+                if (password.hasError('required')) {
+                    this.errors.password = 'Password is required';
+                } else if (password.hasError('pattern')) {
+                    this.errors.password = 'Password must be alphanumeric and at least 8 characters long';
                 } else {
                     this.errors.password = '';
                 }
             }
         );
 
-        this.confirm.valueChanges.subscribe(
+        confirm.valueChanges.subscribe(
             newValue => {
-                if (this.confirm.hasError('required')) {
-                    this.errors.confirm = 'Password is required.';
-                } else if (!this.confirm.hasError('match')) {
-                    this.errors.confirm = 'Passwords do not match.';
+                if (confirm.hasError('required')) {
+                    this.errors.confirm = 'Password is required';
+                } else if (confirm.hasError('pattern')) {
+                    this.errors.confirm = 'Password must be alphanumeric and at least 8 characters long';
+                } else if (!confirm.hasError('match')) {
+                    this.errors.confirm = 'Passwords do not match';
                 } else {
                     this.errors.confirm = '';
                 }
