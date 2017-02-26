@@ -1,20 +1,49 @@
-import { Component} from '@angular/core';
-import { PopoverController} from 'ionic-angular';
+import { Component, ViewChild,ChangeDetectorRef} from '@angular/core';
+import { PopoverController, Content} from 'ionic-angular';
 import { MoreMenuPopover } from './more.popover';
 import { queue } from './schedule.mock';
 import { PatientProfilePage } from '../patient-profile/patient-profile.page';
-import { RootNavController } from '../../services/services';
+import { RootNavController } from '../../services';
 @Component({
 	selector: 'schedule-page',
 	templateUrl: 'schedule.html'
 })
 export class SchedulePage {
 	public queue: any[];
-
-	constructor(private popover: PopoverController,
-		private rootNav: RootNavController){
-		this.queue = queue;
+	@ViewChild(Content)
+	private content: Content;
+	@ViewChild('ServingNow')
+	private set _servingNow(dom){
+		this.servingNow = dom.nativeElement;
 	}
+	private servingNow: any;
+	private queueTopOffset: number;
+	public controlCss: boolean;
+	private isReOrder: boolean = false;
+	constructor(private popover: PopoverController,
+		private rootNav: RootNavController,
+		private detector: ChangeDetectorRef){
+		this.queue = queue;
+		this.controlCss = false;
+	}
+
+	ngAfterViewInit(){
+		this.queueTopOffset = this.servingNow.clientHeight;
+		this.content.ionScroll.subscribe(event => {
+			if(event.scrollTop > this.queueTopOffset){
+				if(!this.controlCss){
+					this.controlCss = true;
+					this.detector.detectChanges();
+				}
+			}else{
+				if(this.controlCss){
+					this.controlCss = false;
+					this.detector.detectChanges();
+				}
+			}
+		})
+	}
+
 
 	reorderItems(indexes){
 		let element = this.queue[indexes.from];
@@ -29,10 +58,19 @@ export class SchedulePage {
 		});
 		popover.onDidDismiss(response=>{
 			console.log(response);
+				switch (response) {
+					case 2:
+						this.toggleReOrder();
+						break;
+				}
 		});
 	}
 
 	view(patientId){
 		this.rootNav.push(PatientProfilePage);
+	}
+
+	toggleReOrder(){
+		this.isReOrder = !this.isReOrder;
 	}
 }

@@ -1,28 +1,44 @@
 import { NgModule, ErrorHandler } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { components } from './components';
 import { pages } from './pages';
+<<<<<<< HEAD
+import { RootNavController, Storage } from '../services';
+import { LockerModule,Locker } from 'angular2-locker'
+=======
 import { RootNavController } from '../services/services';
+import { CanvasWhiteboardModule } from 'ng2-canvas-whiteboard';
+import { EqualValidatorDirective } from '../shared/equal-validation.directive';
+
+>>>>>>> 0bed003dce4beb5bd30add5f650e02b6921e943f
 @NgModule({
   declarations: [
     MyApp,
+    pages,
     components,
-    pages
+    EqualValidatorDirective
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+<<<<<<< HEAD
+    LockerModule],
+=======
+    FormsModule,
+    ReactiveFormsModule,
+    CanvasWhiteboardModule,
   ],
+>>>>>>> 0bed003dce4beb5bd30add5f650e02b6921e943f
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    components,
-    pages
+    pages,
+    components
   ],
-<<<<<<< HEAD
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, RootNavController ]
-=======
-  providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler }]
->>>>>>> 38f1f7e4b37c1f15b26e972e56cdd351eae64851
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}
+  , RootNavController
+  , Storage
+  , Locker ]
 })
 export class AppModule { }

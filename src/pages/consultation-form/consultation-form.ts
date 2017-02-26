@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-
+import { NavController, NavParams, ModalController } from 'ionic-angular';
+import { DrawingPad } from '../../components/drawing-pad/drawing-pad';
 /*
   Generated class for the ConsultationForm page.
 
@@ -12,11 +12,15 @@ import { NavController, NavParams } from 'ionic-angular';
   templateUrl: 'consultation-form.html'
 })
 export class ConsultationFormPage {
+  private images : any[] =  [];
+  constructor(public navCtrl: NavController, public navParams: NavParams
+  	, private modal: ModalController) {}
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ConsultationFormPage');
+  addAttachment(){
+  	let modal = this.modal.create(DrawingPad, {diagram: 'MF'});
+  	modal.onDidDismiss(data => {
+  		this.images.push(data);
+  	})
+  	modal.present();
   }
-
 }

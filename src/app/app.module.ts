@@ -1,5 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LockerModule, Locker } from 'angular2-locker';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { CanvasWhiteboardModule } from 'ng2-canvas-whiteboard';
 
@@ -9,9 +10,8 @@ import { components } from './components';
 import { pages } from './pages';
 
 // services
-import { RootNavController } from '../services/services';
+import { RootNavController, Storage } from '../services/services';
 
-// shared
 import { EqualValidatorDirective } from '../shared/equal-validation.directive';
 
 // utilities
@@ -26,16 +26,21 @@ import { ConfigurationService } from '../utilities/configuration.service';
   ],
   imports: [
     IonicModule.forRoot(MyApp),
+    CanvasWhiteboardModule,
     FormsModule,
     ReactiveFormsModule,
-    CanvasWhiteboardModule,
-  ],
-  bootstrap: [IonicApp],
+    LockerModule
+  ], bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     pages,
     components
   ],
-  providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler }, ConfigurationService, RootNavController]
+  providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler }
+    , ConfigurationService
+    , Locker
+    , RootNavController
+    , Storage
+  ]
 })
 export class AppModule { }

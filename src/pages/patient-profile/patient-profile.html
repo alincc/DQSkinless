@@ -10,11 +10,13 @@
 		<ion-avatar item-left>
 			<img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
 		</ion-avatar>
-		<h1>Patient Name</h1>
+		<h2>Patient Name</h2>
 		<p>Patient Since: date</p>
 		<p>Contact No.: name</p>
+		<p>Age: 100</p>
+		<p>Address: QC</p>
 	</ion-item>
-	<ion-row color="primary">
+	<div class="control-bar" [ngClass]="{'minimize': controlCss}"><ion-row color="primary">
 		<ion-col width-33 color="primary">
 			<button ion-button icon-only clear full>
 				<ion-icon name='call' color="accent"></ion-icon>
@@ -34,13 +36,14 @@
 			</button>
 		</ion-col>
 	</ion-row>
+	</div>
 	<hr>
 	<ion-list no-lines>
 	<ion-item-group *ngFor="let group of timeline">
 		<ion-item-divider>
 			{{group.yearGroup}}
 		</ion-item-divider>
-		<ion-item *ngFor="let transaction of group.transactions">
+		<ion-item *ngFor="let transaction of group.transactions" (click)="open(transaction)">
 			<ion-card>
 				<ion-card-header>
 					{{transaction.description}}

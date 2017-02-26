@@ -2,16 +2,5 @@ patient-profile-page{
 	ion-content{
 		line-height: none;
 	}
-	ion-col {
-		padding: 0px;
-		border-top: 0;
-		border-right: 1px solid $light;
-		&:last-child{
-			border-right: none;
-		}
-		.button{
-			color: $accent;
-			
-		}
-	}
+	
 }

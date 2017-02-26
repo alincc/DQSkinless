@@ -1,19 +1,23 @@
 <ion-header>
 	<ion-toolbar color="primary">
 		<ion-buttons end>
-		<button ion-button color="accent" small>
+		<button ion-button color="accent" small (click)="save()">
 			SAVE
 		</button>
-		<button ion-button color="accent" outline small>
+		<button ion-button color="accent" outline small (click)="cancel()">
 			CANCEL
 		</button>
 		</ion-buttons>
 	</ion-toolbar>
 </ion-header>
-<ion-content>
-	<canvas-whiteboard #canvasWhiteboard class=""
-           [drawButtonClass]="'drawButtonClass'"
-           [clearButtonClass]="'clearButtonClass'"
-           >                    
-    </canvas-whiteboard>
+<ion-content color="primary">
+	<canvas #drawingPad id="myCanvas" [height]='content.contentHeight' [width]='content.contentWidth'
+		(mousedown)="pendown($event)"
+		(mousemove)="pendrag($event)"
+		(mouseup)="penup($event)"
+		(touchstart)="pendown($event)"
+		(touchmove)="pendrag($event)"
+		(touchend)="penup($event)"
+		src="assets/diagram/images.jpg">
+	</canvas>
 </ion-content>
