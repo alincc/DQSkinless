@@ -19,6 +19,7 @@ export class SchedulePage {
 	private servingNow: any;
 	private queueTopOffset: number;
 	public controlCss: boolean;
+	private isReOrder: boolean = false;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
 		private detector: ChangeDetectorRef){
@@ -57,10 +58,19 @@ export class SchedulePage {
 		});
 		popover.onDidDismiss(response=>{
 			console.log(response);
+				switch (response) {
+					case 2:
+						this.toggleReOrder();
+						break;
+				}
 		});
 	}
 
 	view(patientId){
 		this.rootNav.push(PatientProfilePage);
+	}
+
+	toggleReOrder(){
+		this.isReOrder = !this.isReOrder;
 	}
 }

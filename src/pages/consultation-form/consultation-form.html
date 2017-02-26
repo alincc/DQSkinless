@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>Consultation Form</ion-title>
   </ion-navbar>
 
@@ -14,5 +14,19 @@
 
 
 <ion-content padding>
-	<drawing-pad></drawing-pad>
+<ion-label>Visit Reason</ion-label>
+<ion-input></ion-input>
+<ion-label>Symptoms</ion-label>
+<ion-textarea></ion-textarea>
+<ion-label>Diagnosis</ion-label>
+<ion-textarea></ion-textarea>
+<ion-label>Remarks</ion-label>
+<ion-textarea></ion-textarea>
+<hr>
+<ion-label>Attachment</ion-label>
+<img *ngFor="let img of images" [src]="img">
+<button ion-button icon-only color="accent" round (click)="addAttachment()"><ion-icon name="add" ></ion-icon>Add</button>
+<hr>
+<button ion-button large icon-only color="accent" round>Submit</button>
+
 </ion-content>

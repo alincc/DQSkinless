@@ -22,13 +22,13 @@
 	</div>
 	<div class="control-bar" [ngClass]="{'minimize': controlCss}">
 		<ion-row>
-			<ion-col width-33 width-md-25>
+			<ion-col width-33 width-md-20>
 				<button ion-button icon-only clear full>
 					<ion-icon name="thumbs-up" color="accent"></ion-icon>
 					Done
 				</button>
 			</ion-col>
-			<ion-col width-33 width-md-25>
+			<ion-col width-33 width-md-20>
 				<button ion-button icon-only clear full>
 					<ion-icon name="swap" color="accent"></ion-icon>
 					Next
@@ -40,21 +40,27 @@
 					More
 				</button>
 			</ion-col>
-			<ion-col width-md-25>
+			<ion-col width-md-20>
 				<button ion-button icon-only  clear full>
 					<ion-icon name="return-left" color="accent"></ion-icon>
 					Queue Again
 				</button>
 			</ion-col>
-			<ion-col width-md-25>
+			<ion-col width-md-20>
 				<button ion-button icon-only  clear full>
 					<ion-icon name="eye-off" color="accent"></ion-icon>
 					No-Show
 				</button>
 			</ion-col>
+			<ion-col width-md-20>
+				<button ion-button icon-only  clear full>
+					<ion-icon name="list" color="accent" (click)="toggleReOrder()"></ion-icon>
+					Re-Order
+				</button>
+			</ion-col>
 		</ion-row>
 	</div>
-	<ion-list reorder="true" (ionItemReorder)="reorderItems($event)">
+	<ion-list [reorder]="isReOrder" (ionItemReorder)="reorderItems($event)">
 		<ion-item-sliding *ngFor="let customer of queue;">
 			<button ion-item  (click)="view(0)">
 				<ion-avatar  item-left>

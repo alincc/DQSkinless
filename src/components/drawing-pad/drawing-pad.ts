@@ -19,26 +19,23 @@ export class DrawingPad{
 
 	ngAfterViewInit(){
 		this.context = this.canvas.getContext("2d");
-		this.loadImage();
+		let _context = this.context;
+		let _content = this.content;
+		let imageObj = new Image();
+		imageObj.src = DIAGRAM.assets[this.params!.data!.diagram];
+		imageObj.onload = function(){
+			// setTimeout(() => {
+			_context.drawImage(imageObj,
+				(_content.contentWidth - imageObj.width)/2,
+				(_content.contentHeight - imageObj.height)/2);
+		// }, 300)
+		}
 	}
 
 	constructor(
 		private view: ViewController,
 		private params: NavParams){
 
-	}
-
-
-	private loadImage(){
-		let _context = this.context;
-		let _content = this.content;
-		let imageObj = new Image();
-		imageObj.src = DIAGRAM.assets[this.params!.data!.diagram];
-		imageObj.onload = function(){
-			_context.drawImage(imageObj,
-				(_content.contentWidth - imageObj.width)/2,
-				(_content.contentHeight - imageObj.height)/2);
-		}
 	}
 
 	private pendown(e){
