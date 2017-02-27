@@ -9,7 +9,7 @@ import { ConsultationFormPage } from '../pages/consultation-form/consultation-fo
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage = ConsultationFormPage;
+  rootPage = LoginPage;
   @ViewChild('rootApp')
   private app: any;
   constructor(platform: Platform,

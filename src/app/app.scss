@@ -144,6 +144,57 @@ ion-content{
 		}
 	}
 
+	// Radio Buttons
+	ion-list[role="radiogroup"]{
+		display: inline-block;
+		ion-item{
+			border-bottom: 0 !important;
+			border-top: 0 !important;
+			background-color: transparent !important;
+
+			.item-inner {
+				border: none !important;
+				direction: rtl;
+			}
+
+			.input-wrapper{
+				direction: ltr;
+				ion-label{
+					white-space: normal;
+					font-size: 14px;
+				}
+			}
+			ion-radio{
+				margin-left: 2px !important;
+				.radio-icon{
+					background-color: $secondary;
+					border: 1px solid $primary-light;
+					border-radius: 50%;
+					height: 21px;
+					width: 21px;
+					&.radio-checked .radio-inner{
+						border-radius: 50% !important;
+						height: 15px !important;
+						width: 15px !important;
+						left: 12%;
+						top: 11%;
+						background-color: $primary;
+						border-width: 0px !important;
+						-webkit-transform: none !important;
+						transform: none !important;
+					}
+				}
+			}
+			&.item-ios .input-wrapper{
+				margin-left: 10px !important;
+			}
+		}
+		.item-radio-checked.item-ios ion-label{
+			color: black !important;
+		}
+
+	}
+
     .error-message{
     	margin: 5%;
     	text-align: left;
@@ -170,10 +221,4 @@ ion-content{
             top: 44px;
         }
     }
-}
-
-ion-textarea, ion-input{
-    border: 1px solid;
-    border-radius: 10px;
-    background-color: white;
 }

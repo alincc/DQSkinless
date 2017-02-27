@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { config } from '../../config/config';
 
 @Component({
     selector: 'profile-form',
@@ -12,11 +14,14 @@ export class ProfileForm {
     private profileForm: FormGroup;
 
     errors: any;
+    genderList: any
 
     constructor(private formBuilder: FormBuilder) {
         this.createForm();
 
         this.errors = {
+            prc: '',
+            ptr: '',
             email: '',
             lastName: '',
             firstName: '',
@@ -26,32 +31,68 @@ export class ProfileForm {
             address: '',
             contactNo: ''
         };
+
+        this.genderList = config.GENDER;
     }
 
     createForm() {
         this.profileForm = this.formBuilder.group({
-            email: [''],
+            prc: ['', Validators.required],
+            ptr: ['', Validators.required],
+            email: ['', [Validators.required, Validators.pattern(config.regex.email)]],
             lastName: ['', Validators.required],
             firstName: ['', Validators.required],
-            middleName: ['', Validators.required],
-            birthDate: [''],//
-            gender: [''],//, Validators.required
-            address: [''],//, Validators.required
-            contactNo: [''],//, Validators.required
+            middleName: [''],
+            birthDate: ['', Validators.required],
+            gender: [''],
+            address: [''],
+            contactNo: ['', Validators.required]
         });
 
+        const prc = this.profileForm.get('prc');
+        const ptr = this.profileForm.get('ptr');
+        const email = this.profileForm.get('email');
         const lastName = this.profileForm.get('lastName');
         const firstName = this.profileForm.get('firstName');
-        const middleName = this.profileForm.get('middleName');
-        // const birthDate = this.profileForm.get('birthDate');
-        // const gender = this.profileForm.get('gender');
-        // const address = this.profileForm.get('address');
-        // const contactNo = this.profileForm.get('contactNo');
+        const birthDate = this.profileForm.get('birthDate');
+        const contactNo = this.profileForm.get('contactNo');
+
+        prc.valueChanges.subscribe(
+            newValue => {
+                if (prc.hasError('required')) {
+                    this.errors.prc = 'PRC is required';
+                } else {
+                    this.errors.prc = '';
+                }
+            }
+        );
+
+        ptr.valueChanges.subscribe(
+            newValue => {
+                if (ptr.hasError('required')) {
+                    this.errors.ptr = 'PTR is required';
+                } else {
+                    this.errors.ptr = '';
+                }
+            }
+        );
+
+        email.valueChanges.subscribe(
+            newValue => {
+                if (email.hasError('required')) {
+                    this.errors.email = 'Email is required.';
+                } else if (email.hasError('pattern')) {
+                    this.errors.email = 'Invalid email address format';
+                } else {
+                    this.errors.email = '';
+                }
+            }
+        );
 
         lastName.valueChanges.subscribe(
             newValue => {
                 if (lastName.hasError('required')) {
-                    this.errors.lastName = 'Last Name is required.';
+                    this.errors.lastName = 'Last Name is required';
                 } else {
                     this.errors.lastName = '';
                 }
@@ -61,61 +102,33 @@ export class ProfileForm {
         firstName.valueChanges.subscribe(
             newValue => {
                 if (firstName.hasError('required')) {
-                    this.errors.firstName = 'First Name is required.';
+                    this.errors.firstName = 'First Name is required';
                 } else {
                     this.errors.firstName = '';
                 }
             }
         );
 
-        
-        middleName.valueChanges.subscribe(
+        birthDate.valueChanges.subscribe(
             newValue => {
-                if (middleName.hasError('required')) {
-                    this.errors.middleName = 'Middle Name is required.';
+                console.log('errors =>' + JSON.stringify(birthDate.errors));
+                if (birthDate.hasError('required')) {
+                    this.errors.birthDate = 'Birth Date is required';
                 } else {
-                    this.errors.middleName = '';
+                    this.errors.birthDate = '';
                 }
             }
         );
 
-        // birthDate.valueChanges.subscribe(
-        //     newValue => {
-        //         if (birthDate.hasError('required')) {
-        //             this.errors.birthDate = 'Birth Date is required.';
-        //         } else {
-        //             this.errors.birthDate = '';
-        //         }
-        //     }
-        // );
-
-        // gender.valueChanges.subscribe(
-        //     newValue => {
-        //         if (gender.hasError('required')) {
-        //             this.errors.gender = 'Gender is required.';
-        //         } else {
-        //             this.errors.gender = '';
-        //         }
-        //     }
-        // );
-        // address.valueChanges.subscribe(
-        //     newValue => {
-        //         if (address.hasError('required')) {
-        //             this.errors.address = 'Address is required.';
-        //         } else {
-        //             this.errors.address = '';
-        //         }
-        //     }
-        // );
-        // contactNo.valueChanges.subscribe(
-        //     newValue => {
-        //         if (contactNo.hasError('required')) {
-        //             this.errors.contactNo = 'Contact Number is required.';
-        //         } else {
-        //             this.errors.contactNo = '';
-        //         }
-        //     }
-        // );
+        contactNo.valueChanges.subscribe(
+            newValue => {
+                if (contactNo.hasError('required')) {
+                    this.errors.contactNo = 'Contact No. is required';
+                } else {
+                    this.errors.contactNo = '';
+                }
+            }
+        );
     }
 
     submitForm() {
