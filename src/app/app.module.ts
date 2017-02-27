@@ -4,7 +4,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { components } from './components';
 import { pages } from './pages';
-import { RootNavController, Storage } from '../services';
+import { RootNavController, Storage } from '../services/services';
 import { LockerModule,Locker } from 'angular2-locker'
 import { EqualValidatorDirective } from '../shared/equal-validation.directive';
 

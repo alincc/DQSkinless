@@ -3,7 +3,7 @@ import { PopoverController, Content} from 'ionic-angular';
 import { MoreMenuPopover } from './more.popover';
 import { queue } from './schedule.mock';
 import { PatientProfilePage } from '../patient-profile/patient-profile.page';
-import { RootNavController } from '../../services';
+import { RootNavController } from '../../services/services';
 @Component({
 	selector: 'schedule-page',
 	templateUrl: 'schedule.html'

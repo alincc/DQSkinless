@@ -1,6 +1,6 @@
 import { Component, ViewChild} from '@angular/core';
 import { Content, ViewController, NavParams } from 'ionic-angular';
-import { DIAGRAM } from '../../constants';
+import { DIAGRAM } from '../../constants/constants';
 @Component({
 	selector:"drawing-pad",
 	templateUrl: "drawing-pad.html",

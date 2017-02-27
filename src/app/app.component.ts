@@ -1,15 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
-import { Storage } from '../services';
+import { Storage } from '../services/services';
 import { LoginPage } from '../pages/login/login.page';
-import { SchedulePage } from '../pages/schedule/schedule.page';
+import { ConsultationFormPage } from '../pages/consultation-form/consultation-form';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage = LoginPage;
+  rootPage = ConsultationFormPage;
   @ViewChild('rootApp')
   private app: any;
   constructor(platform: Platform,
