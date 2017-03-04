@@ -1,17 +1,21 @@
 <ion-content>
-	<img class="logo" src="assets/img/logo.jpg"/>
+	<div center>
+		<img class="logo" src="assets/img/logo.jpg"/>
+	</div>
 	<form #form="ngForm" (submit)="login()">
 		<ion-list no-lines>
-			<ion-item>
-				<ion-label in-line>Username</ion-label>
+			<ion-label><ion-icon name="person"></ion-icon>Username</ion-label>
+			<ion-item round>
 				<ion-input type="text"></ion-input>
 			</ion-item>
 
-			<ion-item>
-				<ion-label  in-line>Password</ion-label>
+			<ion-label ><ion-icon name="lock"></ion-icon>Password</ion-label>
+			<ion-item round>
 				<ion-input type="password"></ion-input>
 			</ion-item>
 		</ion-list>
-		<button ion-button round block big color="accent"> Login </button>
+		<div center>
+			<button ion-button round large color="accent"> Login </button>
+		</div>
 	</form>
 </ion-content>

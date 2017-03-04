@@ -2,5 +2,15 @@ patient-profile-page{
 	ion-content{
 		line-height: none;
 	}
+
+	ion-item {
+		button[icon-only]{
+			float:right;
+		}
+		ion-avatar img{
+			width: 90px !important;
+			height: 90px !important;
+		}
+	}
 	
 }

@@ -1,8 +1,7 @@
 login-page{
 	ion-content .scroll-content{
 		padding: 50px;
-		text-align: center;
-		background: $dark;
+		background: $primary;
 		.logo{
 			width: 60%;
 			height: auto;
@@ -10,19 +9,8 @@ login-page{
 		ion-list{
 			margin: 50px 0px;
 		}
-		ion-item{
-
-			ion-label{
-				color: $light;
-			}
-			ion-input{
-				color: $light;
-			}
-			background-color: $dark;
-		}
-		button{
-			font-size: 22px;
-			padding: 30px;
+		ion-label{
+			color: $light;
 		}
 	}
 	

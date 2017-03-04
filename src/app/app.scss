@@ -99,8 +99,8 @@ ion-content{
 		box-shadow: none !important;
 
 		textarea {
-			height: 41pt !important;
-			min-height: 41pt !important;
+			margin: 5px !important;
+			min-height: 100% !important;
 		}
 	}
 
@@ -221,4 +221,33 @@ ion-content{
             top: 44px;
         }
     }
+}
+
+
+
+form {
+	.form-group{
+		margin: 5% 2% 0 2%;
+	}
+
+	.form-label{
+		margin: 2% 0 2% 0;
+	}
+	.form-buttons{
+		text-align: center;
+	}
+}
+
+button,ion-label ion-icon{
+	margin-right: 5px;
+}
+
+div[center]{
+	text-align: center;
+}
+
+div [frame]{
+	padding: 5px;
+	border: dashed 1px $primary-light;
+	border-radius: 4px;
 }

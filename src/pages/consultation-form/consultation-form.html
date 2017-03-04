@@ -15,18 +15,31 @@
 
 <ion-content padding>
 <ion-label>Visit Reason</ion-label>
-<ion-input></ion-input>
+<ion-item round>
+	<ion-input round></ion-input>
+</ion-item>
 <ion-label>Symptoms</ion-label>
+<ion-item round>
 <ion-textarea></ion-textarea>
+</ion-item>
 <ion-label>Diagnosis</ion-label>
+<ion-item round>
 <ion-textarea></ion-textarea>
+</ion-item>
 <ion-label>Remarks</ion-label>
+<ion-item round>
 <ion-textarea></ion-textarea>
+</ion-item>
 <hr>
 <ion-label>Attachment</ion-label>
-<img *ngFor="let img of images" [src]="img">
-<button ion-button icon-only color="accent" round (click)="addAttachment()"><ion-icon name="add" ></ion-icon>Add</button>
+<div center>
+<div frame *ngFor="let img of images" >
+	<img [src]="img">
+</div>
+	<button ion-button large color="accent" round (click)="addAttachment()" center><ion-icon name="attach"></ion-icon>Attach</button>
+</div>
 <hr>
-<button ion-button large icon-only color="accent" round>Submit</button>
-
+<div center>
+<button ion-button large color="accent" round>Submit</button>
+</div>
 </ion-content>

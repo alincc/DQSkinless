@@ -3,7 +3,7 @@ import { Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import { Storage } from '../services/services';
 import { LoginPage } from '../pages/login/login.page';
-import { ConsultationFormPage } from '../pages/consultation-form/consultation-form';
+import { PatientProfilePage } from '../pages/patient-profile/patient-profile.page';
 
 @Component({
   templateUrl: 'app.html'
