@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content #Content padding>
     <form [formGroup]="profileForm" (ngSubmit)="submitForm()" novalidate>
         <ion-list>
             <div class="row form-group">
@@ -59,7 +59,7 @@
                 <ion-item round>
                     <ion-input formControlName="address"></ion-input>
                 </ion-item>
-                <ion-label class="form-label h1">Contact No.</ion-label>
+                <ion-label class="form-label h1">Contact No. *</ion-label>
                 <ion-item round>
                     <ion-input formControlName="contactNo"></ion-input>
                 </ion-item>

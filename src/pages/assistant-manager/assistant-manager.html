@@ -1,24 +1,44 @@
 <ion-content #Content padding>
-	<h3>Number of Available Assitant Account: 1</h3>
+	<h3>Number of Available Assitant Account: {{ allowableAssistants }}</h3>
 	<ion-list>
+		<ion-item-sliding>
+			<ion-item *ngFor="let a of assistants" no-lines>
+				<ion-avatar item-left>
+					<img src="https://tribzap2it.files.wordpress.com/2015/10/ken-jeong-dr-ken-abc.jpg">
+				</ion-avatar>
+				<h2>{{ a }}</h2>
+			</ion-item>
+			<ion-item-options side="right">
+				<button ion-button color="accent-light">
+                    <ion-icon name="clipboard"></ion-icon>
+                </button>
+				<button ion-button color="accent-light">
+                    <ion-icon name="trash"></ion-icon>
+                </button>
+			</ion-item-options>
+		</ion-item-sliding>
+	</ion-list>
+	<ion-label *ngIf="assistants.length === 0">
+		No assistants added.
+	</ion-label>
+	<!--<ion-list>
 		<ion-item no-lines>
 			<ion-card>
 				<ion-card-header>
 					Assistant-name
 				</ion-card-header>
 				<ion-card-content>
-					Contact Number: 123123123
-					Address: 121 kaliwa kanan St. Dimatagpuan City.
+					Contact Number: 123123123 Address: 121 kaliwa kanan St. Dimatagpuan City.
 				</ion-card-content>
 			</ion-card>
 		</ion-item>
-	</ion-list>
+	</ion-list>-->
 	<ion-fab bottom right>
 		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
 		<ion-fab-list side="left">
-	      <button color="accent-light" ion-fab><ion-icon name="person-add"></ion-icon></button>
-	      <button color="accent-light" ion-fab><ion-icon name="search"></ion-icon>
+			<button color="accent-light" ion-fab (click)="addAssistant()"><ion-icon name="person-add"></ion-icon></button>
+			<button color="accent-light" ion-fab (click)="searchAssistant()"><ion-icon name="search"></ion-icon>
 	      </button>
-	    </ion-fab-list>
+		</ion-fab-list>
 	</ion-fab>
 </ion-content>

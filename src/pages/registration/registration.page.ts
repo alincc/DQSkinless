@@ -17,7 +17,8 @@ export class RegistrationPage {
 		this.root = StepOnePage;
 		this.params = {
 			parentNav: nav,
-			parent: this
+			parent: this,
+			registrationData: {}
 		};
 	}
 
@@ -38,6 +39,4 @@ export class RegistrationPage {
 	public done(){
 		this.nav.push(ManagerPage);
 	}
-
-
 }
