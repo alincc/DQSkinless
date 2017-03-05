@@ -10,11 +10,13 @@ import { AssistantManagerPage } from '../assistant-manager/assistant-manager.pag
 	selector: 'login-page',
 	templateUrl: 'login.html'
 })
-export class LoginPage{
+export class LoginPage {
 
-	constructor(private nav: NavController){}
+	constructor(private nav: NavController) { }
 
-	public login(){
-		this.nav.setRoot(RegistrationPage);
+	public login() {
+		// FOR TESTING
+		const isLoggedAsDoctor = true;
+		this.nav.setRoot(RegistrationPage, { isLoggedAsDoctor: isLoggedAsDoctor });
 	}
 }

@@ -11,18 +11,19 @@ export class StepTwoPage {
 
     private parentNav: NavController;
 
+    public formType: string;
+
     constructor(private nav: NavController,
         private params: NavParams) {
         this.parentNav = params.data.parentNav;
+        this.formType = params.data.isLoggedAsDoctor ? 'doctor' : 'nonDoctor';
         params.data.parent.step = 2;
     }
 
     public submit(response) {
         if (this.params.data) {
-            console.log(response);
             this.params.data.parent.step = 3;
-            this.params.data.registrationData.profile = response;
-            console.log('registration data=>' + JSON.stringify(this.params.data.registrationData));
+            this.params.data.registrationData.user.profile = response;
             this.nav.setRoot(StepThreePage, this.params.data, { animate: true, direction: 'forward' });
         }
     }

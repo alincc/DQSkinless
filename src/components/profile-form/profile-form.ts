@@ -1,66 +1,78 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { config } from '../../config/config';
 
 import { Profile } from '../../shared/model/registration.model';
 
+import { DOCTOR_TYPES } from './doctor-types';
+
 @Component({
     selector: 'profile-form',
     templateUrl: 'profile-form.html'
 })
-export class ProfileForm {
+export class ProfileForm implements OnInit {
 
     @Input() formTitle: string;
+    @Input() formType: string;
 
     @Output() onSubmit = new EventEmitter();
 
     private profileForm: FormGroup;
     private profile: Profile;
 
+    public doctorTypes: any;
     public errors: any;
-    public genderList: any
+    public genderList: any;
 
     constructor(private formBuilder: FormBuilder) {
         this.formTitle = 'My Profile';
-        this.createForm();
-
+        this.formType = 'nonDoctor';        
+        this.doctorTypes = DOCTOR_TYPES;
         this.errors = {
             prc: '',
             ptr: '',
+            doctorType: '',
+            specialization: '',
             email: '',
             lastName: '',
             firstName: '',
-            middleName: '',
             birthDate: '',
             gender: '',
-            address: '',
             contactNo: ''
         };
-
         this.genderList = config.GENDER;
+    }
+
+    ngOnInit() {
+        this.createForm();
     }
 
     createForm() {
         this.profileForm = this.formBuilder.group({
-            prc: ['', Validators.required],
-            ptr: ['', Validators.required],
+            prc: this.formType === 'doctor' ? ['', Validators.required] : [''],
+            ptr: this.formType === 'doctor' ? ['', Validators.required] : [''],
+            doctorType: this.formType === 'doctor' ? ['', Validators.required] : [''],
+            specialization: this.formType === 'doctor' ? ['', Validators.required] : [''],
             email: ['', [Validators.required, Validators.pattern(config.regex.email)]],
             lastName: ['', Validators.required],
             firstName: ['', Validators.required],
             middleName: [''],
             birthDate: ['', Validators.required],
-            gender: [''],
+            gender: ['', Validators.required],
             address: [''],
             contactNo: ['', Validators.required]
         });
 
         const prc = this.profileForm.get('prc');
         const ptr = this.profileForm.get('ptr');
+        const doctorType = this.profileForm.get('doctorType');
+        const specialization = this.profileForm.get('specialization');
         const email = this.profileForm.get('email');
         const lastName = this.profileForm.get('lastName');
         const firstName = this.profileForm.get('firstName');
         const birthDate = this.profileForm.get('birthDate');
+        const gender = this.profileForm.get('gender');
         const contactNo = this.profileForm.get('contactNo');
 
         prc.valueChanges.subscribe(
@@ -79,6 +91,26 @@ export class ProfileForm {
                     this.errors.ptr = 'PTR is required';
                 } else {
                     this.errors.ptr = '';
+                }
+            }
+        );
+
+        doctorType.valueChanges.subscribe(
+            newValue => {
+                if (doctorType.hasError('required')) {
+                    this.errors.doctorType = 'Doctor Type is required';
+                } else {
+                    this.errors.doctorType = '';
+                }
+            }
+        );
+
+        specialization.valueChanges.subscribe(
+            newValue => {
+                if (specialization.hasError('required')) {
+                    this.errors.specialization = 'Specialization is required';
+                } else {
+                    this.errors.specialization = '';
                 }
             }
         );
@@ -125,6 +157,16 @@ export class ProfileForm {
             }
         );
 
+        gender.valueChanges.subscribe(
+            newValue => {
+                if (gender.hasError('required')) {
+                    this.errors.gender = 'Gender is required';
+                } else {
+                    this.errors.gender = '';
+                }
+            }
+        );
+
         contactNo.valueChanges.subscribe(
             newValue => {
                 if (contactNo.hasError('required')) {
@@ -145,6 +187,8 @@ export class ProfileForm {
         this.profile = new Profile();
         this.profile.prc = this.profileForm.get('prc').value;
         this.profile.ptr = this.profileForm.get('ptr').value;
+        this.profile.doctorType = this.profileForm.get('doctorType').value;
+        this.profile.specialization = this.profileForm.get('specialization').value;
         this.profile.email = this.profileForm.get('email').value;
         this.profile.lastName = this.profileForm.get('lastName').value;
         this.profile.firstName = this.profileForm.get('firstName').value;

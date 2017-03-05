@@ -1,8 +1,12 @@
 export class RegistrationData {
+    user: RegistrationForm;
+    assistant: RegistrationForm[];
+}
+
+export class RegistrationForm {
     password: string;
     photo: string;
     profile: Profile;
-    assistants: Profile[];
 }
 
 export class Profile {

@@ -4,11 +4,12 @@
 		<ion-item-sliding>
 			<ion-item *ngFor="let assistant of assistants">
 				<ion-avatar item-left>
-					<img src="https://tribzap2it.files.wordpress.com/2015/10/ken-jeong-dr-ken-abc.jpg">
+					<img src="http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif">
 				</ion-avatar>
 				<h2>Name: {{ assistant.profile.fullName }}</h2>
 				<h2>Login: {{ assistant.profile.email }}</h2>
 				<h2>Password: {{ assistant.password }}</h2>
+				<h2>Contact No: {{ assistant.profile.contactNo }}</h2>
 			</ion-item>
 			<ion-item-options side="right">
 				<button ion-button color="accent-light">

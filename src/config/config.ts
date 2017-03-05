@@ -28,5 +28,9 @@ export const config = {
             id: '2',
             description: 'Female'
         }
-    ]
+    ],
+    ROLES:{
+        doctor: 'doctor',
+        nonDoctor: 'nonDoctor',
+    }
 };

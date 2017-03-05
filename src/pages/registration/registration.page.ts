@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, Content } from 'ionic-angular';
+import { Content, NavController, NavParams } from 'ionic-angular';
 
 import { ManagerPage } from "../manager/manager.page";
 import { StepOnePage } from './step-one/step-one.page';
 
-import { RegistrationData } from '../../shared/model/registration.model';
+import { RegistrationData, RegistrationForm } from '../../shared/model/registration.model';
 
 @Component({
 	selector: 'registration-page',
@@ -18,17 +18,27 @@ export class RegistrationPage {
 	public completedRegistration: boolean;
 	public _step: number;
 
-	constructor(private nav: NavController) {
+	constructor(
+		private nav: NavController,
+		private loginParams: NavParams) {
+
 		this.root = StepOnePage;
 		this.completedRegistration = false;
+
 		this.params = {
 			parentNav: nav,
 			parent: this,
-			registrationData: new RegistrationData()
+			isLoggedAsDoctor: this.loginParams.data.isLoggedAsDoctor,
+			registrationData: this.initRegistrationData()
 		};
 	}
 
-
+	initRegistrationData() {
+		const registrationData = new RegistrationData();
+		registrationData.user = new RegistrationForm();
+		registrationData.assistant = [];
+		return registrationData;
+	}
 	public set step(_step: any) {
 		if (_step == 4) {
 			this.content!.resize();

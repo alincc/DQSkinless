@@ -143,6 +143,38 @@ ion-content{
 			background-color: $light !important;
 		}
 	}
+	// Select Inputs
+	ion-item.item-select {
+		padding-left: 15px;
+		border: 1px solid $primary-light !important;
+		-webkit-border-radius: 4.4em !important;
+		border-radius: 4.4rem !important;
+		height: 35px !important;
+		min-height: 35px !important;
+
+		button {
+			border-radius: 4.4rem !important;
+		}
+
+		ion-label {
+			display: none;
+		}
+		
+		.options {
+    		width: 100%;
+			max-width: 100%;
+			padding: 0;
+
+			.select-icon-inner {
+				color: transparent !important;
+			}
+    	}		
+
+		.item-inner {
+			box-shadow: none !important;
+			border: none !important;
+		}
+	}
 
 	// Radio Buttons
 	ion-list[role="radiogroup"]{

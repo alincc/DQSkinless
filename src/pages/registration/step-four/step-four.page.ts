@@ -19,7 +19,6 @@ export class StepFourPage {
 
     public submit(response) {
         if (this.params.data) {
-            console.log(response);
             this.parentNav.setRoot(ManagerPage);
         }
     }

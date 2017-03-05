@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
-import { RegistrationData } from '../../../shared/model/registration.model';
+import { RegistrationForm } from '../../../shared/model/registration.model';
 
 import { PasswordGeneratorService } from '../../../utilities/password-generator.service';
 
@@ -21,12 +21,12 @@ export class AddAssistantPage {
 
     public submit(response) {
         this.callback = this.params.get('callback');
-        let registrationData = new RegistrationData();
+        let registrationForm = new RegistrationForm();
 
-        registrationData.profile = response;
-        registrationData.password = this.passwordGeneratorService.generatePassword();
+        registrationForm.profile = response;
+        registrationForm.password = this.passwordGeneratorService.generatePassword();
         
-        this.callback(registrationData).then(() => {
+        this.callback(registrationForm).then(() => {
             this.nav.pop();
         });
     }
