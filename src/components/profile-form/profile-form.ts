@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { config } from '../../config/config';
@@ -11,6 +11,8 @@ import { Profile } from '../../shared/model/registration.model';
 })
 export class ProfileForm {
 
+    @Input() formTitle: string;
+
     @Output() onSubmit = new EventEmitter();
 
     private profileForm: FormGroup;
@@ -20,6 +22,7 @@ export class ProfileForm {
     public genderList: any
 
     constructor(private formBuilder: FormBuilder) {
+        this.formTitle = 'My Profile';
         this.createForm();
 
         this.errors = {

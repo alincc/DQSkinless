@@ -43,6 +43,6 @@ export class RegistrationPage {
 	public done() {
 		// TODO save registration data
 		console.log('registration data=> ' + JSON.stringify(this.params.registrationData));
-		this.nav.push(ManagerPage);
+		this.nav.setRoot(ManagerPage);
 	}
 }

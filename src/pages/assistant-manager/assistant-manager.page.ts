@@ -29,10 +29,12 @@ export class AssistantManagerPage {
 
 	addAssistantCallBack = (params) => {
 		return new Promise((resolve, reject) => {
-			this.assistants = new Array(this.allowableAssistants);
 			this.assistants.push(params);
 			this.allowableAssistants--;
-			this.params.data.parent.completedRegistration = true;
+
+			if (this.params.data) {
+				this.params.data.parent.completedRegistration = true;
+			}
 			resolve();
 		});
 	}

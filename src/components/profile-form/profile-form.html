@@ -1,4 +1,5 @@
 <ion-content #Content padding>
+    <h3>{{ formTitle }}</h3>
     <form [formGroup]="profileForm" (ngSubmit)="submitForm()" novalidate>
         <ion-list>
             <div class="row form-group">
@@ -6,35 +7,35 @@
                 <ion-item round>
                     <ion-input type="number" formControlName="prc"></ion-input>
                 </ion-item>
-                <div class="error-message" *ngIf="profileForm.get('prc').invalid">
+                <div class="error-message" *ngIf="profileForm.get('prc').dirty && profileForm.get('prc').invalid">
                     {{ errors.prc }}
                 </div>
                 <ion-label class="form-label h1">PTR *</ion-label>
                 <ion-item round>
                     <ion-input type="number" formControlName="ptr"></ion-input>
                 </ion-item>
-                <div class="error-message" *ngIf="profileForm.get('ptr').invalid">
+                <div class="error-message" *ngIf="profileForm.get('ptr').dirty &&  profileForm.get('ptr').invalid">
                     {{ errors.ptr }}
                 </div>
                 <ion-label class="form-label h1">Email *</ion-label>
                 <ion-item round>
                     <ion-input type="email" formControlName="email"></ion-input>
                 </ion-item>
-                <div class="error-message" *ngIf="profileForm.get('email').invalid">
+                <div class="error-message" *ngIf="profileForm.get('email').dirty &&  profileForm.get('email').invalid">
                     {{ errors.email }}
                 </div>
                 <ion-label class="form-label h1">Last Name *</ion-label>
                 <ion-item round>
                     <ion-input formControlName="lastName"></ion-input>
                 </ion-item>
-                <div class="error-message" *ngIf="profileForm.get('lastName').invalid">
+                <div class="error-message" *ngIf="profileForm.get('lastName').dirty &&  profileForm.get('lastName').invalid">
                     {{ errors.lastName }}
                 </div>
                 <ion-label class="form-label h1">First Name *</ion-label>
                 <ion-item round>
                     <ion-input formControlName="firstName"></ion-input>
                 </ion-item>
-                <div class="error-message" *ngIf="profileForm.get('firstName').invalid">
+                <div class="error-message" *ngIf="profileForm.get('firstName').dirty &&  profileForm.get('firstName').invalid">
                     {{ errors.firstName }}
                 </div>
                 <ion-label class="form-label h1">Middle Name</ion-label>
@@ -45,7 +46,7 @@
                 <ion-item round>
                     <ion-input type="date" formControlName="birthDate"></ion-input>
                 </ion-item>
-                <div class="error-message" *ngIf="profileForm.get('birthDate').invalid">
+                <div class="error-message" *ngIf="profileForm.get('birthDate').dirty &&  profileForm.get('birthDate').invalid">
                     {{ errors.birthDate }}
                 </div>
                 <ion-label class="form-label h1">Gender</ion-label>
@@ -63,6 +64,9 @@
                 <ion-item round>
                     <ion-input formControlName="contactNo"></ion-input>
                 </ion-item>
+                <div class="error-message" *ngIf="profileForm.get('contactNo').dirty &&  profileForm.get('contactNo').invalid">
+                    {{ errors.contactNo }}
+                </div>
             </div>
         </ion-list>
         <div center>

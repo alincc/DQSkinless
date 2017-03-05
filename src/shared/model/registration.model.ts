@@ -19,4 +19,8 @@ export class Profile {
     gender?: string;
     maritalStatus?: string;
     contactNo: string;
+
+    get fullName() {
+        return this.lastName + ', ' + this.firstName + ' ' + this.middleName;
+    }
 }
