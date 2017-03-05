@@ -2,13 +2,13 @@
 	<h3>Number of Available Assitant Account: {{ allowableAssistants }}</h3>
 	<ion-list>
 		<ion-item-sliding>
-			<ion-item *ngFor="let a of assistants">
+			<ion-item *ngFor="let assistant of assistants">
 				<ion-avatar item-left>
 					<img src="https://tribzap2it.files.wordpress.com/2015/10/ken-jeong-dr-ken-abc.jpg">
 				</ion-avatar>
-				<h2>{{ a.fullName }}</h2>
-				<h2>{{ a.email }}</h2>
-				<h2>{{ a.password }}</h2>
+				<h2>Name: {{ assistant.profile.fullName }}</h2>
+				<h2>Login: {{ assistant.profile.email }}</h2>
+				<h2>Password: {{ assistant.password }}</h2>
 			</ion-item>
 			<ion-item-options side="right">
 				<button ion-button color="accent-light">

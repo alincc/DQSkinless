@@ -15,6 +15,7 @@ import { EqualValidatorDirective } from '../shared/directive/equal-validation.di
 
 // utilities
 import { ConfigurationService } from '../utilities/configuration.service';
+import { PasswordGeneratorService } from '../utilities/password-generator.service';
 
 @NgModule({
   declarations: [
@@ -34,11 +35,12 @@ import { ConfigurationService } from '../utilities/configuration.service';
     pages,
     components
   ],
-  providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler }
-    , ConfigurationService
-    , Locker
-    , RootNavController
-    , Storage
+  providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler },
+    ConfigurationService,
+    PasswordGeneratorService,
+    Locker,
+    RootNavController,
+    Storage
   ]
 })
 export class AppModule { }

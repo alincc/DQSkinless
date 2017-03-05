@@ -4,7 +4,7 @@ import { NavController, NavParams } from "ionic-angular";
 import { AddAssistantPage } from './add-assistant/add-assistant.page';
 import { SearchAssistantPage } from './search-assistant/search-assistant.page';
 
-import { Profile } from '../../shared/model/registration.model';
+import { RegistrationData } from '../../shared/model/registration.model';
 
 @Component({
 	selector: 'assistant-manager-page',
@@ -13,11 +13,11 @@ import { Profile } from '../../shared/model/registration.model';
 export class AssistantManagerPage {
 
 	allowableAssistants: number;
-	assistants: Profile[];
+	assistants: RegistrationData[];
 
 	constructor(private nav: NavController,
 		private params: NavParams) {
-		this.allowableAssistants = 1;
+		this.allowableAssistants = 4;
 		this.assistants = [];
 	}
 
@@ -32,7 +32,7 @@ export class AssistantManagerPage {
 			this.assistants.push(params);
 			this.allowableAssistants--;
 
-			if (this.params.data) {
+			if (this.params.data.parent) {
 				this.params.data.parent.completedRegistration = true;
 			}
 			resolve();

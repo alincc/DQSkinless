@@ -3,7 +3,9 @@ import { NavController } from 'ionic-angular';
 import { ManagerPage } from '../manager/manager.page';
 import { RegistrationPage } from '../registration/registration.page';
 
+// TO BE REMOVED
 import { AssistantManagerPage } from '../assistant-manager/assistant-manager.page';
+
 @Component({
 	selector: 'login-page',
 	templateUrl: 'login.html'

@@ -19,10 +19,7 @@ import { StepThreePage } from '../pages/registration/step-three/step-three.page'
 import { StepFourPage } from '../pages/registration/step-four/step-four.page';
 import { TabsPage } from '../pages/tabs/tabs';
 
-
 import { ChangePasswordPage } from '../pages/change-password/change-password.page';
-
-
 
 export const pages: any[] = [
 	AddAssistantPage,
@@ -47,5 +44,4 @@ export const pages: any[] = [
 	TabsPage,
 
 	ChangePasswordPage,
-
 ]

@@ -65,6 +65,6 @@ export class ChangePasswordForm implements OnInit {
     }
 
     submitForm() {
-        this.onSubmit.emit(this.changePasswordForm.get('password').value);
+        this.onSubmit.emit(btoa(this.changePasswordForm.get('password').value));
     }
 }
