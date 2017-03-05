@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { config } from '../../config/config';
 
+import { Profile } from '../../shared/model/registration.model';
+
 @Component({
     selector: 'profile-form',
     templateUrl: 'profile-form.html'
@@ -12,9 +14,10 @@ export class ProfileForm {
     @Output() onSubmit = new EventEmitter();
 
     private profileForm: FormGroup;
+    private profile: Profile;
 
-    errors: any;
-    genderList: any
+    public errors: any;
+    public genderList: any
 
     constructor(private formBuilder: FormBuilder) {
         this.createForm();
@@ -111,7 +114,6 @@ export class ProfileForm {
 
         birthDate.valueChanges.subscribe(
             newValue => {
-                console.log('errors =>' + JSON.stringify(birthDate.errors));
                 if (birthDate.hasError('required')) {
                     this.errors.birthDate = 'Birth Date is required';
                 } else {
@@ -132,6 +134,21 @@ export class ProfileForm {
     }
 
     submitForm() {
-        this.onSubmit.emit(this.profileForm.value);
+        this.setProfileDetails();
+        this.onSubmit.emit(this.profile);
+    }
+
+    setProfileDetails() {
+        this.profile = new Profile();
+        this.profile.prc = this.profileForm.get('prc').value;
+        this.profile.ptr = this.profileForm.get('ptr').value;
+        this.profile.email = this.profileForm.get('email').value;
+        this.profile.lastName = this.profileForm.get('lastName').value;
+        this.profile.firstName = this.profileForm.get('firstName').value;
+        this.profile.middleName = this.profileForm.get('middleName').value;
+        this.profile.birthDate = this.profileForm.get('birthDate').value;
+        this.profile.gender = this.profileForm.get('gender').value;
+        this.profile.address = this.profileForm.get('address').value;
+        this.profile.contactNo = this.profileForm.get('contactNo').value;
     }
 }

@@ -1,9 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { config } from '../../config/config';
 
-import { equalValidator } from '../../shared/equal-validation.directive';
+import { equalValidator } from '../../shared/directive/equal-validation.directive';
 
 @Component({
     selector: 'change-password-form',

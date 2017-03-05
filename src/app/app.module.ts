@@ -11,7 +11,7 @@ import { pages } from './pages';
 // services
 import { RootNavController, Storage } from '../services/services';
 
-import { EqualValidatorDirective } from '../shared/equal-validation.directive';
+import { EqualValidatorDirective } from '../shared/directive/equal-validation.directive';
 
 // utilities
 import { ConfigurationService } from '../utilities/configuration.service';

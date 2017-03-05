@@ -18,9 +18,10 @@ export class StepThreePage {
     }
 
     public submit(response) {
-        if (this.params.data) {
-            console.log(response);
+        if (this.params.data) {            
             this.params.data.parent.step = 4;
+            this.params.data.registrationData.photo = response;
+            console.log('registration data=>' + JSON.stringify(this.params.data.registrationData));
             this.nav.setRoot(StepFourPage, this.params.data, { animate: true, direction: 'forward' });
         }
     }

@@ -42,7 +42,7 @@ export class UploadPhoto {
 	}
 
 	public submit(){
-		this.onSubmit.emit('upload photo');
+		this.onSubmit.emit('todo photo in base 64');
 		// this.nav.push(AssistantManagerForm, {parent: this.params.data.parent});
 	}
 

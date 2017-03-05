@@ -35,6 +35,6 @@
 <ion-nav [root]="root" [rootParams]="params"></ion-nav>
 </ion-content>
 <ion-footer *ngIf="step==4">
-	<button ion-button full color="secondary" (click)="done()">DONE</button>
+	<button ion-button full color="secondary" [disabled]="!completedRegistration" (click)="done()">DONE</button>
 </ion-footer>
 

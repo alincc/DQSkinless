@@ -21,6 +21,8 @@ export class StepTwoPage {
         if (this.params.data) {
             console.log(response);
             this.params.data.parent.step = 3;
+            this.params.data.registrationData.profile = response;
+            console.log('registration data=>' + JSON.stringify(this.params.data.registrationData));
             this.nav.setRoot(StepThreePage, this.params.data, { animate: true, direction: 'forward' });
         }
     }

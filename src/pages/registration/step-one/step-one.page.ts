@@ -13,14 +13,15 @@ export class StepOnePage {
 
     constructor(private nav: NavController,
         private params: NavParams) {
-            this.parentNav = params.data.parentNav;
-            params.data.parent.step = 1;
+        this.parentNav = params.data.parentNav;
+        params.data.parent.step = 1;
     }
 
     public changePassword(response) {
         if (this.params.data) {
-            console.log(response);
             this.params.data.parent.step = 2;
+            this.params.data.registrationData.password = response;            
+            console.log('registration data=>' + JSON.stringify(this.params.data.registrationData));
             this.nav.setRoot(StepTwoPage, this.params.data, { animate: true, direction: 'forward' });
         }
     }

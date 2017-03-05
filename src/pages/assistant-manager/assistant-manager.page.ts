@@ -4,6 +4,8 @@ import { NavController, NavParams } from "ionic-angular";
 import { AddAssistantPage } from './add-assistant/add-assistant.page';
 import { SearchAssistantPage } from './search-assistant/search-assistant.page';
 
+import { Profile } from '../../shared/model/registration.model';
+
 @Component({
 	selector: 'assistant-manager-page',
 	templateUrl: 'assistant-manager.html'
@@ -11,7 +13,7 @@ import { SearchAssistantPage } from './search-assistant/search-assistant.page';
 export class AssistantManagerPage {
 
 	allowableAssistants: number;
-	assistants: any[];
+	assistants: Profile[];
 
 	constructor(private nav: NavController,
 		private params: NavParams) {
@@ -28,8 +30,9 @@ export class AssistantManagerPage {
 	addAssistantCallBack = (params) => {
 		return new Promise((resolve, reject) => {
 			this.assistants = new Array(this.allowableAssistants);
-			this.assistants[0] = params.lastName + ',' + params.firstName + ' ' + params.middleName;
+			this.assistants.push(params);
 			this.allowableAssistants--;
+			this.params.data.parent.completedRegistration = true;
 			resolve();
 		});
 	}
@@ -40,9 +43,9 @@ export class AssistantManagerPage {
 		});
 	}
 
-	searchAssistantCallBack  = (params) => {
+	searchAssistantCallBack = (params) => {
 		return new Promise((resolve, reject) => {
-			
+
 			resolve();
 		});
 	}

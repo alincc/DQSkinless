@@ -15,6 +15,7 @@ export class Profile {
     firstName: string;
     middleName?: string;
     birthDate: Date;
+    address?: string;
     gender?: string;
     maritalStatus?: string;
     contactNo: string;
