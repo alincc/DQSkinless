@@ -1,97 +1,94 @@
-<ion-content #Content padding>
-    <h3>{{ formTitle }}</h3>
-    <form [formGroup]="profileForm" (ngSubmit)="submitForm()" novalidate>
-        <ion-list>
-            <div class="row form-group">
-                <div *ngIf="formType === 'doctor'">
-                    <ion-label class="form-label h1">PRC License *</ion-label>
-                    <ion-item round>
-                        <ion-input type="number" formControlName="prc"></ion-input>
-                    </ion-item>
-                    <div class="error-message" *ngIf="profileForm.get('prc').dirty && profileForm.get('prc').invalid">
-                        {{ errors.prc }}
-                    </div>
-                    <ion-label class="form-label h1">PTR *</ion-label>
-                    <ion-item round>
-                        <ion-input type="number" formControlName="ptr"></ion-input>
-                    </ion-item>
-                    <div class="error-message" *ngIf="profileForm.get('ptr').dirty &&  profileForm.get('ptr').invalid">
-                        {{ errors.ptr }}
-                    </div>
-                    <ion-label class="form-label h1">Doctor Type *</ion-label>
-                    <ion-item round>
-                        <ion-select class="options" formControlName="doctorType">
-                            <ion-option *ngFor="let type of doctorTypes" value="{{ type.code }}">{{ type.description }}</ion-option>
-                        </ion-select>
-                    </ion-item>
-                    <div class="error-message" *ngIf="profileForm.get('doctorType').dirty &&  profileForm.get('doctorType').invalid">
-                        {{ errors.doctorType }}
-                    </div>
-                    <ion-label class="form-label h1">Specialization *</ion-label>
-                    <ion-item round>
-                        <ion-input formControlName="specialization"></ion-input>
-                    </ion-item>
-                    <div class="error-message" *ngIf="profileForm.get('specialization').dirty &&  profileForm.get('specialization').invalid">
-                        {{ errors.specialization }}
-                    </div>
+<form [formGroup]="profileForm" (ngSubmit)="submitForm()" novalidate>
+    <ion-list>
+        <div class="row form-group">
+            <div *ngIf="formType === 'doctor'">
+                <ion-label class="form-label h1">PRC License *</ion-label>
+                <ion-item round>
+                    <ion-input type="number" formControlName="prc"></ion-input>
+                </ion-item>
+                <div class="error-message" *ngIf="profileForm.get('prc').dirty && profileForm.get('prc').invalid">
+                    {{ errors.prc }}
                 </div>
-                <ion-label class="form-label h1">Email *</ion-label>
+                <ion-label class="form-label h1">PTR *</ion-label>
                 <ion-item round>
-                    <ion-input type="email" formControlName="email"></ion-input>
+                    <ion-input type="number" formControlName="ptr"></ion-input>
                 </ion-item>
-                <div class="error-message" *ngIf="profileForm.get('email').dirty &&  profileForm.get('email').invalid">
-                    {{ errors.email }}
+                <div class="error-message" *ngIf="profileForm.get('ptr').dirty &&  profileForm.get('ptr').invalid">
+                    {{ errors.ptr }}
                 </div>
-                <ion-label class="form-label h1">Last Name *</ion-label>
+                <ion-label class="form-label h1">Doctor Type *</ion-label>
                 <ion-item round>
-                    <ion-input formControlName="lastName"></ion-input>
+                    <ion-select class="options" formControlName="doctorType">
+                        <ion-option *ngFor="let type of doctorTypes" value="{{ type.code }}">{{ type.description }}</ion-option>
+                    </ion-select>
                 </ion-item>
-                <div class="error-message" *ngIf="profileForm.get('lastName').dirty &&  profileForm.get('lastName').invalid">
-                    {{ errors.lastName }}
+                <div class="error-message" *ngIf="profileForm.get('doctorType').dirty &&  profileForm.get('doctorType').invalid">
+                    {{ errors.doctorType }}
                 </div>
-                <ion-label class="form-label h1">First Name *</ion-label>
+                <ion-label class="form-label h1">Specialization *</ion-label>
                 <ion-item round>
-                    <ion-input formControlName="firstName"></ion-input>
+                    <ion-input formControlName="specialization"></ion-input>
                 </ion-item>
-                <div class="error-message" *ngIf="profileForm.get('firstName').dirty &&  profileForm.get('firstName').invalid">
-                    {{ errors.firstName }}
-                </div>
-                <ion-label class="form-label h1">Middle Name</ion-label>
-                <ion-item round>
-                    <ion-input formControlName="middleName"></ion-input>
-                </ion-item>
-                <ion-label class="form-label h1">Birth Date *</ion-label>
-                <ion-item round>
-                    <ion-input type="date" formControlName="birthDate"></ion-input>
-                </ion-item>
-                <div class="error-message" *ngIf="profileForm.get('birthDate').dirty &&  profileForm.get('birthDate').invalid">
-                    {{ errors.birthDate }}
-                </div>
-                <ion-label class="form-label h1">Gender *</ion-label>
-                <ion-list radio-group name="gender" formControlName="gender">
-                    <ion-item *ngFor="let gender of genderList">
-                        <ion-radio color="primary" value="{{ gender.id }}"></ion-radio>
-                        <ion-label>{{ gender.description }}</ion-label>
-                    </ion-item>
-                </ion-list>
-                <div class="error-message" *ngIf="profileForm.get('gender').dirty &&  profileForm.get('gender').invalid">
-                    {{ errors.gender }}
-                </div>
-                <ion-label class="form-label h1">Address</ion-label>
-                <ion-item round>
-                    <ion-input formControlName="address"></ion-input>
-                </ion-item>
-                <ion-label class="form-label h1">Contact No. *</ion-label>
-                <ion-item round>
-                    <ion-input formControlName="contactNo"></ion-input>
-                </ion-item>
-                <div class="error-message" *ngIf="profileForm.get('contactNo').dirty &&  profileForm.get('contactNo').invalid">
-                    {{ errors.contactNo }}
+                <div class="error-message" *ngIf="profileForm.get('specialization').dirty &&  profileForm.get('specialization').invalid">
+                    {{ errors.specialization }}
                 </div>
             </div>
-        </ion-list>
-        <div center>
-            <button type="submit" ion-button round large color="accent" [disabled]="profileForm.invalid"> Submit </button>
+            <ion-label class="form-label h1">Email *</ion-label>
+            <ion-item round>
+                <ion-input type="email" formControlName="email"></ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="profileForm.get('email').dirty &&  profileForm.get('email').invalid">
+                {{ errors.email }}
+            </div>
+            <ion-label class="form-label h1">Last Name *</ion-label>
+            <ion-item round>
+                <ion-input formControlName="lastName"></ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="profileForm.get('lastName').dirty &&  profileForm.get('lastName').invalid">
+                {{ errors.lastName }}
+            </div>
+            <ion-label class="form-label h1">First Name *</ion-label>
+            <ion-item round>
+                <ion-input formControlName="firstName"></ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="profileForm.get('firstName').dirty &&  profileForm.get('firstName').invalid">
+                {{ errors.firstName }}
+            </div>
+            <ion-label class="form-label h1">Middle Name</ion-label>
+            <ion-item round>
+                <ion-input formControlName="middleName"></ion-input>
+            </ion-item>
+            <ion-label class="form-label h1">Birth Date *</ion-label>
+            <ion-item round>
+                <ion-input type="date" formControlName="birthDate"></ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="profileForm.get('birthDate').dirty &&  profileForm.get('birthDate').invalid">
+                {{ errors.birthDate }}
+            </div>
+            <ion-label class="form-label h1">Gender *</ion-label>
+            <ion-list radio-group name="gender" formControlName="gender">
+                <ion-item *ngFor="let gender of genderList">
+                    <ion-radio color="primary" value="{{ gender.id }}"></ion-radio>
+                    <ion-label>{{ gender.description }}</ion-label>
+                </ion-item>
+            </ion-list>
+            <div class="error-message" *ngIf="profileForm.get('gender').dirty &&  profileForm.get('gender').invalid">
+                {{ errors.gender }}
+            </div>
+            <ion-label class="form-label h1">Address</ion-label>
+            <ion-item round>
+                <ion-input formControlName="address"></ion-input>
+            </ion-item>
+            <ion-label class="form-label h1">Contact No. *</ion-label>
+            <ion-item round>
+                <ion-input formControlName="contactNo"></ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="profileForm.get('contactNo').dirty &&  profileForm.get('contactNo').invalid">
+                {{ errors.contactNo }}
+            </div>
         </div>
-    </form>
-</ion-content>
+    </ion-list>
+    <div center>
+        <button type="submit" ion-button round large color="accent" [disabled]="profileForm.invalid"> Submit </button>
+    </div>
+</form>

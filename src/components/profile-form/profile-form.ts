@@ -13,7 +13,6 @@ import { DOCTOR_TYPES } from './doctor-types';
 })
 export class ProfileForm implements OnInit {
 
-    @Input() formTitle: string;
     @Input() formType: string;
 
     @Output() onSubmit = new EventEmitter();
@@ -26,7 +25,6 @@ export class ProfileForm implements OnInit {
     public genderList: any;
 
     constructor(private formBuilder: FormBuilder) {
-        this.formTitle = 'My Profile';
         this.formType = 'nonDoctor';        
         this.doctorTypes = DOCTOR_TYPES;
         this.errors = {

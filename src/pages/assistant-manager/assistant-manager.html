@@ -7,15 +7,17 @@
 					<img src="http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif">
 				</ion-avatar>
 				<h2>Name: {{ assistant.profile.fullName }}</h2>
-				<h2>Login: {{ assistant.profile.email }}</h2>
+				<h2>Email: {{ assistant.profile.email }}</h2>
 				<h2>Contact No: {{ assistant.profile.contactNo }}</h2>
 			</ion-item>
-			<ion-item-options side="right">
+			<ion-item-options>
 				<button ion-button color="accent-light">
                     <ion-icon name="clipboard"></ion-icon>
+					Edit
                 </button>
 				<button ion-button color="accent-light">
                     <ion-icon name="trash"></ion-icon>
+					Delete
                 </button>
 			</ion-item-options>
 		</ion-item-sliding>

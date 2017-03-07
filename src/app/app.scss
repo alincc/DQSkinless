@@ -222,7 +222,7 @@ ion-content{
 			}
 		}
 		.item-radio-checked.item-ios ion-label{
-			color: black !important;
+			color: $dark !important;
 		}
 
 	}
@@ -232,6 +232,28 @@ ion-content{
     	text-align: left;
     	color: $danger;
     }
+
+	// ION SEARCH BAR
+	
+	ion-searchbar{
+	    background: none !important;
+	    border: none !important;
+	    .searchbar-input{
+	    	border-bottom: 1px solid $primary-light !important;
+	    }
+	}
+
+	.searchbar-input-container{
+		.searchbar-input{
+			background: white !important;
+			border: 1px solid $primary-light !important;
+			-webkit-border-radius: 4.4em !important;
+			border-radius: 4.4rem !important;
+			color: $dark !important;
+			padding-left: 35px;
+			padding-right: 35px;
+		}
+	}
 }
 
 .control-bar{

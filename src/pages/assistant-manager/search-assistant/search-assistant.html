@@ -1,27 +1,23 @@
+<ion-header>
+	<ion-navbar color="primary">
+		<ion-title>
+			Search Assistant
+		</ion-title>
+	</ion-navbar>
+</ion-header>
 <ion-content #Content padding>
-    <ion-label class="form-label h1">Search</ion-label>
-    <ion-item round>
-        <ion-input></ion-input>
-    </ion-item>
-    <ion-list>
+    <ion-searchbar (ionInput)="search($event)" placeholder="Enter a Name"></ion-searchbar>
+    <div *ngIf="mockAssistants && mockAssistants.length === 0">Last Name Not Found</div>
+    <ion-list *ngIf="mockAssistants && mockAssistants.length > 0">
         <ion-item-sliding>
-            <ion-item no-lines>
+            <ion-item *ngFor="let assistant of mockAssistants">
                 <ion-avatar item-left>
-                    <img src="https://tribzap2it.files.wordpress.com/2015/10/ken-jeong-dr-ken-abc.jpg">
+                    <img src="http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif">
                 </ion-avatar>
-                <h2> Assistant 1</h2>
+                <h2>Name: {{ assistant.profile.fullName }}</h2>
+                <h2>Email: {{ assistant.profile.email }}</h2>
+                <h2>Contact No: {{ assistant.profile.contactNo }}</h2>
             </ion-item>
-            <ion-item no-lines>
-                <ion-avatar item-left>
-                    <img src="https://tribzap2it.files.wordpress.com/2015/10/ken-jeong-dr-ken-abc.jpg">
-                </ion-avatar>
-                <h2> Assistant 2</h2>
-            </ion-item>
-            <ion-item-options side="right">
-                <button ion-button color="accent-light">
-                    <ion-icon name="person-add"></ion-icon>
-                </button>
-            </ion-item-options>
         </ion-item-sliding>
     </ion-list>
 </ion-content>
