@@ -19,10 +19,9 @@ export class StepThreePage {
     }
 
     public submit(response) {
+        console.log ('upload photo api => ' + response);
         if (this.params.data) {
             this.params.data.parent.step = 4;
-            this.params.data.registrationData.user.photo = response;
-
             if (this.params.data.isLoggedAsDoctor) {
                 this.nav.setRoot(StepFourPage, this.params.data, { animate: true, direction: 'forward' });
             } else {

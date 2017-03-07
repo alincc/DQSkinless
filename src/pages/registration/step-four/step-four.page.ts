@@ -18,6 +18,7 @@ export class StepFourPage {
     }
 
     public submit(response) {
+        console.log ('save assistants api => ' + JSON.stringify(response));
         if (this.params.data) {
             this.parentNav.setRoot(ManagerPage);
         }

@@ -4,8 +4,6 @@ import { Content, NavController, NavParams } from 'ionic-angular';
 import { ManagerPage } from "../manager/manager.page";
 import { StepOnePage } from './step-one/step-one.page';
 
-import { RegistrationData, RegistrationForm } from '../../shared/model/registration.model';
-
 @Component({
 	selector: 'registration-page',
 	templateUrl: 'registration.html'
@@ -28,17 +26,10 @@ export class RegistrationPage {
 		this.params = {
 			parentNav: nav,
 			parent: this,
-			isLoggedAsDoctor: this.loginParams.data.isLoggedAsDoctor,
-			registrationData: this.initRegistrationData()
+			isLoggedAsDoctor: this.loginParams.data.isLoggedAsDoctor
 		};
 	}
 
-	initRegistrationData() {
-		const registrationData = new RegistrationData();
-		registrationData.user = new RegistrationForm();
-		registrationData.assistant = [];
-		return registrationData;
-	}
 	public set step(_step: any) {
 		if (_step == 4) {
 			this.content!.resize();
@@ -52,7 +43,6 @@ export class RegistrationPage {
 
 	public done() {
 		// TODO save registration data
-		console.log('registration data=> ' + JSON.stringify(this.params.registrationData));
 		this.nav.setRoot(ManagerPage);
 	}
 }

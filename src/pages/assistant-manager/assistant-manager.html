@@ -8,7 +8,6 @@
 				</ion-avatar>
 				<h2>Name: {{ assistant.profile.fullName }}</h2>
 				<h2>Login: {{ assistant.profile.email }}</h2>
-				<h2>Password: {{ assistant.password }}</h2>
 				<h2>Contact No: {{ assistant.profile.contactNo }}</h2>
 			</ion-item>
 			<ion-item-options side="right">
@@ -24,18 +23,6 @@
 	<ion-label *ngIf="assistants.length === 0">
 		No assistants added.
 	</ion-label>
-	<!--<ion-list>
-		<ion-item no-lines>
-			<ion-card>
-				<ion-card-header>
-					Assistant-name
-				</ion-card-header>
-				<ion-card-content>
-					Contact Number: 123123123 Address: 121 kaliwa kanan St. Dimatagpuan City.
-				</ion-card-content>
-			</ion-card>
-		</ion-item>
-	</ion-list>-->
 	<ion-fab bottom right>
 		<button ion-fab color="accent" [disabled]="allowableAssistants === 0"><ion-icon name="add"></ion-icon></button>
 		<ion-fab-list side="left">

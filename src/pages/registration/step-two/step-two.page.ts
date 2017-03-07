@@ -21,9 +21,9 @@ export class StepTwoPage {
     }
 
     public submit(response) {
+        console.log ('update profile api => ' + JSON.stringify(response));
         if (this.params.data) {
             this.params.data.parent.step = 3;
-            this.params.data.registrationData.user.profile = response;
             this.nav.setRoot(StepThreePage, this.params.data, { animate: true, direction: 'forward' });
         }
     }

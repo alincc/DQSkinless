@@ -18,9 +18,9 @@ export class StepOnePage {
     }
 
     public changePassword(response) {
+        console.log ('change password api => ' + response);
         if (this.params.data) {
             this.params.data.parent.step = 2;
-            this.params.data.registrationData.user.password = response;
             this.nav.setRoot(StepTwoPage, this.params.data, { animate: true, direction: 'forward' });
         }
     }

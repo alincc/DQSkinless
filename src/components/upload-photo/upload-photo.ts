@@ -1,7 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Camera, ImagePicker } from 'ionic-native';
-// import { AssistantManagerForm } from '../../pages/assistant-manager/assistant-manager.form';
 
 @Component({
 	selector: 'upload-photo',
@@ -43,7 +42,6 @@ export class UploadPhoto {
 
 	public submit(){
 		this.onSubmit.emit('todo photo in base 64');
-		// this.nav.push(AssistantManagerForm, {parent: this.params.data.parent});
 	}
 
 }

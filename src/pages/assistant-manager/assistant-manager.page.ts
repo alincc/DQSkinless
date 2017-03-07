@@ -35,10 +35,7 @@ export class AssistantManagerPage {
 			if (this.params.data.parent) {
 				this.params.data.parent.completedRegistration = true;
 			}
-
-			if (this.params.data.registrationData.assistant){
-				this.params.data.registrationData.assistant = this.assistants;
-			}
+			
 			resolve();
 		});
 	}
