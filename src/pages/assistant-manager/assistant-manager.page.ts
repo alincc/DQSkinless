@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
 import { AlertController, NavController, NavParams } from "ionic-angular";
 
-import { AddAssistantPage } from './add-assistant/add-assistant.page';
+import { AssistantPage } from './assistant/assistant.page';
 import { SearchAssistantPage } from './search-assistant/search-assistant.page';
 
-import { RegistrationForm } from '../../shared/model/registration.model';
+import { RegistrationForm, Profile } from '../../shared/model/registration.model';
 
 @Component({
 	selector: 'assistant-manager-page',
@@ -12,8 +12,9 @@ import { RegistrationForm } from '../../shared/model/registration.model';
 })
 export class AssistantManagerPage {
 
-	allowableAssistants: number;
-	assistants: RegistrationForm[];
+	public allowableAssistants: number;
+	public assistants: RegistrationForm[];
+	private index: number;
 
 	constructor(
 		private alertController: AlertController,
@@ -23,47 +24,21 @@ export class AssistantManagerPage {
 		this.assistants = [];
 	}
 
-	addAssistant() {
-		this.nav.push(AddAssistantPage, {
-			callback: this.addAssistantCallBack
+	public addAssistant() {
+		this.nav.push(AssistantPage, {
+			callback: this.addAssistantCallBack,
+			profile: new Profile(),
+			mode: 'Add'
 		});
 	}
 
-	addAssistantCallBack = (params) => {
-		return new Promise((resolve, reject) => {
-			this.assistants.push(params);
-			this.allowableAssistants--;
-
-			if (this.params.data.parent) {
-				this.params.data.parent.completedRegistration = true;
-			}
-
-			resolve();
-		});
-	}
-
-	searchAssistant() {
+	public searchAssistant() {
 		this.nav.push(SearchAssistantPage, {
 			callback: this.searchAssistantCallBack
 		});
 	}
 
-	searchAssistantCallBack = (params) => {
-		return new Promise((resolve, reject) => {
-
-			this.assistants.push(params);
-			this.allowableAssistants--;
-
-			if (this.params.data.parent) {
-				this.params.data.parent.completedRegistration = true;
-			}
-
-			resolve();
-		});
-	}
-
-	deleteAssistant(assistant, i) {
-		console.log(assistant);
+	public deleteAssistant(assistant, i) {
 		this.alertController.create({
 			message: `Delete ${assistant.profile.fullName} as assistant?`,
 			buttons: [
@@ -74,11 +49,64 @@ export class AssistantManagerPage {
 				{
 					text: 'YES',
 					handler: () => {
-						this.assistants.splice(i);
+						this.assistants.splice(i, 1);
+						this.allowableAssistants++;
 					}
 				}
 			]
 		}).present();
+	}
+
+	public editAssistant(assistant, i) {
+		this.index = i;
+		this.nav.push(AssistantPage, {
+			callback: this.editAssistantCallBack,
+			profile: assistant.profile,
+			mode: 'Edit'
+		});
+	}
+
+	public viewAssistant(assistant) {
+		this.nav.push(AssistantPage, {
+			profile: assistant.profile,
+			mode: 'View'
+		});
+	}
+
+	public addAssistantCallBack = (params) => {
+		return new Promise((resolve, reject) => {
+			this.assistants.push(params);
+			this.allowableAssistants--;
+
+			if (this.params.data.parent) {
+				this.params.data.parent.completedRegistration = true;
+			}
+
+			resolve();
+		});
+	}
+
+	public editAssistantCallBack = (params) => {
+		return new Promise((resolve, reject) => {
+			if (this.index !== undefined){
+				this.assistants[this.index] = params;
+			}
+			resolve();
+		});
+	}
+
+	public searchAssistantCallBack = (params) => {
+		return new Promise((resolve, reject) => {
+
+			this.assistants.push(params);
+			this.allowableAssistants--;
+
+			if (this.params.data.parent) {
+				this.params.data.parent.completedRegistration = true;
+			}
+
+			resolve();
+		});
 	}
 
 }

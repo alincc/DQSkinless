@@ -1,11 +1,11 @@
 <ion-header>
     <ion-navbar color="primary">
         <ion-title>
-            Add Assistant
+            {{ mode }} Assistant
         </ion-title>
     </ion-navbar>
 </ion-header>
 <ion-content #Content padding>
-    <profile-form (onSubmit)="submit($event)">
+    <profile-form (onSubmit)="submit($event)" [profile]="profile" [mode]="mode">
     </profile-form>
 </ion-content>

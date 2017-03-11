@@ -5,8 +5,6 @@ import { config } from '../../config/config';
 
 import { Profile } from '../../shared/model/registration.model';
 
-import { DOCTOR_TYPES } from './doctor-types';
-
 @Component({
     selector: 'profile-form',
     templateUrl: 'profile-form.html'
@@ -15,22 +13,24 @@ export class ProfileForm implements OnInit {
 
     @Input() formType: string;
 
+    @Input() profile: Profile;
+    @Input() mode: string;
+
     @Output() onSubmit = new EventEmitter();
 
     private profileForm: FormGroup;
-    private profile: Profile;
 
-    public doctorTypes: any;
+    public medicalArts: any;
     public errors: any;
+    public gender: string;
     public genderList: any;
 
     constructor(private formBuilder: FormBuilder) {
-        this.formType = 'nonDoctor';        
-        this.doctorTypes = DOCTOR_TYPES;
+        this.formType = 'nonDoctor';
         this.errors = {
             prc: '',
             ptr: '',
-            doctorType: '',
+            medicalArt: '',
             specialization: '',
             email: '',
             lastName: '',
@@ -39,32 +39,40 @@ export class ProfileForm implements OnInit {
             gender: '',
             contactNo: ''
         };
-        this.genderList = config.GENDER;
+        this.medicalArts = config.medicalArts;
+        this.genderList = config.gender;
+        this.profile = new Profile();
+        this.mode = 'Edit';
     }
 
     ngOnInit() {
         this.createForm();
+
+        this.gender = this.genderList.filter((g: any) => {
+            return g.id == this.profile.gender;
+        })[0];
+
     }
 
     createForm() {
         this.profileForm = this.formBuilder.group({
-            prc: this.formType === 'doctor' ? ['', Validators.required] : [''],
-            ptr: this.formType === 'doctor' ? ['', Validators.required] : [''],
-            doctorType: this.formType === 'doctor' ? ['', Validators.required] : [''],
-            specialization: this.formType === 'doctor' ? ['', Validators.required] : [''],
-            email: ['', [Validators.required, Validators.pattern(config.regex.email)]],
-            lastName: ['', Validators.required],
-            firstName: ['', Validators.required],
-            middleName: [''],
-            birthDate: ['', Validators.required],
-            gender: ['', Validators.required],
-            address: [''],
-            contactNo: ['', Validators.required]
+            prc: this.formType === 'doctor' ? [this.profile.prc, Validators.required] : [this.profile.prc],
+            ptr: this.formType === 'doctor' ? [this.profile.ptr, Validators.required] : [this.profile.ptr],
+            medicalArt: this.formType === 'doctor' ? [this.profile.medicalArt, Validators.required] : [this.profile.medicalArt],
+            specialization: this.formType === 'doctor' ? [this.profile.specialization, Validators.required] : [this.profile.specialization],
+            email: [this.profile.email, [Validators.required, Validators.pattern(config.regex.email)]],
+            lastName: [this.profile.lastName, Validators.required],
+            firstName: [this.profile.firstName, Validators.required],
+            middleName: this.profile.middleName,
+            birthDate: [this.profile.birthDate, Validators.required],
+            gender: [this.profile.gender, Validators.required],
+            address: this.profile.address,
+            contactNo: [this.profile.contactNo, Validators.required]
         });
 
         const prc = this.profileForm.get('prc');
         const ptr = this.profileForm.get('ptr');
-        const doctorType = this.profileForm.get('doctorType');
+        const medicalArt = this.profileForm.get('medicalArt');
         const specialization = this.profileForm.get('specialization');
         const email = this.profileForm.get('email');
         const lastName = this.profileForm.get('lastName');
@@ -93,12 +101,12 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        doctorType.valueChanges.subscribe(
+        medicalArt.valueChanges.subscribe(
             newValue => {
-                if (doctorType.hasError('required')) {
-                    this.errors.doctorType = 'Doctor Type is required';
+                if (medicalArt.hasError('required')) {
+                    this.errors.medicalArt = 'Medical Arts is required';
                 } else {
-                    this.errors.doctorType = '';
+                    this.errors.medicalArt = '';
                 }
             }
         );
@@ -177,15 +185,14 @@ export class ProfileForm implements OnInit {
     }
 
     submitForm() {
-        this.setProfileDetails();
+        this.bindProfileDetails();
         this.onSubmit.emit(this.profile);
     }
 
-    setProfileDetails() {
-        this.profile = new Profile();
+    bindProfileDetails() {
         this.profile.prc = this.profileForm.get('prc').value;
         this.profile.ptr = this.profileForm.get('ptr').value;
-        this.profile.doctorType = this.profileForm.get('doctorType').value;
+        this.profile.medicalArt = this.profileForm.get('medicalArt').value;
         this.profile.specialization = this.profileForm.get('specialization').value;
         this.profile.email = this.profileForm.get('email').value;
         this.profile.lastName = this.profileForm.get('lastName').value;
@@ -195,5 +202,9 @@ export class ProfileForm implements OnInit {
         this.profile.gender = this.profileForm.get('gender').value;
         this.profile.address = this.profileForm.get('address').value;
         this.profile.contactNo = this.profileForm.get('contactNo').value;
+    }
+
+    isEditMode(): boolean {
+        return this.mode !== 'View';
     }
 }

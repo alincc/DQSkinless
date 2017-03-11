@@ -1,4 +1,4 @@
-import { AddAssistantPage } from '../pages/assistant-manager/add-assistant/add-assistant.page';
+import { AssistantPage } from '../pages/assistant-manager/assistant/assistant.page';
 import { AssistantManagerPage } from '../pages/assistant-manager/assistant-manager.page';
 import { BlankPage } from '../pages/blank/blank.page';
 import { ChatPage } from '../pages/chat/chat.page';
@@ -22,7 +22,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { ChangePasswordPage } from '../pages/change-password/change-password.page';
 
 export const pages: any[] = [
-	AddAssistantPage,
+	AssistantPage,
 	AssistantManagerPage,
 	BlankPage,
 	ChatPage,

@@ -2,7 +2,7 @@
 	<h3>Number of Available Assitant Account: {{ allowableAssistants }}</h3>
 	<ion-list>
 		<ion-item-sliding *ngFor="let assistant of assistants;let i=index">
-			<ion-item>
+			<ion-item (click)="viewAssistant(assistant)">
 				<ion-avatar item-left>
 					<img src="http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif">
 				</ion-avatar>
@@ -11,7 +11,7 @@
 				<h2>Contact No: {{ assistant.profile.contactNo }}</h2>
 			</ion-item>
 			<ion-item-options>
-				<button ion-button color="accent-light">
+				<button ion-button color="accent-light" (click)="editAssistant(assistant, i)">
                     <ion-icon name="clipboard"></ion-icon>
 					Edit
                 </button>
@@ -26,10 +26,10 @@
 		No assistants added.
 	</ion-label>
 	<ion-fab bottom right>
-		<button ion-fab color="accent" [disabled]="allowableAssistants === 0"><ion-icon name="add"></ion-icon></button>
+		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
 		<ion-fab-list side="left">
-			<button color="accent-light" [disabled]="allowableAssistants === 0" ion-fab (click)="addAssistant()"><ion-icon name="person-add"></ion-icon></button>
-			<button color="accent-light" [disabled]="allowableAssistants === 0" ion-fab (click)="searchAssistant()"><ion-icon name="search"></ion-icon>
+			<button color="accent-light" [disabled]="assistants.length !== 0 && allowableAssistants === 0" ion-fab (click)="addAssistant()"><ion-icon name="person-add"></ion-icon></button>
+			<button color="accent-light" [disabled]="assistants.length !== 0 && allowableAssistants === 0" ion-fab (click)="searchAssistant()"><ion-icon name="search"></ion-icon>
 	      </button>
 		</ion-fab-list>
 	</ion-fab>
