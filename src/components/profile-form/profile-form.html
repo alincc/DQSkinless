@@ -3,21 +3,21 @@
     <ion-list>
         <div class="row form-group">
             <div *ngIf="formType === 'doctor'">
-                <ion-label class="form-label h1">PRC License *</ion-label>
+                <ion-label class="form-label h1">PRC License <span *ngIf="isEditMode()">*</span></ion-label>
                 <ion-item round>
                     <ion-input type="number" name="prc" formControlName="prc" [disabled]="!isEditMode()"></ion-input>
                 </ion-item>
                 <div class="error-message" *ngIf="profileForm.get('prc')?.dirty && profileForm.get('prc').invalid">
                     {{ errors.prc }}
                 </div>
-                <ion-label class="form-label h1">PTR *</ion-label>
+                <ion-label class="form-label h1">PTR <span *ngIf="isEditMode()">*</span></ion-label>
                 <ion-item round>
                     <ion-input type="number" name="ptr" formControlName="ptr" [disabled]="!isEditMode()"></ion-input>
                 </ion-item>
                 <div class="error-message" *ngIf="profileForm.get('ptr')?.dirty &&  profileForm.get('ptr').invalid">
                     {{ errors.ptr }}
                 </div>
-                <ion-label class="form-label h1">Medical Arts *</ion-label>
+                <ion-label class="form-label h1">Medical Arts <span *ngIf="isEditMode()">*</span></ion-label>
                 <ion-item round>
                     <ion-select class="options" name="medicalArt" formControlName="medicalArt">
                         <ion-option *ngFor="let type of medicalArts" value="{{ type?.code }}">{{ type?.description }}</ion-option>
@@ -26,7 +26,7 @@
                 <div class="error-message" *ngIf="profileForm.get('medicalArt')?.dirty &&  profileForm.get('medicalArt').invalid">
                     {{ errors.doctorType }}
                 </div>
-                <ion-label class="form-label h1">Specialization *</ion-label>
+                <ion-label class="form-label h1">Specialization <span *ngIf="isEditMode()">*</span></ion-label>
                 <ion-item round>
                     <ion-input name="birthDate" formControlName="specialization" [disabled]="!isEditMode()"></ion-input>
                 </ion-item>
@@ -34,21 +34,21 @@
                     {{ errors.specialization }}
                 </div>
             </div>
-            <ion-label class="form-label h1">Email *</ion-label>
+            <ion-label class="form-label h1">Email <span *ngIf="isEditMode()">*</span></ion-label>
             <ion-item round>
                 <ion-input type="email" name="email" formControlName="email" [disabled]="!isEditMode()"></ion-input>
             </ion-item>
             <div class="error-message" *ngIf="profileForm.get('email')?.dirty &&  profileForm.get('email').invalid">
                 {{ errors.email }}
             </div>
-            <ion-label class="form-label h1">Last Name *</ion-label>
+            <ion-label class="form-label h1">Last Name <span *ngIf="isEditMode()">*</span></ion-label>
             <ion-item round>
                 <ion-input name="lastName" formControlName="lastName" [disabled]="!isEditMode()"></ion-input>
             </ion-item>
             <div class="error-message" *ngIf="profileForm.get('lastName')?.dirty &&  profileForm.get('lastName').invalid">
                 {{ errors.lastName }}
             </div>
-            <ion-label class="form-label h1">First Name *</ion-label>
+            <ion-label class="form-label h1">First Name <span *ngIf="isEditMode()">*</span></ion-label>
             <ion-item round>
                 <ion-input name="firstName" formControlName="firstName" [disabled]="!isEditMode()"></ion-input>
             </ion-item>
@@ -59,20 +59,21 @@
             <ion-item round>
                 <ion-input name="middleName" formControlName="middleName" [disabled]="!isEditMode()"></ion-input>
             </ion-item>
-            <ion-label class="form-label h1">Birth Date *</ion-label>
+            <ion-label class="form-label h1">Birth Date <span *ngIf="isEditMode()">*</span></ion-label>
             <ion-item round>
                 <ion-input type="date" name="birthDate" formControlName="birthDate" [disabled]="!isEditMode()"></ion-input>
             </ion-item>
             <div class="error-message" *ngIf="profileForm.get('birthDate')?.dirty &&  profileForm.get('birthDate').invalid">
                 {{ errors.birthDate }}
             </div>
-            <ion-label class="form-label h1">Gender *</ion-label>
-            <ion-list radio-group name="gender" formControlName="gender">
+            <ion-label class="form-label h1">Gender <span *ngIf="isEditMode()">*</span></ion-label>
+            <ion-list *ngIf="isEditMode()" radio-group name="gender" formControlName="gender">
                 <ion-item *ngFor="let gender of genderList">
                     <ion-radio color="primary" value="{{ gender?.id }}" [disabled]="!isEditMode()"></ion-radio>
                     <ion-label>{{ gender?.description }}</ion-label>
                 </ion-item>
             </ion-list>
+            <p *ngIf="!isEditMode()" >{{ gender ? gender.description : "" }}</p>
             <div class="error-message" *ngIf="isEditMode() && profileForm.get('gender')?.dirty &&  profileForm.get('gender').invalid">
                 {{ errors.gender }}
             </div>
@@ -80,7 +81,7 @@
             <ion-item round>
                 <ion-input name="address" formControlName="address" [disabled]="!isEditMode()"></ion-input>
             </ion-item>
-            <ion-label class="form-label h1">Contact No. *</ion-label>
+            <ion-label class="form-label h1">Contact No. <span *ngIf="isEditMode()">*</span></ion-label>
             <ion-item round>
                 <ion-input name="contactNo" formControlName="contactNo" [disabled]="!isEditMode()"></ion-input>
             </ion-item>
