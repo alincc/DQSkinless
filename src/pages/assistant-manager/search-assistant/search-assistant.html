@@ -10,7 +10,7 @@
     <div *ngIf="mockAssistants && mockAssistants.length === 0">Last Name Not Found</div>
     <ion-list *ngIf="mockAssistants && mockAssistants.length > 0">
         <ion-item-sliding>
-            <ion-item *ngFor="let assistant of mockAssistants">
+            <ion-item *ngFor="let assistant of mockAssistants" (click)="selectAssistant(assistant)">
                 <ion-avatar item-left>
                     <img src="http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif">
                 </ion-avatar>

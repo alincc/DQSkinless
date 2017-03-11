@@ -11,7 +11,7 @@ import { PasswordGeneratorService } from '../../../utilities/password-generator.
 })
 export class AddAssistantPage {
 
-    callback: Function;
+    private callback: Function;
 
     constructor(
         private nav: NavController,
@@ -24,7 +24,7 @@ export class AddAssistantPage {
         let registrationForm = new RegistrationForm();
 
         registrationForm.profile = response;
-        registrationForm.password = this.passwordGeneratorService.generatePassword();
+        // registrationForm.password = this.passwordGeneratorService.generatePassword();
         
         this.callback(registrationForm).then(() => {
             this.nav.pop();

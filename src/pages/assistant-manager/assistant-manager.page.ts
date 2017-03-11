@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NavController, NavParams } from "ionic-angular";
+import { AlertController, NavController, NavParams } from "ionic-angular";
 
 import { AddAssistantPage } from './add-assistant/add-assistant.page';
 import { SearchAssistantPage } from './search-assistant/search-assistant.page';
@@ -15,9 +15,11 @@ export class AssistantManagerPage {
 	allowableAssistants: number;
 	assistants: RegistrationForm[];
 
-	constructor(private nav: NavController,
+	constructor(
+		private alertController: AlertController,
+		private nav: NavController,
 		private params: NavParams) {
-		this.allowableAssistants = 1;
+		this.allowableAssistants = 2;
 		this.assistants = [];
 	}
 
@@ -35,7 +37,7 @@ export class AssistantManagerPage {
 			if (this.params.data.parent) {
 				this.params.data.parent.completedRegistration = true;
 			}
-			
+
 			resolve();
 		});
 	}
@@ -49,8 +51,34 @@ export class AssistantManagerPage {
 	searchAssistantCallBack = (params) => {
 		return new Promise((resolve, reject) => {
 
+			this.assistants.push(params);
+			this.allowableAssistants--;
+
+			if (this.params.data.parent) {
+				this.params.data.parent.completedRegistration = true;
+			}
+
 			resolve();
 		});
+	}
+
+	deleteAssistant(assistant, i) {
+		console.log(assistant);
+		this.alertController.create({
+			message: `Delete ${assistant.profile.fullName} as assistant?`,
+			buttons: [
+				{
+					text: 'NO',
+					role: 'cancel',
+				},
+				{
+					text: 'YES',
+					handler: () => {
+						this.assistants.splice(i);
+					}
+				}
+			]
+		}).present();
 	}
 
 }
