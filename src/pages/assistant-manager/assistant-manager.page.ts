@@ -28,7 +28,8 @@ export class AssistantManagerPage {
 		this.nav.push(AssistantPage, {
 			callback: this.addAssistantCallBack,
 			profile: new Profile(),
-			mode: 'Add'
+			mode: 'Add',
+			usage: 'account'
 		});
 	}
 
@@ -57,19 +58,20 @@ export class AssistantManagerPage {
 		}).present();
 	}
 
-	public editAssistant(assistant, i) {
-		this.index = i;
-		this.nav.push(AssistantPage, {
-			callback: this.editAssistantCallBack,
-			profile: assistant.profile,
-			mode: 'Edit'
-		});
-	}
+	// public editAssistant(assistant, i) {
+	// 	this.index = i;
+	// 	this.nav.push(AssistantPage, {
+	// 		callback: this.editAssistantCallBack,
+	// 		profile: assistant.profile,
+	// 		mode: 'Edit'
+	// 	});
+	// }
 
 	public viewAssistant(assistant) {
 		this.nav.push(AssistantPage, {
 			profile: assistant.profile,
-			mode: 'View'
+			mode: 'View',
+			usage: 'profile'
 		});
 	}
 
@@ -86,14 +88,14 @@ export class AssistantManagerPage {
 		});
 	}
 
-	public editAssistantCallBack = (params) => {
-		return new Promise((resolve, reject) => {
-			if (this.index !== undefined){
-				this.assistants[this.index] = params;
-			}
-			resolve();
-		});
-	}
+	// public editAssistantCallBack = (params) => {
+	// 	return new Promise((resolve, reject) => {
+	// 		if (this.index !== undefined){
+	// 			this.assistants[this.index] = params;
+	// 		}
+	// 		resolve();
+	// 	});
+	// }
 
 	public searchAssistantCallBack = (params) => {
 		return new Promise((resolve, reject) => {

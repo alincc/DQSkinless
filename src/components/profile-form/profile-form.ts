@@ -12,6 +12,7 @@ import { Profile } from '../../shared/model/registration.model';
 export class ProfileForm implements OnInit {
 
     @Input() formType: string;
+    @Input() usage: string;
 
     @Input() profile: Profile;
     @Input() mode: string;
@@ -27,6 +28,7 @@ export class ProfileForm implements OnInit {
 
     constructor(private formBuilder: FormBuilder) {
         this.formType = 'nonDoctor';
+        this.usage = 'profile'
         this.errors = {
             prc: '',
             ptr: '',
@@ -46,7 +48,12 @@ export class ProfileForm implements OnInit {
     }
 
     ngOnInit() {
-        this.createForm();
+        if (this.usage === 'profile') {
+            this.createProfileForm();
+        }
+        else {
+            this.createAccountForm();
+        }
 
         this.gender = this.genderList.filter((g: any) => {
             return g.id == this.profile.gender;
@@ -54,7 +61,7 @@ export class ProfileForm implements OnInit {
 
     }
 
-    createForm() {
+    createProfileForm() {
         this.profileForm = this.formBuilder.group({
             prc: this.formType === 'doctor' ? [this.profile.prc, Validators.required] : [this.profile.prc],
             ptr: this.formType === 'doctor' ? [this.profile.ptr, Validators.required] : [this.profile.ptr],
@@ -179,6 +186,37 @@ export class ProfileForm implements OnInit {
                     this.errors.contactNo = 'Contact No. is required';
                 } else {
                     this.errors.contactNo = '';
+                }
+            }
+        );
+    }
+
+    createAccountForm() {
+        this.profileForm = this.formBuilder.group({
+            prc: this.profile.prc,
+            ptr: this.profile.ptr,
+            medicalArt: this.profile.medicalArt,
+            specialization: this.profile.specialization,
+            email: [this.profile.email, [Validators.required, Validators.pattern(config.regex.email)]],
+            lastName:this.profile.lastName,
+            firstName: this.profile.firstName,
+            middleName: this.profile.middleName,
+            birthDate: this.profile.birthDate,
+            gender: this.profile.gender,
+            address: this.profile.address,
+            contactNo: this.profile.contactNo,
+        });
+
+        const email = this.profileForm.get('email');
+
+        email.valueChanges.subscribe(
+            newValue => {
+                if (email.hasError('required')) {
+                    this.errors.email = 'Email is required.';
+                } else if (email.hasError('pattern')) {
+                    this.errors.email = 'Invalid email address format';
+                } else {
+                    this.errors.email = '';
                 }
             }
         );

@@ -15,6 +15,7 @@ export class AssistantPage {
 
     public profile: Profile;
     public mode: string;
+    public usage: string;
 
     constructor(
         private nav: NavController,
@@ -24,6 +25,7 @@ export class AssistantPage {
         if (this.params.data) {
             this.profile = this.params.data.profile;
             this.mode = this.params.data.mode;
+            this.usage = this.params.data.usage;
         }
     }
 

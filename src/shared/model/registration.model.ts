@@ -20,7 +20,7 @@ export class Profile {
     contactNo: string;
 
     get fullName() {
-        return this.lastName + ', ' + this.firstName + ' ' + (this.middleName ? this.middleName : '');
+        return (this.lastName ? this.lastName + ', ' : '') + this.firstName + ' ' + (this.middleName ? this.middleName : '');
     }
 
     constructor() {

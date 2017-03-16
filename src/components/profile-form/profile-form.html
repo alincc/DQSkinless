@@ -1,8 +1,8 @@
 <form [ngClass]="{'edit-mode': isEditMode(), 'read-only': !isEditMode()}" [formGroup]="profileForm" (ngSubmit)="submitForm()"
     novalidate>
     <ion-list>
-        <div class="row form-group">
-            <div *ngIf="formType === 'doctor'">
+        <div class="row form-group" *ngIf="usage === 'profile'">
+            <div *ngIf="formType === 'doctor' || formType === 'doctor'">
                 <ion-label class="form-label h1">PRC License <span *ngIf="isEditMode()">*</span></ion-label>
                 <ion-item round>
                     <ion-input type="number" name="prc" formControlName="prc" [disabled]="!isEditMode()"></ion-input>
@@ -73,7 +73,7 @@
                     <ion-label>{{ gender?.description }}</ion-label>
                 </ion-item>
             </ion-list>
-            <p *ngIf="!isEditMode()" >{{ gender ? gender.description : "" }}</p>
+            <p *ngIf="!isEditMode()">{{ gender ? gender.description : "" }}</p>
             <div class="error-message" *ngIf="isEditMode() && profileForm.get('gender')?.dirty &&  profileForm.get('gender').invalid">
                 {{ errors.gender }}
             </div>
@@ -87,6 +87,15 @@
             </ion-item>
             <div class="error-message" *ngIf="profileForm.get('contactNo')?.dirty &&  profileForm.get('contactNo').invalid">
                 {{ errors.contactNo }}
+            </div>
+        </div>
+        <div class="row form-group" *ngIf="usage !== 'profile'">
+            <ion-label class="form-label h1">Email <span *ngIf="isEditMode()">*</span></ion-label>
+            <ion-item round>
+                <ion-input type="email" name="email" formControlName="email" [disabled]="!isEditMode()"></ion-input>
+            </ion-item>
+            <div class="error-message" *ngIf="profileForm.get('email')?.dirty &&  profileForm.get('email').invalid">
+                {{ errors.email }}
             </div>
         </div>
     </ion-list>
