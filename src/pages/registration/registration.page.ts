@@ -26,9 +26,9 @@ export class RegistrationPage {
 		this.params = {
 			parentNav: nav,
 			parent: this,
-			isLoggedAsDoctor: this.loginParams.data.isLoggedAsDoctor
+			isLoggedAsDoctor: this.loginParams.data.role === 1
 		};
-		switch(loginParams.data){
+		switch(loginParams.data.step){
 			case 0:
 				this.root = StepOnePage;
 				break;

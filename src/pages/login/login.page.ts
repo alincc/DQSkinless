@@ -29,7 +29,7 @@ export class LoginPage {
 							buttons: ['Dismiss']
 						}).present;
 					default:
-						this.nav.push(RegistrationPage, response.result.principal.status);
+						this.nav.push(RegistrationPage, {step : response.result.principal.status, role: response.result.principal.role});
 						break;
 				}
 			}
