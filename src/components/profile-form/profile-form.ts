@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { config } from '../../config/config';
-
+import { LOVS } from '../../constants/constants';
+import { REGEX } from '../../config/config';
 import { Profile } from '../../shared/model/registration.model';
 
 @Component({
@@ -41,8 +41,8 @@ export class ProfileForm implements OnInit {
             gender: '',
             contactNo: ''
         };
-        this.medicalArts = config.medicalArts;
-        this.genderList = config.gender;
+        this.medicalArts = LOVS.MEDICAL_ARTS;
+        this.genderList = LOVS.GENDER;
         this.profile = new Profile();
         this.mode = 'Edit';
     }
@@ -67,7 +67,7 @@ export class ProfileForm implements OnInit {
             ptr: this.formType === 'doctor' ? [this.profile.ptr, Validators.required] : [this.profile.ptr],
             medicalArt: this.formType === 'doctor' ? [this.profile.medicalArt, Validators.required] : [this.profile.medicalArt],
             specialization: this.formType === 'doctor' ? [this.profile.specialization, Validators.required] : [this.profile.specialization],
-            email: [this.profile.email, [Validators.required, Validators.pattern(config.regex.email)]],
+            email: [this.profile.email, [Validators.required, Validators.pattern(REGEX.EMAIL)]],
             lastName: [this.profile.lastName, Validators.required],
             firstName: [this.profile.firstName, Validators.required],
             middleName: this.profile.middleName,
@@ -197,7 +197,7 @@ export class ProfileForm implements OnInit {
             ptr: this.profile.ptr,
             medicalArt: this.profile.medicalArt,
             specialization: this.profile.specialization,
-            email: [this.profile.email, [Validators.required, Validators.pattern(config.regex.email)]],
+            email: [this.profile.email, [Validators.required, Validators.pattern(REGEX.EMAIL)]],
             lastName:this.profile.lastName,
             firstName: this.profile.firstName,
             middleName: this.profile.middleName,

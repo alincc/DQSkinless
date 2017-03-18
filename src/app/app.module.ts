@@ -9,12 +9,10 @@ import { components } from './components';
 import { pages } from './pages';
 
 // services
-import { RootNavController, Storage } from '../services/services';
-
+import { RootNavController, Storage, HttpService } from '../services/services';
 import { EqualValidatorDirective } from '../shared/directive/equal-validation.directive';
 
 // utilities
-import { ConfigurationService } from '../utilities/configuration.service';
 import { PasswordGeneratorService } from '../utilities/password-generator.service';
 
 @NgModule({
@@ -36,11 +34,11 @@ import { PasswordGeneratorService } from '../utilities/password-generator.servic
     components
   ],
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler },
-    ConfigurationService,
     PasswordGeneratorService,
     Locker,
     RootNavController,
-    Storage
+    Storage,
+    HttpService
   ]
 })
 export class AppModule { }

@@ -6,12 +6,12 @@
 		<ion-list no-lines>
 			<ion-label><ion-icon name="person"></ion-icon>Username</ion-label>
 			<ion-item round>
-				<ion-input type="text"></ion-input>
+				<ion-input type="text" [(ngModel)]="username" name="username"></ion-input>
 			</ion-item>
 
 			<ion-label ><ion-icon name="lock"></ion-icon>Password</ion-label>
 			<ion-item round>
-				<ion-input type="password"></ion-input>
+				<ion-input type="password" [(ngModel)]="password" name="password"></ion-input>
 			</ion-item>
 		</ion-list>
 		<div center>

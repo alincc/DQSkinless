@@ -1,21 +1,41 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, AlertController } from 'ionic-angular';
 import { ManagerPage } from '../manager/manager.page';
-import { RegistrationPage } from '../registration/registration.page';
 
+import { RegistrationPage } from '../registration/registration.page';
+import { LoginService } from './login.service';
 @Component({
 	selector: 'login-page',
-	templateUrl: 'login.html'
+	templateUrl: 'login.html',
+	providers: [LoginService]
 })
 export class LoginPage {
-
-	constructor(private nav: NavController) { }
+	private username: string;
+	private password: string;
+	constructor(private nav: NavController,
+		private service: LoginService,
+		private alert: AlertController) { }
 
 	public login() {
-		// FOR TESTING
-		const isLoggedAsDoctor = true;
-		const isRegistered = false;
-
-		this.nav.setRoot(isRegistered ? ManagerPage : RegistrationPage, { isLoggedAsDoctor: isLoggedAsDoctor });
+		this.service.authenticate(this.username, this.password).subscribe(response => {
+			if(response.status){
+				switch(response.result.principal.status){
+					case 5: 
+						this.nav.push(ManagerPage);
+						break;
+					case 0:
+						this.alert.create({
+							message: "Account is inactive. Please Contact System Administrator",
+							buttons: ['Dismiss']
+						}).present;
+					default:
+						this.nav.push(RegistrationPage, response.result.principal.status);
+						break;
+				}
+			}
+		});
 	}
+
+
+
 }

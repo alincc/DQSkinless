@@ -3,6 +3,9 @@ import { Content, NavController, NavParams } from 'ionic-angular';
 
 import { ManagerPage } from "../manager/manager.page";
 import { StepOnePage } from './step-one/step-one.page';
+import { StepTwoPage } from './step-two/step-two.page';
+import { StepThreePage } from './step-three/step-three.page';
+import { StepFourPage } from './step-four/step-four.page';
 
 @Component({
 	selector: 'registration-page',
@@ -20,14 +23,26 @@ export class RegistrationPage {
 		private nav: NavController,
 		private loginParams: NavParams) {
 
-		this.root = StepOnePage;
-		this.completedRegistration = false;
-
 		this.params = {
 			parentNav: nav,
 			parent: this,
 			isLoggedAsDoctor: this.loginParams.data.isLoggedAsDoctor
 		};
+		switch(loginParams.data){
+			case 0:
+				this.root = StepOnePage;
+				break;
+			case 1:
+				this.root = StepTwoPage;
+				break;
+			case 2:
+				this.root = StepThreePage;
+				break;
+			case 3:
+				this.root = StepFourPage;
+		}
+		this.completedRegistration = false;
+
 	}
 
 	public set step(_step: any) {

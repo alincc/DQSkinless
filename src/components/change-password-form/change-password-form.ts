@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { config } from '../../config/config';
+import { REGEX } from '../../config/config';
 
 import { equalValidator } from '../../shared/directive/equal-validation.directive';
 
@@ -30,8 +30,8 @@ export class ChangePasswordForm implements OnInit {
 
     createForm() {
         this.changePasswordForm = this.formBuilder.group({
-            password: ['', [Validators.required, Validators.pattern(config.regex.password)]],
-            confirm: ['', [Validators.required, Validators.pattern(config.regex.password), equalValidator('password', false)]]
+            password: ['', [Validators.required, Validators.pattern(REGEX.PASSWORD)]],
+            confirm: ['', [Validators.required, Validators.pattern(REGEX.PASSWORD), equalValidator('password', false)]]
         });
 
         const password = this.changePasswordForm.get('password');

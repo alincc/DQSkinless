@@ -33,7 +33,10 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "^1.0.0",
-    "typescript": "2.0.9"
+    "gulp": "^3.9.1",
+    "gulp-ts-config": "^1.0.11",
+    "typescript": "2.0.9",
+    "yargs": "^7.0.2"
   },
   "cordovaPlugins": [
     "cordova-plugin-console",
