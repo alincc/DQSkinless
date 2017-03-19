@@ -12,9 +12,6 @@ import { pages } from './pages';
 import { RootNavController, Storage, HttpService } from '../services/services';
 import { EqualValidatorDirective } from '../shared/directive/equal-validation.directive';
 
-// utilities
-import { PasswordGeneratorService } from '../utilities/password-generator.service';
-
 @NgModule({
   declarations: [
     MyApp,
@@ -34,7 +31,6 @@ import { PasswordGeneratorService } from '../utilities/password-generator.servic
     components
   ],
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler },
-    PasswordGeneratorService,
     Locker,
     RootNavController,
     Storage,
