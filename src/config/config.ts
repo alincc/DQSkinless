@@ -15,7 +15,8 @@ export const REGEX = {
 
 export const MESSAGES = {
     ERROR: {
-        GENERIC: 'Something went wrong...'
+        GENERIC: 'Something went wrong...',
+        NOT_FOUND: 'Can\'t connect to server please check internet connection'
     },
     SUCCESS: {
         GENERIC: 'Congrats'

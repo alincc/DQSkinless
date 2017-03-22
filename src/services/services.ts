@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Locker, DRIVERS } from 'angular2-locker';
 import { Http } from '@angular/http';
-import { HTTP_CONFIG } from '../config/config';
+import { HTTP_CONFIG, MESSAGES } from '../config/config';
 import { environment } from '../config/environment';
 import { Observable } from 'rxjs/Observable';
 import { Endpoint } from '../config/endpoint';
@@ -85,13 +85,18 @@ export class HttpService{
 	}
 
 	private errorHandler(err:any){
-		if(err.status === '401'){
+		if(err.status === 401){
 			this.unauthorizedEvent.emit();
+		}else if(err.status === 404){
+			this.errorEvent.emit(MESSAGES.ERROR.NOT_FOUND);
 		}else{
 			this.errorEvent.emit(err);
 		}
-		Observable.throw(err);
-		return err;
+		// Observable.throw(err);
+		if(err.status === 0){
+			return err;
+		}
+		return Observable.throw(err);
 	}
 
 
