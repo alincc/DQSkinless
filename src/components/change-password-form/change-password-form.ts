@@ -38,9 +38,6 @@ export class ChangePasswordForm implements OnInit {
             oldPassword: '',
             password: '',
             confirm: ''
-            // oldPassword: ['', [Validators.required]],
-            // password: ['', [Validators.required, Validators.pattern(REGEX.PASSWORD), equalFieldValidator('confirm')]],
-            // confirm: ['', [Validators.required, equalFieldValidator('password')]]
         });
 
         this.oldPassword = this.changePasswordForm.get('oldPassword');

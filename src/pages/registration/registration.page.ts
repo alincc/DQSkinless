@@ -28,21 +28,21 @@ export class RegistrationPage {
 			parent: this,
 			isLoggedAsDoctor: this.loginParams.data.role === 1
 		};
+
 		switch(loginParams.data.step){
-			case 0:
+			case 1:
 				this.root = StepOnePage;
 				break;
-			case 1:
+			case 2:
 				this.root = StepTwoPage;
 				break;
-			case 2:
+			case 3:
 				this.root = StepThreePage;
 				break;
-			case 3:
+			case 4:
 				this.root = StepFourPage;
 		}
 		this.completedRegistration = false;
-
 	}
 
 	public set step(_step: any) {
