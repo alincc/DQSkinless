@@ -3,8 +3,6 @@ import { NavController, NavParams } from 'ionic-angular';
 
 import { RegistrationForm, Profile } from '../../../shared/model/registration.model';
 
-import { PasswordGeneratorService } from '../../../utilities/password-generator.service';
-
 @Component({
     selector: 'assistant-page',
     templateUrl: 'assistant.html'
@@ -19,8 +17,7 @@ export class AssistantPage {
 
     constructor(
         private nav: NavController,
-        private params: NavParams,
-        private passwordGeneratorService: PasswordGeneratorService) {
+        private params: NavParams) {
 
         if (this.params.data) {
             this.profile = this.params.data.profile;
@@ -34,7 +31,6 @@ export class AssistantPage {
         let registrationForm = new RegistrationForm();
 
         registrationForm.profile = response;
-        // registrationForm.password = this.passwordGeneratorService.generatePassword();
 
         this.callback(registrationForm).then(() => {
             this.nav.pop();
