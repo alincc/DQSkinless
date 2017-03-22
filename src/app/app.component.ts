@@ -12,7 +12,7 @@ import { MESSAGES } from '../config/config';
 })
 export class MyApp {
   private rootPage = LoginPage;
-  private alertCallback: EventEmitter = new EventEmitter();
+  private alertCallback: EventEmitter<any> = new EventEmitter();
   @ViewChild('rootApp')
   private app: any;
   constructor(platform: Platform,
