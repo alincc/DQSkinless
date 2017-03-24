@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Locker, DRIVERS } from 'angular2-locker';
-import { Headers, Http, RequestOptions } from '@angular/http';
+import { Headers, Http, RequestOptions,Response } from '@angular/http';
 import { HTTP_CONFIG, MESSAGES } from '../config/config';
 import { environment } from '../config/environment';
 import { Observable } from 'rxjs/Observable';
@@ -33,7 +33,8 @@ export class RootNavController {
 
 export const STORAGE_KEYS = {
 	DIMENSION: 'dimension',
-	USER_DETAILS: 'userDetails'
+	USER_DETAILS: 'userDetails',
+	TOKEN: 'token'
 }
 
 @Injectable()
@@ -47,8 +48,11 @@ export class Storage {
 	}
 
 	// userDetails
-	get userDetails() { return this.local.get(STORAGE_KEYS.USER_DETAILS); }
-	set userDetails(data) { this.local.set(STORAGE_KEYS.USER_DETAILS, data); }
+	public get userDetails() { return this.local.get(STORAGE_KEYS.USER_DETAILS); }
+	public set userDetails(data) { this.local.set(STORAGE_KEYS.USER_DETAILS, data); }
+
+	public get token() { return this.local.get(STORAGE_KEYS.TOKEN); }
+	public set token(data) { this.local.set(STORAGE_KEYS.TOKEN, data); }
 
 
 }
@@ -58,7 +62,7 @@ export class HttpService {
 
 	public errorEvent: EventEmitter<any>;
 	public unauthorizedEvent: EventEmitter<any>;
-	public token: string;
+	public _token: string;
 
 	constructor(
 		private http: Http,
@@ -67,7 +71,18 @@ export class HttpService {
 		this.unauthorizedEvent = new EventEmitter();
 	}
 
-	private extractData(response) {
+	public get token(){
+		if(!Boolean(this._token)){
+			this._token === this.storage.token;
+		}
+		return this._token;
+	}
+	public set token(data){
+		this._token = data;
+		this.storage.token = data;
+	}
+
+	private extractData(response : Response) {
 		let _response = response.json();
 		if (_response.status) {
 			return _response;
@@ -108,11 +123,12 @@ export class HttpService {
 		} else {
 			this.errorEvent.emit(err);
 		}
-		// Observable.throw(err);
+		if(err instanceof Response){
+			return Observable.throw(err);
+		}
 		if (err.status === 0) {
 			return err;
 		}
-		return Observable.throw(err);
 	}
 
 
