@@ -1,0 +1,22 @@
+xhr-button{
+	&[wd-full] button{
+		width: 100%;
+	}
+	&[wd-lg] button{
+		width: 250px;
+	}
+	&[wd-md] button{
+		width: 180px;
+	}
+	&[wd-sm] button{
+		width: 120px;
+	}
+
+}
+
+xhr-loading{
+	.loading-spinner ion-spiner {
+		height: 50px !important;
+		width: 50px !important;
+	}
+}

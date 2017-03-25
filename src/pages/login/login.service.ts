@@ -9,12 +9,12 @@ export class LoginService {
 		private storage: Storage) { }
 
 
-	public authenticate(username, password) {
-		let _parameter = {
-			username: username,
-			password: password
-		}
-		return this.http.post(CONFIG.API.authenticate, _parameter)
+	public authenticate(_username, _password) {
+		return this.http.post(CONFIG.API.authenticate,
+			 {
+			 	username: _username, 
+			 	password: _password
+			 })
 			.map(response => {
 				if (response.status) {
 					this.http.token = response.result.token;
