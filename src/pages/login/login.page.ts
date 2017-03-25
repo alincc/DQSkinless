@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { NavController, AlertController } from 'ionic-angular';
 import { ManagerPage } from '../manager/manager.page';
 
@@ -12,28 +12,38 @@ import { LoginService } from './login.service';
 export class LoginPage {
 	private username: string;
 	private password: string;
+	private form:any;
+	private submitObservable: any;
+	private submitEmitter: any;
+
 	constructor(private nav: NavController,
 		private service: LoginService,
-		private alert: AlertController) { }
+		private alert: AlertController) {
+
+		this.submitObservable  = this.service.authenticate;
+		this.submitEmitter = new EventEmitter();
+	}
 
 	public login() {
-		this.service.authenticate(this.username, this.password).subscribe(response => {
-			if(response.status){
-				switch(response.result.principal.status){
-					case 5: 
-						this.nav.push(ManagerPage);
-						break;
-					case 0:
-						this.alert.create({
-							message: "Account is inactive. Please Contact System Administrator",
-							buttons: ['Dismiss']
-						}).present;
-					default:
-						this.nav.push(RegistrationPage, {step : response.result.principal.status, role: response.result.principal.role});
-						break;
-				}
+		this.submitEmitter.emit();
+	}
+
+	public onSuccess(response){
+		if(response.status){
+			switch(response.result.principal.status){
+				case 5: 
+					this.nav.push(ManagerPage);
+					break;
+				case 0:
+					this.alert.create({
+						message: "Account is inactive. Please Contact System Administrator",
+						buttons: ['Dismiss']
+					}).present;
+				default:
+					this.nav.push(RegistrationPage, {step : response.result.principal.status, role: response.result.principal.role});
+					break;
 			}
-		});
+		}
 	}
 
 

@@ -57,8 +57,9 @@ $tabs-ios-tab-icon-color: $accent-light;
 $tabs-ios-tab-icon-color-active : $accent;
 $tabs-ios-tab-text-color-active: $accent;
 $tabs-ios-tab-text-color: $accent-light;
-
-
+$loading-ios-background: rgba(0,0,0,0);
+$loading-ios-spinner-color: $light;
+$loading-ios-text-color: $light;
 
 // App Material Design Variables
 // --------------------------------------------------
@@ -68,7 +69,9 @@ $tabs-md-tab-icon-color-active: $accent;
 $tabs-md-tab-icon-color: $accent-light;
 $tabs-md-tab-text-color-active: $accent;
 $tabs-md-tab-text-color: $accent-light;
-
+$loading-md-background: rgba(0,0,0,0);
+$loading-md-spinner-color: $light;
+$loading-md-text-color : $light;
 
 // App Windows Variables
 // --------------------------------------------------
