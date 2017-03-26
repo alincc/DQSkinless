@@ -109,10 +109,16 @@ export class HttpService {
 			.catch(err => this.errorHandler(err));
 	}
 
-	public post(url: string, parameters: any, ): Observable<any> {
+	public post(url: string, parameters: any ): Observable<any> {
 		return this.http.post(Endpoint.environment + url, parameters, this.getOptions())
 			.map(response => this.extractData(response))
 			.catch(err => this.errorHandler(err));
+	}
+
+	public put(url:string, paramters: any): Observable<any>{
+		return this.http.put(Endpoint.environment + url, paramters, this.getOptions())
+				.map(response => this.extractData(response))
+				.catch(err => this.errorHandler(err));
 	}
 
 	private errorHandler(err: any) {

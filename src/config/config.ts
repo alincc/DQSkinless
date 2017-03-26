@@ -1,10 +1,10 @@
-import { environment } from './environment';
 
 export const CONFIG = {
     // Others
     API: {
         authenticate: '/users/authenticate',
-        changePassword: '/users/changepass'
+        changePassword: '/users/changepass',
+        doctorDetails: '/doctordetails'
     }
 };
 

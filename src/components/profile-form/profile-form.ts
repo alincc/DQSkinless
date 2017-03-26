@@ -1,23 +1,28 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ProfileFormService} from './profile-form.service';
+import { XHRButton } from '../xhr-button/xhr-button.component';
 
 import { LOVS } from '../../constants/constants';
 import { REGEX } from '../../config/config';
-import { Profile } from '../../shared/model/registration.model';
+// import { Profile } from '../../shared/model/registration.model';
 
 @Component({
     selector: 'profile-form',
-    templateUrl: 'profile-form.html'
+    templateUrl: 'profile-form.html',
+    providers: [ProfileFormService]
 })
 export class ProfileForm implements OnInit {
 
     @Input() formType: string;
     @Input() usage: string;
 
-    @Input() profile: Profile;
+    @Input() profile: any;
     @Input() mode: string;
 
     @Output() onSubmit = new EventEmitter();
+
+    @ViewChild(XHRButton) submitBtn : XHRButton;
 
     private profileForm: FormGroup;
 
@@ -26,7 +31,8 @@ export class ProfileForm implements OnInit {
     public gender: string;
     public genderList: any;
 
-    constructor(private formBuilder: FormBuilder) {
+    constructor(private formBuilder: FormBuilder,
+        private service : ProfileFormService) {
         this.formType = 'nonDoctor';
         this.usage = 'profile'
         this.errors = {
@@ -43,7 +49,8 @@ export class ProfileForm implements OnInit {
         };
         this.medicalArts = LOVS.MEDICAL_ARTS;
         this.genderList = LOVS.GENDER;
-        this.profile = new Profile();
+        // this.profile = new Profile();
+        this.profile = {};
         this.mode = 'Edit';
     }
 
@@ -224,19 +231,26 @@ export class ProfileForm implements OnInit {
 
     submitForm() {
         this.bindProfileDetails();
-        this.onSubmit.emit(this.profile);
+        this.service.setDoctorDetails(this.profile).subscribe(response => {
+            if(response.status){
+                this.onSubmit.emit(this.profile);
+            }
+            this.submitBtn.dismissLoading();
+        }, err=> {
+            this.submitBtn.dismissLoading();
+        })
     }
 
     bindProfileDetails() {
-        this.profile.prc = this.profileForm.get('prc').value;
+        this.profile.prcNum = this.profileForm.get('prc').value;
         this.profile.ptr = this.profileForm.get('ptr').value;
         this.profile.medicalArt = this.profileForm.get('medicalArt').value;
         this.profile.specialization = this.profileForm.get('specialization').value;
         this.profile.email = this.profileForm.get('email').value;
-        this.profile.lastName = this.profileForm.get('lastName').value;
-        this.profile.firstName = this.profileForm.get('firstName').value;
-        this.profile.middleName = this.profileForm.get('middleName').value;
-        this.profile.birthDate = this.profileForm.get('birthDate').value;
+        this.profile.lastname = this.profileForm.get('lastName').value;
+        this.profile.firstname = this.profileForm.get('firstName').value;
+        this.profile.middlename = this.profileForm.get('middleName').value;
+        this.profile.birthdate = this.profileForm.get('birthDate').value;
         this.profile.gender = this.profileForm.get('gender').value;
         this.profile.address = this.profileForm.get('address').value;
         this.profile.contactNo = this.profileForm.get('contactNo').value;
@@ -245,4 +259,5 @@ export class ProfileForm implements OnInit {
     isEditMode(): boolean {
         return this.mode !== 'View';
     }
+
 }
