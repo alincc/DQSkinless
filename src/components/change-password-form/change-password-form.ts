@@ -1,6 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { XHRButton } from '../../components/xhr-button/xhr-button.component';
+import { ChangePasswordService } from './change-password-form.service';
 import { REGEX } from '../../config/config';
 
 import { equalFieldValidator } from '../../shared/directive/equal-validation.directive';
@@ -8,11 +9,13 @@ import { equalFieldValidator } from '../../shared/directive/equal-validation.dir
 @Component({
     selector: 'change-password-form',
     templateUrl: 'change-password-form.html',
+    providers : [ChangePasswordService]
 })
 export class ChangePasswordForm implements OnInit {
 
-    @Output() onSubmit = new EventEmitter();
+    @Output() public onSuccess = new EventEmitter();
 
+    @ViewChild(XHRButton) submitBtn : XHRButton;
     private oldPassword: AbstractControl;
     private password: AbstractControl;
     private confirm: AbstractControl;
@@ -21,7 +24,8 @@ export class ChangePasswordForm implements OnInit {
 
     private errors: any;
 
-    constructor(private formBuilder: FormBuilder) {
+    constructor(private formBuilder: FormBuilder,
+        private service: ChangePasswordService) {
         this.errors = {
             oldPassword: '',
             password: '',
@@ -100,9 +104,16 @@ export class ChangePasswordForm implements OnInit {
 
     public submitForm() {
         this.validateForm();
-
         if (this.changePasswordForm.valid) {
-            this.onSubmit.emit(this.changePasswordForm.value);
+                this.service.changePassword(this.changePasswordForm.value).subscribe(response => {
+                    if(response.status){
+                        this.onSuccess.emit(this.changePasswordForm.value);
+                    }
+                    this.submitBtn.dismissLoading();
+                }, err => {
+                    this.submitBtn.dismissLoading();
+                }
+            );
         }
     }
 }

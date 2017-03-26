@@ -22,16 +22,10 @@ export class StepOnePage {
         params.data.parent.step = 1;
     }
 
-    public changePassword(changePasswordFormValue) {
-        console.log ('change password api => ' + JSON.stringify(changePasswordFormValue));
-
-        this.registrationService.changePassword(changePasswordFormValue).subscribe(response => {
-
-        });
-        
+    public moveToNext(changePasswordFormValue) {
         if (this.params.data) {
             this.params.data.parent.step = 2;
-            this.nav.setRoot(StepTwoPage, this.params.data, { animate: true, direction: 'forward' });
         }
+        this.nav.setRoot(StepTwoPage, this.params.data, { animate: true, direction: 'forward' });
     }
 }
