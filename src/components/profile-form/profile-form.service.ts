@@ -6,14 +6,36 @@ import { CONFIG } from '../../config/config'
 export class ProfileFormService {
     constructor(
         private http: HttpService,
-        private storage: Storage) { }
+        private storage: Storage) {
+
+    }
+    private userId;
+
+    private getUserId(){
+        if(!this.userId){
+            this.userId = this.storage.userDetails.userId;
+        }
+        return this.userId;
+    }
 
 
     public setDoctorDetails(_parameter) {
-        _parameter.userId = this.storage.userDetails.userId;
-        return this.http.put(CONFIG.API.doctorDetails, _parameter)
-            .map(response => {
-                return response;
-            });
+        _parameter.userId = this.getUserId();
+        return this.http.put(CONFIG.API.doctorDetails, _parameter);
+    }
+
+    public getDoctorDetails(){
+        return this.http.get(CONFIG.API.doctorDetails, this.getUserId())
+    }
+
+    public addAsistantDetails(_parameter){
+        _parameter.userId = this.getUserId();
+        return this.http.post(CONFIG.API.assistantDetails, _parameter);
+    }
+
+
+    public setAsistantDetails(_parameter){
+        _parameter.userId = this.getUserId();
+        return this.http.put(CONFIG.API.assistantDetails, _parameter);
     }
 }

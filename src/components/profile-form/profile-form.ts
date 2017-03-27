@@ -231,14 +231,23 @@ export class ProfileForm implements OnInit {
 
     submitForm() {
         this.bindProfileDetails();
-        this.service.setDoctorDetails(this.profile).subscribe(response => {
-            if(response.status){
-                this.onSubmit.emit(this.profile);
-            }
-            this.submitBtn.dismissLoading();
-        }, err=> {
-            this.submitBtn.dismissLoading();
-        })
+        if(this.formType === 'doctor'){
+            this.service.setDoctorDetails(this.profile).subscribe(response => {
+                if(response.status){
+                    this.onSubmit.emit(this.profile);
+                }
+                this.submitBtn.dismissLoading();
+            }, err=> {
+                this.submitBtn.dismissLoading();
+            })
+        }else{
+            this.service.addAsistantDetails(this.profile).subscribe(response =>{
+                if(response.status){
+                    this.onSubmit.emit(this.profile);
+                }
+                this.submitBtn.dismissLoading();
+            })
+        }
     }
 
     bindProfileDetails() {

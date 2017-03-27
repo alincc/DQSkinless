@@ -31,7 +31,7 @@
                 </ion-row>
                 <div *ngIf="formType === 'doctor' || formType === 'doctor'">
                     <ion-row>
-                        <ion-col>
+                        <ion-col col-12 col-sm-6 col-md-6>
                             <ion-label class="form-label h1">PRC License <span *ngIf="isEditMode()">*</span></ion-label>
                             <ion-item round>
                                 <ion-input type="number" name="prc" formControlName="prc" [disabled]="!isEditMode()"></ion-input>
@@ -40,9 +40,7 @@
                                 {{ errors.prc }}
                             </div>
                         </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col>
+                        <ion-col col-12 col-sm-6 col-md-6>
                             <ion-label class="form-label h1">PTR <span *ngIf="isEditMode()">*</span></ion-label>
                             <ion-item round>
                                 <ion-input type="number" name="ptr" formControlName="ptr" [disabled]="!isEditMode()"></ion-input>
@@ -53,7 +51,7 @@
                         </ion-col>
                     </ion-row>
                     <ion-row>
-                        <ion-col col-12 col-sm-12 col-md-6>
+                        <ion-col col-12 col-sm-6 col-md-6>
                             <ion-label class="form-label h1">Medical Arts <span *ngIf="isEditMode()">*</span></ion-label>
                             <ion-item round>
                                 <ion-select class="options" name="medicalArt" formControlName="medicalArt">
@@ -64,7 +62,7 @@
                                 {{ errors.doctorType }}
                             </div>
                         </ion-col>
-                        <ion-col col-12 col-sm-12 col-md-6>
+                        <ion-col col-12 col-sm-6 col-md-6>
                             <ion-label class="form-label h1">Specialization <span *ngIf="isEditMode()">*</span></ion-label>
                             <ion-item round>
                                 <ion-input name="specialization" formControlName="specialization" [disabled]="!isEditMode()"></ion-input>

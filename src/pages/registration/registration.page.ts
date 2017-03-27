@@ -18,6 +18,7 @@ export class RegistrationPage {
 	public params: any;
 	public completedRegistration: boolean;
 	public _step: number;
+	public _isDoctor: number;
 
 	constructor(
 		private nav: NavController,
@@ -26,7 +27,7 @@ export class RegistrationPage {
 		this.params = {
 			parentNav: nav,
 			parent: this,
-			isLoggedAsDoctor: this.loginParams.data.role === 1
+			isLoggedAsDoctor: this.isDoctor()
 		};
 
 		switch(loginParams.data.step){
@@ -43,6 +44,13 @@ export class RegistrationPage {
 				this.root = StepFourPage;
 		}
 		this.completedRegistration = false;
+	}
+
+	public isDoctor(){
+		if(!this._isDoctor){
+			this._isDoctor = this.loginParams.data.role;
+		}
+		return this._isDoctor === 1;
 	}
 
 	public set step(_step: any) {

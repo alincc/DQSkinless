@@ -23,7 +23,7 @@
 			</ion-label>
 			<div class="registration-arrow"></div>
 		</div>
-		<div class="checklist" [ngClass]="{'active':step == 4}">
+		<div class="checklist" [ngClass]="{'active':step == 4}" *ngIf="isDoctor()">
 			<ion-label>
 				Assistant
 			</ion-label>

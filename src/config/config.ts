@@ -4,7 +4,8 @@ export const CONFIG = {
     API: {
         authenticate: '/users/authenticate',
         changePassword: '/users/changepass',
-        doctorDetails: '/doctordetails'
+        doctorDetails: '/doctordetails',
+        assistantDetails: '/assistantdetails'
     }
 };
 
