@@ -62,6 +62,13 @@ export class ProfileForm implements OnInit {
             this.createAccountForm();
         }
 
+        //check for exisiting data
+        this.service.getAssistantDetails().subscribe(response => {
+            if(response.status){
+                this.profile = response.result;
+            }
+        })
+
         this.gender = this.genderList.filter((g: any) => {
             return g.id == this.profile.gender;
         })[0];
@@ -245,6 +252,8 @@ export class ProfileForm implements OnInit {
                 if(response.status){
                     this.onSubmit.emit(this.profile);
                 }
+                this.submitBtn.dismissLoading();
+            }, err=> {
                 this.submitBtn.dismissLoading();
             })
         }

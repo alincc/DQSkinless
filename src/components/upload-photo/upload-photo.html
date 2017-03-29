@@ -13,10 +13,12 @@
 						<ion-icon name="images"></ion-icon>
 						From Album
 					</button>
-
 				</ion-col>
 			</ion-row>
-			<img [src]="image" *ngIf="image">
+			<div center *ngIf="isLoading">
+				<ion-spinner name="crescent"></ion-spinner>
+			</div>
+			<img [src]="'data:image/jpeg;base64,' + image" *ngIf="image">
 		</div>
 		<button ion-button round large color="accent"
 		(click)="submit()">Submit</button>

@@ -100,11 +100,11 @@ export class HttpService {
 	}
 
 	public get(url, ...parameters): Observable<any> {
-		let _url: string = url;
+		let parameter:string = '';
 		for (let _parameter of parameters) {
-			_url += "/" + _parameter;
+			parameter += "/" + _parameter;
 		}
-		return this.http.get(Endpoint.environment + url, this.getOptions())
+		return this.http.get(Endpoint.environment + url + parameter, this.getOptions())
 			.map(response => this.extractData(response))
 			.catch(err => this.errorHandler(err));
 	}

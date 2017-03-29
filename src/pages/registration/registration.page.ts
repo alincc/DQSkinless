@@ -7,9 +7,12 @@ import { StepTwoPage } from './step-two/step-two.page';
 import { StepThreePage } from './step-three/step-three.page';
 import { StepFourPage } from './step-four/step-four.page';
 
+import { RegistrationService } from './registration.service';
+
 @Component({
 	selector: 'registration-page',
-	templateUrl: 'registration.html'
+	templateUrl: 'registration.html',
+	providers: [RegistrationService]
 })
 export class RegistrationPage {
 	@ViewChild(Content) content: Content;
@@ -22,7 +25,8 @@ export class RegistrationPage {
 
 	constructor(
 		private nav: NavController,
-		private loginParams: NavParams) {
+		private loginParams: NavParams,
+		private service : RegistrationService) {
 
 		this.params = {
 			parentNav: nav,
@@ -54,6 +58,10 @@ export class RegistrationPage {
 	}
 
 	public set step(_step: any) {
+		// update status
+		if(this._step){
+			this.service.updateStatus(_step).subscribe();
+		}
 		if (_step == 4) {
 			this.content!.resize();
 		}

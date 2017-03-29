@@ -38,4 +38,8 @@ export class ProfileFormService {
         _parameter.userId = this.getUserId();
         return this.http.put(CONFIG.API.assistantDetails, _parameter);
     }
+
+    public getAssistantDetails(){
+        return this.http.get(CONFIG.API.assistantDetails, this.getUserId())
+    }
 }

@@ -9,15 +9,10 @@ export class RegistrationService {
         private storage: Storage) { }
 
 
-    public changePassword(changePasswordFormValue) {
-        let _parameter = {
-            username: this.storage.userDetails.username,
-            oldPassword: changePasswordFormValue.oldPassword,
-            newPassword: changePasswordFormValue.password
-        }
-        return this.http.post(CONFIG.API.changePassword, _parameter)
-            .map(response => {
-                return response;
-            });
+    updateStatus(status){
+        return this.http.put(CONFIG.API.changeStatus, {
+            userId : this.storage.userDetails.userId,
+            status : status
+        });
     }
 }
