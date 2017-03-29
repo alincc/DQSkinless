@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProfileFormService} from './profile-form.service';
+import { ProfileFormService } from './profile-form.service';
 import { XHRButton } from '../xhr-button/xhr-button.component';
 
 import { LOVS } from '../../constants/constants';
@@ -22,7 +22,7 @@ export class ProfileForm implements OnInit {
 
     @Output() onSubmit = new EventEmitter();
 
-    @ViewChild(XHRButton) submitBtn : XHRButton;
+    @ViewChild(XHRButton) submitBtn: XHRButton;
 
     private profileForm: FormGroup;
 
@@ -32,7 +32,7 @@ export class ProfileForm implements OnInit {
     public genderList: any;
 
     constructor(private formBuilder: FormBuilder,
-        private service : ProfileFormService) {
+        private service: ProfileFormService) {
         this.formType = 'nonDoctor';
         this.usage = 'profile'
         this.errors = {
@@ -49,7 +49,6 @@ export class ProfileForm implements OnInit {
         };
         this.medicalArts = LOVS.MEDICAL_ARTS;
         this.genderList = LOVS.GENDER;
-        // this.profile = new Profile();
         this.profile = {};
         this.mode = 'Edit';
     }
@@ -63,11 +62,19 @@ export class ProfileForm implements OnInit {
         }
 
         //check for exisiting data
-        this.service.getAssistantDetails().subscribe(response => {
-            if(response.status){
-                this.profile = response.result;
-            }
-        })
+        if (this.formType === 'doctor') {
+            this.service.getDoctorDetails().subscribe(response => {
+                if (response && response.status) {
+                    this.profile = response.result;
+                }
+            });
+        } else {
+            this.service.getAssistantDetails().subscribe(response => {
+                if (response && response.status) {
+                    this.profile = response.result;
+                }
+            });
+        }
 
         this.gender = this.genderList.filter((g: any) => {
             return g.id == this.profile.gender;
@@ -212,7 +219,7 @@ export class ProfileForm implements OnInit {
             medicalArt: this.profile.medicalArt,
             specialization: this.profile.specialization,
             email: [this.profile.email, [Validators.required, Validators.pattern(REGEX.EMAIL)]],
-            lastName:this.profile.lastName,
+            lastName: this.profile.lastName,
             firstName: this.profile.firstName,
             middleName: this.profile.middleName,
             birthDate: this.profile.birthDate,
@@ -238,22 +245,22 @@ export class ProfileForm implements OnInit {
 
     submitForm() {
         this.bindProfileDetails();
-        if(this.formType === 'doctor'){
+        if (this.formType === 'doctor') {
             this.service.setDoctorDetails(this.profile).subscribe(response => {
-                if(response.status){
+                if (response.status) {
                     this.onSubmit.emit(this.profile);
                 }
                 this.submitBtn.dismissLoading();
-            }, err=> {
+            }, err => {
                 this.submitBtn.dismissLoading();
             })
-        }else{
-            this.service.addAsistantDetails(this.profile).subscribe(response =>{
-                if(response.status){
+        } else {
+            this.service.addAsistantDetails(this.profile).subscribe(response => {
+                if (response.status) {
                     this.onSubmit.emit(this.profile);
                 }
                 this.submitBtn.dismissLoading();
-            }, err=> {
+            }, err => {
                 this.submitBtn.dismissLoading();
             })
         }

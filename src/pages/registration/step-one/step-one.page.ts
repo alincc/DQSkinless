@@ -18,7 +18,7 @@ export class StepOnePage {
         private nav: NavController,
         private params: NavParams,
         private registrationService: RegistrationService) {
-        this.parentNav = params.data.parentNav;
+        this.parentNav = nav;
         params.data.parent.step = 1;
     }
 
@@ -26,6 +26,7 @@ export class StepOnePage {
         if (this.params.data) {
             this.params.data.parent.step = 2;
         }
-        this.nav.setRoot(StepTwoPage, this.params.data, { animate: true, direction: 'forward' });
+
+        this.parentNav.setRoot(StepTwoPage, this.params.data, { animate: true, direction: 'forward' });
     }
 }

@@ -13,7 +13,7 @@ export class StepTwoPage {
 
     public formType: string;
 
-    constructor(private nav: NavController,
+    constructor(
         private params: NavParams) {
         this.parentNav = params.data.parentNav;
         this.formType = params.data.isLoggedAsDoctor ? 'doctor' : 'nonDoctor';
@@ -21,10 +21,9 @@ export class StepTwoPage {
     }
 
     public submit(response) {
-        console.log ('update profile api => ', response);
         if (this.params.data) {
             this.params.data.parent.step = 3;
-            this.nav.setRoot(StepThreePage, this.params.data, { animate: true, direction: 'forward' });
+            this.parentNav.setRoot(StepThreePage, this.params.data, { animate: true, direction: 'forward' });
         }
     }
 }

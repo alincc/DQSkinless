@@ -1,10 +1,14 @@
-import { Component, EventEmitter, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController, AlertController } from 'ionic-angular';
 import { ManagerPage } from '../manager/manager.page';
 
 import { RegistrationPage } from '../registration/registration.page';
 import { LoginService } from './login.service';
+
 import { XHRButton } from '../../components/xhr-button/xhr-button.component';
+
+import { RootNavController } from '../../services/services';
+
 @Component({
 	selector: 'login-page',
 	templateUrl: 'login.html',
@@ -16,19 +20,21 @@ export class LoginPage {
 
 	@ViewChild(XHRButton) submit: XHRButton;
 
-	constructor(private nav: NavController,
-		private service: LoginService,
-		private alert: AlertController) {
-
+	constructor(
+		private alert: AlertController,
+		private nav: NavController,
+		private rootNav: RootNavController,
+		private service: LoginService) {
+		this.rootNav.setRootNav(this.nav);
 	}
 
 	public login() {
 		this.service.authenticate(this.username, this.password)
 			.subscribe(response => {
-				if(response.status){
-					switch(response.result.principal.status){
-						case 5: 
-							this.nav.push(ManagerPage);
+				if (response.status) {
+					switch (response.result.principal.status) {
+						case 5:
+							this.rootNav.setRoot(ManagerPage);
 							break;
 						case 0:
 							this.alert.create({
@@ -36,7 +42,7 @@ export class LoginPage {
 								buttons: ['Dismiss']
 							}).present;
 						default:
-							this.nav.push(RegistrationPage, {step : response.result.principal.status, role: response.result.principal.role});
+							this.rootNav.push(RegistrationPage, { step: response.result.principal.status, role: response.result.principal.role });
 							break;
 					}
 				}

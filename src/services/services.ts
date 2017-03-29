@@ -1,8 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Locker, DRIVERS } from 'angular2-locker';
-import { Headers, Http, RequestOptions,Response } from '@angular/http';
-import { HTTP_CONFIG, MESSAGES } from '../config/config';
-import { environment } from '../config/environment';
+import { Headers, Http, RequestOptions, Response } from '@angular/http';
+import { MESSAGES } from '../config/config';
 import { Observable } from 'rxjs/Observable';
 import { Endpoint } from '../config/endpoint';
 import 'rxjs/add/operator/map';
@@ -21,8 +20,12 @@ export class RootNavController {
 		this._rootNav = rootNav;
 	}
 
-	public push(page: any) {
-		this._rootNav.push(page);
+	public push(page: any, param?: any) {
+		this._rootNav.push(page, param);
+	}
+
+	public setRoot(page: any, param?: any) {
+		this._rootNav.setRoot(page, param);
 	}
 
 	public pop() {
@@ -71,18 +74,18 @@ export class HttpService {
 		this.unauthorizedEvent = new EventEmitter();
 	}
 
-	public get token(){
-		if(!Boolean(this._token)){
+	public get token() {
+		if (!Boolean(this._token)) {
 			this._token === this.storage.token;
 		}
 		return this._token;
 	}
-	public set token(data){
+	public set token(data) {
 		this._token = data;
 		this.storage.token = data;
 	}
 
-	private extractData(response : Response) {
+	private extractData(response: Response) {
 		let _response = response.json();
 		if (_response.status) {
 			return _response;
@@ -100,7 +103,7 @@ export class HttpService {
 	}
 
 	public get(url, ...parameters): Observable<any> {
-		let parameter:string = '';
+		let parameter: string = '';
 		for (let _parameter of parameters) {
 			parameter += "/" + _parameter;
 		}
@@ -109,16 +112,16 @@ export class HttpService {
 			.catch(err => this.errorHandler(err));
 	}
 
-	public post(url: string, parameters: any ): Observable<any> {
+	public post(url: string, parameters: any): Observable<any> {
 		return this.http.post(Endpoint.environment + url, parameters, this.getOptions())
 			.map(response => this.extractData(response))
 			.catch(err => this.errorHandler(err));
 	}
 
-	public put(url:string, paramters: any): Observable<any>{
+	public put(url: string, paramters: any): Observable<any> {
 		return this.http.put(Endpoint.environment + url, paramters, this.getOptions())
-				.map(response => this.extractData(response))
-				.catch(err => this.errorHandler(err));
+			.map(response => this.extractData(response))
+			.catch(err => this.errorHandler(err));
 	}
 
 	private errorHandler(err: any) {
@@ -129,7 +132,7 @@ export class HttpService {
 		} else {
 			this.errorEvent.emit(err);
 		}
-		if(err instanceof Response){
+		if (err instanceof Response) {
 			return Observable.throw(err);
 		}
 		if (err.status === 0) {

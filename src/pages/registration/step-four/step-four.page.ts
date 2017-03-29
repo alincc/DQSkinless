@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
 
 import { ManagerPage } from '../../../pages/manager/manager.page';
+
+import { RootNavController } from '../../../services/services';
 
 @Component({
     selector: 'step-four',
@@ -9,18 +10,6 @@ import { ManagerPage } from '../../../pages/manager/manager.page';
 })
 export class StepFourPage {
 
-    private parentNav: NavController;
-
-    constructor(private nav: NavController,
-        private params: NavParams) {
-             this.parentNav = params.data.parentNav;
-            params.data.parent.step = 4;
-    }
-
-    public submit(response) {
-        console.log ('save assistants api => ' + JSON.stringify(response));
-        if (this.params.data) {
-            this.parentNav.setRoot(ManagerPage);
-        }
-    }
+    constructor(private rootNav: RootNavController) { }
+    
 }

@@ -9,6 +9,8 @@ import { StepFourPage } from './step-four/step-four.page';
 
 import { RegistrationService } from './registration.service';
 
+import { RootNavController } from '../../services/services';
+
 @Component({
 	selector: 'registration-page',
 	templateUrl: 'registration.html',
@@ -26,7 +28,8 @@ export class RegistrationPage {
 	constructor(
 		private nav: NavController,
 		private loginParams: NavParams,
-		private service : RegistrationService) {
+		private service : RegistrationService,
+		private rootNav: RootNavController) {
 
 		this.params = {
 			parentNav: nav,
@@ -73,7 +76,7 @@ export class RegistrationPage {
 	}
 
 	public done() {
-		// TODO save registration data
-		this.nav.setRoot(ManagerPage);
+		// TODO UPDAET STATUS TO 5
+		this.rootNav.setRoot(ManagerPage);
 	}
 }

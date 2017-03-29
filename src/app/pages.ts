@@ -2,6 +2,7 @@ import { AssistantPage } from '../pages/assistant-manager/assistant/assistant.pa
 import { AssistantManagerPage } from '../pages/assistant-manager/assistant-manager.page';
 import { BlankPage } from '../pages/blank/blank.page';
 import { ChatPage } from '../pages/chat/chat.page';
+import { ClinicPage } from '../pages/clinic/clinic.page';
 import { ConsultationFormPage } from '../pages/consultation-form/consultation-form';
 import { LoginPage } from '../pages/login/login.page';
 import { ManagerPage } from '../pages/manager/manager.page';
@@ -31,6 +32,7 @@ export const pages: any[] = [
 	NotificationPage,
 	PatientPage,
 	PatientProfilePage,
+	ClinicPage,
 	ConsultationFormPage,	
 	MoreMenuPopover,
 	ProfilePage,
