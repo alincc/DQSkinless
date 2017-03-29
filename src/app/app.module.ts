@@ -12,6 +12,14 @@ import { pages } from './pages';
 import { RootNavController, Storage, HttpService } from '../services/services';
 import { EqualValidatorDirective } from '../shared/directive/equal-validation.directive';
 
+
+//native
+import { ActionSheet } from '@ionic-native/action-sheet';
+import { Camera } from '@ionic-native/camera';
+import { Device } from '@ionic-native/device';
+import { Keyboard } from '@ionic-native/keyboard';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar } from '@ionic-native/status-bar';
 @NgModule({
   declarations: [
     MyApp,
@@ -34,7 +42,14 @@ import { EqualValidatorDirective } from '../shared/directive/equal-validation.di
     Locker,
     RootNavController,
     Storage,
-    HttpService
+    HttpService,
+    //native
+    ActionSheet,
+    Camera,
+    Device,
+    Keyboard,
+    SplashScreen,
+    StatusBar
   ]
 })
 export class AppModule { }

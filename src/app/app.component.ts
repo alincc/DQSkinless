@@ -1,6 +1,7 @@
 import { Component, ViewChild, EventEmitter } from '@angular/core';
 import { Platform, AlertController } from 'ionic-angular';
-import { StatusBar, Splashscreen } from 'ionic-native';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '../services/services';
 import { LoginPage } from '../pages/login/login.page';
 import { PatientProfilePage } from '../pages/patient-profile/patient-profile.page';
@@ -18,12 +19,14 @@ export class MyApp {
   constructor(platform: Platform,
     private storage : Storage,
     private httpService: HttpService,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController,
+    private splashscreen: SplashScreen,
+    private statusBar: StatusBar) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      StatusBar.styleDefault();
-      Splashscreen.hide();
+      statusBar.styleDefault();
+      splashscreen.hide();
       //error message
       httpService.errorEvent.subscribe(_err=>{
         this.alert(_err);
