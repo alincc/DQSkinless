@@ -1,6 +1,5 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { XHRButton } from '../../components/xhr-button/xhr-button.component';
 import { ChangePasswordService } from './change-password-form.service';
 import { REGEX } from '../../config/config';
 
@@ -15,7 +14,6 @@ export class ChangePasswordForm implements OnInit {
 
     @Output() public onSuccess = new EventEmitter();
 
-    @ViewChild(XHRButton) submitBtn : XHRButton;
     private oldPassword: AbstractControl;
     private password: AbstractControl;
     private confirm: AbstractControl;
@@ -102,18 +100,20 @@ export class ChangePasswordForm implements OnInit {
         }
     }
 
-    public submitForm() {
+    public submitForm(event) {
         this.validateForm();
         if (this.changePasswordForm.valid) {
                 this.service.changePassword(this.changePasswordForm.value).subscribe(response => {
                     if(response.status){
                         this.onSuccess.emit(this.changePasswordForm.value);
                     }
-                    this.submitBtn.dismissLoading();
+                    event.dismissLoading();
                 }, err => {
-                    this.submitBtn.dismissLoading();
+                    event.dismissLoading();
                 }
             );
+        }else{
+            event.dismissLoading();
         }
     }
 }

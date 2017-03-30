@@ -1,5 +1,5 @@
-<form [ngClass]="{'edit-mode': isEditMode(), 'read-only': !isEditMode()}" [formGroup]="profileForm" (ngSubmit)="submitForm()" #form="ngForm"
-    novalidate>
+<form [ngClass]="{'edit-mode': isEditMode(), 'read-only': !isEditMode()}" [formGroup]="profileForm" #form="ngForm" (ngSubmit)="xhr.submit($event)" 
+    >
     <ion-list>
         <div class="row form-group" *ngIf="usage === 'profile'">
             <ion-grid>
@@ -139,6 +139,11 @@
         </div> -->
     </ion-list>
     <div center>
-        <xhr-button round large color="accent" *ngIf="isEditMode()" [disabled]="profileForm.invalid" [disabled]="form.invalid"> Submit </xhr-button>
+        <xhr-button #xhr round large color="accent" type="submit" 
+            [hidden]="isEditMode()" 
+            [disabled]="profileForm.invalid || form.invalid"
+            (xhrClick)="submitForm($event)">
+            Submit
+        </xhr-button>
     </div>
 </form>

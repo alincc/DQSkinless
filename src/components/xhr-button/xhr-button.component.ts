@@ -4,7 +4,12 @@ import { Observable } from 'rxjs/Observable';
 
 @Component({
 	selector: 'xhr-button',
-	template: `<button ion-button [round]="round" [large]="large" [disabled]="disabled" [color]="color" (click)="submit($event)"> <ng-content></ng-content> </button>`
+	template: `<button ion-button [round]="round" [large]="large" [disabled]="disabled" [color]="color" [type]="type"
+		[full]="full"
+		[block]="block"
+		(click)="submit($event)">
+			<ng-content></ng-content>
+		</button>`
 })
 export class XHRButton{
 
@@ -17,6 +22,12 @@ export class XHRButton{
 	private color: string;
 	@Input()
 	private disabled: boolean;
+	@Input()
+	private full: boolean;
+	@Input()
+	private block: boolean;
+	@Input()
+	private type: string;
 
 	//emitters
 	@Output()
@@ -31,12 +42,15 @@ export class XHRButton{
 	}
 	//loading container
 	private loading: any; 
+	//event
+	private event: any;
 
 	constructor(private loadingCtrl: LoadingController){}
 	
-	private submit(event){
+	public submit(event){
 		this.showLoading();
-		this.xhrClick.emit(event);
+		this.event = event;
+		this.xhrClick.emit(this);
 	}
 
 	public showLoading(){

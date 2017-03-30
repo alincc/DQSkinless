@@ -1,11 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, AlertController } from 'ionic-angular';
 import { ManagerPage } from '../manager/manager.page';
 
 import { RegistrationPage } from '../registration/registration.page';
 import { LoginService } from './login.service';
 
-import { XHRButton } from '../../components/xhr-button/xhr-button.component';
 
 import { RootNavController } from '../../services/services';
 
@@ -18,8 +17,6 @@ export class LoginPage {
 	private username: string;
 	private password: string;
 
-	@ViewChild(XHRButton) submit: XHRButton;
-
 	constructor(
 		private alert: AlertController,
 		private nav: NavController,
@@ -28,7 +25,7 @@ export class LoginPage {
 		this.rootNav.setRootNav(this.nav);
 	}
 
-	public login() {
+	public login(event) {
 		this.service.authenticate(this.username, this.password)
 			.subscribe(response => {
 				if (response.status) {
@@ -46,9 +43,9 @@ export class LoginPage {
 							break;
 					}
 				}
-				this.submit.dismissLoading();
+				event.dismissLoading();
 			}, err => {
-				this.submit.dismissLoading();
+				event.dismissLoading();
 			});
 	}
 

@@ -1,11 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileFormService } from './profile-form.service';
-import { XHRButton } from '../xhr-button/xhr-button.component';
 
 import { LOVS } from '../../constants/constants';
 import { REGEX } from '../../config/config';
-// import { Profile } from '../../shared/model/registration.model';
 
 @Component({
     selector: 'profile-form',
@@ -22,7 +20,6 @@ export class ProfileForm implements OnInit {
 
     @Output() onSubmit = new EventEmitter();
 
-    @ViewChild(XHRButton) submitBtn: XHRButton;
 
     private profileForm: FormGroup;
 
@@ -243,25 +240,25 @@ export class ProfileForm implements OnInit {
         );
     }
 
-    submitForm() {
+    submitForm(event) {
         this.bindProfileDetails();
         if (this.formType === 'doctor') {
             this.service.setDoctorDetails(this.profile).subscribe(response => {
                 if (response.status) {
                     this.onSubmit.emit(this.profile);
                 }
-                this.submitBtn.dismissLoading();
+                event.dismissLoading();
             }, err => {
-                this.submitBtn.dismissLoading();
+                event.dismissLoading();
             })
         } else {
             this.service.addAsistantDetails(this.profile).subscribe(response => {
                 if (response.status) {
                     this.onSubmit.emit(this.profile);
                 }
-                this.submitBtn.dismissLoading();
+                event.dismissLoading();
             }, err => {
-                this.submitBtn.dismissLoading();
+                event.dismissLoading();
             })
         }
     }
