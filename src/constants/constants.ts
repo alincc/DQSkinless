@@ -23,11 +23,11 @@ export const DIAGRAM = {
 export const LOVS = {
      GENDER: [
         {
-            id: '1',
+            code: '1',
             description: 'Male'
         },
         {
-            id: '2',
+            code: '2',
             description: 'Female'
         }
     ],
@@ -85,5 +85,18 @@ export const LOVS = {
         { code: '46', description: 'Thoraxic Oncologist' },
         { code: '47', description: 'Urologist' },
         { code: '48', description: 'Veterinarian' }
+    ],
+    EMAIL_TYPE: [
+        { code: '0', description: 'Email'},
+        { code: '1', description: 'Number'},
+    ],
+    DAYS: [
+        { code: '0', description: 'Monday'},
+        { code: '1', description: 'Tuesday'},
+        { code: '2', description: 'Wednesday'},
+        { code: '3', description: 'Thursday'},
+        { code: '4', description: 'Friday'},
+        { code: '5', description: 'Saturday'},
+        { code: '6', description: 'Sunday'},
     ]
 }

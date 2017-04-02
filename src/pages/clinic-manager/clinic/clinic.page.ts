@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, NavParams } from "ionic-angular";
 
 import { RootNavController } from '../../../services/services';
+
+import { LOVS } from '../../../constants/constants'
 
 @Component({
     selector: 'clinic-page',
@@ -13,9 +15,11 @@ export class ClinicPage implements OnInit {
     public clinicForm: FormGroup;
 
     public errors: any;
-    public mode: string;
+    public days: any;
+    public mode: string;    
 
     private clinic: any;
+
 
     constructor(
         private formBuilder: FormBuilder,
@@ -38,13 +42,16 @@ export class ClinicPage implements OnInit {
             contact: ''
         }
 
-        this.mode = 'Add'
+        this.mode = 'Add';
+        this.days = LOVS.DAYS;
     }
 
     private createClinicForm() {
         this.clinicForm = this.formBuilder.group({
             name: [this.clinic.name, [Validators.required]],
             address: [this.clinic.name, [Validators.required]],
+            schedules: this.formBuilder.array([]),
+            contacts: this.formBuilder.array([])
         });
 
         const name = this.clinicForm.get('name');
@@ -75,7 +82,23 @@ export class ClinicPage implements OnInit {
         return this.mode !== 'View';
     }
 
-    public submitForm(event) {
+    public createSchedule() {
+        const schedules = <FormArray>this.clinicForm.get('schedules');
+        schedules.push(this.initSchedules());
+    }
 
+    private initSchedules() {
+        const schedForm = <FormGroup> this.formBuilder.group({
+            day: ['', Validators.required],
+            from: ['', Validators.required],
+            to: ['', Validators.required]
+        });
+
+        return schedForm;
+    }
+
+    public submitForm(event) {
+        console.log(this.clinicForm.value);
+        event.dismissLoading();
     }
 }

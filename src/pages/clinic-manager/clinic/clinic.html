@@ -12,7 +12,7 @@
                 <ion-grid>
                     <ion-row>
                         <ion-col col-12 col-sm-12 col-md-4>
-                            <ion-label class="form-label h1">Last Name <span *ngIf="isEditMode()">*</span></ion-label>
+                            <ion-label class="form-label h1">Name <span *ngIf="isEditMode()">*</span></ion-label>
                             <ion-item round>
                                 <ion-input name="name" formControlName="name" [disabled]="!isEditMode()"></ion-input>
                             </ion-item>
@@ -32,6 +32,60 @@
                             </div>
                         </ion-col>
                     </ion-row>
+                </ion-grid>
+            </div>
+        </ion-list>
+        <ion-list>
+            <div class="row form-group">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-md-6>
+                            <ion-label class="form-label h1">Schedule <span *ngIf="isEditMode()">*</span></ion-label>
+                        </ion-col>
+                        <ion-col col-md-6 *ngIf="isEditMode()">
+                            <a (click)="createSchedule()" color="accent">
+                                <ion-icon name="add"></ion-icon> Add Schedule</a>
+                        </ion-col>
+                    </ion-row>
+
+                    <div formArrayName="schedules">
+                        <ion-row *ngFor="let schedule of clinicForm.get('schedules').controls; let i=index">
+                            <div class="schedule-list" [formGroupName]="i">
+                                <ion-row>
+                                    <ion-col col-md-6>
+                                        <ion-label class="form-label h1">Day <span *ngIf="isEditMode()">*</span></ion-label>
+                                        <ion-item round>
+                                            <ion-select class="options" name="day" formControlName="day">
+                                                <ion-option *ngFor="let d of days" value="{{ d?.code }}">{{ d?.description }}</ion-option>
+                                            </ion-select>
+                                        </ion-item>
+                                        <div class="error-message" *ngIf="schedule.get('day')?.dirty &&  schedule.get('day').invalid">
+                                            {{ errors.doctorType }}
+                                        </div>
+                                    </ion-col>
+                                    <ion-col col-md-6>
+                                        <ion-row>
+                                            <ion-label class="form-label h1">From <span *ngIf="isEditMode()">*</span></ion-label>
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-item round>
+                                                <ion-input type="time" name="from" formControlName="from" [disabled]="!isEditMode()"></ion-input>
+                                            </ion-item>
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-label class="form-label h1">To <span *ngIf="isEditMode()">*</span></ion-label>
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-item round>
+                                                <ion-input type="time" name="to" formControlName="to" [disabled]="!isEditMode()"></ion-input>
+                                            </ion-item>
+                                        </ion-row>
+                                    </ion-col>
+                                </ion-row>
+                            </div>
+                        </ion-row>
+                    </div>
+
                 </ion-grid>
             </div>
         </ion-list>
