@@ -30,27 +30,10 @@ export class ProfileForm implements OnInit {
 
     constructor(private formBuilder: FormBuilder,
         private service: ProfileFormService) {
-        this.formType = 'nonDoctor';
-        this.usage = 'profile'
-        this.errors = {
-            prc: '',
-            ptr: '',
-            medicalArt: '',
-            specialization: '',
-            email: '',
-            lastName: '',
-            firstName: '',
-            birthDate: '',
-            gender: '',
-            contactNo: ''
-        };
-        this.medicalArts = LOVS.MEDICAL_ARTS;
-        this.genderList = LOVS.GENDER;
-        this.profile = {};
-        this.mode = 'Edit';
+        this.getDefaults();
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         if (this.usage === 'profile') {
             this.createProfileForm();
         }
@@ -79,7 +62,29 @@ export class ProfileForm implements OnInit {
 
     }
 
-    createProfileForm() {
+    private getDefaults() {
+
+        this.formType = 'nonDoctor';
+        this.usage = 'profile'
+        this.errors = {
+            prc: '',
+            ptr: '',
+            medicalArt: '',
+            specialization: '',
+            email: '',
+            lastName: '',
+            firstName: '',
+            birthDate: '',
+            gender: '',
+            contactNo: ''
+        };
+        this.medicalArts = LOVS.MEDICAL_ARTS;
+        this.genderList = LOVS.GENDER;
+        this.profile = {};
+        this.mode = 'Edit';
+    }
+
+    private createProfileForm() {
         this.profileForm = this.formBuilder.group({
             prc: this.formType === 'doctor' ? [this.profile.prc, Validators.required] : [this.profile.prc],
             ptr: this.formType === 'doctor' ? [this.profile.ptr, Validators.required] : [this.profile.ptr],
@@ -209,7 +214,7 @@ export class ProfileForm implements OnInit {
         );
     }
 
-    createAccountForm() {
+    private createAccountForm() {
         this.profileForm = this.formBuilder.group({
             prc: this.profile.prc,
             ptr: this.profile.ptr,
@@ -240,7 +245,7 @@ export class ProfileForm implements OnInit {
         );
     }
 
-    submitForm(event) {
+    public submitForm(event) {
         this.bindProfileDetails();
         if (this.formType === 'doctor') {
             this.service.setDoctorDetails(this.profile).subscribe(response => {
@@ -263,7 +268,7 @@ export class ProfileForm implements OnInit {
         }
     }
 
-    bindProfileDetails() {
+    private bindProfileDetails() {
         this.profile.prcNum = this.profileForm.get('prc').value;
         this.profile.ptr = this.profileForm.get('ptr').value;
         this.profile.medicalArt = this.profileForm.get('medicalArt').value;
@@ -278,7 +283,7 @@ export class ProfileForm implements OnInit {
         this.profile.contactNo = this.profileForm.get('contactNo').value;
     }
 
-    isEditMode(): boolean {
+    public isEditMode(): boolean {
         return this.mode !== 'View';
     }
 

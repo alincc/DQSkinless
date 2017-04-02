@@ -1,0 +1,45 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-title>
+            {{ mode }} Clinic
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content #Content padding>
+    <form [ngClass]="{'edit-mode': isEditMode(), 'read-only': !isEditMode()}" [formGroup]="clinicForm" #form="ngForm" (ngSubmit)="xhr.submit($event)">
+        <ion-list>
+            <div class="row form-group">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-12 col-sm-12 col-md-4>
+                            <ion-label class="form-label h1">Last Name <span *ngIf="isEditMode()">*</span></ion-label>
+                            <ion-item round>
+                                <ion-input name="name" formControlName="name" [disabled]="!isEditMode()"></ion-input>
+                            </ion-item>
+                            <div class="error-message" *ngIf="clinicForm.get('name')?.dirty &&  clinicForm.get('name').invalid">
+                                {{ errors.name }}
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <ion-label class="form-label h1">Address <span *ngIf="isEditMode()">*</span></ion-label>
+                            <ion-item round>
+                                <ion-textarea name="address" formControlName="address" [disabled]="!isEditMode()"></ion-textarea>
+                            </ion-item>
+                            <div class="error-message" *ngIf="clinicForm.get('Address')?.dirty &&  clinicForm.get('Address').invalid">
+                                {{ errors.address }}
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+        </ion-list>
+        <div center>
+            <xhr-button #xhr round large color="accent" type="submit" [hidden]="!isEditMode()" [disabled]="clinicForm.invalid || form.invalid"
+                (xhrClick)="submitForm($event)">
+                Submit
+            </xhr-button>
+        </div>
+    </form>
+</ion-content>

@@ -3,11 +3,13 @@ import { AlertController, NavParams } from "ionic-angular";
 
 import { RootNavController } from '../../services/services';
 
+import { ClinicPage } from './clinic/clinic.page';
+
 @Component({
 	selector: 'clinic-manager-page',
 	templateUrl: 'clinic-manager.html'
 })
-export class ClinicPage implements OnInit {
+export class ClinicManagerPage implements OnInit {
 
 	public allowableClinics: any;
 	public clinics: any;
@@ -98,7 +100,6 @@ export class ClinicPage implements OnInit {
 		this.clinics.push(clinic2);
 
 		this.allowableClinics = this.clinics.length; // TODO BE FETCH FROM DB
-		console.log(this.clinics.length);
 	}
 
 	public displayTime(time) {
@@ -124,12 +125,12 @@ export class ClinicPage implements OnInit {
 
 	private sortContactType(contacts) {
 		return contacts.sort(function (a, b) {
-			return new Date(a.type - b.type);
+			return a.type - b.type;
 		});
 	}
 
 	public addClinic() {
-
+		this.rootNav.push(ClinicPage);
 	}
 
 	public editClinic(clinic, i) {

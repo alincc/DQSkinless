@@ -1,8 +1,10 @@
 import { AssistantPage } from '../pages/assistant-manager/assistant/assistant.page';
 import { AssistantManagerPage } from '../pages/assistant-manager/assistant-manager.page';
+import { AssociateMemberPage } from '../pages/clinic-manager/associate-member/associate-member.page';
 import { BlankPage } from '../pages/blank/blank.page';
 import { ChatPage } from '../pages/chat/chat.page';
-import { ClinicPage } from '../pages/clinic-manager/clinic-manager.page';
+import { ClinicManagerPage } from '../pages/clinic-manager/clinic-manager.page';
+import { ClinicPage } from '../pages/clinic-manager/clinic/clinic.page';
 import { ConsultationFormPage } from '../pages/consultation-form/consultation-form';
 import { LoginPage } from '../pages/login/login.page';
 import { ManagerPage } from '../pages/manager/manager.page';
@@ -25,15 +27,17 @@ import { ChangePasswordPage } from '../pages/change-password/change-password.pag
 export const pages: any[] = [
 	AssistantPage,
 	AssistantManagerPage,
+	AssociateMemberPage,
 	BlankPage,
 	ChatPage,
+	ClinicPage,
+	ClinicManagerPage,
+	ConsultationFormPage,
 	LoginPage,
 	ManagerPage,
 	NotificationPage,
 	PatientPage,
 	PatientProfilePage,
-	ClinicPage,
-	ConsultationFormPage,	
 	MoreMenuPopover,
 	ProfilePage,
 	RegistrationPage,

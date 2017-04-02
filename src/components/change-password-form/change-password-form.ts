@@ -1,14 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { ChangePasswordService } from './change-password-form.service';
 import { REGEX } from '../../config/config';
-
-import { equalFieldValidator } from '../../shared/directive/equal-validation.directive';
 
 @Component({
     selector: 'change-password-form',
     templateUrl: 'change-password-form.html',
-    providers : [ChangePasswordService]
+    providers: [ChangePasswordService]
 })
 export class ChangePasswordForm implements OnInit {
 
@@ -24,15 +22,20 @@ export class ChangePasswordForm implements OnInit {
 
     constructor(private formBuilder: FormBuilder,
         private service: ChangePasswordService) {
+        this.getDefaults();
+    }
+
+    public ngOnInit() {
+        this.createForm();
+    }
+
+    private getDefaults() {
+
         this.errors = {
             oldPassword: '',
             password: '',
             confirm: ''
         };
-    }
-
-    ngOnInit() {
-        this.createForm();
     }
 
     private createForm() {
@@ -103,16 +106,16 @@ export class ChangePasswordForm implements OnInit {
     public submitForm(event) {
         this.validateForm();
         if (this.changePasswordForm.valid) {
-                this.service.changePassword(this.changePasswordForm.value).subscribe(response => {
-                    if(response.status){
-                        this.onSuccess.emit(this.changePasswordForm.value);
-                    }
-                    event.dismissLoading();
-                }, err => {
-                    event.dismissLoading();
+            this.service.changePassword(this.changePasswordForm.value).subscribe(response => {
+                if (response.status) {
+                    this.onSuccess.emit(this.changePasswordForm.value);
                 }
+                event.dismissLoading();
+            }, err => {
+                event.dismissLoading();
+            }
             );
-        }else{
+        } else {
             event.dismissLoading();
         }
     }
