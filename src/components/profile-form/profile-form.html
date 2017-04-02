@@ -140,7 +140,7 @@
     </ion-list>
     <div center>
         <xhr-button #xhr round large color="accent" type="submit" 
-            [hidden]="isEditMode()" 
+            [hidden]="!isEditMode()" 
             [disabled]="profileForm.invalid || form.invalid"
             (xhrClick)="submitForm($event)">
             Submit

@@ -1,0 +1,29 @@
+<ion-content #Content padding>
+    <h3>Number of Clinics: {{ allowableClinics }}</h3>
+
+    <ion-card (click)="viewClinic(clinic, i)" *ngFor="let clinic of clinics;let i=index">
+
+        <ion-card-content>
+            <h2>Name: {{ clinic?.name }}</h2>
+            <h2>Address: {{ clinic?.address }}</h2>
+            <h2>Schedule:</h2>
+            <ul>
+                <li *ngFor="let schedule of clinic?.schedules">{{ schedule?.day }} : {{ displayTime(schedule?.time) }}</li>
+            </ul>
+            <h2>Contact Us:</h2>
+            <ul>
+                <li *ngFor="let contact of clinic?.contacts">{{ contact?.contact }}</li>
+            </ul>
+
+            <a (click)="editClinic(clinic, i)" color="accent">Edit&nbsp;&nbsp;&nbsp;</a>
+            <a (click)="deleteClinic(clinic, i)" color="accent">Delete</a>
+        </ion-card-content>
+
+    </ion-card>
+    <ion-label *ngIf="clinics.length === 0">
+        No clinics set
+    </ion-label>
+    <ion-fab bottom right>
+        <button ion-fab color="accent" [disabled]="clinics.length !== 0 && allowableClinics === 0" (click)="addClinic()"><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
+</ion-content>

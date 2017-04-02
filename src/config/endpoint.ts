@@ -1,6 +1,6 @@
 export class Endpoint {
 
   public static get environment(): string {
-    return "https://dqmedapp.herokuapp.com";
+    return "http://localhost:8100/api";
   }
 }
