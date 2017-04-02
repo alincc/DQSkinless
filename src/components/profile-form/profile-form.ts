@@ -1,9 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileFormService } from './profile-form.service';
+import { ModalController } from 'ionic-angular';
 
 import { LOVS } from '../../constants/constants';
 import { REGEX } from '../../config/config';
+
+
+import { ContactModal } from '../contact-modal/contact-modal.component';
 
 @Component({
     selector: 'profile-form',
@@ -27,9 +31,11 @@ export class ProfileForm implements OnInit {
     public errors: any;
     public gender: string;
     public genderList: any;
+    private contactList: any[] = LOVS.CONTACT_TYPE;
 
     constructor(private formBuilder: FormBuilder,
-        private service: ProfileFormService) {
+        private service: ProfileFormService,
+        private modal: ModalController) {
         this.getDefaults();
     }
 
@@ -285,6 +291,18 @@ export class ProfileForm implements OnInit {
 
     public isEditMode(): boolean {
         return this.mode !== 'View';
+    }
+
+    public addLine(event: Event): void{
+        event.preventDefault();
+        let modal = this.modal.create(ContactModal, 
+        {
+            header: "Add User Contact"
+        });
+        modal.onDidDismiss(_return =>{
+            console.log(_return)
+        });
+        modal.present();
     }
 
 }

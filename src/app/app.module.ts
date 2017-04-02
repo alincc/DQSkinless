@@ -43,7 +43,6 @@ import { StatusBar } from '@ionic-native/status-bar';
     RootNavController,
     Storage,
     HttpService,
-    //native
     ActionSheet,
     Camera,
     Device,

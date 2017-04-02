@@ -85,5 +85,19 @@ export const LOVS = {
         { code: '46', description: 'Thoraxic Oncologist' },
         { code: '47', description: 'Urologist' },
         { code: '48', description: 'Veterinarian' }
+    ],
+    CONTACT_TYPE: [
+        { 
+            code : 0,
+            description: "Home"
+        },
+        {
+            code: 1,
+            description: "Mobile"
+        },
+        {
+            code: 2,
+            description: "Other"
+        }
     ]
 }
