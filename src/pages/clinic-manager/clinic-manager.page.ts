@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams } from "ionic-angular";
+import { AlertController, NavParams } from "ionic-angular";
+
+import { RootNavController } from '../../services/services';
 
 @Component({
 	selector: 'clinic-manager-page',
@@ -10,7 +12,10 @@ export class ClinicPage implements OnInit {
 	public allowableClinics: any;
 	public clinics: any;
 
-	constructor(private params: NavParams) {
+	constructor(
+		private alertController: AlertController,
+		private params: NavParams,
+		private rootNav: RootNavController) {
 		if (this.params.data) {
 			params.data.parent.step = 4;
 			this.params.data.parent.completedRegistration = true; //TEMP
@@ -92,7 +97,7 @@ export class ClinicPage implements OnInit {
 		this.clinics.push(clinic);
 		this.clinics.push(clinic2);
 
-		this.allowableClinics = 2; // TODO BE DELETED
+		this.allowableClinics = this.clinics.length; // TODO BE FETCH FROM DB
 		console.log(this.clinics.length);
 	}
 
@@ -132,7 +137,22 @@ export class ClinicPage implements OnInit {
 	}
 
 	public deleteClinic(clinic, i) {
-
+		this.alertController.create({
+			message: `Delete ${clinic.name}?`,
+			buttons: [
+				{
+					text: 'NO',
+					role: 'cancel',
+				},
+				{
+					text: 'YES',
+					handler: () => {
+						this.clinics.splice(i, 1);
+						this.allowableClinics++;
+					}
+				}
+			]
+		}).present();
 	}
 
 	public viewClinic(clinic, i) {
