@@ -201,18 +201,6 @@ ion-content{
 		}
 	}
 
-	// Invalid Rounded Selects that are invalid and not disabled
-	ion-item.item-select[round]:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
-		display: inline-block;
-		border: 1px solid $primary-light !important;
-	}
-
-	// Invalid Rounded Selects that are invalid and not disabled
-	ion-item.item-select[round].ng-invalid:not(.item-input-disabled) {
-		display: inline-block;
-		border: 1px solid $danger !important;
-	}
-
 	// Radio Buttons
 	ion-list[role="radiogroup"]{
 		display: inline-block;
