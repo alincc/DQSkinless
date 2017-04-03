@@ -4,7 +4,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '../services/services';
 import { LoginPage } from '../pages/login/login.page';
-import { PatientProfilePage } from '../pages/patient-profile/patient-profile.page';
 import { HttpService } from '../services/services';
 import { MESSAGES } from '../config/config';
 
@@ -17,7 +16,7 @@ export class MyApp {
   @ViewChild('rootApp')
   private app: any;
   constructor(platform: Platform,
-    private storage : Storage,
+    private storage: Storage,
     private httpService: HttpService,
     private alertCtrl: AlertController,
     private splashscreen: SplashScreen,
@@ -28,30 +27,30 @@ export class MyApp {
       statusBar.styleDefault();
       splashscreen.hide();
       //error message
-      httpService.errorEvent.subscribe(_err=>{
+      httpService.errorEvent.subscribe(_err => {
         this.alert(_err);
       });
       //unauthorized access
-      httpService.unauthorizedEvent.subscribe(_err=>{
-        this.alert(_err).subscribe(()=>{
+      httpService.unauthorizedEvent.subscribe(_err => {
+        this.alert(_err).subscribe(() => {
           this.rootPage = LoginPage;
         });
       });
     });
   }
 
-  private alert(_err){
+  private alert(_err) {
     let message;
-    if((typeof _err ) === 'string'){
+    if ((typeof _err) === 'string') {
       message = _err;
-    }else if(_err){
+    } else if (_err) {
       message = _err.errorDescription;
     }
     let errorMessage = this.alertCtrl.create({
       message: message || MESSAGES.ERROR.GENERIC,
-      buttons:['Dismiss']
+      buttons: ['Dismiss']
     });
-    errorMessage.onDidDismiss(()=>{
+    errorMessage.onDidDismiss(() => {
       this.alertCallback.emit(_err);
     })
     errorMessage.present();

@@ -14,6 +14,7 @@ import { PatientPage } from '../pages/patient/patient.page';
 import { PatientProfilePage } from '../pages/patient-profile/patient-profile.page';
 import { ProfilePage } from '../pages/profile/profile.page';
 import { RegistrationPage } from '../pages/registration/registration.page';
+import { ScheduleModal } from '../pages/clinic-manager/schedule-modal/schedule-modal';
 import { SchedulePage } from '../pages/schedule/schedule.page';
 import { SearchAssistantPage } from '../pages/assistant-manager/search-assistant/search-assistant.page';
 import { StepOnePage } from '../pages/registration/step-one/step-one.page';
@@ -41,6 +42,7 @@ export const pages: any[] = [
 	MoreMenuPopover,
 	ProfilePage,
 	RegistrationPage,
+	ScheduleModal,
 	SchedulePage,
 	SearchAssistantPage,
 	StepOnePage,

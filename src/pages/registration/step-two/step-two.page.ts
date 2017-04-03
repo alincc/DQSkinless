@@ -20,7 +20,7 @@ export class StepTwoPage {
         params.data.parent.step = 2;
     }
 
-    public submit(response) {
+    public moveToNext(response) {
         if (this.params.data) {
             this.params.data.parent.step = 3;
             this.parentNav.setRoot(StepThreePage, this.params.data, { animate: true, direction: 'forward' });
