@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController, NavParams } from "ionic-angular";
 
 import { RootNavController } from '../../../services/services';
@@ -16,12 +16,15 @@ export class ClinicPage implements OnInit {
 
     public clinicForm: FormGroup;
 
+    public schedules: any;
+    public contactList: any;
+
     public errors: any;
     public days: any;
-    public schedules;
     public mode: string;
 
     private clinic: any;
+
 
 
     constructor(
@@ -33,12 +36,12 @@ export class ClinicPage implements OnInit {
 
     public ngOnInit() {
         this.clinic = {} // TODO get from navparams 
-
         this.createClinicForm();
-
     }
 
     private getDefaults() {
+        this.schedules = [];
+
         this.errors = {
             name: '',
             address: '',
@@ -54,8 +57,6 @@ export class ClinicPage implements OnInit {
         this.clinicForm = this.formBuilder.group({
             name: [this.clinic.name, [Validators.required]],
             address: [this.clinic.name, [Validators.required]]
-            // ,schedules: this.formBuilder.array([]),
-            // contacts: this.formBuilder.array([])
         });
 
         const name = this.clinicForm.get('name');
@@ -93,23 +94,42 @@ export class ClinicPage implements OnInit {
         });
         scheduleModal.present();
 
-        scheduleModal.onDidDismiss(response => {
-            console.log('scheduleModal dismiss => ' + JSON.stringify(response));
-            // TODO CREATE SCHEDULE FORM array
+        scheduleModal.onDidDismiss(schedule => {
+            this.addSchedule(schedule);
         });
-
-        // const schedules = <FormArray>this.clinicForm.get('schedules');
-        // schedules.push(this.initSchedules());
     }
 
-    private initSchedules() {
-        const schedForm = <FormGroup>this.formBuilder.group({
-            day: ['', Validators.required],
-            from: ['', Validators.required],
-            to: ['', Validators.required]
-        });
+    private addSchedule(newSchedule) {
+        const schedule = this.schedules.filter(s => { return s.day === newSchedule.day });
 
-        return schedForm;
+        if (schedule.length === 0) {
+
+            this.schedules.push(
+                {
+                    day: newSchedule.day,
+                    time: [{
+                        from: newSchedule.from,
+                        to: newSchedule.to
+                    }]
+                }
+            );
+
+        } else {
+            this.schedules.filter(s => { return s.day === newSchedule.day })[0].time.push({
+                from: newSchedule.from,
+                to: newSchedule.to
+            });
+
+            this.schedules.filter(s => { return s.day === newSchedule.day })[0].time.sort(function (a, b) {
+                return new Date('1970/01/01 ' + a.from).getTime() - new Date('1970/01/01 ' + b.from).getTime();
+            });
+        }
+    }
+
+    public getDay(day) {
+        return this.days.filter(d => {
+            return d.code === day;
+        })[0].description;
     }
 
     public submitForm(event) {

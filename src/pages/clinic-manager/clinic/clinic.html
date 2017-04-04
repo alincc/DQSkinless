@@ -36,7 +36,7 @@
             </div>
         </ion-list>
         <ion-list>
-            <div class="row form-group">
+            <div class="row">
                 <ion-grid>
                     <ion-row>
                         <ion-col col-md-6>
@@ -47,12 +47,20 @@
                                 <ion-icon name="add"></ion-icon> Add Schedule</a>
                         </ion-col>
                     </ion-row>
-
-                    <ion-row *ngFor="let schedule of schedules; let i=index">
-                        {{ schedule.day }} : {{ schedule.from }} to {{ schedule.to }}
-                    </ion-row>
-
                 </ion-grid>
+
+                <ion-card *ngFor="let schedule of schedules">
+                    <ion-card-header>
+                        {{ getDay(schedule.day) }}
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-item no-lines>
+                            <ion-row *ngFor="let time of schedule.time">
+                                {{ time.from}} to {{ time.to }} <ion-icon name="md-create"></ion-icon> <ion-icon name="md-close"></ion-icon>
+                            </ion-row>
+                        </ion-item>
+                    </ion-card-content>
+                </ion-card>
             </div>
         </ion-list>
         <div center>
