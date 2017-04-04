@@ -10,7 +10,7 @@ import { REGEX } from '../../config/config';
 })
 export class ChangePasswordForm implements OnInit {
 
-    @Output() public onSuccess = new EventEmitter();
+    @Output() public onSubmit = new EventEmitter();
 
     private oldPassword: AbstractControl;
     private password: AbstractControl;
@@ -108,7 +108,7 @@ export class ChangePasswordForm implements OnInit {
         if (this.changePasswordForm.valid) {
             this.service.changePassword(this.changePasswordForm.value).subscribe(response => {
                 if (response.status) {
-                    this.onSuccess.emit(this.changePasswordForm.value);
+                    this.onSubmit.emit(this.changePasswordForm.value);
                 }
                 event.dismissLoading();
             }, err => {

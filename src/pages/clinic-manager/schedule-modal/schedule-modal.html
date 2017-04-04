@@ -1,0 +1,44 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-buttons>
+            <button ion-button (click)="cancel()" type="button" class="left">Cancel</button>
+            <button ion-button (click)="returnSchedule()" type="submit" class="right" [disabled]="scheduleForm.invalid">Save</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <div class="modal-form">
+        <ion-label class="form-label h1">{{ mode }} Schedule</ion-label>
+        <form [formGroup]="scheduleForm" (ngSubmit)="submitForm()" novalidate>
+            <ion-list>
+                <div class="form-group">
+                    <ion-label class="form-label h1">Day *</ion-label>
+                    <ion-item round>
+                        <ion-select class="options" name="day" formControlName="day">
+                            <ion-option *ngFor="let d of days" value="{{ d?.code }}">{{ d?.description }}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                    <div class="error-message" *ngIf="scheduleForm.get('day').dirty &&  scheduleForm.get('day').invalid">
+                        {{ errors.day }}
+                    </div>
+                    <ion-label class="form-label h1">From *</ion-label>
+                    <ion-item round>
+                        <ion-datetime displayFormat="hh:mm a" name="from" formControlName="from"></ion-datetime>
+                        <!--<ion-input type="time" name="from" formControlName="from"></ion-input>-->
+                    </ion-item>
+                    <div class="error-message" *ngIf="scheduleForm.get('from').dirty && scheduleForm.get('from').invalid">
+                        {{ errors.from }}
+                    </div>
+                    <ion-label class="form-label h1">To *</ion-label>
+                    <ion-item round>
+                        <!--<ion-input type="time" name="to" formControlName="to"></ion-input>-->
+                        <ion-datetime displayFormat="hh:mm a" name="to" formControlName="to"></ion-datetime>
+                    </ion-item>
+                    <div class="error-message" *ngIf="scheduleForm.get('to').dirty && scheduleForm.get('to').invalid">
+                        {{ errors.to }}
+                    </div>
+                </div>
+            </ion-list>
+        </form>
+    </div>
+</ion-content>

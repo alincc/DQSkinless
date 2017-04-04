@@ -122,7 +122,11 @@
                         <ion-label class="form-label">Gender <span *ngIf="isEditMode()">*</span></ion-label>
                         <ion-list *ngIf="isEditMode()" radio-group name="gender" formControlName="gender">
                             <ion-item *ngFor="let gender of genderList">
-                                <ion-radio color="primary" [value]="gender?.code" [disabled]="!isEditMode()"></ion-radio>
+<<<<<<< HEAD
+                                <ion-radio color="primary" [value]="gender?.id" [disabled]="!isEditMode()"></ion-radio>
+=======
+                                <ion-radio color="primary" value="{{ gender?.code }}" [disabled]="!isEditMode()"></ion-radio>
+>>>>>>> ba8f712a881aecaaed8eea243da10c70f3582261
                                 <ion-label>{{ gender?.description }}</ion-label>
                             </ion-item>
                         </ion-list>

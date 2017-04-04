@@ -143,6 +143,31 @@ ion-content{
 			background-color: $light !important;
 		}
 	}
+
+	// Rounded Ion-datetime
+	ion-item.item-datetime[round] {
+		display: inline-block;
+		border: 1px solid $primary-light !important;
+		box-shadow: none !important;
+		-webkit-border-radius: 4.4em !important;
+		border-radius: 4.4rem !important;
+		height: 35px !important;
+		min-height: 35px !important;
+
+		button {
+			border-radius: 4.4rem !important;
+		}
+
+		ion-label {
+			display: none;
+		}
+
+		ion-datetime {
+			padding: 0px;
+		}	
+	}
+
+
 	// Select Inputs
 	ion-item.item-select {
 		padding-left: 15px;
@@ -277,13 +302,7 @@ ion-content{
     }
 }
 
-
-
 form {
-	.form-group{
-		margin: 5% 2% 0 2%;
-	}
-
 	.form-label{
 		margin: 2% 0 2% 0;
 		font-weight: bold;
@@ -291,9 +310,6 @@ form {
 	.form-link{
 		margin: 2% 0 2% 0;
 		// font-weight: bold;
-	}
-	.form-buttons{
-		text-align: center;
 	}
 
 	.contact-control{
