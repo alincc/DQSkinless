@@ -112,6 +112,16 @@ export class HttpService {
 			.catch(err => this.errorHandler(err));
 	}
 
+	public delete(url, ...parameters): Observable<any> {
+		let parameter: string = '';
+		for (let _parameter of parameters) {
+			parameter += "/" + _parameter;
+		}
+		return this.http.delete(Endpoint.environment + url + parameter, this.getOptions())
+			.map(response => this.extractData(response))
+			.catch(err => this.errorHandler(err));
+	}
+
 	public post(url: string, parameters: any): Observable<any> {
 		return this.http.post(Endpoint.environment + url, parameters, this.getOptions())
 			.map(response => this.extractData(response))

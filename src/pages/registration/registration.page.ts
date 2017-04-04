@@ -62,7 +62,7 @@ export class RegistrationPage {
 
 	public set step(_step: any) {
 		// update status
-		if(this._step){
+		if(this._step && this._step !== _step){
 			this.service.updateStatus(_step).subscribe();
 		}
 		if (_step == 4) {

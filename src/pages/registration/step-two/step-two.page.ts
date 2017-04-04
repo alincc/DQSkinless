@@ -9,13 +9,12 @@ import { StepThreePage } from '../step-three/step-three.page';
 })
 export class StepTwoPage {
 
-    private parentNav: NavController;
 
     public formType: string;
 
     constructor(
+        private nav: NavController,
         private params: NavParams) {
-        this.parentNav = params.data.parentNav;
         this.formType = params.data.isLoggedAsDoctor ? 'doctor' : 'nonDoctor';
         params.data.parent.step = 2;
     }
@@ -23,7 +22,7 @@ export class StepTwoPage {
     public submit(response) {
         if (this.params.data) {
             this.params.data.parent.step = 3;
-            this.parentNav.setRoot(StepThreePage, this.params.data, { animate: true, direction: 'forward' });
+            this.nav.setRoot(StepThreePage, this.params.data, { animate: true, direction: 'forward' });
         }
     }
 }

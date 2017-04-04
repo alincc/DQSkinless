@@ -286,9 +286,34 @@ form {
 
 	.form-label{
 		margin: 2% 0 2% 0;
+		font-weight: bold;
+	}
+	.form-link{
+		margin: 2% 0 2% 0;
+		// font-weight: bold;
 	}
 	.form-buttons{
 		text-align: center;
+	}
+
+	.contact-control{
+		ion-col{
+			&:last-child{
+				text-align: right;
+			}	
+		}	
+	}
+	.contact-header{
+		padding: 0 10px;
+	}
+	.contact-details{
+		padding: 0 10px;
+		ion-col:last-child{
+			text-align: right;
+			ion-icon{
+				font-size: 28px;
+			}
+		}
 	}
 }
 

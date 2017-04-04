@@ -31,8 +31,8 @@ export class ProfileForm implements OnInit {
     public errors: any;
     public gender: string;
     public genderList: any;
-    private contactList: any[] = LOVS.CONTACT_TYPE;
-
+    private contactType: any[] = LOVS.CONTACT_TYPE;
+    private contacts : any[] = [];
     constructor(private formBuilder: FormBuilder,
         private service: ProfileFormService,
         private modal: ModalController) {
@@ -40,37 +40,48 @@ export class ProfileForm implements OnInit {
     }
 
     public ngOnInit() {
+        //check for exisiting data
+        this.profile = {};
         if (this.usage === 'profile') {
             this.createProfileForm();
+            if (this.formType === 'doctor') {
+                this.service.getDoctorDetails().subscribe(response => {
+                    if (response && response.status) {
+                        this.profile = response.result;
+                    }
+                });
+            }else{
+                this.profile = {};
+            }
         }
         else {
             this.createAccountForm();
+            if (this.formType === 'doctor') {
+                this.service.getDoctorDetails().subscribe(response => {
+                    if (response && response.status) {
+                        this.profile = response.result;
+                    }
+                });
+            }else{
+                this.service.getAssistantDetails().subscribe(response => {
+                    if (response && response.status) {
+                        this.profile = response.result;
+                    }
+                });
+            }
+
+            this.gender = this.genderList.filter((g: any) => {
+                return g.id == this.profile.gender;
+            })[0];
         }
 
-        //check for exisiting data
-        if (this.formType === 'doctor') {
-            this.service.getDoctorDetails().subscribe(response => {
-                if (response && response.status) {
-                    this.profile = response.result;
-                }
-            });
-        } else {
-            this.service.getAssistantDetails().subscribe(response => {
-                if (response && response.status) {
-                    this.profile = response.result;
-                }
-            });
-        }
 
-        this.gender = this.genderList.filter((g: any) => {
-            return g.id == this.profile.gender;
-        })[0];
 
     }
 
     private getDefaults() {
 
-        this.formType = 'nonDoctor';
+        // this.formType = 'nonDoctor';
         this.usage = 'profile'
         this.errors = {
             prc: '',
@@ -81,12 +92,11 @@ export class ProfileForm implements OnInit {
             lastName: '',
             firstName: '',
             birthDate: '',
-            gender: '',
-            contactNo: ''
+            gender: ''
         };
         this.medicalArts = LOVS.MEDICAL_ARTS;
         this.genderList = LOVS.GENDER;
-        this.profile = {};
+      
         this.mode = 'Edit';
     }
 
@@ -102,8 +112,7 @@ export class ProfileForm implements OnInit {
             middleName: this.profile.middleName,
             birthDate: [this.profile.birthDate, Validators.required],
             gender: [this.profile.gender, Validators.required],
-            address: this.profile.address,
-            contactNo: [this.profile.contactNo, Validators.required]
+            address: this.profile.address
         });
 
         const prc = this.profileForm.get('prc');
@@ -115,7 +124,6 @@ export class ProfileForm implements OnInit {
         const firstName = this.profileForm.get('firstName');
         const birthDate = this.profileForm.get('birthDate');
         const gender = this.profileForm.get('gender');
-        const contactNo = this.profileForm.get('contactNo');
 
         prc.valueChanges.subscribe(
             newValue => {
@@ -209,15 +217,7 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        contactNo.valueChanges.subscribe(
-            newValue => {
-                if (contactNo.hasError('required')) {
-                    this.errors.contactNo = 'Contact No. is required';
-                } else {
-                    this.errors.contactNo = '';
-                }
-            }
-        );
+       
     }
 
     private createAccountForm() {
@@ -233,7 +233,6 @@ export class ProfileForm implements OnInit {
             birthDate: this.profile.birthDate,
             gender: this.profile.gender,
             address: this.profile.address,
-            contactNo: this.profile.contactNo,
         });
 
         const email = this.profileForm.get('email');
@@ -252,25 +251,30 @@ export class ProfileForm implements OnInit {
     }
 
     public submitForm(event) {
-        this.bindProfileDetails();
-        if (this.formType === 'doctor') {
-            this.service.setDoctorDetails(this.profile).subscribe(response => {
-                if (response.status) {
-                    this.onSubmit.emit(this.profile);
-                }
-                event.dismissLoading();
-            }, err => {
-                event.dismissLoading();
-            })
-        } else {
-            this.service.addAsistantDetails(this.profile).subscribe(response => {
-                if (response.status) {
-                    this.onSubmit.emit(this.profile);
-                }
-                event.dismissLoading();
-            }, err => {
-                event.dismissLoading();
-            })
+        event.event.preventDefault();
+        if(this.profileForm.valid && this.hasContact()){
+            this.bindProfileDetails();
+            if (this.formType === 'doctor') {
+                this.service.setDoctorDetails(this.profile).subscribe(response => {
+                    if (response.status) {
+                        this.onSubmit.emit(this.profile);
+                    }
+                    event.dismissLoading();
+                }, err => {
+                    event.dismissLoading();
+                })
+            } else {
+                this.service.addAsistantDetails(this.profile).subscribe(response => {
+                    if (response.status) {
+                        this.onSubmit.emit(this.profile);
+                    }
+                    event.dismissLoading();
+                }, err => {
+                    event.dismissLoading();
+                })
+            }
+        }else{
+            event.dismissLoading();
         }
     }
 
@@ -286,23 +290,36 @@ export class ProfileForm implements OnInit {
         this.profile.birthdate = this.profileForm.get('birthDate').value;
         this.profile.gender = this.profileForm.get('gender').value;
         this.profile.address = this.profileForm.get('address').value;
-        this.profile.contactNo = this.profileForm.get('contactNo').value;
     }
 
     public isEditMode(): boolean {
         return this.mode !== 'View';
     }
 
-    public addLine(event: Event): void{
+    public addContact(event: Event): void{
         event.preventDefault();
         let modal = this.modal.create(ContactModal, 
         {
             header: "Add User Contact"
         });
         modal.onDidDismiss(_return =>{
-            console.log(_return)
+            if(_return){
+                this.contacts.push(_return);
+                this.hasContact();
+            }
         });
         modal.present();
+    }
+
+    public removeContact(event,idx){
+        event.preventDefault();
+        this.contacts.splice(idx,1);
+        this.hasContact();
+    }
+
+    public hasContact(){
+        this.errors.contactNo = this.contacts.length ? '' : "Contact is required";
+        return !Boolean(this.errors.contactNo);
     }
 
 }

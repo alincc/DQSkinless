@@ -6,7 +6,8 @@ export const CONFIG = {
         changePassword: '/users/changepass',
         doctorDetails: '/doctordetails',
         assistantDetails: '/assistantdetails',
-        changeStatus: '/users/changestatus'
+        changeStatus: '/users/changestatus',
+        contact: '/contacts/'
     }
 };
 

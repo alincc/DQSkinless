@@ -1,13 +1,13 @@
 <ion-header>
 	<ion-toolbar color="secondary">
 		<ion-buttons start>
-			<button ion-button small navPop>CANCEL</button>
+			<button ion-button icon-only navPop><ion-icon name="close"></ion-icon></button>
 		</ion-buttons>
 		<ion-title>
 			{{header}}
 		</ion-title>
 		<ion-buttons end>
-			<button ion-button small (click)="save()">SAVE</button>
+			<button ion-button icon-only (click)="save()"><ion-icon name="checkmark"></ion-icon></button>
 		</ion-buttons>
 	</ion-toolbar>
 </ion-header>
@@ -16,10 +16,10 @@
 		<ion-grid>
 			<ion-row>
 				<ion-col col-12 col-sm-12 col-md-12>
-					  <ion-label class="form-label h1">Contact Type*</ion-label>
+					  <ion-label class="form-label">Contact Type*</ion-label>
                         <ion-item round>
                             <ion-select class="options" name="contactType" formControlName="contactType">
-                                    <ion-option *ngFor="let type of contactTypeList" [value]="type?.code">{{ type?.description }}</ion-option>
+                                    <ion-option *ngFor="let type of contactTypeList;let idx = index" [value]="idx">{{ type }}</ion-option>
                                 </ion-select>
                         </ion-item>
                         <div class="error-message" *ngIf="errors.contactType">
@@ -29,7 +29,7 @@
             </ion-row>
             <ion-row>
 				<ion-col col-12 col-sm-12 col-md-12>
-					  <ion-label class="form-label h1">Contact Detail*</ion-label>
+					  <ion-label class="form-label">Contact Detail*</ion-label>
                         <ion-item round>
                              <ion-input type="tel" name="contactDetail" formControlName="contactDetail"></ion-input>
                         </ion-item>

@@ -12,13 +12,11 @@ import { RegistrationService } from '../registration.service';
 })
 export class StepOnePage {
 
-    private parentNav: NavController;
 
     constructor(
         private nav: NavController,
         private params: NavParams,
         private registrationService: RegistrationService) {
-        this.parentNav = nav;
         params.data.parent.step = 1;
     }
 
@@ -27,6 +25,6 @@ export class StepOnePage {
             this.params.data.parent.step = 2;
         }
 
-        this.parentNav.setRoot(StepTwoPage, this.params.data, { animate: true, direction: 'forward' });
+        this.nav.setRoot(StepTwoPage, this.params.data, { animate: true, direction: 'forward' });
     }
 }

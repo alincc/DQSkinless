@@ -42,4 +42,12 @@ export class ProfileFormService {
     public getAssistantDetails(){
         return this.http.get(CONFIG.API.assistantDetails, this.getUserId())
     }
+
+    public addContacts(_parameter){
+        return this.http.post(CONFIG.API.contacts, _parameter);
+    }
+
+    public deleteContacts(_parameter){
+        return this.http.delete(CONFIG.API.CONTACTS, _paramter);
+    }
 }

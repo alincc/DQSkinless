@@ -12,13 +12,11 @@ import { RootNavController } from '../../../services/services';
 })
 export class StepThreePage {
 
-    private parentNav: NavController;
 
     constructor(
         private nav: NavController,
         private params: NavParams,
         private rootNav: RootNavController) {
-        this.parentNav = nav;
         params.data.parent.step = 3;
     }
 
@@ -26,7 +24,7 @@ export class StepThreePage {
         if (this.params.data) {
             this.params.data.parent.step = 4;
             if (this.params.data.isLoggedAsDoctor) {
-                this.parentNav.setRoot(StepFourPage, this.params.data, { animate: true, direction: 'forward' });
+                this.nav.setRoot(StepFourPage, this.params.data, { animate: true, direction: 'forward' });
             } else {
                 this.rootNav.push(ManagerPage);
             }
