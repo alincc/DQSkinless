@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileFormService } from './profile-form.service';
 import { ModalController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/concat';
 
 import { LOVS } from '../../constants/constants';
 import { REGEX } from '../../config/config';
@@ -254,25 +256,29 @@ export class ProfileForm implements OnInit {
         event.event.preventDefault();
         if(this.profileForm.valid && this.hasContact()){
             this.bindProfileDetails();
+            let observable;
+            //store details
             if (this.formType === 'doctor') {
-                this.service.setDoctorDetails(this.profile).subscribe(response => {
-                    if (response.status) {
-                        this.onSubmit.emit(this.profile);
-                    }
-                    event.dismissLoading();
-                }, err => {
-                    event.dismissLoading();
-                })
+                observable = this.service.setDoctorDetails(this.profile)
             } else {
-                this.service.addAsistantDetails(this.profile).subscribe(response => {
-                    if (response.status) {
-                        this.onSubmit.emit(this.profile);
+                observable = this.service.addAsistantDetails(this.profile);
+            }
+            //store contacts
+            for(let contact of this.contacts){
+                observable = observable.concat(this.service.addContacts(contact))
+            }
+            let subscription = observable.subscribe(response => {
+                    if (!response.status) {
+                        event.dismissLoading();
+                        subscription.unsubcribe();
                     }
-                    event.dismissLoading();
                 }, err => {
                     event.dismissLoading();
+                    subscription.unsubcribe();
+                }, () => {
+                    event.dismissLoading();
+                    this.onSubmit.emit(this.profile);
                 })
-            }
         }else{
             event.dismissLoading();
         }

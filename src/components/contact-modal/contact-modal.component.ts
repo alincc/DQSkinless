@@ -52,7 +52,7 @@ export class ContactModal{
 		if(this.contactForm.valid){
 			this.view.dismiss({
 				contactType : this.contactType.value,
-				contactDetail : this.contactDetail.value
+				contact : this.contactDetail.value
 			});
 		}
 	}
