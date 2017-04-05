@@ -51,10 +51,10 @@
                         <ion-card-header>
                             <ion-row>
                                 <ion-col>
-                                    <ion-label class="form-label"> {{ getDay(schedule.day) }} </ion-label>
+                                    <ion-label class="form-label"> {{ days[schedule.day] }} </ion-label>
                                 </ion-col>
                                 <ion-col>
-                                    <ion-icon name="trash" (click)="removeSchedule($event,schedule.day, schedules, si)" color="accent-dark"></ion-icon>
+                                    <ion-icon name="trash" (click)="removeSchedule($event, schedule.day, schedules, si)" color="accent-dark"></ion-icon>
                                 </ion-col>
                             </ion-row>
                         </ion-card-header>
@@ -105,9 +105,10 @@
                             <ion-label>{{contact.contactDetail}}</ion-label>
                         </ion-col>
                         <ion-col col-3 col-sm-3 col-md-3>
-                            <ion-icon name="trash" (click)="removeContact($event,idx)" color="accent-dark"></ion-icon>
+                            <ion-icon name="trash" (click)="removeContact($event, idx)" color="accent-dark"></ion-icon>
                         </ion-col>
                     </ion-row>
+
                     <ion-row *ngIf="errors.contact">
                         <ion-col col-12 col-sm-12 col-md-12>
                             <div class="error-message">

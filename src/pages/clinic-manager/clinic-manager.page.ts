@@ -3,6 +3,8 @@ import { AlertController, NavParams } from "ionic-angular";
 
 import { RootNavController } from '../../services/services';
 
+import { LOVS } from '../../constants/constants'
+
 import { ClinicPage } from './clinic/clinic.page';
 
 @Component({
@@ -14,15 +16,24 @@ export class ClinicManagerPage implements OnInit {
 	public allowableClinics: any;
 	public clinics: any;
 
+	public days: any;
+	public contactType: any;
+
 	constructor(
 		private alertController: AlertController,
 		private params: NavParams,
 		private rootNav: RootNavController) {
+		this.getDefaults();
 	}
 
 	public ngOnInit() {
 		this.clinics = []; // TODO IMPLEMENTED CLINIC RETRIEVAL
 		this.allowableClinics = this.clinics.length; // TODO BE FETCH FROM DB
+	}
+
+	private getDefaults() {
+		this.days = LOVS.DAYS;
+		this.contactType = LOVS.CONTACT_TYPE;
 	}
 
 	public addClinic() {

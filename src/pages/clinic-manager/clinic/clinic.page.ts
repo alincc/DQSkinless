@@ -137,7 +137,7 @@ export class ClinicPage implements OnInit {
         event.preventDefault();
 
         this.alertController.create({
-            message: `Remove ${this.getDay(day)} schedule?`,
+            message: `Remove ${this.days[day]} schedule?`,
             buttons: [
                 {
                     text: 'NO',
@@ -157,7 +157,7 @@ export class ClinicPage implements OnInit {
         event.preventDefault();
 
         this.alertController.create({
-            message: `Remove ${time.from} to ${time.to} for ${this.getDay(day)} schedule?`,
+            message: `Remove ${time.from} to ${time.to} for ${this.days[day]} schedule?`,
             buttons: [
                 {
                     text: 'NO',
@@ -192,29 +192,45 @@ export class ClinicPage implements OnInit {
         this.contacts.splice(idx, 1);
     }
 
-    public getDay(day) {
-        return this.days.filter(d => {
-            return d.code === day;
-        })[0].description;
+    private validateContacts() {
+        if (this.contacts.length === 0) {
+            this.errors.contact = 'Contact is required';
+            return false;
+        }
+
+        return true;
     }
 
-    private validateForm() {
+    private validateSchedules() {
+        if (this.schedules.length === 0) {
+            this.errors.schedule = 'Schedule is required';
+            return false;
+        }
 
+        return true;
     }
 
     public submitForm(event) {
-        this.callback = this.params.get('callback');
+        event.event.preventDefault();
 
-        const newClinic = {
-            name: this.clinicForm.get('name'),
-            address: this.clinicForm.get('address'),
-            schedules: this.schedules,
-            contacts: this.contacts
-        };
+        if (this.clinicForm.valid && (this.validateContacts() || this.validateSchedules())) {
+            this.callback = this.params.get('callback');
 
-        this.callback(newClinic).then(() => {
-            this.rootNav.pop();
-        });
+            const newClinic = {
+                name: this.clinicForm.get('name').value,
+                address: this.clinicForm.get('address').value,
+                schedules: this.schedules,
+                contacts: this.contacts
+            };
+
+            // TODO SAVING
+
+            this.callback(newClinic).then(() => {
+                this.rootNav.pop();
+            });
+
+        }
+
         event.dismissLoading();
     }
 }
