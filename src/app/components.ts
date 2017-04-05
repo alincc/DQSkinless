@@ -4,6 +4,7 @@ import { ProfileForm } from '../components/profile-form/profile-form';
 import { UploadPhoto } from '../components/upload-photo/upload-photo';
 import { XHRButton } from '../components/xhr-button/xhr-button.component';
 import { ContactModal } from '../components/contact-modal/contact-modal.component';
+import { ScheduleModal } from '../components/schedule-modal/schedule-modal';
 
 export const components = [
     ChangePasswordForm,
@@ -11,5 +12,6 @@ export const components = [
     ProfileForm,
     UploadPhoto,
     XHRButton,
-    ContactModal
+    ContactModal,
+    ScheduleModal
 ];

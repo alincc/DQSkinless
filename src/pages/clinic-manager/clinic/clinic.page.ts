@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ModalController, NavParams } from "ionic-angular";
+import { AlertController, ModalController, NavParams } from "ionic-angular";
 
 import { RootNavController } from '../../../services/services';
 
 import { LOVS } from '../../../constants/constants'
 
-import { ScheduleModal } from '../schedule-modal/schedule-modal';
+import { ContactModal } from '../../../components/contact-modal/contact-modal.component';
+import { ScheduleModal } from '../../../components/schedule-modal/schedule-modal';
 
 @Component({
     selector: 'clinic-page',
@@ -17,19 +18,22 @@ export class ClinicPage implements OnInit {
     public clinicForm: FormGroup;
 
     public schedules: any;
-    public contactList: any;
+    public contacts: any;
 
     public errors: any;
     public days: any;
+    public contactTypes: any;
     public mode: string;
 
     private clinic: any;
 
-
+    private callback: Function;
 
     constructor(
+        private alertController: AlertController,
         private formBuilder: FormBuilder,
         private modalController: ModalController,
+        private params: NavParams,
         private rootNav: RootNavController) {
         this.getDefaults();
     }
@@ -41,6 +45,7 @@ export class ClinicPage implements OnInit {
 
     private getDefaults() {
         this.schedules = [];
+        this.contacts = [];
 
         this.errors = {
             name: '',
@@ -51,6 +56,7 @@ export class ClinicPage implements OnInit {
 
         this.mode = 'Add';
         this.days = LOVS.DAYS;
+        this.contactTypes = LOVS.CONTACT_TYPE;
     }
 
     private createClinicForm() {
@@ -87,15 +93,18 @@ export class ClinicPage implements OnInit {
         return this.mode !== 'View';
     }
 
-    public createSchedule() {
+    public createSchedule(event: Event) {
+        event.preventDefault();
+
         let scheduleModal = this.modalController.create(ScheduleModal, {
-            enableBackdropDismiss: false,
-            showBackdrop: true
+            mode: 'Add'
         });
         scheduleModal.present();
 
         scheduleModal.onDidDismiss(schedule => {
-            this.addSchedule(schedule);
+            if (schedule) {
+                this.addSchedule(schedule);
+            }
         });
     }
 
@@ -103,27 +112,84 @@ export class ClinicPage implements OnInit {
         const schedule = this.schedules.filter(s => { return s.day === newSchedule.day });
 
         if (schedule.length === 0) {
-
             this.schedules.push(
                 {
                     day: newSchedule.day,
-                    time: [{
+                    times: [{
                         from: newSchedule.from,
                         to: newSchedule.to
                     }]
                 }
             );
-
         } else {
-            this.schedules.filter(s => { return s.day === newSchedule.day })[0].time.push({
+            this.schedules.filter(s => { return s.day === newSchedule.day })[0].times.push({
                 from: newSchedule.from,
                 to: newSchedule.to
             });
 
-            this.schedules.filter(s => { return s.day === newSchedule.day })[0].time.sort(function (a, b) {
+            this.schedules.filter(s => { return s.day === newSchedule.day })[0].times.sort(function (a, b) {
                 return new Date('1970/01/01 ' + a.from).getTime() - new Date('1970/01/01 ' + b.from).getTime();
             });
         }
+    }
+
+    public removeSchedule(event: Event, day, schedules, i) {
+        event.preventDefault();
+
+        this.alertController.create({
+            message: `Remove ${this.getDay(day)} schedule?`,
+            buttons: [
+                {
+                    text: 'NO',
+                    role: 'cancel',
+                },
+                {
+                    text: 'YES',
+                    handler: () => {
+                        this.schedules.splice(i, 1);
+                    }
+                }
+            ]
+        }).present();
+    }
+
+    public removeTime(event: Event, day, time, times, i) {
+        event.preventDefault();
+
+        this.alertController.create({
+            message: `Remove ${time.from} to ${time.to} for ${this.getDay(day)} schedule?`,
+            buttons: [
+                {
+                    text: 'NO',
+                    role: 'cancel',
+                },
+                {
+                    text: 'YES',
+                    handler: () => {
+                        times.splice(i, 1);
+                    }
+                }
+            ]
+        }).present();
+    }
+
+    public addContact(event: Event): void {
+        event.preventDefault();
+        let modal = this.modalController.create(ContactModal,
+            {
+                header: "Add User Contact"
+            });
+        modal.onDidDismiss(contact => {
+            if (contact) {
+                this.contacts.push(contact);
+            }
+        });
+        modal.present();
+    }
+
+    public removeContact(event, idx) {
+        event.preventDefault();
+        this.contacts.splice(idx, 1);
     }
 
     public getDay(day) {
@@ -132,8 +198,23 @@ export class ClinicPage implements OnInit {
         })[0].description;
     }
 
+    private validateForm() {
+
+    }
+
     public submitForm(event) {
-        console.log(this.clinicForm.value);
+        this.callback = this.params.get('callback');
+
+        const newClinic = {
+            name: this.clinicForm.get('name'),
+            address: this.clinicForm.get('address'),
+            schedules: this.schedules,
+            contacts: this.contacts
+        };
+
+        this.callback(newClinic).then(() => {
+            this.rootNav.pop();
+        });
         event.dismissLoading();
     }
 }

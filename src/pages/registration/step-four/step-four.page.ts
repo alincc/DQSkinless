@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { NavController, NavParams } from 'ionic-angular';
 
-import { ManagerPage } from '../../../pages/manager/manager.page';
+import { StepTwoPage } from '../step-two/step-two.page';
 
-import { RootNavController } from '../../../services/services';
+import { RegistrationService } from '../registration.service';
+
 
 @Component({
     selector: 'step-four',
@@ -10,6 +12,10 @@ import { RootNavController } from '../../../services/services';
 })
 export class StepFourPage {
 
-    constructor(private rootNav: RootNavController) { }
-    
+    constructor(
+        private nav: NavController,
+        private params: NavParams,
+        private registrationService: RegistrationService) {
+        params.data.parent.step = 4;
+    }
 }

@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ViewController } from 'ionic-angular';
+import { NavParams, ViewController } from 'ionic-angular';
 
-import { LOVS } from '../../../constants/constants';
+import { LOVS } from '../../constants/constants';
 
 @Component({
     selector: 'schedule-modal',
@@ -14,6 +14,7 @@ export class ScheduleModal {
 
     public scheduleForm: FormGroup;
     public days: any;
+    public mode: any;
 
     private day: AbstractControl;
     private from: AbstractControl;
@@ -23,6 +24,7 @@ export class ScheduleModal {
 
     constructor(
         private formBuilder: FormBuilder,
+        private params: NavParams,
         private viewController: ViewController) {
         this.getDefaults();
     }
@@ -40,6 +42,8 @@ export class ScheduleModal {
         };
 
         this.days = LOVS.DAYS;
+
+        this.mode = this.params.data.mode;
     }
 
     private createForm() {
@@ -85,10 +89,9 @@ export class ScheduleModal {
         this.viewController.dismiss().catch(() => { });
     }
 
-    public returnSchedule() {
+    public save() {
         this.validateForm();
         if (this.scheduleForm.valid) {
-
             this.viewController.dismiss(this.scheduleForm.value).catch(() => { });
         }
     }

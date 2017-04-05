@@ -12,7 +12,7 @@
             </ul>
             <h2>Contact Us:</h2>
             <ul>
-                <li *ngFor="let contact of clinic?.contacts">{{ contact?.contact }}</li>
+                <li *ngFor="let contact of clinic?.contacts">{{ contact?.contactType }} : {{ contact?.contactDetail }}</li>
             </ul>
 
             <a (click)="editClinic(clinic, i)" color="accent">Edit&nbsp;&nbsp;&nbsp;</a>

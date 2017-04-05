@@ -39,28 +39,83 @@
             <div class="row">
                 <ion-grid>
                     <ion-row>
-                        <ion-col col-md-6>
+                        <ion-col>
                             <ion-label class="form-label h1">Schedule <span *ngIf="isEditMode()">*</span></ion-label>
                         </ion-col>
-                        <ion-col col-md-6 *ngIf="isEditMode()">
-                            <a class="form-label h1" (click)="createSchedule()" color="accent">
-                                <ion-icon name="add"></ion-icon> Add Schedule</a>
+                        <ion-col *ngIf="isEditMode()">
+                            <a class="form-label h1" (click)="createSchedule($event)" color="accent-dark">+ Add Schedule</a>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-card *ngFor="let schedule of schedules; let si = index">
+                        <ion-card-header>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-label class="form-label"> {{ getDay(schedule.day) }} </ion-label>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-icon name="trash" (click)="removeSchedule($event,schedule.day, schedules, si)" color="accent-dark"></ion-icon>
+                                </ion-col>
+                            </ion-row>
+                        </ion-card-header>
+                        <ion-card-content>
+                            <ion-item no-lines>
+                                <ion-row center *ngFor="let time of schedule.times; let ti = index">
+                                    <ion-col>
+                                        {{ time.from}} to {{ time.to }}
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-icon name="trash" (click)="removeTime($event, schedule.day, time, schedule.times, ti)" color="accent-dark"></ion-icon>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-item>
+                        </ion-card-content>
+                    </ion-card>
+
+                    <ion-row *ngIf="errors.schedule">
+                        <ion-col col-12 col-sm-12 col-md-12>
+                            <div class="error-message">
+                                {{ errors.schedule }}
+                            </div>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col col-6 col-sm-6 col-md-6>
+                            <ion-label class="form-label h1">Contacts <span *ngIf="isEditMode()">*</span></ion-label>
+                        </ion-col>
+                        <ion-col col-6 col-sm-6 col-md-6>
+                            <a class="form-label h1" (click)="addContact($event)" color="accent-dark">+ Add Contact</a>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row class="contact-header">
+                        <ion-col col-4 col-sm-4 col-md-4>
+                            <ion-label class="form-label">Type</ion-label>
+                        </ion-col>
+                        <ion-col col-5 col-sm-5 col-md-5>
+                            <ion-label class="form-label">Detail</ion-label>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="contact-details" *ngFor="let contact of contacts; let idx = index">
+                        <ion-col col-4 col-sm-4 col-md-4>
+                            <ion-label>{{contactTypes[contact.contactType]}}</ion-label>
+                        </ion-col>
+                        <ion-col col-5 col-sm-5 col-md-5>
+                            <ion-label>{{contact.contactDetail}}</ion-label>
+                        </ion-col>
+                        <ion-col col-3 col-sm-3 col-md-3>
+                            <ion-icon name="trash" (click)="removeContact($event,idx)" color="accent-dark"></ion-icon>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="errors.contact">
+                        <ion-col col-12 col-sm-12 col-md-12>
+                            <div class="error-message">
+                                {{ errors.contact }}
+                            </div>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
-
-                <ion-card *ngFor="let schedule of schedules">
-                    <ion-card-header>
-                        {{ getDay(schedule.day) }}
-                    </ion-card-header>
-                    <ion-card-content>
-                        <ion-item no-lines>
-                            <ion-row *ngFor="let time of schedule.time">
-                                {{ time.from}} to {{ time.to }} <ion-icon name="md-create"></ion-icon> <ion-icon name="md-close"></ion-icon>
-                            </ion-row>
-                        </ion-item>
-                    </ion-card-content>
-                </ion-card>
             </div>
         </ion-list>
         <div center>
