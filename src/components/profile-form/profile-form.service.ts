@@ -48,6 +48,6 @@ export class ProfileFormService {
     }
 
     public deleteContacts(_parameter){
-        return this.http.delete(CONFIG.API.CONTACTS, _paramter);
+        return this.http.delete(CONFIG.API.contacts, _parameter);
     }
 }
