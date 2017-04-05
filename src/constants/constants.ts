@@ -91,17 +91,13 @@ export const LOVS = {
        "Mobile",
        "Other"
     ],
-    EMAIL_TYPE: [
-        { code: '0', description: 'Email'},
-        { code: '1', description: 'Number'},
-    ],
     DAYS: [
-        { code: '0', description: 'Monday'},
-        { code: '1', description: 'Tuesday'},
-        { code: '2', description: 'Wednesday'},
-        { code: '3', description: 'Thursday'},
-        { code: '4', description: 'Friday'},
-        { code: '5', description: 'Saturday'},
-        { code: '6', description: 'Sunday'},
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday'
     ]
 }

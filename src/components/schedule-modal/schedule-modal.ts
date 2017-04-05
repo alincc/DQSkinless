@@ -1,12 +1,14 @@
 import { Component, Input } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ViewController } from 'ionic-angular';
+import { NavParams, ViewController } from 'ionic-angular';
 
-import { LOVS } from '../../../constants/constants';
+import { LOVS } from '../../constants/constants';
 
 @Component({
     selector: 'schedule-modal',
-    templateUrl: 'schedule-modal.html'
+    templateUrl: 'schedule-modal.html',
+    providers: [DatePipe]
 })
 export class ScheduleModal {
 
@@ -14,15 +16,14 @@ export class ScheduleModal {
 
     public scheduleForm: FormGroup;
     public days: any;
-
-    private day: AbstractControl;
-    private from: AbstractControl;
-    private to: AbstractControl;
+    public mode: any;
 
     private errors: any;
 
     constructor(
+        private datePipe: DatePipe,
         private formBuilder: FormBuilder,
+        private params: NavParams,
         private viewController: ViewController) {
         this.getDefaults();
     }
@@ -40,6 +41,8 @@ export class ScheduleModal {
         };
 
         this.days = LOVS.DAYS;
+
+        this.mode = this.params.data.mode;
     }
 
     private createForm() {
@@ -49,28 +52,28 @@ export class ScheduleModal {
             to: ['', [Validators.required]]
         });
 
-        this.day = this.scheduleForm.get('day');
-        this.from = this.scheduleForm.get('from');
-        this.to = this.scheduleForm.get('to');
+        const day = this.scheduleForm.get('day');
+        const from = this.scheduleForm.get('from');
+        const to = this.scheduleForm.get('to');
 
-        this.day.valueChanges.subscribe(newValue => {
-            if (this.day.hasError('required')) {
+        day.valueChanges.subscribe(newValue => {
+            if (day.hasError('required')) {
                 this.errors.day = 'Day is required'
             } else {
                 this.errors.day = '';
             }
         });
 
-        this.from.valueChanges.subscribe(newValue => {
-            if (this.from.hasError('required')) {
+        from.valueChanges.subscribe(newValue => {
+            if (from.hasError('required')) {
                 this.errors.from = 'From is required'
             } else {
                 this.errors.from = '';
             }
         });
 
-        this.to.valueChanges.subscribe(newValue => {
-            if (this.to.hasError('required')) {
+        to.valueChanges.subscribe(newValue => {
+            if (to.hasError('required')) {
                 this.errors.to = 'To is required'
             } else {
                 this.errors.to = '';
@@ -85,11 +88,22 @@ export class ScheduleModal {
         this.viewController.dismiss().catch(() => { });
     }
 
-    public returnSchedule() {
+    public save() {
         this.validateForm();
+
+        const newSchedule = {
+            day: this.scheduleForm.get('day').value,
+            from: this.formatTime(this.scheduleForm.get('from').value),
+            to: this.formatTime(this.scheduleForm.get('to').value)
+        }
+
         if (this.scheduleForm.valid) {
 
-            this.viewController.dismiss(this.scheduleForm.value).catch(() => { });
+            this.viewController.dismiss(newSchedule).catch(() => { });
         }
+    }
+
+    private formatTime(time) {
+        return this.datePipe.transform(new Date('1970/01/01 ' + time), 'hh:mm a');
     }
 }

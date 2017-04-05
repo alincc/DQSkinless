@@ -8,11 +8,11 @@
             <h2>Address: {{ clinic?.address }}</h2>
             <h2>Schedule:</h2>
             <ul>
-                <li *ngFor="let schedule of clinic?.schedules">{{ schedule?.day }} : {{ displayTime(schedule?.time) }}</li>
+                <li *ngFor="let schedule of clinic?.schedules">{{ days[schedule?.day] }} : {{ displayTime(schedule?.times) }}</li>
             </ul>
             <h2>Contact Us:</h2>
             <ul>
-                <li *ngFor="let contact of clinic?.contacts">{{ contact?.contact }}</li>
+                <li *ngFor="let contact of clinic?.contacts">{{ contactType[contact?.contactType] }} : {{ contact?.contactDetail }}</li>
             </ul>
 
             <a (click)="editClinic(clinic, i)" color="accent">Edit&nbsp;&nbsp;&nbsp;</a>
