@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-navbar color="primary">
+    <ion-navbar color="secondary">
         <ion-buttons start>
             <button ion-button icon-only navPop><ion-icon name="close"></ion-icon></button>
         </ion-buttons>
@@ -12,36 +12,44 @@
     </ion-navbar>
 </ion-header>
 <ion-content>
-    <div class="modal-form">
-        <form [formGroup]="scheduleForm" #form="ngForm" (ngSubmit)="save()">
-            <ion-list>
-                <div class="form-group">
-                    <ion-label class="form-label h1">Day *</ion-label>
+    <form [formGroup]="scheduleForm" #form="ngForm" (ngSubmit)="save()">
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-label class="form-label">Day *</ion-label>
                     <ion-item class="item-holder">
                         <ion-select class="options" name="day" formControlName="day">
                             <ion-option *ngFor="let day of days; let i = index" [value]="i">{{ day }}</ion-option>
                         </ion-select>
 
                     </ion-item>
-                    <div class="error-message" *ngIf="scheduleForm.get('day').dirty &&  scheduleForm.get('day').invalid">
-                        {{ errors.day }}
-                    </div>
-                    <ion-label class="form-label h1">From *</ion-label>
+                </ion-col>
+                <div class="error-message" *ngIf="scheduleForm.get('day').dirty &&  scheduleForm.get('day').invalid">
+                    {{ errors.day }}
+                </div>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-label class="form-label">From *</ion-label>
                     <ion-item class="item-holder">
                         <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" name="from" formControlName="from"></ion-datetime>
                     </ion-item>
                     <div class="error-message" *ngIf="scheduleForm.get('from').dirty && scheduleForm.get('from').invalid">
                         {{ errors.from }}
                     </div>
-                    <ion-label class="form-label h1">To *</ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-label class="form-label">To *</ion-label>
                     <ion-item class="item-holder">
                         <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" name="to" formControlName="to"></ion-datetime>
                     </ion-item>
                     <div class="error-message" *ngIf="scheduleForm.get('to').dirty && scheduleForm.get('to').invalid">
                         {{ errors.to }}
                     </div>
-                </div>
-            </ion-list>
-        </form>
-    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
 </ion-content>
