@@ -26,30 +26,26 @@ export class LoginPage {
 	}
 
 	public login(event) {
-		// this.service.authenticate(this.username, this.password)
-		// 	.subscribe(response => {
-		// 		if (response.status) {
-		// 			switch (response.result.principal.status) {
-		// 				case 5:
-		// 					this.rootNav.setRoot(ManagerPage);
-		// 					break;
-		// 				case 0:
-		// 					this.alert.create({
-		// 						message: "Account is inactive. Please Contact System Administrator",
-		// 						buttons: ['Dismiss']
-		// 					}).present;
-		// 				default:
-		// 					this.rootNav.push(RegistrationPage, { step: response.result.principal.status, role: response.result.principal.role });
-		// 					break;
-		// 			}
-		// 		}
-		// 		event.dismissLoading();
-		// 	}, err => {
-		// 		event.dismissLoading();
-		// 	});
-		this.rootNav.push(RegistrationPage, { step: 4, role: 1 });
-		event.dismissLoading();
+		this.service.authenticate(this.username, this.password)
+			.subscribe(response => {
+				if (response.status) {
+					switch (response.result.principal.status) {
+						case 5:
+							this.rootNav.setRoot(ManagerPage);
+							break;
+						case 0:
+							this.alert.create({
+								message: "Account is inactive. Please Contact System Administrator",
+								buttons: ['Dismiss']
+							}).present;
+						default:
+							this.rootNav.push(RegistrationPage, { step: response.result.principal.status, role: response.result.principal.role });
+							break;
+					}
+				}
+				event.dismissLoading();
+			}, err => {
+				event.dismissLoading();
+			});
 	}
-
-
 }
