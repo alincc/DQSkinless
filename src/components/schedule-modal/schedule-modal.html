@@ -17,24 +17,25 @@
             <ion-list>
                 <div class="form-group">
                     <ion-label class="form-label h1">Day *</ion-label>
-                    <!--<ion-item round>-->
+                    <ion-item class="item-holder">
                         <ion-select class="options" name="day" formControlName="day">
                             <ion-option *ngFor="let day of days; let i = index" [value]="i">{{ day }}</ion-option>
                         </ion-select>
-                    <!--</ion-item>-->
+
+                    </ion-item>
                     <div class="error-message" *ngIf="scheduleForm.get('day').dirty &&  scheduleForm.get('day').invalid">
                         {{ errors.day }}
                     </div>
                     <ion-label class="form-label h1">From *</ion-label>
-                    <ion-item round>
-                        <ion-datetime displayFormat="h:mm a" pickerFormat="h:mm a" name="from" formControlName="from"></ion-datetime>
+                    <ion-item class="item-holder">
+                        <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" name="from" formControlName="from"></ion-datetime>
                     </ion-item>
                     <div class="error-message" *ngIf="scheduleForm.get('from').dirty && scheduleForm.get('from').invalid">
                         {{ errors.from }}
                     </div>
                     <ion-label class="form-label h1">To *</ion-label>
-                    <ion-item round>
-                        <ion-datetime displayFormat="h:mm a" pickerFormat="h:mm a" name="to" formControlName="to"></ion-datetime>
+                    <ion-item class="item-holder">
+                        <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" name="to" formControlName="to"></ion-datetime>
                     </ion-item>
                     <div class="error-message" *ngIf="scheduleForm.get('to').dirty && scheduleForm.get('to').invalid">
                         {{ errors.to }}

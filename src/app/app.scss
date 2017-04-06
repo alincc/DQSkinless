@@ -204,11 +204,6 @@ ion-content{
 		.select-icon-inner {
 			color: transparent !important;
 		}
-
-		.item-inner {
-			box-shadow: none !important;
-			border: none !important;
-		}
 	}
 
 	// Invalid Rounded Select Inputs that are not dirty, invalid and not disabled
@@ -300,6 +295,44 @@ ion-content{
 			padding-left: 35px;
 			padding-right: 35px;
 		}
+	}
+
+	// ION DATE TIME
+	ion-datetime {
+		border: 1px solid $primary-light !important;
+		-webkit-border-radius: 4.4em !important;
+		border-radius: 4.4rem !important;
+		height: 35px !important;
+		min-height: 35px !important;
+		width: 100%;
+
+		button {
+			border-radius: 4.4rem !important;
+		}
+
+		&.datetime-ios {
+			padding: 0;
+		}
+	
+		&.datetime-md {
+			padding: 0;
+		}
+
+		.datetime-text {
+			padding: 9px 15px;
+		}
+	}
+}
+
+ion-item.item-holder {
+	border-bottom: 0 !important;
+	border-top: 0 !important;
+	background-color: transparent !important;
+	width: 100%;
+
+	.item-inner {
+		box-shadow: none !important;
+		border: none !important;
 	}
 }
 
