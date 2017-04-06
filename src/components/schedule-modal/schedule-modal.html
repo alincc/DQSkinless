@@ -17,11 +17,11 @@
             <ion-list>
                 <div class="form-group">
                     <ion-label class="form-label h1">Day *</ion-label>
-                    <ion-item round>
+                    <!--<ion-item round>-->
                         <ion-select class="options" name="day" formControlName="day">
                             <ion-option *ngFor="let day of days; let i = index" [value]="i">{{ day }}</ion-option>
                         </ion-select>
-                    </ion-item>
+                    <!--</ion-item>-->
                     <div class="error-message" *ngIf="scheduleForm.get('day').dirty &&  scheduleForm.get('day').invalid">
                         {{ errors.day }}
                     </div>

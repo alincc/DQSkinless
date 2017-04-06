@@ -168,37 +168,59 @@ ion-content{
 	}
 
 
-	// Select Inputs
-	ion-item.item-select {
-		padding-left: 15px;
+	// Rounded Select Inputs
+	ion-select {
+		max-width: 100%;
+		width: 100%;
 		border: 1px solid $primary-light !important;
 		-webkit-border-radius: 4.4em !important;
 		border-radius: 4.4rem !important;
 		height: 35px !important;
 		min-height: 35px !important;
+		padding: 0;
+		
+		&.select-ios {
+			padding: 0;
+		}
+	
+		&.select-md {
+			padding: 0;
+		}
 
 		button {
 			border-radius: 4.4rem !important;
 		}
 
-		ion-label {
-			display: none;
+		.select-text {
+			padding: 9px 15px;
 		}
-		
+
 		.options {
     		width: 100%;
 			max-width: 100%;
 			padding: 0;
+    	}
 
-			.select-icon-inner {
-				color: transparent !important;
-			}
-    	}		
+		.select-icon-inner {
+			color: transparent !important;
+		}
 
 		.item-inner {
 			box-shadow: none !important;
 			border: none !important;
 		}
+	}
+
+	// Invalid Rounded Select Inputs that are not dirty, invalid and not disabled
+	ion-select:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
+		display: inline-block;
+		border: 1px solid $primary-light !important;
+	}
+
+	// Invalid Rounded Select Inputs that are invalid and not disabled
+	ion-select.ng-invalid:not(.item-input-disabled) {
+		display: inline-block;
+		border: 1px solid $danger !important;
 	}
 
 	// Radio Buttons
