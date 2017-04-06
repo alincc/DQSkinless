@@ -96,9 +96,7 @@ export class ClinicPage implements OnInit {
     public createSchedule(event: Event) {
         event.preventDefault();
 
-        let scheduleModal = this.modalController.create(ScheduleModal, {
-            mode: 'Add'
-        });
+        let scheduleModal = this.modalController.create(ScheduleModal);
         scheduleModal.present();
 
         scheduleModal.onDidDismiss(schedule => {

@@ -16,7 +16,6 @@ export class ScheduleModal {
 
     public scheduleForm: FormGroup;
     public days: any;
-    public mode: any;
 
     private errors: any;
 
@@ -33,16 +32,12 @@ export class ScheduleModal {
     }
 
     private getDefaults() {
-
         this.errors = {
             day: '',
             from: '',
             to: ''
         };
-
         this.days = LOVS.DAYS;
-
-        this.mode = this.params.data.mode;
     }
 
     private createForm() {

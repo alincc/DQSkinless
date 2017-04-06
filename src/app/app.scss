@@ -42,13 +42,6 @@ ion-content{
 		transition: all 0.3s;
 	}
 
-	.h1 {
-		text-align: left;
-		font-size: $h1;
-		font-weight: bold;
-		margin: 0px;
-	}
-
 	// Rounded Ion-Inputs
 	ion-item.item-input[round] {
 		display: inline-block;
@@ -192,6 +185,7 @@ ion-content{
 		}
 
 		.select-text {
+			min-width: 100%;
 			padding: 9px 15px;
 		}
 

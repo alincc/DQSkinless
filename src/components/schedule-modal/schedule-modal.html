@@ -4,7 +4,7 @@
             <button ion-button icon-only navPop><ion-icon name="close"></ion-icon></button>
         </ion-buttons>
         <ion-title>
-            {{ mode }} Schedule
+            Add Schedule
         </ion-title>
         <ion-buttons end>
             <button ion-button icon-only (click)="save()"><ion-icon name="checkmark"></ion-icon></button>
@@ -15,7 +15,7 @@
     <form [formGroup]="scheduleForm" #form="ngForm" (ngSubmit)="save()">
         <ion-grid>
             <ion-row>
-                <ion-col>
+                <ion-col col-4 col-sm-4 col-md-4>
                     <ion-label class="form-label">Day *</ion-label>
                     <ion-item class="item-holder">
                         <ion-select class="options" name="day" formControlName="day">
@@ -23,13 +23,11 @@
                         </ion-select>
 
                     </ion-item>
+                    <div class="error-message" *ngIf="scheduleForm.get('day').dirty &&  scheduleForm.get('day').invalid">
+                        {{ errors.day }}
+                    </div>
                 </ion-col>
-                <div class="error-message" *ngIf="scheduleForm.get('day').dirty &&  scheduleForm.get('day').invalid">
-                    {{ errors.day }}
-                </div>
-            </ion-row>
-            <ion-row>
-                <ion-col>
+                <ion-col col-4 col-sm-4 col-md-4>
                     <ion-label class="form-label">From *</ion-label>
                     <ion-item class="item-holder">
                         <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" name="from" formControlName="from"></ion-datetime>
@@ -38,9 +36,7 @@
                         {{ errors.from }}
                     </div>
                 </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
+                <ion-col col-4 col-sm-4 col-md-4>
                     <ion-label class="form-label">To *</ion-label>
                     <ion-item class="item-holder">
                         <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" name="to" formControlName="to"></ion-datetime>
