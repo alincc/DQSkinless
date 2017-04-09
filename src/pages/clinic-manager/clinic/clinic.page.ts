@@ -39,7 +39,10 @@ export class ClinicPage implements OnInit {
     }
 
     public ngOnInit() {
-        this.clinic = {} // TODO get from navparams 
+        this.clinic = this.params.get('clinic') ? this.params.get('clinic') : {};
+        this.schedules = this.clinic.schedules ? this.clinic.schedules : []
+        this.contacts = this.clinic.contacts ? this.clinic.contacts : []
+        this.mode = this.params.get('mode') ? this.params.get('mode') : 'Add';
         this.createClinicForm();
     }
 
@@ -224,6 +227,7 @@ export class ClinicPage implements OnInit {
             // TODO SAVING
 
             this.callback(newClinic).then(() => {
+                console.log(JSON.stringify(newClinic));
                 this.rootNav.pop();
             });
 

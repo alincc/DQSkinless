@@ -3,7 +3,7 @@
   	"environment": "http://localhost:8100/api"
   },
   "local":{
-  	"environment" : "http://localhost:8080/MedAppWS"
+  	"environment" : "http://localhost:8080/medappws"
   },
   "pandong": {
   	"environment": "http://192.168.137.131:8080/medappws"

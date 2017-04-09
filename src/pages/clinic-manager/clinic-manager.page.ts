@@ -19,6 +19,8 @@ export class ClinicManagerPage implements OnInit {
 	public days: any;
 	public contactType: any;
 
+	private index: number;
+
 	constructor(
 		private alertController: AlertController,
 		private params: NavParams,
@@ -56,7 +58,24 @@ export class ClinicManagerPage implements OnInit {
 	}
 
 	public editClinic(clinic, i) {
+		this.index = i;
+		this.rootNav.push(ClinicPage, {
+			callback: this.editClinicCallBack,
+			clinic: clinic,
+			mode: 'Edit'
+		});
+	}
 
+	public editClinicCallBack = (params) => {
+		return new Promise((resolve, reject) => {
+			if (this.params.data.parent) {
+				if (this.index) {
+					this.clinics[this.index] = params;
+				}
+			}
+
+			resolve();
+		});
 	}
 
 	public deleteClinic(clinic, i) {
@@ -76,10 +95,6 @@ export class ClinicManagerPage implements OnInit {
 				}
 			]
 		}).present();
-	}
-
-	public viewClinic(clinic, i) {
-
 	}
 
 	public displayTime(time) {
