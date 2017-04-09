@@ -18,6 +18,10 @@ export class ClinicManagerService {
     }
 
     public getNoOfClinics() {
-        return this.http.get(CONFIG.API.noOfClinics, this.getUserId());
+        return this.http.get(CONFIG.API.getNoOfClinics, this.getUserId());
+    }
+
+    public getUserContacts() {
+        return this.http.get(CONFIG.API.userContacts, this.getUserId());
     }
 }

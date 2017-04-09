@@ -9,9 +9,12 @@ import { LOVS } from '../../../constants/constants'
 import { ContactModal } from '../../../components/contact-modal/contact-modal.component';
 import { ScheduleModal } from '../../../components/schedule-modal/schedule-modal';
 
+import { ClinicManagerService } from '../clinic-manager.service';
+
 @Component({
     selector: 'clinic-page',
-    templateUrl: 'clinic.html'
+    templateUrl: 'clinic.html',
+    providers: [ClinicManagerService]
 })
 export class ClinicPage implements OnInit {
 
@@ -34,7 +37,8 @@ export class ClinicPage implements OnInit {
         private formBuilder: FormBuilder,
         private modalController: ModalController,
         private params: NavParams,
-        private rootNav: RootNavController) {
+        private rootNav: RootNavController,
+        private clinicManagerService: ClinicManagerService) {
         this.getDefaults();
     }
 
@@ -44,6 +48,7 @@ export class ClinicPage implements OnInit {
         this.contacts = this.clinic.contacts ? this.clinic.contacts : []
         this.mode = this.params.get('mode') ? this.params.get('mode') : 'Add';
         this.createClinicForm();
+        this.getUserContacts();
     }
 
     private getDefaults() {
@@ -90,6 +95,14 @@ export class ClinicPage implements OnInit {
                 }
             }
         );
+    }
+
+    private getUserContacts() {
+        this.clinicManagerService.getUserContacts().subscribe(response => {
+            if (response && response.status) {
+                console.log(response);
+            }
+        });
     }
 
     public isEditMode(): boolean {

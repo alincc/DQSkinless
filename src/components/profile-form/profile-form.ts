@@ -34,7 +34,7 @@ export class ProfileForm implements OnInit {
     public gender: string;
     public genderList: any;
     private contactType: any[] = LOVS.CONTACT_TYPE;
-    private contacts : any[] = [];
+    private contacts: any[] = [];
     constructor(private formBuilder: FormBuilder,
         private service: ProfileFormService,
         private modal: ModalController) {
@@ -52,7 +52,7 @@ export class ProfileForm implements OnInit {
                         this.profile = response.result;
                     }
                 });
-            }else{
+            } else {
                 this.profile = {};
             }
         }
@@ -64,7 +64,7 @@ export class ProfileForm implements OnInit {
                         this.profile = response.result;
                     }
                 });
-            }else{
+            } else {
                 this.service.getAssistantDetails().subscribe(response => {
                     if (response && response.status) {
                         this.profile = response.result;
@@ -98,7 +98,7 @@ export class ProfileForm implements OnInit {
         };
         this.medicalArts = LOVS.MEDICAL_ARTS;
         this.genderList = LOVS.GENDER;
-      
+
         this.mode = 'Edit';
     }
 
@@ -219,7 +219,7 @@ export class ProfileForm implements OnInit {
             }
         );
 
-       
+
     }
 
     private createAccountForm() {
@@ -254,32 +254,32 @@ export class ProfileForm implements OnInit {
 
     public submitForm(event) {
         event.event.preventDefault();
-        if(this.profileForm.valid && this.hasContact()){
+        if (this.profileForm.valid && this.hasContact()) {
             this.bindProfileDetails();
             let observable;
             //store details
             if (this.formType === 'doctor') {
-                observable = this.service.setDoctorDetails(this.profile)
+                observable = this.service.setDoctorDetails(this.profile);
             } else {
                 observable = this.service.addAsistantDetails(this.profile);
             }
             //store contacts
-            for(let contact of this.contacts){
-                observable = observable.concat(this.service.addContacts(contact))
+            for (let contact of this.contacts) {
+                observable = observable.concat(this.service.addContacts(contact));
             }
-            let subscription = observable.subscribe(response => {
-                    if (!response.status) {
-                        event.dismissLoading();
-                        subscription.unsubcribe();
-                    }
-                }, err => {
+
+            observable.subscribe(response => {
+                if (!response.status) {
                     event.dismissLoading();
-                    subscription.unsubcribe();
-                }, () => {
-                    event.dismissLoading();
-                    this.onSubmit.emit(this.profile);
-                })
-        }else{
+                }
+            }, err => {
+                event.dismissLoading();
+            }, () => {
+                event.dismissLoading();
+                this.onSubmit.emit(this.profile);
+            });
+
+        } else {
             event.dismissLoading();
         }
     }
@@ -302,14 +302,14 @@ export class ProfileForm implements OnInit {
         return this.mode !== 'View';
     }
 
-    public addContact(event: Event): void{
+    public addContact(event: Event): void {
         event.preventDefault();
-        let modal = this.modal.create(ContactModal, 
-        {
-            header: "Add User Contact"
-        });
-        modal.onDidDismiss(_return =>{
-            if(_return){
+        let modal = this.modal.create(ContactModal,
+            {
+                header: "Add User Contact"
+            });
+        modal.onDidDismiss(_return => {
+            if (_return) {
                 this.contacts.push(_return);
                 this.hasContact();
             }
@@ -317,13 +317,13 @@ export class ProfileForm implements OnInit {
         modal.present();
     }
 
-    public removeContact(event,idx){
+    public removeContact(event, idx) {
         event.preventDefault();
-        this.contacts.splice(idx,1);
+        this.contacts.splice(idx, 1);
         this.hasContact();
     }
 
-    public hasContact(){
+    public hasContact() {
         this.errors.contactNo = this.contacts.length ? '' : "Contact is required";
         return !Boolean(this.errors.contactNo);
     }

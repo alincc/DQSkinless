@@ -2,13 +2,15 @@
 export const CONFIG = {
     // Others
     API: {
+        assistantDetails: '/assistantdetails',
+
+        doctorDetails: '/doctordetails',
+        getNoOfClinics: '/doctordetails/clinics',
+        
         authenticate: '/users/authenticate',
         changePassword: '/users/changepass',
-        doctorDetails: '/doctordetails',
-        assistantDetails: '/assistantdetails',
         changeStatus: '/users/changestatus',
-        contacts: '/contacts/',
-        noOfClinics: '/doctordetails/clinics/'
+        userContacts: '/usercontacts'
     }
 };
 
@@ -29,5 +31,5 @@ export const MESSAGES = {
 }
 
 export const HTTP_CONFIG = {
-    
+
 }
