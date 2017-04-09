@@ -7,9 +7,12 @@ import { LOVS } from '../../constants/constants'
 
 import { ClinicPage } from './clinic/clinic.page';
 
+import { ClinicManagerService } from './clinic-manager.service';
+
 @Component({
 	selector: 'clinic-manager-page',
-	templateUrl: 'clinic-manager.html'
+	templateUrl: 'clinic-manager.html',
+	providers: [ClinicManagerService]
 })
 export class ClinicManagerPage implements OnInit {
 
@@ -24,18 +27,24 @@ export class ClinicManagerPage implements OnInit {
 	constructor(
 		private alertController: AlertController,
 		private params: NavParams,
-		private rootNav: RootNavController) {
+		private rootNav: RootNavController,
+		private clinicManagerService: ClinicManagerService) {
 		this.getDefaults();
 	}
 
 	public ngOnInit() {
 		this.clinics = []; // TODO IMPLEMENTED CLINIC RETRIEVAL
-		this.allowableClinics = this.clinics.length; // TODO BE FETCH FROM DB
+		this.clinicManagerService.getNoOfClinics().subscribe(response => {
+			if (response && response.status) {
+				this.allowableClinics = response.result;
+			}
+		});
 	}
 
 	private getDefaults() {
 		this.days = LOVS.DAYS;
 		this.contactType = LOVS.CONTACT_TYPE;
+		this.allowableClinics = 0;
 	}
 
 	public addClinic() {
@@ -91,6 +100,10 @@ export class ClinicManagerPage implements OnInit {
 					handler: () => {
 						this.clinics.splice(i, 1);
 						this.allowableClinics++;
+
+						if (this.params.data.parent.completedRegistration && this.clinics.length === 0) {
+							this.params.data.parent.completedRegistration = false;
+						}
 					}
 				}
 			]

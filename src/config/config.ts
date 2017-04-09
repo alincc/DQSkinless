@@ -7,7 +7,8 @@ export const CONFIG = {
         doctorDetails: '/doctordetails',
         assistantDetails: '/assistantdetails',
         changeStatus: '/users/changestatus',
-        contacts: '/contacts/'
+        contacts: '/contacts/',
+        noOfClinics: '/doctordetails/clinics/'
     }
 };
 
