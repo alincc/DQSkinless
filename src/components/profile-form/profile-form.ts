@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileFormService } from './profile-form.service';
 import { ModalController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
@@ -29,12 +29,21 @@ export class ProfileForm implements OnInit {
 
     private profileForm: FormGroup;
 
-    public medicalArts: any;
+    public medicalArts: any[];
     public errors: any;
-    public gender: string;
-    public genderList: any;
-    private contactType: any[] = LOVS.CONTACT_TYPE;
-    private contacts: any[] = [];
+    public genderList: any[];
+    public contactType: any[];
+    private contacts: any[];
+    private prc: AbstractControl;
+    private ptr: AbstractControl;
+    private medicalArt: AbstractControl;
+    private specialization: AbstractControl;
+    private email: AbstractControl;
+    private lastName: AbstractControl;
+    private firstName: AbstractControl;
+    private birthDate: AbstractControl;
+    private gender: AbstractControl;
+
     constructor(private formBuilder: FormBuilder,
         private service: ProfileFormService,
         private modal: ModalController) {
@@ -42,49 +51,25 @@ export class ProfileForm implements OnInit {
     }
 
     public ngOnInit() {
-        //check for exisiting data
         this.profile = {};
-        if (this.usage === 'profile') {
-            this.createProfileForm();
-            if (this.formType === 'doctor') {
-                this.service.getDoctorDetails().subscribe(response => {
-                    if (response && response.status) {
-                        this.profile = response.result;
-                    }
-                });
-            } else {
-                this.profile = {};
-            }
+        this.createProfileForm();
+        if (this.formType === 'doctor') {
+            this.service.getDoctorDetails().subscribe(response => {
+                if (response && response.status) {
+                    this.profile = response.result;
+                }
+            });
+        } else {
+            this.service.getAssistantDetails().subscribe(response => {
+                if (response && response.status) {
+                    this.profile = response.result;
+                }
+            });
         }
-        else {
-            this.createAccountForm();
-            if (this.formType === 'doctor') {
-                this.service.getDoctorDetails().subscribe(response => {
-                    if (response && response.status) {
-                        this.profile = response.result;
-                    }
-                });
-            } else {
-                this.service.getAssistantDetails().subscribe(response => {
-                    if (response && response.status) {
-                        this.profile = response.result;
-                    }
-                });
-            }
-
-            this.gender = this.genderList.filter((g: any) => {
-                return g.id == this.profile.gender;
-            })[0];
-        }
-
-
-
     }
 
     private getDefaults() {
-
-        // this.formType = 'nonDoctor';
-        this.usage = 'profile'
+        this.formType = 'nonDoctor';
         this.errors = {
             prc: '',
             ptr: '',
@@ -98,6 +83,8 @@ export class ProfileForm implements OnInit {
         };
         this.medicalArts = LOVS.MEDICAL_ARTS;
         this.genderList = LOVS.GENDER;
+        this.contactType = LOVS.CONTACT_TYPE;
+        this.contacts = [];
 
         this.mode = 'Edit';
     }
@@ -117,19 +104,19 @@ export class ProfileForm implements OnInit {
             address: this.profile.address
         });
 
-        const prc = this.profileForm.get('prc');
-        const ptr = this.profileForm.get('ptr');
-        const medicalArt = this.profileForm.get('medicalArt');
-        const specialization = this.profileForm.get('specialization');
-        const email = this.profileForm.get('email');
-        const lastName = this.profileForm.get('lastName');
-        const firstName = this.profileForm.get('firstName');
-        const birthDate = this.profileForm.get('birthDate');
-        const gender = this.profileForm.get('gender');
+        this.prc = this.profileForm.get('prc');
+        this.ptr = this.profileForm.get('ptr');
+        this.medicalArt = this.profileForm.get('medicalArt');
+        this.specialization = this.profileForm.get('specialization');
+        this.email = this.profileForm.get('email');
+        this.lastName = this.profileForm.get('lastName');
+        this.firstName = this.profileForm.get('firstName');
+        this.birthDate = this.profileForm.get('birthDate');
+        this.gender = this.profileForm.get('gender');
 
-        prc.valueChanges.subscribe(
+        this.prc.valueChanges.subscribe(
             newValue => {
-                if (prc.hasError('required')) {
+                if (this.prc.hasError('required')) {
                     this.errors.prc = 'PRC is required';
                 } else {
                     this.errors.prc = '';
@@ -137,9 +124,9 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        ptr.valueChanges.subscribe(
+        this.ptr.valueChanges.subscribe(
             newValue => {
-                if (ptr.hasError('required')) {
+                if (this.ptr.hasError('required')) {
                     this.errors.ptr = 'PTR is required';
                 } else {
                     this.errors.ptr = '';
@@ -147,9 +134,9 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        medicalArt.valueChanges.subscribe(
+        this.medicalArt.valueChanges.subscribe(
             newValue => {
-                if (medicalArt.hasError('required')) {
+                if (this.medicalArt.hasError('required')) {
                     this.errors.medicalArt = 'Medical Arts is required';
                 } else {
                     this.errors.medicalArt = '';
@@ -157,9 +144,9 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        specialization.valueChanges.subscribe(
+        this.specialization.valueChanges.subscribe(
             newValue => {
-                if (specialization.hasError('required')) {
+                if (this.specialization.hasError('required')) {
                     this.errors.specialization = 'Specialization is required';
                 } else {
                     this.errors.specialization = '';
@@ -167,11 +154,11 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        email.valueChanges.subscribe(
+        this.email.valueChanges.subscribe(
             newValue => {
-                if (email.hasError('required')) {
+                if (this.email.hasError('required')) {
                     this.errors.email = 'Email is required.';
-                } else if (email.hasError('pattern')) {
+                } else if (this.email.hasError('pattern')) {
                     this.errors.email = 'Invalid email address format';
                 } else {
                     this.errors.email = '';
@@ -179,9 +166,9 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        lastName.valueChanges.subscribe(
+        this.lastName.valueChanges.subscribe(
             newValue => {
-                if (lastName.hasError('required')) {
+                if (this.lastName.hasError('required')) {
                     this.errors.lastName = 'Last Name is required';
                 } else {
                     this.errors.lastName = '';
@@ -189,9 +176,9 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        firstName.valueChanges.subscribe(
+        this.firstName.valueChanges.subscribe(
             newValue => {
-                if (firstName.hasError('required')) {
+                if (this.firstName.hasError('required')) {
                     this.errors.firstName = 'First Name is required';
                 } else {
                     this.errors.firstName = '';
@@ -199,9 +186,9 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        birthDate.valueChanges.subscribe(
+        this.birthDate.valueChanges.subscribe(
             newValue => {
-                if (birthDate.hasError('required')) {
+                if (this.birthDate.hasError('required')) {
                     this.errors.birthDate = 'Birth Date is required';
                 } else {
                     this.errors.birthDate = '';
@@ -209,44 +196,12 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        gender.valueChanges.subscribe(
+        this.gender.valueChanges.subscribe(
             newValue => {
-                if (gender.hasError('required')) {
+                if (this.gender.hasError('required')) {
                     this.errors.gender = 'Gender is required';
                 } else {
                     this.errors.gender = '';
-                }
-            }
-        );
-
-
-    }
-
-    private createAccountForm() {
-        this.profileForm = this.formBuilder.group({
-            prc: this.profile.prc,
-            ptr: this.profile.ptr,
-            medicalArt: this.profile.medicalArt,
-            specialization: this.profile.specialization,
-            email: [this.profile.email, [Validators.required, Validators.pattern(REGEX.EMAIL)]],
-            lastName: this.profile.lastName,
-            firstName: this.profile.firstName,
-            middleName: this.profile.middleName,
-            birthDate: this.profile.birthDate,
-            gender: this.profile.gender,
-            address: this.profile.address,
-        });
-
-        const email = this.profileForm.get('email');
-
-        email.valueChanges.subscribe(
-            newValue => {
-                if (email.hasError('required')) {
-                    this.errors.email = 'Email is required.';
-                } else if (email.hasError('pattern')) {
-                    this.errors.email = 'Invalid email address format';
-                } else {
-                    this.errors.email = '';
                 }
             }
         );
@@ -254,6 +209,8 @@ export class ProfileForm implements OnInit {
 
     public submitForm(event) {
         event.event.preventDefault();
+        this.markFormAsDirty();
+        this.validateForm();
         if (this.profileForm.valid && this.hasContact()) {
             this.bindProfileDetails();
             let observable;
@@ -282,6 +239,72 @@ export class ProfileForm implements OnInit {
         } else {
             event.dismissLoading();
         }
+    }
+
+    private markFormAsDirty() {
+        Object.keys(this.profileForm.controls).forEach(key => {
+            this.profileForm.get(key).markAsDirty();
+        });
+    }
+
+    private validateForm() {
+        if (this.prc.hasError('required')) {
+            this.errors.prc = 'PRC is required';
+        } else {
+            this.errors.prc = '';
+        }
+
+        if (this.ptr.hasError('required')) {
+            this.errors.ptr = 'PTR is required';
+        } else {
+            this.errors.ptr = '';
+        }
+
+        if (this.medicalArt.hasError('required')) {
+            this.errors.medicalArt = 'Medical Arts is required';
+        } else {
+            this.errors.medicalArt = '';
+        }
+
+        if (this.specialization.hasError('required')) {
+            this.errors.specialization = 'Specialization is required';
+        } else {
+            this.errors.specialization = '';
+        }
+
+        if (this.email.hasError('required')) {
+            this.errors.email = 'Email is required.';
+        } else if (this.email.hasError('pattern')) {
+            this.errors.email = 'Invalid email address format';
+        } else {
+            this.errors.email = '';
+        }
+
+        if (this.lastName.hasError('required')) {
+            this.errors.lastName = 'Last Name is required';
+        } else {
+            this.errors.lastName = '';
+        }
+
+        if (this.firstName.hasError('required')) {
+            this.errors.firstName = 'First Name is required';
+        } else {
+            this.errors.firstName = '';
+        }
+
+        if (this.birthDate.hasError('required')) {
+            this.errors.birthDate = 'Birth Date is required';
+        } else {
+            this.errors.birthDate = '';
+        }
+
+        if (this.gender.hasError('required')) {
+            this.errors.gender = 'Gender is required';
+        } else {
+            this.errors.gender = '';
+        }
+
+        this.errors.contactNo = this.contacts.length ? '' : "Contact is required";
     }
 
     private bindProfileDetails() {
@@ -327,5 +350,4 @@ export class ProfileForm implements OnInit {
         this.errors.contactNo = this.contacts.length ? '' : "Contact is required";
         return !Boolean(this.errors.contactNo);
     }
-
 }
