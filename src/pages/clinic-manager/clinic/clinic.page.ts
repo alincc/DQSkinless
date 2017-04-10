@@ -211,12 +211,12 @@ export class ClinicPage implements OnInit {
     }
 
     private hasContact() {
-        this.errors.contact = this.contacts.length ? '' : "Contact is required.";
+        this.errors.contact = this.contacts.length ? '' : "Contact is required";
         return !Boolean(this.errors.contact);
     }
 
     private hasSchedule() {
-        this.errors.schedule = this.schedules.length ? '' : "Schedule is required.";
+        this.errors.schedule = this.schedules.length ? '' : "Schedule is required";
         return !Boolean(this.errors.schedule);
     }
 
