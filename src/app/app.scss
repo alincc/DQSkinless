@@ -263,13 +263,13 @@ ion-content{
 
 	}
 
-	// Invalid Rounded Select Inputs that are not dirty, invalid and not disabled
+	// Invalid Radio Group that are not dirty, invalid and not disabled
 	ion-list[role="radiogroup"]:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
 		display: inline-block;
 		border: none !important;
 	}
 
-	// Invalid Rounded Select Inputs that are invalid and not disabled
+	// Invalid Radio Group that are invalid and not disabled
 	ion-list[role="radiogroup"].ng-invalid:not(.item-input-disabled) {
 		display: inline-block;
 		border: 1px solid $danger !important;
@@ -327,6 +327,18 @@ ion-content{
 		.datetime-text {
 			padding: 9px 15px;
 		}
+	}
+
+	// Invalid Ion Datetime that are not dirty, invalid and not disabled
+	ion-datetime:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
+		display: inline-block;
+		border: 1px solid $primary-light !important;
+	}
+
+	// Invalid Ion Datetime that are invalid and not disabled
+	ion-datetime.ng-invalid:not(.item-input-disabled) {
+		display: inline-block;
+		border: 1px solid $danger !important;
 	}
 }
 

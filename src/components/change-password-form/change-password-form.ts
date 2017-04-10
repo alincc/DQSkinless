@@ -63,10 +63,6 @@ export class ChangePasswordForm implements OnInit {
     }
 
     private validateForm() {
-        this.oldPassword.markAsDirty();
-        this.password.markAsDirty();
-        this.confirm.markAsDirty();
-
         const oldPassword = this.oldPassword.value;
         const password = this.password.value;
         const confirm = this.confirm.value;
@@ -103,7 +99,14 @@ export class ChangePasswordForm implements OnInit {
         }
     }
 
+    private markFormAsDirty() {
+        Object.keys(this.changePasswordForm.controls).forEach(key => {
+            this.changePasswordForm.get(key).markAsDirty();
+        });
+    }
+
     public submitForm(event) {
+        this.markFormAsDirty();
         this.validateForm();
         if (this.changePasswordForm.valid) {
             this.service.changePassword(this.changePasswordForm.value).subscribe(response => {
