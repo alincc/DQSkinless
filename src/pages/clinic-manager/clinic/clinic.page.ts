@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ModalController, NavParams } from "ionic-angular";
 
 import { RootNavController } from '../../../services/services';
@@ -28,6 +28,8 @@ export class ClinicPage implements OnInit {
     public contactTypes: any;
     public mode: string;
 
+    private address: AbstractControl;
+    private name: AbstractControl;
     private clinic: any;
 
     private callback: Function;
@@ -73,12 +75,12 @@ export class ClinicPage implements OnInit {
             address: [this.clinic.name, [Validators.required]]
         });
 
-        const name = this.clinicForm.get('name');
-        const address = this.clinicForm.get('address');
+        this.name = this.clinicForm.get('name');
+        this.address = this.clinicForm.get('address');
 
-        name.valueChanges.subscribe(
+        this.name.valueChanges.subscribe(
             newValue => {
-                if (name.hasError('required')) {
+                if (this.name.hasError('required')) {
                     this.errors.name = 'Name is required';
                 } else {
                     this.errors.name = '';
@@ -86,9 +88,9 @@ export class ClinicPage implements OnInit {
             }
         );
 
-        address.valueChanges.subscribe(
+        this.address.valueChanges.subscribe(
             newValue => {
-                if (address.hasError('required')) {
+                if (this.address.hasError('required')) {
                     this.errors.address = 'Address is required';
                 } else {
                     this.errors.address = '';
@@ -118,6 +120,7 @@ export class ClinicPage implements OnInit {
         scheduleModal.onDidDismiss(schedule => {
             if (schedule) {
                 this.addSchedule(schedule);
+                this.hasSchedule();
             }
         });
     }
@@ -196,6 +199,7 @@ export class ClinicPage implements OnInit {
         modal.onDidDismiss(contact => {
             if (contact) {
                 this.contacts.push(contact);
+                this.hasContact();
             }
         });
         modal.present();
@@ -206,28 +210,21 @@ export class ClinicPage implements OnInit {
         this.contacts.splice(idx, 1);
     }
 
-    private validateContacts() {
-        if (this.contacts.length === 0) {
-            this.errors.contact = 'Contact is required';
-            return false;
-        }
-
-        return true;
+    private hasContact() {
+        this.errors.contact = this.contacts.length ? '' : "Contact is required.";
+        return !Boolean(this.errors.contact);
     }
 
-    private validateSchedules() {
-        if (this.schedules.length === 0) {
-            this.errors.schedule = 'Schedule is required';
-            return false;
-        }
-
-        return true;
+    private hasSchedule() {
+        this.errors.schedule = this.schedules.length ? '' : "Schedule is required.";
+        return !Boolean(this.errors.schedule);
     }
 
     public submitForm(event) {
         event.event.preventDefault();
-
-        if (this.clinicForm.valid && (this.validateContacts() || this.validateSchedules())) {
+        this.markFormAsDirty();
+        this.validateForm();
+        if (this.clinicForm.valid && (this.hasContact() || this.hasSchedule())) {
             this.callback = this.params.get('callback');
 
             const newClinic = {
@@ -245,7 +242,29 @@ export class ClinicPage implements OnInit {
             });
 
         }
-
         event.dismissLoading();
+    }
+
+    private markFormAsDirty() {
+        Object.keys(this.clinicForm.controls).forEach(key => {
+            this.clinicForm.get(key).markAsDirty();
+        });
+    }
+
+    private validateForm() {
+        if (this.name.hasError('required')) {
+            this.errors.name = 'Name is required';
+        } else {
+            this.errors.name = '';
+        }
+
+        if (this.address.hasError('required')) {
+            this.errors.address = 'Address is required';
+        } else {
+            this.errors.address = '';
+        }
+
+        this.hasContact();
+        this.hasSchedule();
     }
 }

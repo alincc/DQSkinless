@@ -304,7 +304,7 @@ export class ProfileForm implements OnInit {
             this.errors.gender = '';
         }
 
-        this.errors.contactNo = this.contacts.length ? '' : "Contact is required";
+        this.hasContact();
     }
 
     private bindProfileDetails() {

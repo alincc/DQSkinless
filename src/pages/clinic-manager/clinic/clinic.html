@@ -25,7 +25,7 @@
                     <ion-item round>
                         <ion-textarea name="address" formControlName="address" [disabled]="!isEditMode()"></ion-textarea>
                     </ion-item>
-                    <div class="error-message" *ngIf="clinicForm.get('Address')?.dirty &&  clinicForm.get('Address').invalid">
+                    <div class="error-message" *ngIf="clinicForm.get('address')?.dirty &&  clinicForm.get('address').invalid">
                         {{ errors.address }}
                     </div>
                 </ion-col>
@@ -113,7 +113,7 @@
             </ion-row>
         </ion-grid>
         <div center>
-            <xhr-button #xhr round large color="accent" type="submit" [hidden]="!isEditMode()" [disabled]="clinicForm.invalid || form.invalid"
+            <xhr-button #xhr round large color="accent" type="submit" [hidden]="!isEditMode()" [disabled]="clinicForm.pristine || form.pristine"
                 (xhrClick)="submitForm($event)">
                 Submit
             </xhr-button>
