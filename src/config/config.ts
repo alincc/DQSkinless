@@ -10,7 +10,8 @@ export const CONFIG = {
         authenticate: '/users/authenticate',
         changePassword: '/users/changepass',
         changeStatus: '/users/changestatus',
-        userContacts: '/usercontacts'
+        userContacts: '/usercontacts',
+        getUserContacts: '/usercontacts/u'
     }
 };
 
