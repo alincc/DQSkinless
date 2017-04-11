@@ -11,6 +11,8 @@ import { ScheduleModal } from '../../../components/schedule-modal/schedule-modal
 
 import { ClinicManagerService } from '../clinic-manager.service';
 
+import { ArraySubject } from '../../../shared/model/model'
+
 @Component({
     selector: 'clinic-page',
     templateUrl: 'clinic.html',
@@ -20,8 +22,8 @@ export class ClinicPage implements OnInit {
 
     public clinicForm: FormGroup;
 
-    public schedules: any;
-    public contacts: any;
+    public schedules: ArraySubject;
+    public contacts: ArraySubject;
 
     public errors: any;
     public days: any;
@@ -46,16 +48,16 @@ export class ClinicPage implements OnInit {
 
     public ngOnInit() {
         this.clinic = this.params.get('clinic') ? this.params.get('clinic') : {};
-        this.schedules = this.clinic.schedules ? this.clinic.schedules : []
-        this.contacts = this.clinic.contacts ? this.clinic.contacts : []
+        this.schedules.value = this.clinic.schedules ? this.clinic.schedules : []
+        this.contacts.value = this.clinic.contacts ? this.clinic.contacts : []
         this.mode = this.params.get('mode') ? this.params.get('mode') : 'Add';
         this.createClinicForm();
         this.getUserContacts();
     }
 
     private getDefaults() {
-        this.schedules = [];
-        this.contacts = [];
+        this.schedules = new ArraySubject([]);
+        this.contacts = new ArraySubject([]);
 
         this.errors = {
             name: '',
@@ -97,6 +99,16 @@ export class ClinicPage implements OnInit {
                 }
             }
         );
+
+        this.schedules.subscribe(newValue => {
+            if (newValue)
+                this.errors.schedule = newValue.length ? '' : "Schedule is required";
+        })
+
+        this.contacts.subscribe(newValue => {
+            if (newValue)
+                this.errors.contact = newValue.length ? '' : "Contact is required";
+        })
     }
 
     private getUserContacts() {
@@ -131,7 +143,7 @@ export class ClinicPage implements OnInit {
     }
 
     private addSchedule(newSchedule) {
-        const schedule = this.schedules.filter(s => { return s.day === newSchedule.day });
+        const schedule = this.schedules.value.filter(s => { return s.day === newSchedule.day });
         if (schedule.length === 0) {
             this.schedules.push(
                 {
@@ -152,11 +164,8 @@ export class ClinicPage implements OnInit {
                 return new Date('1970/01/01 ' + a.from).getTime() - new Date('1970/01/01 ' + b.from).getTime();
             });
 
-            this.schedules.filter(s => { return s.day === newSchedule.day })[0] = schedule[0];
+            this.schedules.value.filter(s => { return s.day === newSchedule.day })[0] = schedule[0];
         }
-
-
-        this.hasSchedule();
     }
 
     public removeSchedule(event: Event, day, schedules, i) {
@@ -224,12 +233,10 @@ export class ClinicPage implements OnInit {
     }
 
     private hasContact() {
-        this.errors.contact = this.contacts.length ? '' : "Contact is required";
         return !Boolean(this.errors.contact);
     }
 
     private hasSchedule() {
-        this.errors.schedule = this.schedules.length ? '' : "Schedule is required";
         return !Boolean(this.errors.schedule);
     }
 
@@ -243,8 +250,8 @@ export class ClinicPage implements OnInit {
             const newClinic = {
                 name: this.clinicForm.get('name').value,
                 address: this.clinicForm.get('address').value,
-                schedules: this.schedules,
-                contacts: this.contacts
+                schedules: this.schedules.value,
+                contacts: this.contacts.value
             };
 
             // TODO SAVING
@@ -276,8 +283,5 @@ export class ClinicPage implements OnInit {
         } else {
             this.errors.address = '';
         }
-
-        this.hasContact();
-        this.hasSchedule();
     }
 }

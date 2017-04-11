@@ -301,8 +301,6 @@ export class ProfileForm implements OnInit {
         } else {
             this.errors.gender = '';
         }
-
-        this.hasContact();
     }
 
     private bindProfileDetails() {
@@ -360,7 +358,6 @@ export class ProfileForm implements OnInit {
     }
 
     public hasContact() {
-
         return !Boolean(this.errors.contactNo);
     }
 }
