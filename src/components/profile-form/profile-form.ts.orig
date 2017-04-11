@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { ProfileFormService } from './profile-form.service';
 import { ModalController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/concat';
 
 import { LOVS } from '../../constants/constants';
@@ -10,8 +11,40 @@ import { REGEX } from '../../config/config';
 
 
 import { ContactModal } from '../contact-modal/contact-modal.component';
-import { ArraySubject } from '../../shared/model/model'
 
+class Contacts{
+    private contacts : any[] = [];
+    private contactsSubject : BehaviorSubject<any[]> = new BehaviorSubject(this.contacts);
+
+    public set value( contacts : any[]){
+        this.contacts = contacts;
+        this.contactsSubject.next(this.contacts);
+    }
+
+    public get value() : any[]{
+        return this.contacts;
+    }
+
+    public push(item){
+        this.contacts.push(item);
+        this.contactsSubject.next(this.contacts);
+    }
+
+    public pop(){
+        this.contacts.pop();
+        this.contactsSubject.next(this.contacts);
+    }
+
+    public splice(idx,count,replacement?){
+        replacement ?  this.contacts.splice(idx,count,replacement) : this.contacts.splice(idx,count);
+        this.contactsSubject.next(this.contacts);
+    }
+
+    public subscribe( fn ) : any{
+        this.contactsSubject.subscribe(fn);
+    }
+
+}
 
 @Component({
     selector: 'profile-form',
@@ -33,9 +66,15 @@ export class ProfileForm implements OnInit {
 
     public medicalArts: any[];
     public errors: any;
-    public genderList: any[];
+<<<<<<< HEAD
+    public gender: string;
+    public genderList: any;
     private contactType: any[] = LOVS.CONTACT_TYPE;
-    private contacts : ArraySubject = new ArraySubject();
+    private contacts : Contacts = new Contacts();
+=======
+    public genderList: any[];
+    public contactType: any[];
+    private contacts: any[];
     private prc: AbstractControl;
     private ptr: AbstractControl;
     private medicalArt: AbstractControl;
@@ -45,6 +84,7 @@ export class ProfileForm implements OnInit {
     private firstName: AbstractControl;
     private birthDate: AbstractControl;
     private gender: AbstractControl;
+>>>>>>> b1afb0acb715cd2bac90230bb06ca031c17fa536
 
     constructor(private formBuilder: FormBuilder,
         private service: ProfileFormService,
@@ -86,6 +126,7 @@ export class ProfileForm implements OnInit {
         this.medicalArts = LOVS.MEDICAL_ARTS;
         this.genderList = LOVS.GENDER;
         this.contactType = LOVS.CONTACT_TYPE;
+        this.contacts = [];
 
         this.mode = 'Edit';
     }
@@ -206,19 +247,57 @@ export class ProfileForm implements OnInit {
                 }
             }
         );
+<<<<<<< HEAD
 
         //subcription for contacts
         this.contacts.subscribe(newValue => {
             this.errors.contactNo = newValue.length ? '' : "Contact is required";
         })
 
+       
+    }
 
+    private createAccountForm() {
+        this.profileForm = this.formBuilder.group({
+            prc: this.profile.prc,
+            ptr: this.profile.ptr,
+            medicalArt: this.profile.medicalArt,
+            specialization: this.profile.specialization,
+            email: [this.profile.email, [Validators.required, Validators.pattern(REGEX.EMAIL)]],
+            lastName: this.profile.lastName,
+            firstName: this.profile.firstName,
+            middleName: this.profile.middleName,
+            birthDate: this.profile.birthDate,
+            gender: this.profile.gender,
+            address: this.profile.address,
+        });
+
+        const email = this.profileForm.get('email');
+
+        email.valueChanges.subscribe(
+            newValue => {
+                if (email.hasError('required')) {
+                    this.errors.email = 'Email is required.';
+                } else if (email.hasError('pattern')) {
+                    this.errors.email = 'Invalid email address format';
+                } else {
+                    this.errors.email = '';
+                }
+            }
+        );
     }
 
     public submitForm(event) {
+        if(this.profileForm.valid && this.hasContact()){
+=======
+    }
+
+    public submitForm(event) {
+        event.event.preventDefault();
         this.markFormAsDirty();
         this.validateForm();
         if (this.profileForm.valid && this.hasContact()) {
+>>>>>>> b1afb0acb715cd2bac90230bb06ca031c17fa536
             this.bindProfileDetails();
             let observable;
             //store details
@@ -227,6 +306,7 @@ export class ProfileForm implements OnInit {
             } else {
                 observable = this.service.addAsistantDetails(this.profile);
             }
+<<<<<<< HEAD
             observable.subscribe(response => {
                     if (response.status) {
                         this.onSubmit.emit(this.profile);
@@ -234,6 +314,25 @@ export class ProfileForm implements OnInit {
                     event.dismissLoading();
                 })
         }else{
+=======
+            //store contacts
+            for (let contact of this.contacts) {
+                observable = observable.concat(this.service.addContacts(contact));
+            }
+
+            observable.subscribe(response => {
+                if (!response.status) {
+                    event.dismissLoading();
+                }
+            }, err => {
+                event.dismissLoading();
+            }, () => {
+                event.dismissLoading();
+                this.onSubmit.emit(this.profile);
+            });
+
+        } else {
+>>>>>>> b1afb0acb715cd2bac90230bb06ca031c17fa536
             event.dismissLoading();
         }
     }
@@ -344,17 +443,28 @@ export class ProfileForm implements OnInit {
         modal.present();
     }
 
+<<<<<<< HEAD
     public removeContact(event,item,idx){
         event.preventDefault();
-        this.contacts.splice(idx, 1);
+        this.contacts.splice(idx,1);
         this.service.deleteContacts(item.id).subscribe(response => {}
             ,err => {
                 this.contacts.splice(idx,0,item);
             });
     }
 
-    public hasContact() {
+    public hasContact(){
+       
+=======
+    public removeContact(event, idx) {
+        event.preventDefault();
+        this.contacts.splice(idx, 1);
+        this.hasContact();
+    }
 
+    public hasContact() {
+        this.errors.contactNo = this.contacts.length ? '' : "Contact is required";
+>>>>>>> b1afb0acb715cd2bac90230bb06ca031c17fa536
         return !Boolean(this.errors.contactNo);
     }
 }

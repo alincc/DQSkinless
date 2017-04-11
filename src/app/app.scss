@@ -270,6 +270,18 @@ ion-content{
 
 	}
 
+	// Invalid Radio Group that are not dirty, invalid and not disabled
+	ion-list[role="radiogroup"]:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
+		display: inline-block;
+		border: none !important;
+	}
+
+	// Invalid Radio Group that are invalid and not disabled
+	ion-list[role="radiogroup"].ng-invalid:not(.item-input-disabled) {
+		display: inline-block;
+		border: 1px solid $danger !important;
+	}
+
     .error-message{
     	margin: 10px;
     	text-align: left;
@@ -322,6 +334,18 @@ ion-content{
 		.datetime-text {
 			padding: 9px 15px;
 		}
+	}
+
+	// Invalid Ion Datetime that are not dirty, invalid and not disabled
+	ion-datetime:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
+		display: inline-block;
+		border: 1px solid $primary-light !important;
+	}
+
+	// Invalid Ion Datetime that are invalid and not disabled
+	ion-datetime.ng-invalid:not(.item-input-disabled) {
+		display: inline-block;
+		border: 1px solid $danger !important;
 	}
 }
 

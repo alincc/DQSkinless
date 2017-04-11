@@ -7,9 +7,12 @@ import { LOVS } from '../../constants/constants'
 
 import { ClinicPage } from './clinic/clinic.page';
 
+import { ClinicManagerService } from './clinic-manager.service';
+
 @Component({
 	selector: 'clinic-manager-page',
-	templateUrl: 'clinic-manager.html'
+	templateUrl: 'clinic-manager.html',
+	providers: [ClinicManagerService]
 })
 export class ClinicManagerPage implements OnInit {
 
@@ -19,21 +22,29 @@ export class ClinicManagerPage implements OnInit {
 	public days: any;
 	public contactType: any;
 
+	private index: number;
+
 	constructor(
 		private alertController: AlertController,
 		private params: NavParams,
-		private rootNav: RootNavController) {
+		private rootNav: RootNavController,
+		private clinicManagerService: ClinicManagerService) {
 		this.getDefaults();
 	}
 
 	public ngOnInit() {
 		this.clinics = []; // TODO IMPLEMENTED CLINIC RETRIEVAL
-		this.allowableClinics = this.clinics.length; // TODO BE FETCH FROM DB
+		this.clinicManagerService.getNoOfClinics().subscribe(response => {
+			if (response && response.status) {
+				this.allowableClinics = response.result;
+			}
+		});
 	}
 
 	private getDefaults() {
 		this.days = LOVS.DAYS;
 		this.contactType = LOVS.CONTACT_TYPE;
+		this.allowableClinics = 0;
 	}
 
 	public addClinic() {
@@ -56,7 +67,24 @@ export class ClinicManagerPage implements OnInit {
 	}
 
 	public editClinic(clinic, i) {
+		this.index = i;
+		this.rootNav.push(ClinicPage, {
+			callback: this.editClinicCallBack,
+			clinic: clinic,
+			mode: 'Edit'
+		});
+	}
 
+	public editClinicCallBack = (params) => {
+		return new Promise((resolve, reject) => {
+			if (this.params.data.parent) {
+				if (this.index) {
+					this.clinics[this.index] = params;
+				}
+			}
+
+			resolve();
+		});
 	}
 
 	public deleteClinic(clinic, i) {
@@ -72,14 +100,14 @@ export class ClinicManagerPage implements OnInit {
 					handler: () => {
 						this.clinics.splice(i, 1);
 						this.allowableClinics++;
+
+						if (this.params.data.parent.completedRegistration && this.clinics.length === 0) {
+							this.params.data.parent.completedRegistration = false;
+						}
 					}
 				}
 			]
 		}).present();
-	}
-
-	public viewClinic(clinic, i) {
-
 	}
 
 	public displayTime(time) {

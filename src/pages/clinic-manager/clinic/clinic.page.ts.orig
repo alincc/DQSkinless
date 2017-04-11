@@ -221,10 +221,16 @@ export class ClinicPage implements OnInit {
     }
 
     public submitForm(event) {
+<<<<<<< HEAD
         // event.event.preventDefault();
+
+        if (this.clinicForm.valid && (this.validateContacts() || this.validateSchedules())) {
+=======
+        event.event.preventDefault();
         this.markFormAsDirty();
         this.validateForm();
         if (this.clinicForm.valid && (this.hasContact() || this.hasSchedule())) {
+>>>>>>> b1afb0acb715cd2bac90230bb06ca031c17fa536
             this.callback = this.params.get('callback');
 
             const newClinic = {

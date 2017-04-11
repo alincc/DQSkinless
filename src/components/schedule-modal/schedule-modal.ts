@@ -17,6 +17,9 @@ export class ScheduleModal {
     public scheduleForm: FormGroup;
     public days: any;
 
+    private day: AbstractControl;
+    private from: AbstractControl;
+    private to: AbstractControl;
     private errors: any;
 
     constructor(
@@ -47,28 +50,28 @@ export class ScheduleModal {
             to: ['', [Validators.required]]
         });
 
-        const day = this.scheduleForm.get('day');
-        const from = this.scheduleForm.get('from');
-        const to = this.scheduleForm.get('to');
+        this.day = this.scheduleForm.get('day');
+        this.from = this.scheduleForm.get('from');
+        this.to = this.scheduleForm.get('to');
 
-        day.valueChanges.subscribe(newValue => {
-            if (day.hasError('required')) {
+        this.day.valueChanges.subscribe(newValue => {
+            if (this.day.hasError('required')) {
                 this.errors.day = 'Day is required'
             } else {
                 this.errors.day = '';
             }
         });
 
-        from.valueChanges.subscribe(newValue => {
-            if (from.hasError('required')) {
+        this.from.valueChanges.subscribe(newValue => {
+            if (this.from.hasError('required')) {
                 this.errors.from = 'From is required'
             } else {
                 this.errors.from = '';
             }
         });
 
-        to.valueChanges.subscribe(newValue => {
-            if (to.hasError('required')) {
+        this.to.valueChanges.subscribe(newValue => {
+            if (this.to.hasError('required')) {
                 this.errors.to = 'To is required'
             } else {
                 this.errors.to = '';
@@ -76,16 +79,13 @@ export class ScheduleModal {
         });
     }
 
-    private validateForm() {
-    }
-
     public cancel() {
         this.viewController.dismiss().catch(() => { });
     }
 
     public save() {
+        this.markFormAsDirty();
         this.validateForm();
-
         const newSchedule = {
             day: this.scheduleForm.get('day').value,
             from: this.formatTime(this.scheduleForm.get('from').value),
@@ -93,8 +93,33 @@ export class ScheduleModal {
         }
 
         if (this.scheduleForm.valid) {
-
             this.viewController.dismiss(newSchedule).catch(() => { });
+        }
+    }
+
+    private markFormAsDirty() {
+        Object.keys(this.scheduleForm.controls).forEach(key => {
+            this.scheduleForm.get(key).markAsDirty();
+        });
+    }
+
+    private validateForm() {
+        if (this.day.hasError('required')) {
+            this.errors.day = 'Day is required'
+        } else {
+            this.errors.day = '';
+        }
+
+        if (this.from.hasError('required')) {
+            this.errors.from = 'From is required'
+        } else {
+            this.errors.from = '';
+        }
+
+        if (this.to.hasError('required')) {
+            this.errors.to = 'To is required'
+        } else {
+            this.errors.to = '';
         }
     }
 
