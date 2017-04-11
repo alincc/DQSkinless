@@ -185,7 +185,7 @@ export class ClinicPage implements OnInit {
         modal.present();
     }
 
-    public removeContact(event, idx) {
+    public removeContact(event, item, idx) {
         event.preventDefault();
         this.contacts.splice(idx, 1);
     }
@@ -209,7 +209,7 @@ export class ClinicPage implements OnInit {
     }
 
     public submitForm(event) {
-        event.event.preventDefault();
+        // event.event.preventDefault();
 
         if (this.clinicForm.valid && (this.validateContacts() || this.validateSchedules())) {
             this.callback = this.params.get('callback');

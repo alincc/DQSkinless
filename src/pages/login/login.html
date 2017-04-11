@@ -2,7 +2,7 @@
 	<div center>
 		<img class="logo" src="assets/img/logo.jpg"/>
 	</div>
-	<form #form="ngForm" (submit)="login(xhr)">
+	<form #form="ngForm" (submit)="xhr.submit($event)">
 		<ion-list no-lines>
 			<ion-label><ion-icon name="person"></ion-icon>Username</ion-label>
 			<ion-item round>
@@ -16,7 +16,7 @@
 		</ion-list>
 		<div center>
 			<xhr-button #xhr wd-md round large color="accent"
-			[disabled]="form.invalid"> Login </xhr-button>
+			[disabled]="form.invalid" (xhrClick)="login($event)"> Login </xhr-button>
 		</div>
 	</form>
 </ion-content>

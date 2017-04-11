@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileFormService } from './profile-form.service';
 import { ModalController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/concat';
 
 import { LOVS } from '../../constants/constants';
@@ -10,6 +11,40 @@ import { REGEX } from '../../config/config';
 
 
 import { ContactModal } from '../contact-modal/contact-modal.component';
+
+class Contacts{
+    private contacts : any[] = [];
+    private contactsSubject : BehaviorSubject<any[]> = new BehaviorSubject(this.contacts);
+
+    public set value( contacts : any[]){
+        this.contacts = contacts;
+        this.contactsSubject.next(this.contacts);
+    }
+
+    public get value() : any[]{
+        return this.contacts;
+    }
+
+    public push(item){
+        this.contacts.push(item);
+        this.contactsSubject.next(this.contacts);
+    }
+
+    public pop(){
+        this.contacts.pop();
+        this.contactsSubject.next(this.contacts);
+    }
+
+    public splice(idx,count,replacement?){
+        replacement ?  this.contacts.splice(idx,count,replacement) : this.contacts.splice(idx,count);
+        this.contactsSubject.next(this.contacts);
+    }
+
+    public subscribe( fn ) : any{
+        this.contactsSubject.subscribe(fn);
+    }
+
+}
 
 @Component({
     selector: 'profile-form',
@@ -34,7 +69,8 @@ export class ProfileForm implements OnInit {
     public gender: string;
     public genderList: any;
     private contactType: any[] = LOVS.CONTACT_TYPE;
-    private contacts : any[] = [];
+    private contacts : Contacts = new Contacts();
+
     constructor(private formBuilder: FormBuilder,
         private service: ProfileFormService,
         private modal: ModalController) {
@@ -219,6 +255,11 @@ export class ProfileForm implements OnInit {
             }
         );
 
+        //subcription for contacts
+        this.contacts.subscribe(newValue => {
+            this.errors.contactNo = newValue.length ? '' : "Contact is required";
+        })
+
        
     }
 
@@ -253,7 +294,6 @@ export class ProfileForm implements OnInit {
     }
 
     public submitForm(event) {
-        event.event.preventDefault();
         if(this.profileForm.valid && this.hasContact()){
             this.bindProfileDetails();
             let observable;
@@ -263,21 +303,11 @@ export class ProfileForm implements OnInit {
             } else {
                 observable = this.service.addAsistantDetails(this.profile);
             }
-            //store contacts
-            for(let contact of this.contacts){
-                observable = observable.concat(this.service.addContacts(contact))
-            }
-            let subscription = observable.subscribe(response => {
-                    if (!response.status) {
-                        event.dismissLoading();
-                        subscription.unsubcribe();
+            observable.subscribe(response => {
+                    if (response.status) {
+                        this.onSubmit.emit(this.profile);
                     }
-                }, err => {
                     event.dismissLoading();
-                    subscription.unsubcribe();
-                }, () => {
-                    event.dismissLoading();
-                    this.onSubmit.emit(this.profile);
                 })
         }else{
             event.dismissLoading();
@@ -311,20 +341,30 @@ export class ProfileForm implements OnInit {
         modal.onDidDismiss(_return =>{
             if(_return){
                 this.contacts.push(_return);
-                this.hasContact();
+                // this.hasContact();
+                this.service.addContacts(_return).subscribe(response => {
+                        if(response.status){
+                            _return.id = response.result;
+                        }
+                    },err => {
+                       this.contacts.pop();
+                   });
             }
         });
         modal.present();
     }
 
-    public removeContact(event,idx){
+    public removeContact(event,item,idx){
         event.preventDefault();
         this.contacts.splice(idx,1);
-        this.hasContact();
+        this.service.deleteContacts(item.id).subscribe(response => {}
+            ,err => {
+                this.contacts.splice(idx,0,item);
+            });
     }
 
     public hasContact(){
-        this.errors.contactNo = this.contacts.length ? '' : "Contact is required";
+       
         return !Boolean(this.errors.contactNo);
     }
 

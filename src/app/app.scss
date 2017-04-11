@@ -82,6 +82,13 @@ ion-content{
 		}
 	}
 
+	ion-item[clean]{
+		padding-left : 0px !important;
+		.item-inner{
+			padding-right: 0px !important;
+		}
+	}
+
 	// Rounded Ion-TextArea
 	ion-item.item-textarea[round], {
 		display: inline-block;

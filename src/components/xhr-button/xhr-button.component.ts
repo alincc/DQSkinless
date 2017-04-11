@@ -48,6 +48,7 @@ export class XHRButton{
 	constructor(private loadingCtrl: LoadingController){}
 	
 	public submit(event){
+		event.preventDefault();
 		this.showLoading();
 		this.event = event;
 		this.xhrClick.emit(this);
