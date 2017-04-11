@@ -110,10 +110,10 @@ export class ChangePasswordForm implements OnInit {
         this.validateForm();
         if (this.changePasswordForm.valid) {
             this.service.changePassword(this.changePasswordForm.value).subscribe(response => {
+                event.dismissLoading();
                 if (response.status) {
                     this.onSubmit.emit(this.changePasswordForm.value);
                 }
-                event.dismissLoading();
             }, err => {
                 event.dismissLoading();
             }

@@ -46,10 +46,10 @@ export class ProfileFormService {
 
     public addContacts(_parameter){
         _parameter.userId = this.getUserId();
-        return this.http.post(CONFIG.API.userContacts, _parameter);
+        return this.http.post(CONFIG.API.contacts, _parameter);
     }
 
     public deleteContacts(_parameter){
-        return this.http.delete(CONFIG.API.userContacts, _parameter);
+        return this.http.delete(CONFIG.API.contacts, _parameter);
     }
 }

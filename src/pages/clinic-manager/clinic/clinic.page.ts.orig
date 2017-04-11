@@ -102,13 +102,7 @@ export class ClinicPage implements OnInit {
     private getUserContacts() {
         this.clinicManagerService.getUserContacts().subscribe(response => {
             if (response && response.status) {
-                response.result.forEach(contact => {
-                    this.contacts.push({
-                        contactType: contact.contactType,
-                        contact: contact.contact,
-                        isProfileContacts: true
-                    });
-                });
+                console.log(response);
             }
         });
     }
@@ -126,12 +120,14 @@ export class ClinicPage implements OnInit {
         scheduleModal.onDidDismiss(schedule => {
             if (schedule) {
                 this.addSchedule(schedule);
+                this.hasSchedule();
             }
         });
     }
 
     private addSchedule(newSchedule) {
         const schedule = this.schedules.filter(s => { return s.day === newSchedule.day });
+
         if (schedule.length === 0) {
             this.schedules.push(
                 {
@@ -143,20 +139,15 @@ export class ClinicPage implements OnInit {
                 }
             );
         } else {
-            schedule[0].times.push({
+            this.schedules.filter(s => { return s.day === newSchedule.day })[0].times.push({
                 from: newSchedule.from,
                 to: newSchedule.to
             });
 
-            schedule[0].times.sort(function (a, b) {
+            this.schedules.filter(s => { return s.day === newSchedule.day })[0].times.sort(function (a, b) {
                 return new Date('1970/01/01 ' + a.from).getTime() - new Date('1970/01/01 ' + b.from).getTime();
             });
-
-            this.schedules.filter(s => { return s.day === newSchedule.day })[0] = schedule[0];
         }
-
-
-        this.hasSchedule();
     }
 
     public removeSchedule(event: Event, day, schedules, i) {
@@ -207,11 +198,7 @@ export class ClinicPage implements OnInit {
             });
         modal.onDidDismiss(contact => {
             if (contact) {
-                this.contacts.push({
-                    contactType: contact.contactType,
-                    contact: contact.contact,
-                    isProfileContacts: false
-                });
+                this.contacts.push(contact);
                 this.hasContact();
             }
         });
@@ -234,10 +221,16 @@ export class ClinicPage implements OnInit {
     }
 
     public submitForm(event) {
+<<<<<<< HEAD
         // event.event.preventDefault();
+
+        if (this.clinicForm.valid && (this.validateContacts() || this.validateSchedules())) {
+=======
+        event.event.preventDefault();
         this.markFormAsDirty();
         this.validateForm();
-        if (this.clinicForm.valid && this.hasContact() && this.hasSchedule()) {
+        if (this.clinicForm.valid && (this.hasContact() || this.hasSchedule())) {
+>>>>>>> b1afb0acb715cd2bac90230bb06ca031c17fa536
             this.callback = this.params.get('callback');
 
             const newClinic = {
