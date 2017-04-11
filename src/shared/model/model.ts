@@ -1,35 +1,40 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class ArraySubject{
-    private contacts : any[] = [];
-    private contactsSubject : BehaviorSubject<any[]> = new BehaviorSubject(this.contacts);
+    private array : any[];
+    private arraySubject : BehaviorSubject<any[]> = new BehaviorSubject(this.array);
 
-    public set value( contacts : any[]){
-        this.contacts = contacts;
-        this.contactsSubject.next(this.contacts);
+    constructor(array?){
+        this.array = array;
+    }
+
+    public set value( array : any[]){
+        this.array = array;
+        this.arraySubject.next(this.array);
     }
 
     public get value() : any[]{
-        return this.contacts;
+        return this.array;
     }
 
+
     public push(item){
-        this.contacts.push(item);
-        this.contactsSubject.next(this.contacts);
+        this.array.push(item);
+        this.arraySubject.next(this.array);
     }
 
     public pop(){
-        this.contacts.pop();
-        this.contactsSubject.next(this.contacts);
+        this.array.pop();
+        this.arraySubject.next(this.array);
     }
 
     public splice(idx,count,replacement?){
-        replacement ?  this.contacts.splice(idx,count,replacement) : this.contacts.splice(idx,count);
-        this.contactsSubject.next(this.contacts);
+        replacement ?  this.array.splice(idx,count,replacement) : this.array.splice(idx,count);
+        this.arraySubject.next(this.array);
     }
 
     public subscribe( fn ) : any{
-        this.contactsSubject.subscribe(fn);
+        this.arraySubject.subscribe(fn);
     }
 
 }

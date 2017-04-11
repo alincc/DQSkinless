@@ -209,7 +209,8 @@ export class ProfileForm implements OnInit {
 
         //subcription for contacts
         this.contacts.subscribe(newValue => {
-            this.errors.contactNo = newValue.length ? '' : "Contact is required";
+            if(newValue)
+                this.errors.contactNo = newValue.length ? '' : "Contact is required";
         })
 
 
@@ -330,7 +331,12 @@ export class ProfileForm implements OnInit {
             });
         modal.onDidDismiss(_return => {
             if (_return) {
-                this.contacts.push(_return);
+                if(this.contacts.value){
+                    this.contacts.push(_return);
+                }
+                else{
+                    this.contacts.value = [_return];
+                }
                 // this.hasContact();
                 this.service.addContacts(_return).subscribe(response => {
                         if(response.status){
