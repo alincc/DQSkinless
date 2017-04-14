@@ -79,10 +79,6 @@ export class ScheduleModal {
         });
     }
 
-    public cancel() {
-        this.viewController.dismiss().catch(() => { });
-    }
-
     public save() {
         this.markFormAsDirty();
         this.validateForm();

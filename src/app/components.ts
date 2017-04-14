@@ -6,6 +6,7 @@ import { UploadPhoto } from '../components/upload-photo/upload-photo';
 import { XHRButton } from '../components/xhr-button/xhr-button.component';
 import { ContactModal } from '../components/contact-modal/contact-modal.component';
 import { ScheduleModal } from '../components/schedule-modal/schedule-modal';
+import { SearchUserModal } from '../components/search-user-modal/search-user-modal';
 
 export const components = [
     Accordion,
@@ -15,5 +16,6 @@ export const components = [
     UploadPhoto,
     XHRButton,
     ContactModal,
-    ScheduleModal
+    ScheduleModal,
+    SearchUserModal
 ];

@@ -1,0 +1,54 @@
+<ion-header>
+    <ion-navbar color="secondary">
+        <ion-buttons start>
+            <button ion-button icon-only navPop><ion-icon name="close"></ion-icon></button>
+        </ion-buttons>
+        <ion-title>
+            Search User
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <form [formGroup]="searchForm" #form="ngForm" #form="ngForm" (ngSubmit)="xhr.submit($event)">
+        <ion-grid>
+            <ion-row>
+                <ion-col col-12 col-sm-12 col-md-4>
+                    <ion-label class="form-label">Username</ion-label>
+                    <ion-item round>
+                        <ion-input name="userName" formControlName="userName"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-12 col-sm-12 col-md-4>
+                    <ion-label class="form-label">Last Name</ion-label>
+                    <ion-item round>
+                        <ion-input name="lastName" formControlName="lastName"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-12 col-sm-12 col-md-4>
+                    <ion-label class="form-label">First Name</ion-label>
+                    <ion-item round>
+                        <ion-input name="firstName" formControlName="firstName"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <div center>
+            <xhr-button #xhr round large color="accent" type="submit" (xhrClick)="search($event)">
+                Search
+            </xhr-button>
+        </div>
+    </form>
+    <div class="user-list">
+        <div *ngIf="users && users.length === 0">User(s) not found</div>
+        <ion-card *ngFor="let user of users" (click)="selectUser(user)">
+            <ion-item>
+                <ion-avatar item-left>
+                    <img src="http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif">
+                </ion-avatar>
+                <p>Name: {{ getFullName(user) }}</p>
+                <p>Email: {{ user.email }}</p>
+                <p>Contact No: {{ user.contactNo }}</p>
+            </ion-item>
+        </ion-card>
+    </div>
+</ion-content>
