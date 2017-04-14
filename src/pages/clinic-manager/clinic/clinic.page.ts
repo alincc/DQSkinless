@@ -138,6 +138,7 @@ export class ClinicPage implements OnInit {
         scheduleModal.onDidDismiss(schedule => {
             if (schedule) {
                 this.addSchedule(schedule);
+                this.clinicForm.markAsDirty();
             }
         });
     }
@@ -221,7 +222,7 @@ export class ClinicPage implements OnInit {
                     contact: contact.contact,
                     isProfileContacts: false
                 });
-                this.hasContact();
+                this.clinicForm.markAsDirty();
             }
         });
         modal.present();

@@ -2,8 +2,16 @@ clinic-manager-page {
     .options {
         font-size: $h1;
     }
-}
 
-li {
-    word-wrap: break-word;
+    .actions-container {
+        margin-top: 20px;
+    }
+
+    ul {
+        margin: 0;
+    }
+
+    li {
+        word-wrap: break-word;
+    }
 }
