@@ -18,6 +18,7 @@ export class SearchUserModalService {
                 lastName: 'last name',
                 firstName: 'first name',
                 middleName: 'middle name',
+                img: 'http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif',
                 email: 'user1@user.com',
                 contactNo: '9111111'
             },
@@ -25,6 +26,7 @@ export class SearchUserModalService {
                 lastName: 'last name2',
                 firstName: 'first name2',
                 middleName: 'middle name2',
+                img: 'http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif',
                 email: 'user2@user.com',
                 contactNo: '9222222'
             }
