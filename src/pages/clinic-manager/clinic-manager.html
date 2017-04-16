@@ -2,24 +2,40 @@
     <h3>Number of Clinics: {{ allowableClinics }}</h3>
 
     <ion-card *ngFor="let clinic of clinics;let i=index">
-
         <ion-card-content>
-            <h2>Name: {{ clinic?.name }}</h2>
-            <h2>Address: {{ clinic?.address }}</h2>
-            <h2>Schedule:</h2>
-            <ul>
-                <li *ngFor="let schedule of clinic?.schedules">{{ days[schedule?.day] }} : {{ displayTime(schedule?.times) }}</li>
-            </ul>
-            <h2>Contact Us:</h2>
-            <ul>
-                <li *ngFor="let contact of clinic?.contacts">{{ contactType[contact?.contactType] }} : {{ contact?.contact }}</li>
-            </ul>
-
-            <a (click)="editClinic(clinic, i)" color="accent">Edit&nbsp;&nbsp;&nbsp;</a>
-            <a (click)="deleteClinic(clinic, i)" color="accent">Delete</a>
+            <accordion [header]="clinic?.name" [subHeader]="clinic?.address">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-4 col-sm-2 col-md-2>
+                            <b>Schedule:</b>
+                        </ion-col>
+                        <ion-col col-8 col-sm-10 col-md-10>
+                            <ul>
+                                <li *ngFor="let schedule of clinic?.schedules">{{ days[schedule?.day] }} : {{ displayTime(schedule?.times) }}</li>
+                            </ul>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col col-4 col-sm-2 col-md-2>
+                            <b>Contact Us:</b>
+                        </ion-col>
+                        <ion-col col-8 col-sm-10 col-md-10>
+                            <ul>
+                                <li *ngFor="let contact of clinic?.contacts">{{ contactType[contact?.contactType] }} : {{ contact?.contact }}</li>
+                            </ul>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="actions-container">
+                        <ion-col col-12 col-sm-12 col-md-12>
+                            <a (click)="editClinic(clinic, i)" color="accent-dark">Edit&nbsp;&nbsp;&nbsp;</a>
+                            <a (click)="deleteClinic(clinic, i)" color="accent-dark">Delete</a>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </accordion>
         </ion-card-content>
-
     </ion-card>
+
     <ion-label *ngIf="clinics.length === 0">
         No clinics set
     </ion-label>

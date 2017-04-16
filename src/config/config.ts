@@ -6,11 +6,12 @@ export const CONFIG = {
 
         doctorDetails: '/doctordetails',
         getNoOfClinics: '/doctordetails/clinics',
-        
+
         authenticate: '/users/authenticate',
         changePassword: '/users/changepass',
         changeStatus: '/users/changestatus',
-        contacts: '/usercontacts/'
+        contacts: '/usercontacts/',
+        getUserContacts: '/usercontacts/u'
 
     },
     SOCKETS: {

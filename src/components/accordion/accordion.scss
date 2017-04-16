@@ -1,0 +1,38 @@
+accordion {
+
+    .accordion {
+        width: 100%;
+    }
+
+    .header {
+        display:flex;
+        align-items:center;
+        justify-content: space-between;
+        width: 100%;
+        
+        p {
+            margin: 0;
+        }
+
+        .title {
+            max-width: 80%;
+            word-break: break-word;
+
+            &.open-title {
+                margin-bottom: 10px;
+            }
+        }
+
+        .accordion-toggle {
+            font-size: 28px;
+        }
+
+        &.open-header {
+            border-bottom: 1px solid $primary-light !important;
+        }
+    }
+
+    .accordion-content {
+        margin-top: 10px;
+    }
+}

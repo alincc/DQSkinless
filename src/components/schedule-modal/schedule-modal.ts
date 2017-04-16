@@ -79,10 +79,6 @@ export class ScheduleModal {
         });
     }
 
-    public cancel() {
-        this.viewController.dismiss().catch(() => { });
-    }
-
     public save() {
         this.markFormAsDirty();
         this.validateForm();
@@ -105,21 +101,33 @@ export class ScheduleModal {
 
     private validateForm() {
         if (this.day.hasError('required')) {
-            this.errors.day = 'Day is required'
+            this.errors.day = 'Day is required';
         } else {
             this.errors.day = '';
         }
 
         if (this.from.hasError('required')) {
-            this.errors.from = 'From is required'
+            this.errors.from = 'From is required';
         } else {
             this.errors.from = '';
         }
 
         if (this.to.hasError('required')) {
-            this.errors.to = 'To is required'
+            this.errors.to = 'To is required';
         } else {
             this.errors.to = '';
+        }
+
+        if (!this.from.hasError('required') && !this.to.hasError('required')) {
+            if (this.from.value === this.to.value) {
+                this.errors.to = 'From and To cannot be equal';
+                this.from.setErrors({ error: true });
+                this.to.setErrors({ error: true });
+            } else {
+                this.errors.to = '';
+                this.from.setErrors(null);
+                this.to.setErrors(null);
+            }
         }
     }
 
