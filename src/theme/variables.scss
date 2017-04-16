@@ -13,13 +13,13 @@ $font-path: "../assets/fonts";
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
 $grid : 10 20 25 33 50 67 80 90 100;
-
+$grid-padding-width: 0px;
 
 
 // Named Color Variables
 // --------------------------------------------------
 // Named colors makes it easy to reuse colors on various components.
-// It's highly recommended to change the default colors
+// It's highly recommended to change the default col
 // to match your app's branding. Ionic uses a Sass map of
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.

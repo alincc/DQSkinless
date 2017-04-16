@@ -21,44 +21,46 @@
 		</ion-item>
 	</div>
 	<div class="control-bar" [ngClass]="{'minimize': controlCss}">
-		<ion-row>
-			<ion-col width-33 width-md-20>
-				<button ion-button icon-only clear full>
-					<ion-icon name="thumbs-up" color="accent"></ion-icon>
-					Done
-				</button>
-			</ion-col>
-			<ion-col width-33 width-md-20>
-				<button ion-button icon-only clear full>
-					<ion-icon name="swap" color="accent"></ion-icon>
-					Next
-				</button>
-			</ion-col>
-			<ion-col width-33 width-md-0>
-				<button ion-button icon-only clear full (click)="showMore($event)">
-					<ion-icon name="more" color="accent"></ion-icon>
-					More
-				</button>
-			</ion-col>
-			<ion-col width-md-20>
-				<button ion-button icon-only  clear full>
-					<ion-icon name="return-left" color="accent"></ion-icon>
-					Queue Again
-				</button>
-			</ion-col>
-			<ion-col width-md-20>
-				<button ion-button icon-only  clear full>
-					<ion-icon name="eye-off" color="accent"></ion-icon>
-					No-Show
-				</button>
-			</ion-col>
-			<ion-col width-md-20>
-				<button ion-button icon-only  clear full (click)="toggleReOrder()">
-					<ion-icon name="list" color="accent" ></ion-icon>
-					Re-Order
-				</button>
-			</ion-col>
-		</ion-row>
+		<ion-grid>
+			<ion-row>
+				<ion-col >
+					<button ion-button icon-only clear full (click)="done()">
+						<ion-icon name="thumbs-up" color="accent"></ion-icon>
+						Done
+					</button>
+				</ion-col>
+				<ion-col>
+					<button ion-button icon-only clear full>
+						<ion-icon name="swap" color="accent"></ion-icon>
+						Next
+					</button>
+				</ion-col>
+				<ion-col col-sm-0 col-md-0>
+					<button ion-button icon-only clear full (click)="showMore($event)">
+						<ion-icon name="more" color="accent"></ion-icon>
+						More
+					</button>
+				</ion-col>
+				<ion-col col-0 >
+					<button ion-button icon-only  clear full>
+						<ion-icon name="return-left" color="accent"></ion-icon>
+						Queue Again
+					</button>
+				</ion-col>
+				<ion-col col-0>
+					<button ion-button icon-only  clear full>
+						<ion-icon name="eye-off" color="accent"></ion-icon>
+						No-Show
+					</button>
+				</ion-col>
+				<ion-col col-0>
+					<button ion-button icon-only  clear full (click)="toggleReOrder()">
+						<ion-icon name="list" color="accent" ></ion-icon>
+						Re-Order
+					</button>
+				</ion-col>
+			</ion-row>
+		</ion-grid>
 	</div>
 	<ion-list [reorder]="isReOrder" (ionItemReorder)="reorderItems($event)">
 		<ion-item-sliding *ngFor="let customer of queue;">

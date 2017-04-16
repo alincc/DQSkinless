@@ -15,18 +15,26 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
-
-@media all and (min-device-width: 768px){
-	@each $width in $grid{
-		ion-col[width-md-#{$width}]{
-			flex: #{$width}% !important;
-		}
-	}
-
-	ion-col[width-md-0]{
+@media (max-device-width: 576px){
+	ion-col[col-0]{
 		display: none;		
 	}
 }
+
+@media (min-device-width: 576px) and (max-device-width: 767px){
+	ion-col[col-sm-0]{
+		display: none;		
+	}
+}
+
+@media (min-device-width: 768px){
+	ion-col[col-md-0]{
+		display: none;		
+	}
+}
+
+
+
 
 
 @each $color in map-keys($colors){

@@ -8,7 +8,7 @@ import { components } from './components';
 import { pages } from './pages';
 
 // services
-import { RootNavController, Storage, HttpService } from '../services/services';
+import { RootNavController, Storage, HttpService,WebSocketFactory } from '../services/services';
 
 // native
 import { ActionSheet } from '@ionic-native/action-sheet';
@@ -40,6 +40,8 @@ import { StatusBar } from '@ionic-native/status-bar';
     RootNavController,
     Storage,
     HttpService,
+    WebSocketFactory,
+
     ActionSheet,
     Camera,
     Device,

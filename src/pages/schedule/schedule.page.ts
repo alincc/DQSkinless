@@ -4,9 +4,11 @@ import { MoreMenuPopover } from './more.popover';
 import { queue } from './schedule.mock';
 import { PatientProfilePage } from '../patient-profile/patient-profile.page';
 import { RootNavController } from '../../services/services';
+import { ScheduleService } from './schedule.service';
 @Component({
 	selector: 'schedule-page',
-	templateUrl: 'schedule.html'
+	templateUrl: 'schedule.html',
+	providers:[ ScheduleService ]
 })
 export class SchedulePage {
 	public queue: any[];
@@ -16,13 +18,15 @@ export class SchedulePage {
 	private set _servingNow(dom){
 		this.servingNow = dom.nativeElement;
 	}
+	private ws : any;
 	private servingNow: any;
 	private queueTopOffset: number;
 	public controlCss: boolean;
 	private isReOrder: boolean = false;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
-		private detector: ChangeDetectorRef){
+		private detector: ChangeDetectorRef,
+		private service : ScheduleService){
 		this.queue = queue;
 		this.controlCss = false;
 	}
@@ -41,6 +45,19 @@ export class SchedulePage {
 					this.detector.detectChanges();
 				}
 			}
+		});
+		this.ws = this.service.connectToQueue()
+		this.ws.then(
+			response => {
+				this.ws.send("1");
+			}
+		);
+		this.ws.connection.subscribe(response => {
+			console.log(response);
+		}, err => {
+			console.error(err);
+		}, () => {
+			console.log("closed");
 		})
 	}
 
@@ -72,5 +89,9 @@ export class SchedulePage {
 
 	toggleReOrder(){
 		this.isReOrder = !this.isReOrder;
+	}
+
+	done(){
+		this.ws.send("1");
 	}
 }

@@ -7,6 +7,8 @@ import { Endpoint } from '../config/endpoint';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
+import * as SockJS from 'sockjs-client/dist/sockjs';
+import * as StompJS from 'stompjs/lib/stomp.js';
 
 @Injectable()
 export class RootNavController {
@@ -59,13 +61,13 @@ export class Storage {
 
 
 }
+var _token : string;
 
 @Injectable()
 export class HttpService {
 
 	public errorEvent: EventEmitter<any>;
 	public unauthorizedEvent: EventEmitter<any>;
-	public _token: string;
 
 	constructor(
 		private http: Http,
@@ -75,13 +77,13 @@ export class HttpService {
 	}
 
 	public get token() {
-		if (!Boolean(this._token)) {
-			this._token === this.storage.token;
+		if (!Boolean(_token)) {
+			_token === this.storage.token;
 		}
-		return this._token;
+		return _token;
 	}
 	public set token(data) {
-		this._token = data;
+		_token = data;
 		this.storage.token = data;
 	}
 
@@ -94,13 +96,7 @@ export class HttpService {
 		}
 	}
 
-	private getOptions(): RequestOptions {
-		let headers = new Headers({ 'Content-Type': 'application/json' });
-		headers.append('Authorization', 'Bearer ' + this.token);
-
-		let options = new RequestOptions({ headers: headers });
-		return options;
-	}
+	private 
 
 	public get(url, ...parameters): Observable<any> {
 		let parameter: string = '';
@@ -150,6 +146,50 @@ export class HttpService {
 		}
 	}
 
+	private getOptions = function(): RequestOptions {
+		let headers = new Headers({ 'Content-Type': 'application/json' });
+		headers.append('Authorization', 'Bearer ' + _token);
+
+		let options = new RequestOptions({ headers: headers });
+		return options;
+	}
+
+
+}
+
+
+@Injectable()
+export class WebSocketFactory{
+	
+	
+	public connect(url:String): any{
+		var sock = new SockJS(Endpoint.environment + url, null, {headers : {Authorization : 'Bearer ' + _token}});
+		// var client = StompJS.Stomp.over(sock);
+		// client.connect({ Authorization : 'Bearer '+ _token})
+		var connection : any = new Observable(publisher => {
+			
+			sock.onmessage = response => {
+				publisher.next(response.data);
+			}
+			sock.onclose = err => {
+				publisher.error(err);
+			}
+		});
+		// stompClient.connect({}, function())
+
+		return {
+			send : (message) => {sock.send(message)},
+			connection : connection,
+			then : function(callback){
+				sock.onopen = response => {
+					callback(response)
+				}
+			}
+		};
+
+		// return Observable.throw(null);
+		// ;
+	}
 
 
 }

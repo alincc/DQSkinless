@@ -11,6 +11,11 @@ export const CONFIG = {
         changePassword: '/users/changepass',
         changeStatus: '/users/changestatus',
         contacts: '/usercontacts/'
+
+    },
+    SOCKETS: {
+        queue: '/queue/'
+
     }
 };
 
