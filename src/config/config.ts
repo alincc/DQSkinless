@@ -16,7 +16,9 @@ export const CONFIG = {
         queue: '/queue',
         queueBoard: '/queue-board'
 
-    },
+        createClinic: '/customclinic',
+
+        createAccount: '/users'    },
     SOCKETS: {
         queue: '/queue-socket'
 

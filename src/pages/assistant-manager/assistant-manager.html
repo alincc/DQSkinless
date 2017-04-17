@@ -1,21 +1,16 @@
 <ion-content #Content padding>
-	<h3>Number of Available Assitant Account: {{ allowableAssistants }}</h3>
 	<ion-list>
 		<ion-item-sliding *ngFor="let assistant of assistants;let i=index">
 			<ion-item (click)="viewAssistant(assistant)">
 				<ion-avatar item-left>
 					<img src="http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif">
 				</ion-avatar>
-				<h2>Name: {{ assistant.profile?.fullName }}</h2>
-				<h2>Email: {{ assistant.profile?.email }}</h2>
-				<h2>Contact No: {{ assistant.profile?.contactNo }}</h2>
+				<h2>Name: {{ assistant.password ? '' : 'fullname dummy' }}</h2>
+				<h2>Email: {{ assistant.password ? assistant.username : 'email dummy' }}</h2>
+				<h2>Contact No: {{ assistant.password ? '' : assistant?.contactNo }}</h2>
 				<h2 *ngIf="assistant.password">Password: {{ assistant.password }}</h2>
 			</ion-item>
 			<ion-item-options>
-				<!--<button ion-button color="accent-light" (click)="editAssistant(assistant, i)">
-                    <ion-icon name="clipboard"></ion-icon>
-					Edit
-                </button>-->
 				<button ion-button color="accent-light" (click)="deleteAssistant(assistant, i)">
 					<ion-icon name="trash"></ion-icon> 
 					Delete
@@ -29,8 +24,8 @@
 	<ion-fab bottom right>
 		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
 		<ion-fab-list side="left">
-			<button color="accent-light" [disabled]="assistants.length !== 0 && allowableAssistants === 0" ion-fab (click)="addAssistant()"><ion-icon name="person-add"></ion-icon></button>
-			<button color="accent-light" [disabled]="assistants.length !== 0 && allowableAssistants === 0" ion-fab (click)="searchAssistant()"><ion-icon name="search"></ion-icon>
+			<button color="accent-light" ion-fab (click)="addAssistant()"><ion-icon name="person-add"></ion-icon></button>
+			<button color="accent-light" ion-fab (click)="searchAssistant()"><ion-icon name="search"></ion-icon>
 	      </button>
 		</ion-fab-list>
 	</ion-fab>

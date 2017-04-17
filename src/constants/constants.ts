@@ -96,6 +96,12 @@ export const LOVS = {
     ]
 }
 
+export const MODE = {
+    add: 'Add',
+    edit: 'Edit',
+    View: 'View'
+}
+
 export const QUEUE_MAP = {
     DONE : "D",
     NEXT : "N",

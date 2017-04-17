@@ -1,4 +1,5 @@
 import { Accordion } from '../components/accordion/accordion';
+import { AccountCreationModal } from '../components/account-creation-modal/account-creation-modal';
 import { ChangePasswordForm } from '../components/change-password-form/change-password-form';
 import { DrawingPad } from '../components/drawing-pad/drawing-pad';
 import { ProfileForm } from '../components/profile-form/profile-form';
@@ -10,6 +11,7 @@ import { SearchUserModal } from '../components/search-user-modal/search-user-mod
 
 export const components = [
     Accordion,
+    AccountCreationModal,
     ChangePasswordForm,
     DrawingPad,
     ProfileForm,

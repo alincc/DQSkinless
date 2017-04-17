@@ -1,0 +1,32 @@
+<ion-header>
+    <ion-toolbar color="secondary">
+        <ion-buttons start>
+            <button ion-button icon-only navPop><ion-icon name="close"></ion-icon></button>
+        </ion-buttons>
+        <ion-title>
+            Create Assistant Account
+        </ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="save()"><ion-icon name="checkmark"></ion-icon></button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content #Content padding>
+    <form [formGroup]="assistantForm" #form="ngForm">
+        <div class="row form-group">
+            <ion-grid>
+                <ion-row>
+                    <ion-col col-12 col-sm-12 col-md-12>
+                        <ion-label class="form-label">Email *</ion-label>
+                        <ion-item round>
+                            <ion-input name="email" formControlName="email"></ion-input>
+                        </ion-item>
+                        <div class="error-message" *ngIf="assistantForm.get('email')?.dirty &&  assistantForm.get('email').invalid">
+                            {{ errors.email }}
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </div>
+    </form>
+</ion-content>

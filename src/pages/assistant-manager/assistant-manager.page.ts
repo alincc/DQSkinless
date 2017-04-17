@@ -1,41 +1,57 @@
-import { Component } from "@angular/core";
-import { AlertController, NavController, NavParams } from "ionic-angular";
+import { Component, OnInit } from "@angular/core";
+import { AlertController, ModalController } from "ionic-angular";
 
-import { AssistantPage } from './assistant/assistant.page';
-import { SearchAssistantPage } from './search-assistant/search-assistant.page';
+import { RootNavController } from '../../services/services';
 
-import { RegistrationForm, Profile } from '../../shared/model/registration.model';
+import { AccountCreationModal } from '../../components/account-creation-modal/account-creation-modal';
+import { SearchUserModal } from '../../components/search-user-modal/search-user-modal';
 
 @Component({
 	selector: 'assistant-manager-page',
 	templateUrl: 'assistant-manager.html'
 })
-export class AssistantManagerPage {
+export class AssistantManagerPage implements OnInit {
 
 	public allowableAssistants: number;
-	public assistants: RegistrationForm[];
-	private index: number;
+	public assistants: any;
 
 	constructor(
 		private alertController: AlertController,
-		private nav: NavController,
-		private params: NavParams) {
-		this.allowableAssistants = 2;
+		private modalController: ModalController,
+		private rootNav: RootNavController) {
+		this.getDefaults();
+	}
+
+	private getDefaults() {
 		this.assistants = [];
 	}
 
+	public ngOnInit() {
+		// TODO GET ASSISTANTS
+	}
+
 	public addAssistant() {
-		this.nav.push(AssistantPage, {
-			callback: this.addAssistantCallBack,
-			profile: new Profile(),
-			mode: 'Add',
-			usage: 'account'
+		let accountCreationModal = this.modalController.create(AccountCreationModal);
+
+		accountCreationModal.present();
+
+		accountCreationModal.onDidDismiss(assistant => {
+			if (assistant) {
+				console.log('assistant =>' + JSON.stringify(assistant));
+				this.assistants.push(assistant);
+			}
 		});
 	}
 
 	public searchAssistant() {
-		this.nav.push(SearchAssistantPage, {
-			callback: this.searchAssistantCallBack
+		let searchAssistantModal = this.modalController.create(SearchUserModal);
+
+		searchAssistantModal.present();
+
+		searchAssistantModal.onDidDismiss(assistant => {
+			if (assistant) {
+				console.log('assistant =>' + JSON.stringify(assistant));
+			}
 		});
 	}
 
@@ -57,58 +73,4 @@ export class AssistantManagerPage {
 			]
 		}).present();
 	}
-
-	// public editAssistant(assistant, i) {
-	// 	this.index = i;
-	// 	this.nav.push(AssistantPage, {
-	// 		callback: this.editAssistantCallBack,
-	// 		profile: assistant.profile,
-	// 		mode: 'Edit'
-	// 	});
-	// }
-
-	public viewAssistant(assistant) {
-		this.nav.push(AssistantPage, {
-			profile: assistant.profile,
-			mode: 'View',
-			usage: 'profile'
-		});
-	}
-
-	public addAssistantCallBack = (params) => {
-		return new Promise((resolve, reject) => {
-			this.assistants.push(params);
-			this.allowableAssistants--;
-
-			if (this.params.data.parent) {
-				this.params.data.parent.completedRegistration = true;
-			}
-
-			resolve();
-		});
-	}
-
-	// public editAssistantCallBack = (params) => {
-	// 	return new Promise((resolve, reject) => {
-	// 		if (this.index !== undefined){
-	// 			this.assistants[this.index] = params;
-	// 		}
-	// 		resolve();
-	// 	});
-	// }
-
-	public searchAssistantCallBack = (params) => {
-		return new Promise((resolve, reject) => {
-
-			this.assistants.push(params);
-			this.allowableAssistants--;
-
-			if (this.params.data.parent) {
-				this.params.data.parent.completedRegistration = true;
-			}
-
-			resolve();
-		});
-	}
-
 }

@@ -1,4 +1,3 @@
-import { AssistantPage } from '../pages/assistant-manager/assistant/assistant.page';
 import { AssistantManagerPage } from '../pages/assistant-manager/assistant-manager.page';
 import { AssociateMemberPage } from '../pages/clinic-manager/associate-member/associate-member.page';
 import { BlankPage } from '../pages/blank/blank.page';
@@ -15,7 +14,6 @@ import { PatientProfilePage } from '../pages/patient-profile/patient-profile.pag
 import { ProfilePage } from '../pages/profile/profile.page';
 import { RegistrationPage } from '../pages/registration/registration.page';
 import { SchedulePage } from '../pages/schedule/schedule.page';
-import { SearchAssistantPage } from '../pages/assistant-manager/search-assistant/search-assistant.page';
 import { StepOnePage } from '../pages/registration/step-one/step-one.page';
 import { StepTwoPage } from '../pages/registration/step-two/step-two.page';
 import { StepThreePage } from '../pages/registration/step-three/step-three.page';
@@ -25,7 +23,6 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { ChangePasswordPage } from '../pages/change-password/change-password.page';
 
 export const pages: any[] = [
-	AssistantPage,
 	AssistantManagerPage,
 	AssociateMemberPage,
 	BlankPage,
@@ -42,7 +39,6 @@ export const pages: any[] = [
 	ProfilePage,
 	RegistrationPage,
 	SchedulePage,
-	SearchAssistantPage,
 	StepOnePage,
 	StepTwoPage,
 	StepThreePage,

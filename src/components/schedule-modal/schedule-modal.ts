@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavParams, ViewController } from 'ionic-angular';
+import { ViewController } from 'ionic-angular';
 
 import { LOVS } from '../../constants/constants';
 
@@ -16,6 +16,7 @@ export class ScheduleModal {
 
     public scheduleForm: FormGroup;
     public days: any;
+    public header: any;
 
     private day: AbstractControl;
     private from: AbstractControl;
@@ -25,7 +26,6 @@ export class ScheduleModal {
     constructor(
         private datePipe: DatePipe,
         private formBuilder: FormBuilder,
-        private params: NavParams,
         private viewController: ViewController) {
         this.getDefaults();
     }
