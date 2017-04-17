@@ -130,9 +130,7 @@ export class ClinicPage implements OnInit {
     public createSchedule(event: Event) {
         event.preventDefault();
 
-        let scheduleModal = this.modalController.create(ScheduleModal, {
-            header: 'Add Schedule'
-        });
+        let scheduleModal = this.modalController.create(ScheduleModal);
 
         scheduleModal.present();
 
