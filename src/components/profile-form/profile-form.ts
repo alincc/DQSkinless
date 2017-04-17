@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileFormService } from './profile-form.service';
 import { ModalController } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/concat';
 
 import { LOVS } from '../../constants/constants';

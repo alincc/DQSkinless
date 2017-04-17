@@ -13,7 +13,9 @@ export const CONFIG = {
         contacts: '/usercontacts/',
         getUserContacts: '/usercontacts/u',
 
-        createClinic: '/customclinic'
+        createClinic: '/customclinic',
+
+        createAccount: '/users'
 
     },
     SOCKETS: {
