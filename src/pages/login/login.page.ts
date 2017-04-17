@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, AlertController } from 'ionic-angular';
 import { ManagerPage } from '../manager/manager.page';
 
-// import { RegistrationPage } from '../registration/registration.page';
-import { SchedulePage } from '../schedule/schedule.page';
+import { RegistrationPage } from '../registration/registration.page';
+// import { SchedulePage } from '../schedule/schedule.page'; // FOR REMOVAL
 import { LoginService } from './login.service';
 
 
@@ -40,7 +40,7 @@ export class LoginPage {
 								buttons: ['Dismiss']
 							}).present;
 						default:
-							this.rootNav.push(SchedulePage, { step: response.result.principal.status, role: response.result.principal.role });
+							this.rootNav.push(RegistrationPage, { step: response.result.principal.status, role: response.result.principal.role });
 							break;
 					}
 				}

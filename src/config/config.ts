@@ -11,7 +11,9 @@ export const CONFIG = {
         changePassword: '/users/changepass',
         changeStatus: '/users/changestatus',
         contacts: '/usercontacts/',
-        getUserContacts: '/usercontacts/u'
+        getUserContacts: '/usercontacts/u',
+
+        createClinic: '/customclinic'
 
     },
     SOCKETS: {

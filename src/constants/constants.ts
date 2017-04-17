@@ -95,3 +95,9 @@ export const LOVS = {
         'Sunday'
     ]
 }
+
+export const MODE = {
+    add: 'Add',
+    edit: 'Edit',
+    View: 'View'
+}

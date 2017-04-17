@@ -16,6 +16,7 @@ export class ScheduleModal {
 
     public scheduleForm: FormGroup;
     public days: any;
+    public header: any;
 
     private day: AbstractControl;
     private from: AbstractControl;

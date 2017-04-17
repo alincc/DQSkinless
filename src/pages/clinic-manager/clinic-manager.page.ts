@@ -3,7 +3,7 @@ import { AlertController, NavParams } from "ionic-angular";
 
 import { RootNavController } from '../../services/services';
 
-import { LOVS } from '../../constants/constants'
+import { LOVS, MODE } from '../../constants/constants'
 
 import { ClinicPage } from './clinic/clinic.page';
 
@@ -39,6 +39,10 @@ export class ClinicManagerPage implements OnInit {
 				this.allowableClinics = response.result;
 			}
 		});
+
+		if (this.params.data.parent && this.clinics.length > 0) {
+			this.params.data.parent.completedRegistration = true;
+		}
 	}
 
 	private getDefaults() {
@@ -49,7 +53,7 @@ export class ClinicManagerPage implements OnInit {
 
 	public addClinic() {
 		this.rootNav.push(ClinicPage, {
-			callback: this.addClinicCallBack,
+			mode: MODE.add
 		});
 	}
 

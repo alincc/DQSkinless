@@ -24,4 +24,8 @@ export class ClinicManagerService {
     public getUserContacts() {
         return this.http.get(CONFIG.API.getUserContacts, this.getUserId());
     }
+
+    public createClinic(clinic) {
+        return this.http.post(CONFIG.API.createClinic, clinic);
+    }
 }

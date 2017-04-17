@@ -4,7 +4,7 @@ import { AlertController, ModalController, NavParams } from "ionic-angular";
 
 import { RootNavController } from '../../../services/services';
 
-import { LOVS } from '../../../constants/constants'
+import { LOVS, MODE } from '../../../constants/constants'
 
 import { ContactModal } from '../../../components/contact-modal/contact-modal.component';
 import { ScheduleModal } from '../../../components/schedule-modal/schedule-modal';
@@ -34,8 +34,6 @@ export class ClinicPage implements OnInit {
     private name: AbstractControl;
     private clinic: any;
 
-    private callback: Function;
-
     constructor(
         private alertController: AlertController,
         private formBuilder: FormBuilder,
@@ -50,7 +48,7 @@ export class ClinicPage implements OnInit {
         this.clinic = this.params.get('clinic') ? this.params.get('clinic') : {};
         this.schedules.value = this.clinic.schedules ? this.clinic.schedules : []
         this.contacts.value = this.clinic.contacts ? this.clinic.contacts : []
-        this.mode = this.params.get('mode') ? this.params.get('mode') : 'Add';
+        this.mode = this.params.get('mode') ? this.params.get('mode') : MODE.add;
         this.createClinicForm();
         this.getUserContacts();
     }
@@ -132,7 +130,10 @@ export class ClinicPage implements OnInit {
     public createSchedule(event: Event) {
         event.preventDefault();
 
-        let scheduleModal = this.modalController.create(ScheduleModal);
+        let scheduleModal = this.modalController.create(ScheduleModal, {
+            header: 'Add Schedule'
+        });
+
         scheduleModal.present();
 
         scheduleModal.onDidDismiss(schedule => {
@@ -213,7 +214,7 @@ export class ClinicPage implements OnInit {
         event.preventDefault();
         let modal = this.modalController.create(ContactModal,
             {
-                header: "Add User Contact"
+                header: 'Add User Contact'
             });
         modal.onDidDismiss(contact => {
             if (contact) {
@@ -246,24 +247,25 @@ export class ClinicPage implements OnInit {
         this.markFormAsDirty();
         this.validateForm();
         if (this.clinicForm.valid && this.hasContact() && this.hasSchedule()) {
-            this.callback = this.params.get('callback');
 
-            const newClinic = {
-                name: this.clinicForm.get('name').value,
-                address: this.clinicForm.get('address').value,
-                schedules: this.schedules.value,
-                contacts: this.contacts.value
-            };
+            if (this.mode === MODE.add) {
+                const newClinic = {
+                    name: this.clinicForm.get('name').value,
+                    address: this.clinicForm.get('address').value,
+                    schedules: this.schedules.value,
+                    contacts: this.contacts.value
+                };
 
-            // TODO SAVING
+                this.clinicManagerService.createClinic(newClinic).subscribe(response => {
+                    if (response && response.status) {
+                        this.rootNav.pop();
+                    }
+                    event.dismissLoading();
+                })
+            } else {
 
-            this.callback(newClinic).then(() => {
-                console.log(JSON.stringify(newClinic));
-                this.rootNav.pop();
-            });
-
+            }
         }
-        event.dismissLoading();
     }
 
     private markFormAsDirty() {
