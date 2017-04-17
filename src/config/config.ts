@@ -14,11 +14,12 @@ export const CONFIG = {
         getUserContacts: '/usercontacts/u',
 
         queue: '/queue',
-        queueBoard: '/queue-board'
+        queueBoard: '/queue-board',
 
         createClinic: '/customclinic',
 
-        createAccount: '/users'    },
+        createAccount: '/users'    
+    },
     SOCKETS: {
         queue: '/queue-socket'
 
