@@ -3,8 +3,10 @@ import { Locker, DRIVERS } from 'angular2-locker';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { MESSAGES } from '../config/config';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Endpoint } from '../config/endpoint';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import * as SockJS from 'sockjs-client/dist/sockjs';
@@ -13,6 +15,7 @@ import * as StompJS from 'stompjs/lib/stomp.js';
 @Injectable()
 export class RootNavController {
 	private _rootNav: any;
+	public reloadPublisher: BehaviorSubject<any>;
 
 	public getRootNav() {
 		return this._rootNav;
@@ -34,6 +37,13 @@ export class RootNavController {
 		this._rootNav.pop();
 	}
 
+	public loadInit(clinicId: number){
+		// if(this.reloadPublisher){
+		// 	this.reloadPublisher.next(clinicId);
+		// }else{
+		this.reloadPublisher = new BehaviorSubject<any>(clinicId);
+		// }
+	}
 }
 
 export const STORAGE_KEYS = {
@@ -98,14 +108,15 @@ export class HttpService {
 
 	private 
 
-	public get(url, ...parameters): Observable<any> {
+	public get(url: string, parameters: any[], option?: any): Observable<any> {
 		let parameter: string = '';
 		for (let _parameter of parameters) {
 			parameter += "/" + _parameter;
 		}
+
 		return this.http.get(Endpoint.environment + url + parameter, this.getOptions())
 			.map(response => this.extractData(response))
-			.catch(err => this.errorHandler(err));
+			.catch(err => option && option.silentError ? {} : this.errorHandler(err));
 	}
 
 	public delete(url, ...parameters): Observable<any> {
@@ -164,8 +175,6 @@ export class WebSocketFactory{
 	
 	public connect(url:String): any{
 		var sock = new SockJS(Endpoint.environment + url, null, {headers : {Authorization : 'Bearer ' + _token}});
-		// var client = StompJS.Stomp.over(sock);
-		// client.connect({ Authorization : 'Bearer '+ _token})
 		var connection : any = new Observable(publisher => {
 			
 			sock.onmessage = response => {
@@ -175,20 +184,18 @@ export class WebSocketFactory{
 				publisher.error(err);
 			}
 		});
-		// stompClient.connect({}, function())
 
 		return {
 			send : (message) => {sock.send(message)},
 			connection : connection,
-			then : function(callback){
+			then : (callback) => {
 				sock.onopen = response => {
 					callback(response)
 				}
-			}
+			},
+			close: () => {sock.close();}
 		};
 
-		// return Observable.throw(null);
-		// ;
 	}
 
 

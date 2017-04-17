@@ -95,3 +95,10 @@ export const LOVS = {
         'Sunday'
     ]
 }
+
+export const QUEUE_MAP = {
+    DONE : "D",
+    NEXT : "N",
+    FETCH : "F",
+    REQUEUE: "R"
+}

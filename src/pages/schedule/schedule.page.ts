@@ -5,6 +5,7 @@ import { queue } from './schedule.mock';
 import { PatientProfilePage } from '../patient-profile/patient-profile.page';
 import { RootNavController } from '../../services/services';
 import { ScheduleService } from './schedule.service';
+import { QUEUE_MAP } from '../../constants/constants'
 @Component({
 	selector: 'schedule-page',
 	templateUrl: 'schedule.html',
@@ -22,13 +23,61 @@ export class SchedulePage {
 	private servingNow: any;
 	private queueTopOffset: number;
 	public controlCss: boolean;
-	private isReOrder: boolean = false;
+	private isReOrder: boolean;
+	private queueBoard: any;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
 		private detector: ChangeDetectorRef,
 		private service : ScheduleService){
+		rootNav.reloadPublisher.subscribe(clinicId => {
+			this.initSchedule(clinicId);
+		})
+	}
+
+	initSchedule(clinicId){
 		this.queue = queue;
 		this.controlCss = false;
+		this.isReOrder = false;
+		if(this.ws){
+			this.ws.close();
+		}
+		this.ws = this.service.connectToQueue()
+		this.ws.then(
+			response => {
+				this.ws.send(clinicId);
+			}
+		);
+
+		var currentDate = new Date();
+		currentDate.setHours(0);
+		currentDate.setMinutes(0);
+		currentDate.setSeconds(0);
+		currentDate.setMilliseconds(0);
+
+		this.ws.connection.subscribe(response => {
+			this.service.getCurrentQueueBoard(clinicId,currentDate).subscribe(response => {
+				if(response.status){
+					if(!response.result.id){
+						var queueBoard: any = {
+							clinicId : clinicId,
+							date : currentDate
+						};
+						this.service.createQueueBoard(queueBoard).subscribe(response => {
+							if(response.status){
+								queueBoard.id = response.result;
+								this.queueBoard = queueBoard;
+							}
+						});
+					}else{
+						this.queueBoard = response.result;
+					}
+				}
+			});
+		}, err => {
+			console.error(err);
+		}, () => {
+			console.log("closed");
+		})
 	}
 
 	ngAfterViewInit(){
@@ -46,19 +95,7 @@ export class SchedulePage {
 				}
 			}
 		});
-		this.ws = this.service.connectToQueue()
-		this.ws.then(
-			response => {
-				this.ws.send("1");
-			}
-		);
-		this.ws.connection.subscribe(response => {
-			console.log(response);
-		}, err => {
-			console.error(err);
-		}, () => {
-			console.log("closed");
-		})
+		
 	}
 
 
@@ -66,6 +103,7 @@ export class SchedulePage {
 		let element = this.queue[indexes.from];
 	    this.queue.splice(indexes.from, 1);
 	    this.queue.splice(indexes.to, 0, element);
+	    this.ws.send("F");
 	}
 
 	showMore(event){
@@ -92,6 +130,21 @@ export class SchedulePage {
 	}
 
 	done(){
-		this.ws.send("1");
+		this.ws.send(QUEUE_MAP.DONE);
 	}
+
+	next(){
+		this.ws.send(QUEUE_MAP.NEXT);
+	}
+
+	queueAgain(){
+		this.ws.send(QUEUE_MAP.FETCH);
+	}
+
+	noShow(){
+		this.ws.send(QUEUE_MAP.DONE);
+	}
+
+
+
 }

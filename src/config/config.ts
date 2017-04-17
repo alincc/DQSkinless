@@ -10,12 +10,15 @@ export const CONFIG = {
         authenticate: '/users/authenticate',
         changePassword: '/users/changepass',
         changeStatus: '/users/changestatus',
-        contacts: '/usercontacts/',
-        getUserContacts: '/usercontacts/u'
+        contacts: '/usercontacts',
+        getUserContacts: '/usercontacts/u',
+
+        queue: '/queue',
+        queueBoard: '/queue-board'
 
     },
     SOCKETS: {
-        queue: '/queue/'
+        queue: '/queue-socket'
 
     }
 };
