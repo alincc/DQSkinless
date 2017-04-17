@@ -27,7 +27,7 @@ export class AssistantManagerPage implements OnInit {
 	}
 
 	public ngOnInit() {
-		this.allowableAssistants = 2;
+		// TODO GET ASSISTANTS
 	}
 
 	public addAssistant() {

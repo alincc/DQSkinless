@@ -1,5 +1,4 @@
 <ion-content #Content padding>
-	<h3>Number of Available Assitant Account: {{ allowableAssistants }}</h3>
 	<ion-list>
 		<ion-item-sliding *ngFor="let assistant of assistants;let i=index">
 			<ion-item (click)="viewAssistant(assistant)">
@@ -25,8 +24,8 @@
 	<ion-fab bottom right>
 		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
 		<ion-fab-list side="left">
-			<button color="accent-light" [disabled]="assistants.length !== 0 && allowableAssistants === 0" ion-fab (click)="addAssistant()"><ion-icon name="person-add"></ion-icon></button>
-			<button color="accent-light" [disabled]="assistants.length !== 0 && allowableAssistants === 0" ion-fab (click)="searchAssistant()"><ion-icon name="search"></ion-icon>
+			<button color="accent-light" ion-fab (click)="addAssistant()"><ion-icon name="person-add"></ion-icon></button>
+			<button color="accent-light" ion-fab (click)="searchAssistant()"><ion-icon name="search"></ion-icon>
 	      </button>
 		</ion-fab-list>
 	</ion-fab>
