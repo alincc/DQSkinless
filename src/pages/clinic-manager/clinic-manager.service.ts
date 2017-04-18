@@ -18,14 +18,18 @@ export class ClinicManagerService {
     }
 
     public getNoOfClinics() {
-        return this.http.get(CONFIG.API.getNoOfClinics, this.getUserId());
+        return this.http.get(CONFIG.API.getNoOfClinics, [this.getUserId()]);
     }
 
     public getUserContacts() {
-        return this.http.get(CONFIG.API.getUserContacts, this.getUserId());
+        return this.http.get(CONFIG.API.getUserContacts, [this.getUserId()]);
     }
 
     public createClinic(clinic) {
         return this.http.post(CONFIG.API.createClinic, clinic);
+    }
+
+    public getClinicAccessByUserId() {
+        return this.http.get(CONFIG.API.getClinicAccessByUserId, [this.getUserId()]);
     }
 }

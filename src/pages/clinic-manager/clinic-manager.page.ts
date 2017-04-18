@@ -34,6 +34,13 @@ export class ClinicManagerPage implements OnInit {
 
 	public ngOnInit() {
 		this.clinics = []; // TODO IMPLEMENTED CLINIC RETRIEVAL
+
+		this.clinicManagerService.getClinicAccessByUserId().subscribe(response => {
+			if (response && response.status) {
+				console.log(response);
+			}
+		});
+
 		this.clinicManagerService.getNoOfClinics().subscribe(response => {
 			if (response && response.status) {
 				this.allowableClinics = response.result;
