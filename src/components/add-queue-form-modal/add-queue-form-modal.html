@@ -1,0 +1,47 @@
+<ion-header>
+	<ion-toolbar color="secondary">
+		<ion-buttons start>
+			<button ion-button icon-only navPop><ion-icon name="close"></ion-icon></button>
+		</ion-buttons>
+		<ion-title>
+			Add Queue
+		</ion-title>
+		<ion-buttons end>
+			<button ion-button icon-only (click)="save()"><ion-icon name="checkmark"></ion-icon></button>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
+<ion-content padding>
+	<div class="row form-group">
+		<form [formGroup]="queueForm" #form="ngForm" (ngSubmit)="save()">
+	        <ion-grid>
+	            <ion-row>
+	                <ion-col col-12 col-sm-12 col-md-12>
+	                    <ion-label class="form-label">Last Name*</ion-label>
+	                    <ion-item round>
+	                        <ion-input name="lastName" formControlName="lastName"></ion-input>
+	                    </ion-item>
+	                    <div class="error-message" *ngIf="lastName?.dirty &&  lastName.invalid">
+	                        {{ errors.lastName }}
+	                    </div>
+	                </ion-col>
+	                <ion-col col-12 col-sm-12 col-md-12>
+	                    <ion-label class="form-label">First Name*</ion-label>
+	                    <ion-item round>
+	                        <ion-input name="firstName" formControlName="firstName"></ion-input>
+	                    </ion-item>
+	                    <div class="error-message" *ngIf="firstName?.dirty &&  firstName.invalid">
+	                        {{ errors.firstName }}
+	                    </div>
+	                </ion-col>
+	                 <ion-col col-12 col-sm-12 col-md-12>
+                        <ion-label class="form-label">Middle Name</ion-label>
+                        <ion-item round>
+                            <ion-input name="middleName" formControlName="middleName"></ion-input>
+                        </ion-item>
+                    </ion-col>
+	            </ion-row>
+	        </ion-grid>
+       </form>
+    </div>
+</ion-content>

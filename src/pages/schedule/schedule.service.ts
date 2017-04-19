@@ -13,13 +13,19 @@ export class ScheduleService{
 		return this.websocketFactory.connect(CONFIG.SOCKETS.queue);
 	}
 
-	public getCurrentQueueBoard(clinicId , date){
-		
-		return this.http.get(CONFIG.API.queueBoard, [clinicId, date], {silentError: true});
+	public getQueueBoardByIdAndClinic(clinicId , date){
+		return this.http.get(CONFIG.API.queueBoard, [clinicId, date]);
 	}
 
-	public createQueueBoard(queueBoard){
-		return this.http.post(CONFIG.API.queueBoard,queueBoard);
+	
+	public getQueueByBoardID(boardId){
+		return this.http.get(CONFIG.API.queue, boardId, {silentError: true});
 	}
+
+	public addQueue(queue: any){
+		return this.http.post(CONFIG.API.queue, queue);
+	}
+
+
 
 }

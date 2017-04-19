@@ -33,3 +33,4 @@ src/config/endpoint.ts
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+*.orig

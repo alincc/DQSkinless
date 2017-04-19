@@ -11,16 +11,24 @@ export const CONFIG = {
         changePassword: '/users/changepass',
         changeStatus: '/users/changestatus',
 <<<<<<< HEAD
-        contacts: '/usercontacts/'
+        contacts: '/usercontacts',
+        getUserContacts: '/usercontacts/u',
+
+        queue: '/queue',
+        queueBoard: '/queue-board'
+=======
+        contacts: '/usercontacts/',
+        getUserContacts: '/usercontacts/u',
+
+        createClinic: '/customclinic',
+
+        createAccount: '/users'
+>>>>>>> 1c03b371899a2a80a3ac49c2f7820f9b4be36587
 
     },
     SOCKETS: {
-        queue: '/queue/'
+        queue: '/queue-socket'
 
-=======
-        contacts: '/usercontacts/',
-        getUserContacts: '/usercontacts/u'
->>>>>>> dd47a76d6c4a1b91dc0437eec31476febad6915e
     }
 };
 

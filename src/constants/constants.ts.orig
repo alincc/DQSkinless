@@ -1,159 +1,111 @@
 
 const assets = 'assets';
 export const DIAGRAM = {
-	assets: [
-		assets + '/diagram/m-back.jpg',
-		assets + '/diagram/m-front.jpg',
-		assets + '/diagram/m-head.jpg',
-		assets + '/diagram/w-back.jpg',
-		assets + '/diagram/w-front.jpg',
-		assets + '/diagram/w-head.jpg'
-	],
-	label: [
-		'Man Back',
-		'Man Front',
-		'Man Head',
-		'Woman Back',
-		'Woman Front',
-		'Woman Head'
-	]
+    assets: [
+        assets + '/diagram/m-back.jpg',
+        assets + '/diagram/m-front.jpg',
+        assets + '/diagram/m-head.jpg',
+        assets + '/diagram/w-back.jpg',
+        assets + '/diagram/w-front.jpg',
+        assets + '/diagram/w-head.jpg'
+    ],
+    label: [
+        'Man Back',
+        'Man Front',
+        'Man Head',
+        'Woman Back',
+        'Woman Front',
+        'Woman Head'
+    ]
 }
 
 
 export const LOVS = {
-     GENDER: [
-        {
-            code: '1',
-            description: 'Male'
-        },
-        {
-            code: '2',
-            description: 'Female'
-        }
+    GENDER: [
+        'Male',
+        'Female'
     ],
     ROLES: {
         doctor: 'doctor',
         nonDoctor: 'nonDoctor',
     },
     MEDICAL_ARTS: [
-<<<<<<< HEAD
-        { code: 0, description: 'Audiologist' },
-        { code: 1, description: 'Allergist' },
-        { code: 2, description: 'Andrologist' },
-        { code: 3, description: 'Anesthesiologist' },
-        { code: 4, description: 'Cardiologist' },
-        { code: 5, description: 'Cardiovascular Surgeon' },
-        { code: 6, description: 'Clinical Neurophysiologist' },
-        { code: 7, description: 'Dentist' },
-        { code: 8, description: 'Dermatologist' },
-        { code: 9, description: 'Emergency Doctors' },
-        { code: 10, description: 'Endocrinologist' },
-        { code: 11, description: 'Epidemiologist' },
-        { code: 12, description: 'ENT Specialist' },
-        { code: 13, description: 'Family Practitioner' },
-        { code: 14, description: 'Gastroenterologist' },
-        { code: 15, description: 'Gynecologist' },
-        { code: 16, description: 'General Psychiatrist' },
-        { code: 17, description: 'Hematologist' },
-        { code: 18, description: 'Hepatologist' },
-        { code: 19, description: 'Infectious Disease Specialist' },
-        { code: 20, description: 'Internal Medicine Specialist' },
-        { code: 21, description: 'Internists' },
-        { code: 22, description: 'Medical Geneticist' },
-        { code: 23, description: 'Microbiologist' },
-        { code: 24, description: 'Neonatologist' },
-        { code: 25, description: 'Nephrologist' },
-        { code: 26, description: 'Neurologist' },
-        { code: 27, description: 'Neurosurgeon' },
-        { code: 28, description: 'Obstetrician' },
-        { code: 29, description: 'Oncologist' },
-        { code: 30, description: 'Opthalmologist' },
-        { code: 31, description: 'Orthopedic Surgeon' },
-        { code: 32, description: 'Orthopedist' },
-        { code: 33, description: 'Primatologist' },
-        { code: 34, description: 'Pale Pathologist' },
-        { code: 35, description: 'Parasitologist' },
-        { code: 36, description: 'Pathologist' },
-        { code: 37, description: 'Pediatrician' },
-        { code: 38, description: 'Plastic Surgeon' },
-        { code: 39, description: 'Podiatrist' },
-        { code: 40, description: 'Psychiatrist' },
-        { code: 41, description: 'Pulomonologist' },
-        { code: 42, description: 'Radiologist' },
-        { code: 43, description: 'Reproductive Endocrinologist' },
-        { code: 44, description: 'Rheumatologist' },
-        { code: 45, description: 'Surgeon' },
-        { code: 46, description: 'Thoraxic Oncologist' },
-        { code: 47, description: 'Urologist' },
-        { code: 48, description: 'Veterinarian' }
+        'Audiologist',
+        'Allergist',
+        'Andrologist',
+        'Anesthesiologist',
+        'Cardiologist',
+        'Cardiovascular Surgeon',
+        'Clinical Neurophysiologist',
+        'Dentist',
+        'Dermatologist',
+        'Emergency Doctors',
+        'Endocrinologist',
+        'Epidemiologist',
+        'ENT Specialist',
+        'Family Practitioner',
+        'Gastroenterologist',
+        'Gynecologist',
+        'General Psychiatrist',
+        'Hematologist',
+        'Hepatologist',
+        'Infectious Disease Specialist',
+        'Internal Medicine Specialist',
+        'Internists',
+        'Medical Geneticist',
+        'Microbiologist',
+        'Neonatologist',
+        'Nephrologist',
+        'Neurologist',
+        'Neurosurgeon',
+        'Obstetrician',
+        'Oncologist',
+        'Opthalmologist',
+        'Orthopedic Surgeon',
+        'Orthopedist',
+        'Primatologist',
+        'Pale Pathologist',
+        'Parasitologist',
+        'Pathologist',
+        'Pediatrician',
+        'Plastic Surgeon',
+        'Podiatrist',
+        'Psychiatrist',
+        'Pulomonologist',
+        'Radiologist',
+        'Reproductive Endocrinologist',
+        'Rheumatologist',
+        'Surgeon',
+        'Thoraxic Oncologist',
+        'Urologist',
+        'Veterinarian'
     ],
     CONTACT_TYPE: [
-       "Home",
-       "Mobile",
-       "Other"
-=======
-        { code: '0', description: 'Audiologist' },
-        { code: '1', description: 'Allergist' },
-        { code: '2', description: 'Andrologist' },
-        { code: '3', description: 'Anesthesiologist' },
-        { code: '4', description: 'Cardiologist' },
-        { code: '5', description: 'Cardiovascular Surgeon' },
-        { code: '6', description: 'Clinical Neurophysiologist' },
-        { code: '7', description: 'Dentist' },
-        { code: '8', description: 'Dermatologist' },
-        { code: '9', description: 'Emergency Doctors' },
-        { code: '10', description: 'Endocrinologist' },
-        { code: '11', description: 'Epidemiologist' },
-        { code: '12', description: 'ENT Specialist' },
-        { code: '13', description: 'Family Practitioner' },
-        { code: '14', description: 'Gastroenterologist' },
-        { code: '15', description: 'Gynecologist' },
-        { code: '16', description: 'General Psychiatrist' },
-        { code: '17', description: 'Hematologist' },
-        { code: '18', description: 'Hepatologist' },
-        { code: '19', description: 'Infectious Disease Specialist' },
-        { code: '20', description: 'Internal Medicine Specialist' },
-        { code: '21', description: 'Internists' },
-        { code: '22', description: 'Medical Geneticist' },
-        { code: '23', description: 'Microbiologist' },
-        { code: '24', description: 'Neonatologist' },
-        { code: '25', description: 'Nephrologist' },
-        { code: '26', description: 'Neurologist' },
-        { code: '27', description: 'Neurosurgeon' },
-        { code: '28', description: 'Obstetrician' },
-        { code: '29', description: 'Oncologist' },
-        { code: '30', description: 'Opthalmologist' },
-        { code: '31', description: 'Orthopedic Surgeon' },
-        { code: '32', description: 'Orthopedist' },
-        { code: '33', description: 'Primatologist' },
-        { code: '34', description: 'Pale Pathologist' },
-        { code: '35', description: 'Parasitologist' },
-        { code: '36', description: 'Pathologist' },
-        { code: '37', description: 'Pediatrician' },
-        { code: '38', description: 'Plastic Surgeon' },
-        { code: '39', description: 'Podiatrist' },
-        { code: '40', description: 'Psychiatrist' },
-        { code: '41', description: 'Pulomonologist' },
-        { code: '42', description: 'Radiologist' },
-        { code: '43', description: 'Reproductive Endocrinologist' },
-        { code: '44', description: 'Rheumatologist' },
-        { code: '45', description: 'Surgeon' },
-        { code: '46', description: 'Thoraxic Oncologist' },
-        { code: '47', description: 'Urologist' },
-        { code: '48', description: 'Veterinarian' }
-    ],
-    EMAIL_TYPE: [
-        { code: '0', description: 'Email'},
-        { code: '1', description: 'Number'},
+        'Home',
+        'Mobile',
+        'Other'
     ],
     DAYS: [
-        { code: '0', description: 'Monday'},
-        { code: '1', description: 'Tuesday'},
-        { code: '2', description: 'Wednesday'},
-        { code: '3', description: 'Thursday'},
-        { code: '4', description: 'Friday'},
-        { code: '5', description: 'Saturday'},
-        { code: '6', description: 'Sunday'},
->>>>>>> ba8f712a881aecaaed8eea243da10c70f3582261
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday'
     ]
+}
+
+<<<<<<< HEAD
+export const QUEUE_MAP = {
+    DONE : "D",
+    NEXT : "N",
+    FETCH : "F",
+    REQUEUE: "R"
+=======
+export const MODE = {
+    add: 'Add',
+    edit: 'Edit',
+    View: 'View'
+>>>>>>> 1c03b371899a2a80a3ac49c2f7820f9b4be36587
 }
