@@ -26,6 +26,7 @@ export class ClinicManagerService {
     }
 
     public createClinic(clinic) {
+        clinic.userId = this.getUserId();
         return this.http.post(CONFIG.API.createClinic, clinic);
     }
 

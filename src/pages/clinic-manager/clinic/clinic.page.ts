@@ -251,7 +251,7 @@ export class ClinicPage implements OnInit {
                     name: this.clinicForm.get('name').value,
                     address: this.clinicForm.get('address').value,
                     schedules: this.schedules.value,
-                    contacts: this.contacts.value
+                    contacts: this.filterContacts(this.contacts.value)
                 };
 
                 this.clinicManagerService.createClinic(newClinic).subscribe(response => {
@@ -259,7 +259,10 @@ export class ClinicPage implements OnInit {
                         this.rootNav.pop();
                     }
                     event.dismissLoading();
-                })
+                }, err => {
+                    event.dismissLoading();
+                });
+
             } else {
 
             }
@@ -284,5 +287,17 @@ export class ClinicPage implements OnInit {
         } else {
             this.errors.address = '';
         }
+    }
+
+    private filterContacts(conacts) {
+        const newContacts = [];
+        this.contacts.value.filter(contact => {
+            return !contact.isProfileContacts;
+        }).forEach(contact => {
+            delete contact['isProfileContacts'];
+            newContacts.push(contact);
+        });;
+
+        return newContacts;
     }
 }

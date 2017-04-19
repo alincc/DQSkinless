@@ -21,7 +21,6 @@
                         <ion-select class="options" name="day" formControlName="day">
                             <ion-option *ngFor="let day of days; let i = index" [value]="i">{{ day }}</ion-option>
                         </ion-select>
-
                     </ion-item>
                     <div class="error-message" *ngIf="scheduleForm.get('day').dirty &&  scheduleForm.get('day').invalid">
                         {{ errors.day }}
