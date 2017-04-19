@@ -108,10 +108,14 @@ export class HttpService {
 
 	private 
 
-	public get(url: string, parameters: any[], option?: any): Observable<any> {
+	public get(url: string, parameters: any, option?: any): Observable<any> {
 		let parameter: string = '';
-		for (let _parameter of parameters) {
-			parameter += "/" + _parameter;
+		if(Array.isArray(parameters)){
+			for (let _parameter of parameters) {
+				parameter += "/" + _parameter;
+			}
+		}else{
+			parameter += "/" + parameters
 		}
 
 		return this.http.get(Endpoint.environment + url + parameter, this.getOptions())

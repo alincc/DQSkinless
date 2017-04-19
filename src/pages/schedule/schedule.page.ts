@@ -1,11 +1,11 @@
 import { Component, ViewChild,ChangeDetectorRef} from '@angular/core';
-import { PopoverController, Content} from 'ionic-angular';
+import { PopoverController, Content, ModalController, LoadingController} from 'ionic-angular';
 import { MoreMenuPopover } from './more.popover';
-import { queue } from './schedule.mock';
 import { PatientProfilePage } from '../patient-profile/patient-profile.page';
 import { RootNavController } from '../../services/services';
 import { ScheduleService } from './schedule.service';
 import { QUEUE_MAP } from '../../constants/constants'
+import { AddQueueFormModal } from '../../components/add-queue-form-modal/add-queue-form.modal'
 @Component({
 	selector: 'schedule-page',
 	templateUrl: 'schedule.html',
@@ -25,17 +25,19 @@ export class SchedulePage {
 	public controlCss: boolean;
 	private isReOrder: boolean;
 	private queueBoard: any;
+	private current: any;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
 		private detector: ChangeDetectorRef,
-		private service : ScheduleService){
+		private service : ScheduleService,
+		private modal: ModalController,
+		private loadingCtrl: LoadingController){
 		rootNav.reloadPublisher.subscribe(clinicId => {
 			this.initSchedule(clinicId);
 		})
 	}
 
 	initSchedule(clinicId){
-		this.queue = queue;
 		this.controlCss = false;
 		this.isReOrder = false;
 		if(this.ws){
@@ -55,28 +57,31 @@ export class SchedulePage {
 		currentDate.setMilliseconds(0);
 
 		this.ws.connection.subscribe(response => {
-			this.service.getCurrentQueueBoard(clinicId,currentDate).subscribe(response => {
+			this.service.getQueueBoardByIdAndClinic(clinicId,currentDate).subscribe(response => {
 				if(response.status){
-					if(!response.result.id){
-						var queueBoard: any = {
-							clinicId : clinicId,
-							date : currentDate
-						};
-						this.service.createQueueBoard(queueBoard).subscribe(response => {
-							if(response.status){
-								queueBoard.id = response.result;
-								this.queueBoard = queueBoard;
-							}
-						});
-					}else{
-						this.queueBoard = response.result;
-					}
+					this.queueBoard = response.result;
+					this.fetchQueue();
 				}
 			});
 		}, err => {
 			console.error(err);
 		}, () => {
 			console.log("closed");
+		})
+	}
+
+	fetchQueue(callback?, errorHandler?){
+		this.service.getQueueByBoardID(this.queueBoard.id).subscribe(response => {
+			if(response.status){
+				this.queue = response.result;
+				if(callback){
+					callback(response);
+				}	
+			}
+		}, err=> {
+			if(errorHandler){
+				errorHandler(err);
+			}
 		})
 	}
 
@@ -145,6 +150,53 @@ export class SchedulePage {
 		this.ws.send(QUEUE_MAP.DONE);
 	}
 
+	addQueue(){
+		let modal = this.modal.create(AddQueueFormModal);
+		modal.onDidDismiss(item => {
+			if(!item){
+				return;
+			}
+			var parameter: any = item; 
+			parameter.type = "W";
+			parameter.boardId = this.queueBoard.id;
+			parameter.order = this.getNewOrder();
+			parameter.time = new Date();
+			parameter.status = "Q"; 
 
+			var loading = this.loadingCtrl.create({
+				spinner: 'crescent',
+				cssClass: 'xhr-loading'
+			});
+			loading.present();
+			this.service.addQueue(parameter).subscribe(
+				response => {
+					if(response.status){
+						this.ws.send(QUEUE_MAP.FETCH);
+						this.fetchQueue(response => {
+							loading.dismiss();
+						}, err => {
+							loading.dismiss();
+						})
+					}else{
+						loading.dismiss();
+					}
+				}, err => {
+					loading.dismiss();
+				});
+		});
+		modal.present();
+	}
+
+	private getNewOrder(){
+		let order : number = 1000;
+		for(let _queue of this.queue){
+			if(order < _queue.order){
+				order = _queue.order;
+			}
+		}
+		return order;
+	}
 
 }
+
+

@@ -1,5 +1,4 @@
 <form [ngClass]="{'edit-mode': isEditMode(), 'read-only': !isEditMode()}" [formGroup]="profileForm" #form="ngForm" (ngSubmit)="xhr.submit($event)">
-    <ion-list>
         <div class="row form-group">
             <ion-grid>
                 <ion-row>
@@ -152,7 +151,6 @@
 
             </ion-grid>
         </div>
-    </ion-list>
     <div center>
         <xhr-button #xhr round large color="accent" type="submit" [hidden]="!isEditMode()" [disabled]="profileForm.pristine || form.pristine"
             (xhrClick)="submitForm($event)">
