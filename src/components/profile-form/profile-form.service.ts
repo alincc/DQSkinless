@@ -12,8 +12,8 @@ export class ProfileFormService {
     }
     private userId;
 
-    private getUserId(){
-        if(!this.userId){
+    private getUserId() {
+        if (!this.userId) {
             this.userId = this.storage.userDetails.userId;
         }
         return this.userId;
@@ -25,31 +25,31 @@ export class ProfileFormService {
         return this.http.put(CONFIG.API.doctorDetails, _parameter);
     }
 
-    public getDoctorDetails(){
-        return this.http.get(CONFIG.API.doctorDetails, this.getUserId())
+    public getDoctorDetails() {
+        return this.http.get(CONFIG.API.doctorDetails, [this.getUserId()]);
     }
 
-    public addAsistantDetails(_parameter){
+    public addAsistantDetails(_parameter) {
         _parameter.userId = this.getUserId();
         return this.http.post(CONFIG.API.assistantDetails, _parameter);
     }
 
 
-    public setAsistantDetails(_parameter){
+    public setAsistantDetails(_parameter) {
         _parameter.userId = this.getUserId();
         return this.http.put(CONFIG.API.assistantDetails, _parameter);
     }
 
-    public getAssistantDetails(){
-        return this.http.get(CONFIG.API.assistantDetails, this.getUserId())
+    public getAssistantDetails() {
+        return this.http.get(CONFIG.API.assistantDetails, [this.getUserId()]);
     }
 
-    public addContacts(_parameter){
+    public addContacts(_parameter) {
         _parameter.userId = this.getUserId();
         return this.http.post(CONFIG.API.contacts, _parameter);
     }
 
-    public deleteContacts(_parameter){
+    public deleteContacts(_parameter) {
         return this.http.delete(CONFIG.API.contacts, _parameter);
     }
 }

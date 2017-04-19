@@ -40,6 +40,6 @@
         No clinics set
     </ion-label>
     <ion-fab bottom right>
-        <button ion-fab color="accent" [disabled]="clinics.length !== 0 && allowableClinics === 0" (click)="addClinic()"><ion-icon name="add"></ion-icon></button>
+        <button ion-fab color="accent" [disabled]="clinics.length === allowableClinics" (click)="addClinic()"><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 </ion-content>
