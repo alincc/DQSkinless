@@ -4,6 +4,8 @@ import { CONFIG } from '../../config/config';
 
 @Injectable()
 export class ClinicManagerService {
+    
+    private 
     constructor(
         private http: HttpService,
         private storage: Storage) { }
@@ -32,5 +34,17 @@ export class ClinicManagerService {
 
     public getClinicAccessByUserId() {
         return this.http.get(CONFIG.API.getClinicAccessByUserId, [this.getUserId()]);
+    }
+
+    public getClinicRecordById(clinicId) {
+        return this.http.get(CONFIG.API.clinicDetailRecord, [clinicId]);
+    }
+
+    public updateClinicDetailRecord(clinic) {
+        return this.http.put(CONFIG.API.clinicDetailRecord, clinic);
+    }
+
+    public deleteClinicDetailRecord(clinicId) {
+        return this.http.delete(CONFIG.API.clinicDetailRecord, [clinicId]);
     }
 }

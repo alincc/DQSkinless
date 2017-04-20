@@ -18,6 +18,7 @@ export const CONFIG = {
 
         createClinic: '/customclinic',
         getClinicAccessByUserId: '/clinicaccess/u/gbcid',
+        clinicDetailRecord: '/clinicdetails',
 
         createAccount: '/users'
     },

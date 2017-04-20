@@ -50,7 +50,10 @@ export class ClinicPage implements OnInit {
         this.contacts.value = this.clinic.contacts ? this.clinic.contacts : []
         this.mode = this.params.get('mode') ? this.params.get('mode') : MODE.add;
         this.createClinicForm();
-        this.getUserContacts();
+
+        if (this.mode === MODE.add) {
+            this.getUserContacts();
+        }
     }
 
     private getDefaults() {
@@ -71,8 +74,8 @@ export class ClinicPage implements OnInit {
 
     private createClinicForm() {
         this.clinicForm = this.formBuilder.group({
-            name: [this.clinic.name, [Validators.required]],
-            address: [this.clinic.name, [Validators.required]]
+            name: [this.clinic.clinicName, [Validators.required]],
+            address: [this.clinic.address, [Validators.required]]
         });
 
         this.name = this.clinicForm.get('name');
@@ -136,7 +139,11 @@ export class ClinicPage implements OnInit {
 
         scheduleModal.onDidDismiss(schedule => {
             if (schedule) {
-                this.addSchedule(schedule);
+                if (this.mode === MODE.add) {
+                    this.addSchedule(schedule);
+                } else {
+                    // TODO SOLO SAVE
+                }
                 this.clinicForm.markAsDirty();
             }
         });
@@ -216,11 +223,16 @@ export class ClinicPage implements OnInit {
             });
         modal.onDidDismiss(contact => {
             if (contact) {
-                this.contacts.push({
-                    contactType: contact.contactType,
-                    contact: contact.contact,
-                    isProfileContacts: false
-                });
+                if (this.mode === MODE.add) {
+                    this.contacts.push({
+                        contactType: contact.contactType,
+                        contact: contact.contact,
+                        isProfileContacts: false
+                    });
+                } else {
+                    // TODO SOLO SAVE
+                }
+
                 this.clinicForm.markAsDirty();
             }
         });
@@ -256,7 +268,11 @@ export class ClinicPage implements OnInit {
 
                 this.clinicManagerService.createClinic(newClinic).subscribe(response => {
                     if (response && response.status) {
-                        this.rootNav.pop();
+
+                        const callback = this.params.get('callback');
+                        callback(response).then(() => {
+                            this.rootNav.pop();
+                        });
                     }
                     event.dismissLoading();
                 }, err => {
@@ -264,8 +280,26 @@ export class ClinicPage implements OnInit {
                 });
 
             } else {
+                const modifiedClinic = {
+                    clinicId: this.clinic.id,
+                    clinicName: this.clinicForm.get('name').value,
+                    address: this.clinicForm.get('address').value,
+                }
 
+                this.clinicManagerService.updateClinicDetailRecord(modifiedClinic).subscribe(response => {
+                    if (response && response.status) {
+                        const callback = this.params.get('callback');
+                        callback(response).then(() => {
+                            this.rootNav.pop();
+                        });
+                    }
+                    event.dismissLoading();
+                }, err => {
+                    event.dismissLoading();
+                });
             }
+        } else {
+            event.dismissLoading();
         }
     }
 

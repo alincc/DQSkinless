@@ -3,7 +3,7 @@
 
     <ion-card *ngFor="let clinic of clinics;let i=index">
         <ion-card-content>
-            <accordion [header]="clinic?.name" [subHeader]="clinic?.address">
+            <accordion [header]="clinic?.clinicName" [subHeader]="clinic?.address">
                 <ion-grid>
                     <ion-row>
                         <ion-col col-4 col-sm-2 col-md-2>
