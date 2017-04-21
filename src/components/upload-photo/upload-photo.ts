@@ -42,8 +42,8 @@ export class UploadPhoto {
 		});
 	}
 
-	public clear(){
-		this.image = null;
+	public skip(){
+		this.onSubmit.emit('Skip');
 	}
 
 	public submit(){

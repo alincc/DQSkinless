@@ -78,5 +78,6 @@ export class RegistrationPage {
 	public done() {
 		// TODO UPDAET STATUS TO 5
 		this.rootNav.setRoot(ManagerPage);
+		this.service.updateStatus(5).subscribe();
 	}
 }

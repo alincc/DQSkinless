@@ -25,7 +25,8 @@ export class SchedulePage {
 	public controlCss: boolean;
 	private isReOrder: boolean;
 	private queueBoard: any;
-	private current: any;
+	private serving: any;
+	private connection: any;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
 		private detector: ChangeDetectorRef,
@@ -43,6 +44,9 @@ export class SchedulePage {
 		if(this.ws){
 			this.ws.close();
 		}
+		if(this.connection){
+			this.connection.unsubscribe();
+		}
 		this.ws = this.service.connectToQueue()
 		this.ws.then(
 			response => {
@@ -56,24 +60,38 @@ export class SchedulePage {
 		currentDate.setSeconds(0);
 		currentDate.setMilliseconds(0);
 
-		this.ws.connection.subscribe(response => {
-			this.service.getQueueBoardByIdAndClinic(clinicId,currentDate).subscribe(response => {
-				if(response.status){
-					this.queueBoard = response.result;
+		this.service.getQueueBoardByIdAndClinic(clinicId,currentDate).subscribe(response => {
+			if(response.status){
+				this.queueBoard = response.result;
+				this.connection = this.ws.connection.subscribe(response => {
 					this.fetchQueue();
-				}
-			});
-		}, err => {
-			console.error(err);
-		}, () => {
-			console.log("closed");
-		})
+				}, err => {
+					console.error(err);
+				}, () => {
+					console.log("closed");
+				})
+			}
+		});
 	}
+
 
 	fetchQueue(callback?, errorHandler?){
 		this.service.getQueueByBoardID(this.queueBoard.id).subscribe(response => {
 			if(response.status){
-				this.queue = response.result;
+				let newQueueList = [];
+				this.serving = null;
+				for(let item of response.result){
+					switch(item.status){
+						case "S":
+							this.serving = item;
+							break;
+						case "Q":
+						case "E":
+							newQueueList.push(item);
+							break;
+					}
+				}
+				this.queue = newQueueList;
 				if(callback){
 					callback(response);
 				}	
@@ -134,12 +152,42 @@ export class SchedulePage {
 		this.isReOrder = !this.isReOrder;
 	}
 
-	done(){
-		this.ws.send(QUEUE_MAP.DONE);
+	updateQueue(xhr, callback?, errCallback?){
+		this.service.updateQueue(this.serving).subscribe(
+			response => {
+				this.fetchQueue(
+					response => {
+						xhr.dismissLoading();
+						if(callback){
+							callback();
+						}
+					}, err => {
+					xhr.dismissLoading();
+					if(errCallback){
+						errCallback();
+					}
+				})
+			}, err => {
+				xhr.dismissLoading();
+				if(errCallback){
+					errCallback();
+				}
+			})
 	}
 
-	next(){
-		this.ws.send(QUEUE_MAP.NEXT);
+	done(xhr){
+		this.serving.status = 'D';
+		this.updateQueue(xhr, () => {
+			this.ws.send(QUEUE_MAP.DONE);
+		});
+	}
+
+	next(xhr){
+		this.serving = this.queue.splice(0,1)[0];
+		this.serving.status = "S"
+		this.updateQueue(xhr, () => {
+			this.ws.send(QUEUE_MAP.NEXT);
+		});
 	}
 
 	queueAgain(){

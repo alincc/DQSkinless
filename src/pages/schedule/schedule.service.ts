@@ -26,6 +26,10 @@ export class ScheduleService{
 		return this.http.post(CONFIG.API.queue, queue);
 	}
 
+	public updateQueue(queue: any){
+		return this.http.put(CONFIG.API.queue, queue);
+	}
+
 
 
 }

@@ -83,6 +83,7 @@ export const LOVS = {
     CONTACT_TYPE: [
         'Home',
         'Mobile',
+        'Office',
         'Other'
     ],
     DAYS: [
