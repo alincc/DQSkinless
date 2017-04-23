@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController } from 'ionic-angular';
 import { DrawingPad } from '../../components/drawing-pad/drawing-pad';
-import { ActionSheet} from '@ionic-native/action-sheet';
+import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import { Camera } from '@ionic-native/camera';
 // import { ImagePicker } from '@ionic-native/';
 import { DIAGRAM } from '../../constants/constants';
@@ -27,7 +27,8 @@ import { DIAGRAM } from '../../constants/constants';
       this.actionSheet.show({
         title: 'Add Attachment',
         buttonLabels: buttonLabels,
-        addCancelButtonWithLabel: "Cancel"
+        addCancelButtonWithLabel: "Cancel",
+        destructiveButtonLast: false
       }).then((idx:number)=>{
         switch(idx){
           case 1: 
@@ -51,7 +52,8 @@ import { DIAGRAM } from '../../constants/constants';
           this.actionSheet.show({
             title: 'Add Attachment',
             buttonLabels: DIAGRAM.label,
-            addCancelButtonWithLabel: "Cancel"
+            addCancelButtonWithLabel: "Cancel",
+            destructiveButtonLast: false
           }).then((idx:number)=>{
             if(idx > 0){
               let modal = this.modal.create(DrawingPad, {diagram: --idx});

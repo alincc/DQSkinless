@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { Locker, DRIVERS } from 'angular2-locker';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
+import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { MESSAGES } from '../config/config';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -47,29 +47,24 @@ export class RootNavController {
 }
 
 export const STORAGE_KEYS = {
-	DIMENSION: 'dimension',
 	USER_DETAILS: 'userDetails',
 	TOKEN: 'token'
 }
 
 @Injectable()
 export class Storage {
-	private local: any;
-	private session: any;
 
-	constructor(private locker: Locker) {
-		this.local = locker.useDriver(DRIVERS.LOCAL);
-		this.session = locker.useDriver(DRIVERS.SESSION);
-	}
+	constructor(private local: LocalStorageService,
+		private session : SessionStorageService) {}
 
 	// userDetails
-	public get userDetails() { return this.local.get(STORAGE_KEYS.USER_DETAILS); }
-	public set userDetails(data) { this.local.set(STORAGE_KEYS.USER_DETAILS, data); }
+	public get userDetails() { return this.local.retrieve(STORAGE_KEYS.USER_DETAILS); }
+	public set userDetails(data) { this.local.store(STORAGE_KEYS.USER_DETAILS, data); }
 
-	public get token() { return this.local.get(STORAGE_KEYS.TOKEN); }
-	public set token(data) { this.local.set(STORAGE_KEYS.TOKEN, data); }
+	public get token() { return this.local.retrieve(STORAGE_KEYS.TOKEN); }
+	public set token(data) { this.local.store(STORAGE_KEYS.TOKEN, data); }
 
-
+	
 }
 var _token : string;
 

@@ -1,9 +1,10 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LockerModule, Locker } from 'angular2-locker';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
+import { Ng2Webstorage, LocalStorageService, SessionStorageService } from 'ngx-webstorage'
 import { components } from './components';
 import { pages } from './pages';
 
@@ -25,22 +26,27 @@ import { StatusBar } from '@ionic-native/status-bar';
     components
   ],
   imports: [
+    BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp),
     FormsModule,
     ReactiveFormsModule,
-    LockerModule
-  ], bootstrap: [IonicApp],
+    Ng2Webstorage
+  ], 
+  bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     pages,
     components
   ],
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler },
-    Locker,
     RootNavController,
     Storage,
     HttpService,
     WebSocketFactory,
+
+    SessionStorageService,
+    LocalStorageService,
 
     ActionSheet,
     Camera,
