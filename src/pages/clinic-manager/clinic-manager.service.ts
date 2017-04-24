@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/observable/of';
+
 import { HttpService, Storage } from '../../services/services';
 import { CONFIG } from '../../config/config';
 
 @Injectable()
 export class ClinicManagerService {
-    
-    private 
+
+    private
     constructor(
         private http: HttpService,
         private storage: Storage) { }
@@ -32,12 +37,77 @@ export class ClinicManagerService {
         return this.http.post(CONFIG.API.createClinic, clinic);
     }
 
-    public getClinicAccessByUserId() {
-        return this.http.get(CONFIG.API.getClinicAccessByUserId, [this.getUserId()]);
+
+    public getClinicRecord() {
+        return this.getClinicRecordByUserId().map(response => {
+            if (response && response.status) {
+                return response.result;
+            }
+
+            return [];
+
+        }).flatMap(clinics => {
+            const customClinic = [];
+
+            clinics.forEach(clinic => {
+                Observable.forkJoin([
+                    this.getClinicTimeSlotByClinicId(clinic.clinicId),
+                    this.getClinicContactByClinicId(clinic.clinicId),
+                    this.getUserContacts()
+                ]).map((data: any[]) => {
+                    clinic.schedules = [];
+                    clinic.contacts = [];
+
+                    const clinicSchedules = data[0]
+                    const clinicContacts = data[1];
+                    const userContacts = data[2];
+
+                    if (clinicSchedules && clinicSchedules.status) {
+                        clinicSchedules.result.forEach(clinicSchedule => {
+                            clinic.schedules.push(clinicSchedule);
+                        });
+                    }
+
+                    if (clinicContacts && clinicContacts.status) {
+                        clinicContacts.result.forEach(clinicContact => {
+                            this.pushClinicContact(clinic.contacts, clinicContact, false);
+                        });
+                    }
+
+                    if (userContacts && userContacts.status) {
+                        userContacts.result.forEach(userContact => {
+                            this.pushClinicContact(clinic.contacts, userContact, true);
+                        });
+                    }
+
+                    return clinic;
+
+                }).subscribe(clinic => {
+                    console.log(`Retrieved clinic details: ${clinic} for user: ${this.getUserId()}`);
+                });
+
+                customClinic.push(clinic);
+            });
+
+            return Observable.of(customClinic);
+        });
     }
 
-    public getClinicRecordById(clinicId) {
-        return this.http.get(CONFIG.API.clinicDetailRecord, [clinicId]);
+    private pushClinicContact(clinicContacts, data, isProfileContacts) {
+        clinicContacts.push({
+            contactType: data.contactType,
+            contact: data.contact,
+            isProfileContacts: isProfileContacts
+        })
+    }
+
+    private pushClinicSchedule(clinicSchedules, data) {
+        // TODO
+    }
+
+
+    public getClinicRecordByUserId() {
+        return this.http.get(CONFIG.API.getClinicRecordByUserId, [this.getUserId()]);
     }
 
     public updateClinicDetailRecord(clinic) {
@@ -46,5 +116,13 @@ export class ClinicManagerService {
 
     public deleteClinicDetailRecord(clinicId) {
         return this.http.delete(CONFIG.API.clinicDetailRecord, [clinicId]);
+    }
+
+    public getClinicTimeSlotByClinicId(clinicId) {
+        return this.http.get(CONFIG.API.getClinicTimeSlotByClinicId, [clinicId]);
+    }
+
+    public getClinicContactByClinicId(clinicId) {
+        return this.http.get(CONFIG.API.getClinicContactByClinicId, [clinicId]);
     }
 }
