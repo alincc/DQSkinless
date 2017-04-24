@@ -103,9 +103,24 @@ export const MODE = {
     View: 'View'
 }
 
-export const QUEUE_MAP = {
-    DONE : "D",
-    NEXT : "N",
-    FETCH : "F",
-    REQUEUE: "R"
+export const QUEUE = {
+    MAP : {
+        DONE : "D",
+        NEXT : "N",
+        FETCH : "F",
+        REQUEUE: "R"
+    },
+    STATUS : {
+        DONE: "D",
+        SERVING: "S",
+        NO_SHOW: "N",
+        QUEUED: "Q",
+        EN_ROUTE: "E",
+        RESCHED: "R"
+    },
+    TYPE : {
+        WALKIN :"W",
+        SCHEDULED : "S"
+    }
 }
+    

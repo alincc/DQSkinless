@@ -14,8 +14,8 @@
 			<ion-avatar  item-left>
 				<img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
 			</ion-avatar >
-			<h1 color="accent" (click)="view(0)">{{serving?.lastName}}, {{serving?.firstName}} {{serving?.middleName}}</h1>
-			<p>Time: {{serving?.time | date: 'hh:mm a'}} </p>
+			<h2 color="accent" (click)="view(0)">{{serving?.lastName}}, {{serving?.firstName}} {{serving?.middleName}}</h2>
+			<p>{{serving?.time | date: 'hh:mm a'}} </p>
 		</ion-item>
 	</div>
 	<div class="control-bar" [ngClass]="{'minimize': controlCss}">
@@ -40,16 +40,16 @@
 					</button>
 				</ion-col>
 				<ion-col col-0 >
-					<button ion-button icon-only  clear full>
+					<xhr-button icon-only  clear full>
 						<ion-icon name="return-left" color="accent"></ion-icon>
 						Queue Again
-					</button>
+					</xhr-button>
 				</ion-col>
 				<ion-col col-0>
-					<button ion-button icon-only  clear full>
+					<xhr-button #remove icon-only clear full (xhrClick)="noShow($event)">
 						<ion-icon name="eye-off" color="accent"></ion-icon>
 						No-Show
-					</button>
+					</xhr-button>
 				</ion-col>
 				<ion-col col-0>
 					<button ion-button icon-only  clear full (click)="toggleReOrder()">

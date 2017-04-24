@@ -51,6 +51,10 @@ export class XHRButton{
 		event.preventDefault();
 		this.showLoading();
 		this.event = event;
+		this.click();
+	}
+
+	public click(){
 		this.xhrClick.emit(this);
 	}
 

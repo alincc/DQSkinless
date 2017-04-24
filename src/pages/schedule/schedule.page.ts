@@ -4,8 +4,9 @@ import { MoreMenuPopover } from './more.popover';
 import { PatientProfilePage } from '../patient-profile/patient-profile.page';
 import { RootNavController } from '../../services/services';
 import { ScheduleService } from './schedule.service';
-import { QUEUE_MAP } from '../../constants/constants'
+import { QUEUE } from '../../constants/constants'
 import { AddQueueFormModal } from '../../components/add-queue-form-modal/add-queue-form.modal'
+import { XHRButton } from '../../components/xhr-button/xhr-button.component';
 @Component({
 	selector: 'schedule-page',
 	templateUrl: 'schedule.html',
@@ -19,6 +20,8 @@ export class SchedulePage {
 	private set _servingNow(dom){
 		this.servingNow = dom.nativeElement;
 	}
+	@ViewChild('remove')
+	private remove : XHRButton;
 	private ws : any;
 	private servingNow: any;
 	private queueTopOffset: number;
@@ -27,6 +30,7 @@ export class SchedulePage {
 	private queueBoard: any;
 	private serving: any;
 	private connection: any;
+	private requestForRefresh: any;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
 		private detector: ChangeDetectorRef,
@@ -64,7 +68,13 @@ export class SchedulePage {
 			if(response.status){
 				this.queueBoard = response.result;
 				this.connection = this.ws.connection.subscribe(response => {
-					this.fetchQueue();
+					if(this.requestForRefresh){
+						clearTimeout(this.requestForRefresh);
+					}
+					this.requestForRefresh = setTimeout(()=> {
+						this.fetchQueue();
+						this.requestForRefresh = null;
+					}, 3000);
 				}, err => {
 					console.error(err);
 				}, () => {
@@ -123,10 +133,23 @@ export class SchedulePage {
 
 
 	reorderItems(indexes){
-		let element = this.queue[indexes.from];
-	    this.queue.splice(indexes.from, 1);
+		let element = this.queue.splice(indexes.from, 1)[0];
+
+	    // recompute order of element
+	    if(indexes.to === 0){
+	    	element.order = this.queue[indexes.to].order / 2;
+	    }else if(indexes.to === this.queue.length){
+	    	element.order = this.queue[indexes.to - 1].order + 1000;
+	    }else{
+	    	let orderTop = this.queue[indexes.to - 1].order;
+	    	let orderBottom = this.queue[indexes.to].order;
+	    	element.order = (orderTop + orderBottom) / 2;
+	    }
+
 	    this.queue.splice(indexes.to, 0, element);
-	    this.ws.send("F");
+	    this.updateQueue(null, element, response => {
+			this.ws.send(QUEUE.MAP.FETCH);
+	    });
 	}
 
 	showMore(event){
@@ -140,6 +163,9 @@ export class SchedulePage {
 					case 2:
 						this.toggleReOrder();
 						break;
+					case 1:
+						this.remove.click();
+						break;
 				}
 		});
 	}
@@ -152,23 +178,33 @@ export class SchedulePage {
 		this.isReOrder = !this.isReOrder;
 	}
 
-	updateQueue(xhr, callback?, errCallback?){
-		this.service.updateQueue(this.serving).subscribe(
+	updateServing(xhr, callback?, errCallback?){
+		return this.updateQueue(xhr, this.serving, callback, errCallback);
+	}
+
+	updateQueue(xhr, element, callback? , errCallback?){
+		this.service.updateQueue(element).subscribe(
 			response => {
 				this.fetchQueue(
 					response => {
-						xhr.dismissLoading();
+						if(xhr){
+							xhr.dismissLoading();
+						}
 						if(callback){
 							callback();
 						}
 					}, err => {
-					xhr.dismissLoading();
+					if(xhr){
+						xhr.dismissLoading();
+					}
 					if(errCallback){
 						errCallback();
 					}
 				})
 			}, err => {
-				xhr.dismissLoading();
+				if(xhr){
+					xhr.dismissLoading();
+				}
 				if(errCallback){
 					errCallback();
 				}
@@ -176,26 +212,29 @@ export class SchedulePage {
 	}
 
 	done(xhr){
-		this.serving.status = 'D';
-		this.updateQueue(xhr, () => {
-			this.ws.send(QUEUE_MAP.DONE);
+		this.serving.status = QUEUE.STATUS.DONE;
+		this.updateServing(xhr, () => {
+			this.ws.send(QUEUE.MAP.DONE);
 		});
 	}
 
 	next(xhr){
 		this.serving = this.queue.splice(0,1)[0];
-		this.serving.status = "S"
-		this.updateQueue(xhr, () => {
-			this.ws.send(QUEUE_MAP.NEXT);
+		this.serving.status = QUEUE.STATUS.SERVING
+		this.updateServing(xhr, () => {
+			this.ws.send(QUEUE.MAP.NEXT);
 		});
 	}
 
 	queueAgain(){
-		this.ws.send(QUEUE_MAP.FETCH);
+		this.ws.send(QUEUE.MAP.FETCH);
 	}
 
-	noShow(){
-		this.ws.send(QUEUE_MAP.DONE);
+	noShow(xhr){
+		this.serving.status = QUEUE.STATUS.NO_SHOW;
+		this.updateServing(xhr, () => {
+			this.ws.send(QUEUE.MAP.DONE);
+		});
 	}
 
 	addQueue(){
@@ -205,11 +244,11 @@ export class SchedulePage {
 				return;
 			}
 			var parameter: any = item; 
-			parameter.type = "W";
+			parameter.type = QUEUE.TYPE.WALKIN;
 			parameter.boardId = this.queueBoard.id;
 			parameter.order = this.getNewOrder();
 			parameter.time = new Date();
-			parameter.status = "Q"; 
+			parameter.status = QUEUE.STATUS.QUEUED; 
 
 			var loading = this.loadingCtrl.create({
 				spinner: 'crescent',
@@ -219,7 +258,7 @@ export class SchedulePage {
 			this.service.addQueue(parameter).subscribe(
 				response => {
 					if(response.status){
-						this.ws.send(QUEUE_MAP.FETCH);
+						this.ws.send(QUEUE.MAP.FETCH);
 						this.fetchQueue(response => {
 							loading.dismiss();
 						}, err => {
@@ -236,13 +275,7 @@ export class SchedulePage {
 	}
 
 	private getNewOrder(){
-		let order : number = 1000;
-		for(let _queue of this.queue){
-			if(order < _queue.order){
-				order = _queue.order;
-			}
-		}
-		return order;
+		return this.queue[this.queue.length-1].order + 1000;
 	}
 
 }
