@@ -11,7 +11,7 @@
                         </ion-col>
                         <ion-col col-8 col-sm-10 col-md-10>
                             <ul>
-                                <li *ngFor="let schedule of clinic?.schedules">{{ days[schedule?.dayOfWeek] }} : {{ displayTime(schedule?.times) }}</li>
+                                <li *ngFor="let schedule of clinic?.schedules">{{ days[schedule?.dayOfWeek] }} : {{ displayTime(schedule?.timeSlot) }}</li>
                             </ul>
                         </ion-col>
                     </ion-row>
