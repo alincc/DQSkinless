@@ -46,8 +46,9 @@ export class ClinicPage implements OnInit {
 
     public ngOnInit() {
         this.clinic = this.params.get('clinic') ? this.params.get('clinic') : {};
-        this.schedules.value = this.clinic.schedules ? this.clinic.schedules : []
-        this.contacts.value = this.clinic.contacts ? this.clinic.contacts : []
+        this.schedules.value = this.clinic.schedules ? this.clinic.schedules : [];
+        console.log(this.schedules.value);
+        this.contacts.value = this.clinic.contacts ? this.clinic.contacts : [];
         this.mode = this.params.get('mode') ? this.params.get('mode') : MODE.add;
         this.createClinicForm();
 
@@ -142,7 +143,16 @@ export class ClinicPage implements OnInit {
                 if (this.mode === MODE.add) {
                     this.addSchedule(schedule);
                 } else {
-                    // TODO SOLO SAVE
+                    this.clinicManagerService.createClinicTimeslot({
+                        clinicId: this.clinic.clinicId,
+                        dayOfWeek: schedule.dayOfWeek,
+                        startTime: schedule.startTime,
+                        endTime: schedule.endTime,
+                    }).subscribe(response => {
+                        if (response && response.result) {
+                            this.addSchedule(schedule);
+                        }
+                    });
                 }
                 this.clinicForm.markAsDirty();
             }
@@ -162,12 +172,12 @@ export class ClinicPage implements OnInit {
                 }
             );
         } else {
-            schedule[0].times.push({
+            schedule[0].timeSlot.push({
                 startTime: newSchedule.startTime,
-                to: newSchedule.endTime
+                endTime: newSchedule.endTime
             });
 
-            schedule[0].times.sort(function (a, b) {
+            schedule[0].timeSlot.sort(function (a, b) {
                 return new Date('1970/01/01 ' + a.startTime).getTime() - new Date('1970/01/01 ' + b.startTime).getTime();
             });
 
@@ -188,21 +198,27 @@ export class ClinicPage implements OnInit {
                 {
                     text: 'YES',
                     handler: () => {
-                        if (this.mode === MODE.edit) {
-
+                        if (this.mode === MODE.add) {
+                            this.schedules.splice(i, 1);
                         }
-                        this.schedules.splice(i, 1);
+                        else {
+                            // TODO DELETE BY DAY OF WEEK + CLINIC ID
+                        }
                     }
                 }
             ]
         }).present();
     }
 
-    public removeTime(event: Event, dayOfWeek, time, times, i) {
+    public removeTimeSlot(event: Event, schedule, time, ti, si) {
         event.preventDefault();
+        const deleteSchedule = schedule.timeSlot.length === 1;
+        const message = deleteSchedule ?
+            `No time slot will be left for ${this.days[schedule.dayOfWeek]}. ${this.days[schedule.dayOfWeek]} schedule will be removed? ` :
+            `Remove ${time.startTime} to ${time.endTime} for ${this.days[schedule.dayOfWeek]} schedule?`;
 
         this.alertController.create({
-            message: `Remove ${time.startTime} to ${time.endTime} for ${this.days[dayOfWeek]} schedule?`,
+            message: message,
             buttons: [
                 {
                     text: 'NO',
@@ -211,7 +227,22 @@ export class ClinicPage implements OnInit {
                 {
                     text: 'YES',
                     handler: () => {
-                        times.splice(i, 1);
+                        if (this.mode === MODE.add) {
+                            schedule.timeSlot.splice(ti, 1);
+                        }
+                        else {
+                            if (deleteSchedule) {
+                                // TODO DELETE BY DAY OF WEEK + CLINIC ID
+                                this.schedules.splice(si, 1);
+                            } else {
+                                this.clinicManagerService.deleteClinicTimeslot(time.id).subscribe(response => {
+                                    if (response && response.status) {
+                                        schedule.timeSlot.splice(ti, 1);
+                                    }
+                                });
+                            }
+
+                        }
                     }
                 }
             ]
@@ -283,7 +314,7 @@ export class ClinicPage implements OnInit {
 
             } else {
                 const modifiedClinic = {
-                    clinicId: this.clinic.id,
+                    clinicId: this.clinic.clinicId,
                     clinicName: this.clinicForm.get('clinicName').value,
                     address: this.clinicForm.get('address').value,
                 }

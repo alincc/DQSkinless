@@ -109,10 +109,10 @@ export class ClinicManagerService {
         if (schedule.length === 0) {
             clinicSchedules.push(
                 {
-                    id: data.id,
                     clinicId: data.clinicId,
                     dayOfWeek: data.dayOfWeek,
                     timeSlot: [{
+                        id: data.id,
                         startTime: data.startTime,
                         endTime: data.endTime
                     }]
@@ -120,6 +120,7 @@ export class ClinicManagerService {
             );
         } else {
             schedule[0].timeSlot.push({
+                id: data.id,
                 startTime: data.startTime,
                 endTime: data.endTime
             });
