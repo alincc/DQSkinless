@@ -64,7 +64,7 @@ export class ClinicManagerService {
 
                     if (clinicSchedules && clinicSchedules.status) {
                         clinicSchedules.result.forEach(clinicSchedule => {
-                            clinic.schedules.push(clinicSchedule);
+                            this.pushClinicSchedule(clinic.schedules, clinicSchedule);
                         });
                     }
 
@@ -83,7 +83,8 @@ export class ClinicManagerService {
                     return clinic;
 
                 }).subscribe(clinic => {
-                    console.log(`Retrieved clinic details: ${clinic} for user: ${this.getUserId()}`);
+                    console.log(`Retrieved clinic details for user: ${this.getUserId()}`);
+                    console.log(JSON.stringify(clinic));
                 });
 
                 customClinic.push(clinic);
@@ -95,6 +96,8 @@ export class ClinicManagerService {
 
     private pushClinicContact(clinicContacts, data, isProfileContacts) {
         clinicContacts.push({
+            id: data.id,
+            clinicId: data.clinicId,
             contactType: data.contactType,
             contact: data.contact,
             isProfileContacts: isProfileContacts
@@ -102,7 +105,32 @@ export class ClinicManagerService {
     }
 
     private pushClinicSchedule(clinicSchedules, data) {
-        // TODO
+        const schedule = clinicSchedules.filter(clinicSchedule => { return clinicSchedule.dayOfWeek === data.dayOfWeek });
+        if (schedule.length === 0) {
+            clinicSchedules.push(
+                {
+                    clinicId: data.clinicId,
+                    dayOfWeek: data.dayOfWeek,
+                    timeSlot: [{
+                        id: data.id,
+                        startTime: data.startTime,
+                        endTime: data.endTime
+                    }]
+                }
+            );
+        } else {
+            schedule[0].timeSlot.push({
+                id: data.id,
+                startTime: data.startTime,
+                endTime: data.endTime
+            });
+
+            schedule[0].timeSlot.sort(function (a, b) {
+                return new Date('1970/01/01 ' + a.startTime).getTime() - new Date('1970/01/01 ' + b.startTime).getTime();
+            });
+
+            clinicSchedules.filter(clinicSchedule => { return clinicSchedule.dayOfWeek === data.dayOfWeek })[0] = schedule[0];
+        }
     }
 
 
@@ -124,5 +152,29 @@ export class ClinicManagerService {
 
     public getClinicContactByClinicId(clinicId) {
         return this.http.get(CONFIG.API.getClinicContactByClinicId, [clinicId]);
+    }
+
+    public createClinicTimeslot(clinicTimeSlot) {
+        return this.http.post(CONFIG.API.clinicTimeSlots, clinicTimeSlot);
+    }
+
+    public updateClinicTimeslot(clinicTimeSlot) {
+        return this.http.put(CONFIG.API.clinicTimeSlots, clinicTimeSlot);
+    }
+
+    public deleteClinicTimeslot(clinicTimeSlotId) {
+        return this.http.delete(CONFIG.API.clinicTimeSlots, [clinicTimeSlotId]);
+    }
+
+    public createClinicContact(clinicContact) {
+        return this.http.post(CONFIG.API.clinicContacts, clinicContact);
+    }
+
+    public updateClinicContact(clinicContact) {
+        return this.http.put(CONFIG.API.clinicContacts, clinicContact);
+    }
+
+    public deleteClinicContact(clinicContactId) {
+        return this.http.delete(CONFIG.API.clinicContacts, [clinicContactId]);
     }
 }

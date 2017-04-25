@@ -117,24 +117,15 @@ export class ClinicManagerPage implements OnInit {
 		}).present();
 	}
 
-	public displayTime(time) {
-		if (time && time.length > 0) {
-			let timeSlot = '';
-			time = this.sortTime(time);
+	public displayTime(timeSlot) {
+		if (timeSlot && timeSlot.length > 0) {
+			let formattedTimeSlot = '';
 
-			time.forEach(time => {
-				timeSlot += ` ${time.from} to ${time.to},`;
+			timeSlot.forEach(time => {
+				formattedTimeSlot += `${time.startTime} to ${time.endTime}, `;
 			});
-
-			return timeSlot.substring(1, timeSlot.length - 1);
+			return formattedTimeSlot.substring(1, formattedTimeSlot.length - 2);
 		}
-
 		return '';
-	}
-
-	private sortTime(time) {
-		return time.sort(function (a, b) {
-			return new Date('1970/01/01 ' + a.from).getTime() - new Date('1970/01/01 ' + b.from).getTime();
-		});
 	}
 }

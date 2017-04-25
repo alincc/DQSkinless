@@ -56,7 +56,7 @@ export class ScheduleModal {
 
         this.day.valueChanges.subscribe(newValue => {
             if (this.day.hasError('required')) {
-                this.errors.day = 'Day is required'
+                this.errors.day = 'Day of Week is required'
             } else {
                 this.errors.day = '';
             }
@@ -83,9 +83,9 @@ export class ScheduleModal {
         this.markFormAsDirty();
         this.validateForm();
         const newSchedule = {
-            day: this.scheduleForm.get('day').value,
-            from: this.formatTime(this.scheduleForm.get('from').value),
-            to: this.formatTime(this.scheduleForm.get('to').value)
+            dayOfWeek: this.scheduleForm.get('day').value,
+            startTime: this.formatTime(this.scheduleForm.get('from').value),
+            endTime: this.formatTime(this.scheduleForm.get('to').value)
         }
 
         if (this.scheduleForm.valid) {
@@ -101,7 +101,7 @@ export class ScheduleModal {
 
     private validateForm() {
         if (this.day.hasError('required')) {
-            this.errors.day = 'Day is required';
+            this.errors.day = 'Day of Week is required';
         } else {
             this.errors.day = '';
         }

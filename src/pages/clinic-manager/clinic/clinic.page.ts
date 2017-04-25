@@ -31,7 +31,7 @@ export class ClinicPage implements OnInit {
     public mode: string;
 
     private address: AbstractControl;
-    private name: AbstractControl;
+    private clinicName: AbstractControl;
     private clinic: any;
 
     constructor(
@@ -46,8 +46,9 @@ export class ClinicPage implements OnInit {
 
     public ngOnInit() {
         this.clinic = this.params.get('clinic') ? this.params.get('clinic') : {};
-        this.schedules.value = this.clinic.schedules ? this.clinic.schedules : []
-        this.contacts.value = this.clinic.contacts ? this.clinic.contacts : []
+        this.schedules.value = this.clinic.schedules ? this.clinic.schedules : [];
+        console.log(this.schedules.value);
+        this.contacts.value = this.clinic.contacts ? this.clinic.contacts : [];
         this.mode = this.params.get('mode') ? this.params.get('mode') : MODE.add;
         this.createClinicForm();
 
@@ -74,19 +75,19 @@ export class ClinicPage implements OnInit {
 
     private createClinicForm() {
         this.clinicForm = this.formBuilder.group({
-            name: [this.clinic.clinicName, [Validators.required]],
+            clinicName: [this.clinic.clinicName, [Validators.required]],
             address: [this.clinic.address, [Validators.required]]
         });
 
-        this.name = this.clinicForm.get('name');
+        this.clinicName = this.clinicForm.get('clinicName');
         this.address = this.clinicForm.get('address');
 
-        this.name.valueChanges.subscribe(
+        this.clinicName.valueChanges.subscribe(
             newValue => {
-                if (this.name.hasError('required')) {
-                    this.errors.name = 'Name is required';
+                if (this.clinicName.hasError('required')) {
+                    this.errors.clinicName = 'Clinic Name is required';
                 } else {
-                    this.errors.name = '';
+                    this.errors.clinicName = '';
                 }
             }
         );
@@ -142,7 +143,16 @@ export class ClinicPage implements OnInit {
                 if (this.mode === MODE.add) {
                     this.addSchedule(schedule);
                 } else {
-                    // TODO SOLO SAVE
+                    this.clinicManagerService.createClinicTimeslot({
+                        clinicId: this.clinic.clinicId,
+                        dayOfWeek: schedule.dayOfWeek,
+                        startTime: schedule.startTime,
+                        endTime: schedule.endTime,
+                    }).subscribe(response => {
+                        if (response && response.result) {
+                            this.addSchedule(schedule);
+                        }
+                    });
                 }
                 this.clinicForm.markAsDirty();
             }
@@ -150,36 +160,36 @@ export class ClinicPage implements OnInit {
     }
 
     private addSchedule(newSchedule) {
-        const schedule = this.schedules.value.filter(s => { return s.day === newSchedule.day });
+        const schedule = this.schedules.value.filter(s => { return s.dayOfWeek === newSchedule.dayOfWeek });
         if (schedule.length === 0) {
             this.schedules.push(
                 {
-                    day: newSchedule.day,
-                    times: [{
-                        from: newSchedule.from,
-                        to: newSchedule.to
+                    dayOfWeek: newSchedule.dayOfWeek,
+                    timeSlot: [{
+                        startTime: newSchedule.startTime,
+                        endTime: newSchedule.endTime
                     }]
                 }
             );
         } else {
-            schedule[0].times.push({
-                from: newSchedule.from,
-                to: newSchedule.to
+            schedule[0].timeSlot.push({
+                startTime: newSchedule.startTime,
+                endTime: newSchedule.endTime
             });
 
-            schedule[0].times.sort(function (a, b) {
-                return new Date('1970/01/01 ' + a.from).getTime() - new Date('1970/01/01 ' + b.from).getTime();
+            schedule[0].timeSlot.sort(function (a, b) {
+                return new Date('1970/01/01 ' + a.startTime).getTime() - new Date('1970/01/01 ' + b.startTime).getTime();
             });
 
-            this.schedules.value.filter(s => { return s.day === newSchedule.day })[0] = schedule[0];
+            this.schedules.value.filter(s => { return s.dayOfWeek === newSchedule.dayOfWeek })[0] = schedule[0];
         }
     }
 
-    public removeSchedule(event: Event, day, schedules, i) {
+    public removeSchedule(event: Event, dayOfWeek, schedules, i) {
         event.preventDefault();
 
         this.alertController.create({
-            message: `Remove ${this.days[day]} schedule?`,
+            message: `Remove ${this.days[dayOfWeek]} schedule?`,
             buttons: [
                 {
                     text: 'NO',
@@ -188,18 +198,27 @@ export class ClinicPage implements OnInit {
                 {
                     text: 'YES',
                     handler: () => {
-                        this.schedules.splice(i, 1);
+                        if (this.mode === MODE.add) {
+                            this.schedules.splice(i, 1);
+                        }
+                        else {
+                            // TODO DELETE BY DAY OF WEEK + CLINIC ID
+                        }
                     }
                 }
             ]
         }).present();
     }
 
-    public removeTime(event: Event, day, time, times, i) {
+    public removeTimeSlot(event: Event, schedule, time, ti, si) {
         event.preventDefault();
+        const deleteSchedule = schedule.timeSlot.length === 1;
+        const message = deleteSchedule ?
+            `No time slot will be left for ${this.days[schedule.dayOfWeek]}. ${this.days[schedule.dayOfWeek]} schedule will be removed? ` :
+            `Remove ${time.startTime} to ${time.endTime} for ${this.days[schedule.dayOfWeek]} schedule?`;
 
         this.alertController.create({
-            message: `Remove ${time.from} to ${time.to} for ${this.days[day]} schedule?`,
+            message: message,
             buttons: [
                 {
                     text: 'NO',
@@ -208,7 +227,22 @@ export class ClinicPage implements OnInit {
                 {
                     text: 'YES',
                     handler: () => {
-                        times.splice(i, 1);
+                        if (this.mode === MODE.add) {
+                            schedule.timeSlot.splice(ti, 1);
+                        }
+                        else {
+                            if (deleteSchedule) {
+                                // TODO DELETE BY DAY OF WEEK + CLINIC ID
+                                this.schedules.splice(si, 1);
+                            } else {
+                                this.clinicManagerService.deleteClinicTimeslot(time.id).subscribe(response => {
+                                    if (response && response.status) {
+                                        schedule.timeSlot.splice(ti, 1);
+                                    }
+                                });
+                            }
+
+                        }
                     }
                 }
             ]
@@ -253,14 +287,13 @@ export class ClinicPage implements OnInit {
     }
 
     public submitForm(event) {
-        // event.event.preventDefault();
         this.markFormAsDirty();
         this.validateForm();
         if (this.clinicForm.valid && this.hasContact() && this.hasSchedule()) {
 
             if (this.mode === MODE.add) {
                 const newClinic = {
-                    name: this.clinicForm.get('name').value,
+                    clinicName: this.clinicForm.get('clinicName').value,
                     address: this.clinicForm.get('address').value,
                     schedules: this.schedules.value,
                     contacts: this.filterContacts(this.contacts.value)
@@ -281,8 +314,8 @@ export class ClinicPage implements OnInit {
 
             } else {
                 const modifiedClinic = {
-                    clinicId: this.clinic.id,
-                    clinicName: this.clinicForm.get('name').value,
+                    clinicId: this.clinic.clinicId,
+                    clinicName: this.clinicForm.get('clinicName').value,
                     address: this.clinicForm.get('address').value,
                 }
 
@@ -310,10 +343,10 @@ export class ClinicPage implements OnInit {
     }
 
     private validateForm() {
-        if (this.name.hasError('required')) {
-            this.errors.name = 'Name is required';
+        if (this.clinicName.hasError('required')) {
+            this.errors.clinicName = 'Clinic Name is required';
         } else {
-            this.errors.name = '';
+            this.errors.clinicName = '';
         }
 
         if (this.address.hasError('required')) {

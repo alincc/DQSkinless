@@ -10,11 +10,11 @@
         <ion-grid>
             <ion-row>
                 <ion-col col-12 col-sm-12 col-md-4>
-                    <ion-label class="form-label">Name <span *ngIf="isEditMode()">*</span></ion-label>
+                    <ion-label class="form-label">Clinic Name <span *ngIf="isEditMode()">*</span></ion-label>
                     <ion-item round>
-                        <ion-input name="name" formControlName="name" [disabled]="!isEditMode()"></ion-input>
+                        <ion-input name="clinicName" formControlName="clinicName" [disabled]="!isEditMode()"></ion-input>
                     </ion-item>
-                    <div class="error-message" *ngIf="clinicForm.get('name')?.dirty &&  clinicForm.get('name').invalid">
+                    <div class="error-message" *ngIf="clinicForm.get('clinicName')?.dirty &&  clinicForm.get('clinicName').invalid">
                         {{ errors.name }}
                     </div>
                 </ion-col>
@@ -46,20 +46,20 @@
                 <ion-card-header>
                     <ion-row class="schedule-header">
                         <ion-col col-6 col-sm-6 col-md-6>
-                            <ion-label class="form-label"> {{ days[schedule.day] }} </ion-label>
+                            <ion-label class="form-label"> {{ days[schedule.dayOfWeek] }} </ion-label>
                         </ion-col>
                         <ion-col col-6 col-sm-6 col-md-6>
-                            <ion-icon name="trash" (click)="removeSchedule($event, schedule.day, schedules, si)" color="accent-dark"></ion-icon>
+                            <ion-icon name="trash" (click)="removeSchedule($event, schedule.dayOfWeek, schedules, si)" color="accent-dark"></ion-icon>
                         </ion-col>
                     </ion-row>
                 </ion-card-header>
                 <ion-card-content>
-                    <ion-row class="schedule-details" *ngFor="let time of schedule.times; let ti = index">
+                    <ion-row class="schedule-details" *ngFor="let time of schedule.timeSlot; let ti = index">
                         <ion-col col-8 col-sm-8 col-md-8>
-                            <ion-label>{{ time.from}} to {{ time.to }}</ion-label>                            
+                            <ion-label>{{ time.startTime}} to {{ time.endTime }}</ion-label>                            
                         </ion-col>
                         <ion-col col-4 col-sm-4 col-md-4>
-                            <ion-icon name="trash" *ngIf="isEditMode()" (click)="removeTime($event, schedule.day, time, schedule.times, ti)" color="accent-dark"></ion-icon>
+                            <ion-icon name="trash" *ngIf="isEditMode()" (click)="removeTimeSlot($event, schedule, time, ti, si)" color="accent-dark"></ion-icon>
                         </ion-col>
                     </ion-row>
                 </ion-card-content>
