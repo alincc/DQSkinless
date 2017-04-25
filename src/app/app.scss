@@ -55,8 +55,8 @@ ion-content{
 		display: inline-block;
 		border: 1px solid $primary-light !important;
 		box-shadow: none !important;
-		-webkit-border-radius: 4.4em !important;
-		border-radius: 4.4rem !important;
+		-webkit-border-radius: 4rem !important;
+		border-radius: 4rem !important;
 		height: 35px !important;
 		min-height: 35px !important;
 		padding-left: 8px;
@@ -437,6 +437,9 @@ form {
 				font-size: 28px;
 			}
 		}
+	}
+	.form-group{
+		margin:3px;
 	}
 }
 

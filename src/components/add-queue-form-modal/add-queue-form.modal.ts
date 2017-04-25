@@ -11,6 +11,9 @@ export class AddQueueFormModal{
     private lastName: AbstractControl;
     private firstName: AbstractControl;
     private middleName: AbstractControl;
+    private isServeNow: AbstractControl;
+    private schedule: AbstractControl;
+    private timeSlot: AbstractControl;
     private errors: any;
 
     constructor(private formBuilder: FormBuilder,
@@ -20,14 +23,20 @@ export class AddQueueFormModal{
 
     private initFormGroup(){
     	this.queueForm = this.formBuilder.group({
-    		lastName: ["", Validators.required],
+    		lastName: ["test", Validators.required],
             firstName: ["", Validators.required],
-            middleName: ""
+            middleName: "",
+            isServeNow: [true],
+            schedule: [new Date()],
+            timeSlot: [new Date()]
         });
 
     	this.lastName = this.queueForm.get('lastName');
         this.firstName = this.queueForm.get('firstName');
         this.middleName = this.queueForm.get('middleName');
+        this.isServeNow = this.queueForm.get('isServeNow');
+        this.schedule = this.queueForm.get('schedule');
+        this.timeSlot = this.queueForm.get('timeSlot');
 
         this.errors = {};
         this.lastName.valueChanges.subscribe(
@@ -50,6 +59,18 @@ export class AddQueueFormModal{
             }
         );
 
+        this.isServeNow.valueChanges.subscribe(
+            newValue => {
+                if(newValue){
+                    this.schedule.setValue("");
+                    this.timeSlot.setValue("");
+                }else{
+                    this.schedule.setValue(new Date());
+                    this.timeSlot.setValue(new Date());
+                }
+            }
+        );
+
     }
 
 
@@ -58,7 +79,10 @@ export class AddQueueFormModal{
 	    	this.view.dismiss({
 	    		lastName: this.lastName.value,
 	    		firstName: this.firstName.value,
-	    		middleName: this.middleName.value
+	    		middleName: this.middleName.value,
+                isServeNow: this.isServeNow.value,
+                schedule: this.schedule.value,
+                timeSlot: this.timeSlot.value
 	    	})
     	}
     }

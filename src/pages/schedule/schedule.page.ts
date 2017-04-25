@@ -31,6 +31,7 @@ export class SchedulePage {
 	private serving: any;
 	private connection: any;
 	private requestForRefresh: any;
+	private clinicId: any;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
 		private detector: ChangeDetectorRef,
@@ -57,6 +58,7 @@ export class SchedulePage {
 				this.ws.send(clinicId);
 			}
 		);
+		this.clinicId = clinicId;
 
 		var currentDate = new Date();
 		currentDate.setHours(0);
@@ -243,39 +245,76 @@ export class SchedulePage {
 			if(!item){
 				return;
 			}
-			var parameter: any = item; 
-			parameter.type = QUEUE.TYPE.WALKIN;
-			parameter.boardId = this.queueBoard.id;
-			parameter.order = this.getNewOrder();
-			parameter.time = new Date();
-			parameter.status = QUEUE.STATUS.QUEUED; 
-
 			var loading = this.loadingCtrl.create({
 				spinner: 'crescent',
 				cssClass: 'xhr-loading'
 			});
 			loading.present();
-			this.service.addQueue(parameter).subscribe(
-				response => {
-					if(response.status){
-						this.ws.send(QUEUE.MAP.FETCH);
-						this.fetchQueue(response => {
-							loading.dismiss();
+
+			var parameter: any = item;
+			let parameterFactory = new Promise( (resolve, reject) =>{
+				if(item.isServeNow){
+					parameter.type = QUEUE.TYPE.WALKIN;
+					parameter.boardId = this.queueBoard.id;
+					parameter.order = this.getNewOrder();
+					parameter.time = new Date();
+					parameter.status = QUEUE.STATUS.QUEUED;
+					resolve(parameter);
+				}else{
+					this.service.getQueueBoardByIdAndClinic(this.clinicId, new Date(item.schedule))
+						.subscribe( response => {
+							if(response.status){
+								parameter.type = QUEUE.TYPE.SCHEDULED;
+								parameter.boardId = response.result.id;
+								parameter.order = 0,
+								parameter.time = this.parseTimeSlot(item.timeSlot);
+								parameter.status = QUEUE.STATUS.EN_ROUTE;
+								resolve(parameter);
+							}else{
+								reject(parameter);
+							}
 						}, err => {
-							loading.dismiss();
+							reject(err);
 						})
-					}else{
+				}
+			})
+			parameterFactory.then( parameter => {
+				this.service.addQueue(parameter).subscribe(
+					response => {
+						if(response.status){
+							this.ws.send(QUEUE.MAP.FETCH);
+							this.fetchQueue(response => {
+								loading.dismiss();
+							}, err => {
+								loading.dismiss();
+							})
+						}else{
+							loading.dismiss();
+						}
+					}, err => {
 						loading.dismiss();
-					}
-				}, err => {
-					loading.dismiss();
-				});
+					});
+			});
 		});
 		modal.present();
 	}
 
 	private getNewOrder(){
 		return this.queue[this.queue.length-1].order + 1000;
+	}
+
+	private parseTimeSlot(timeSlot){
+		if(timeSlot && (/[0-9]{0,2}\:[0-9]{0,2}/).test(timeSlot)){
+			let token = timeSlot.split(":");
+			let time = new Date();
+			time.setHours(token[0]);
+			time.setMinutes(token[1]);
+			time.setSeconds(0);
+			time.setMilliseconds(0);
+			return time;
+		}else{
+			return;
+		}
 	}
 
 }

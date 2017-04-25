@@ -7,41 +7,75 @@
 			Add Queue
 		</ion-title>
 		<ion-buttons end>
-			<button ion-button icon-only (click)="save()"><ion-icon name="checkmark"></ion-icon></button>
+			<button ion-button (click)="save()">SAVE</button>
 		</ion-buttons>
 	</ion-toolbar>
 </ion-header>
 <ion-content padding>
-	<div class="row form-group">
-		<form [formGroup]="queueForm" #form="ngForm" (ngSubmit)="save()">
-	        <ion-grid>
-	            <ion-row>
-	                <ion-col col-12 col-sm-12 col-md-12>
-	                    <ion-label class="form-label">Last Name*</ion-label>
-	                    <ion-item round>
-	                        <ion-input name="lastName" formControlName="lastName"></ion-input>
-	                    </ion-item>
-	                    <div class="error-message" *ngIf="lastName?.dirty &&  lastName.invalid">
-	                        {{ errors.lastName }}
-	                    </div>
-	                </ion-col>
-	                <ion-col col-12 col-sm-12 col-md-12>
-	                    <ion-label class="form-label">First Name*</ion-label>
-	                    <ion-item round>
-	                        <ion-input name="firstName" formControlName="firstName"></ion-input>
-	                    </ion-item>
-	                    <div class="error-message" *ngIf="firstName?.dirty &&  firstName.invalid">
-	                        {{ errors.firstName }}
-	                    </div>
-	                </ion-col>
-	                 <ion-col col-12 col-sm-12 col-md-12>
-                        <ion-label class="form-label">Middle Name</ion-label>
-                        <ion-item round>
-                            <ion-input name="middleName" formControlName="middleName"></ion-input>
-                        </ion-item>
-                    </ion-col>
-	            </ion-row>
-	        </ion-grid>
-       </form>
-    </div>
+	<form [formGroup]="queueForm" #form="ngForm" (ngSubmit)="save()">
+		<ion-grid>
+			<ion-row>
+				<ion-col col-12 col-sm-6 col-md-6>
+					<div class="form-group">
+						<ion-label class="form-label">Last Name*</ion-label>
+						<ion-item round>
+							<ion-input name="lastName" formControlName="lastName"></ion-input>
+						</ion-item>
+						<div class="error-message" *ngIf="lastName?.dirty &&  lastName.invalid">
+							{{ errors.lastName }}
+						</div>
+					</div>
+				</ion-col>
+				<ion-col col-12 col-sm-6 col-md-6>
+					<div class="form-group">
+						<ion-label class="form-label">First Name*</ion-label>
+						<ion-item round>
+							<ion-input name="firstName" formControlName="firstName"></ion-input>
+						</ion-item>
+						<div class="error-message" *ngIf="firstName?.dirty &&  firstName.invalid">
+							{{ errors.firstName }}
+						</div>
+					</div>
+				</ion-col>
+				<ion-col col-12 col-sm-6 col-md-6>
+					<div class="form-group">
+						<ion-label class="form-label">Middle Name</ion-label>
+						<ion-item round>
+							<ion-input name="middleName" formControlName="middleName"></ion-input>
+						</ion-item>
+					</div>
+				</ion-col>
+			</ion-row>
+			<ion-row>
+				<ion-col col-12 col-sm-12 col-md-12>
+					<ion-list radio-group class="form-group" formControlName="isServeNow">
+					  <ion-item>
+					    <ion-label>Queue Now</ion-label>
+					    <ion-radio class="form-control" [value]="true" checked></ion-radio>
+					  </ion-item>
+					  <ion-item>
+					    <ion-label>Scheduled</ion-label>
+					    <ion-radio class="form-control" [value]="false"></ion-radio>
+					  </ion-item>
+					</ion-list>
+				</ion-col>
+			</ion-row>
+			<ion-row>
+				<ion-col col-12 col-sm-6 col-md-6>
+					<div class="form-group">
+						<ion-label>Date</ion-label>
+						<ion-datetime displayFormat="MMMM DD YYYY" formControlName="schedule" [disabled]="isServeNow.value">
+						</ion-datetime>
+					</div>
+				</ion-col>
+				<ion-col col-12 col-sm-6 col-md-6>
+					<div class="form-group">
+						<ion-label>Time</ion-label>
+						<ion-datetime pickerFormat="hh:mm A" formControlName="timeSlot" [disabled]="isServeNow.value">
+						</ion-datetime>
+					</div>
+				</ion-col>
+			</ion-row>
+		</ion-grid>
+	</form>
 </ion-content>

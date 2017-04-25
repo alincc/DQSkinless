@@ -34,3 +34,4 @@ src/config/endpoint.ts
 Thumbs.db
 UserInterfaceState.xcuserstate
 *.orig
+src/config/endpoint.ts
