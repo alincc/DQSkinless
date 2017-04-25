@@ -31,7 +31,7 @@ export class ClinicPage implements OnInit {
     public mode: string;
 
     private address: AbstractControl;
-    private name: AbstractControl;
+    private clinicName: AbstractControl;
     private clinic: any;
 
     constructor(
@@ -74,19 +74,19 @@ export class ClinicPage implements OnInit {
 
     private createClinicForm() {
         this.clinicForm = this.formBuilder.group({
-            name: [this.clinic.clinicName, [Validators.required]],
+            clinicName: [this.clinic.clinicName, [Validators.required]],
             address: [this.clinic.address, [Validators.required]]
         });
 
-        this.name = this.clinicForm.get('name');
+        this.clinicName = this.clinicForm.get('clinicName');
         this.address = this.clinicForm.get('address');
 
-        this.name.valueChanges.subscribe(
+        this.clinicName.valueChanges.subscribe(
             newValue => {
-                if (this.name.hasError('required')) {
-                    this.errors.name = 'Name is required';
+                if (this.clinicName.hasError('required')) {
+                    this.errors.clinicName = 'Clinic Name is required';
                 } else {
-                    this.errors.name = '';
+                    this.errors.clinicName = '';
                 }
             }
         );
@@ -150,36 +150,36 @@ export class ClinicPage implements OnInit {
     }
 
     private addSchedule(newSchedule) {
-        const schedule = this.schedules.value.filter(s => { return s.day === newSchedule.day });
+        const schedule = this.schedules.value.filter(s => { return s.dayOfWeek === newSchedule.dayOfWeek });
         if (schedule.length === 0) {
             this.schedules.push(
                 {
-                    day: newSchedule.day,
-                    times: [{
-                        from: newSchedule.from,
-                        to: newSchedule.to
+                    dayOfWeek: newSchedule.dayOfWeek,
+                    timeSlot: [{
+                        startTime: newSchedule.startTime,
+                        endTime: newSchedule.endTime
                     }]
                 }
             );
         } else {
             schedule[0].times.push({
-                from: newSchedule.from,
-                to: newSchedule.to
+                startTime: newSchedule.startTime,
+                to: newSchedule.endTime
             });
 
             schedule[0].times.sort(function (a, b) {
-                return new Date('1970/01/01 ' + a.from).getTime() - new Date('1970/01/01 ' + b.from).getTime();
+                return new Date('1970/01/01 ' + a.startTime).getTime() - new Date('1970/01/01 ' + b.startTime).getTime();
             });
 
-            this.schedules.value.filter(s => { return s.day === newSchedule.day })[0] = schedule[0];
+            this.schedules.value.filter(s => { return s.dayOfWeek === newSchedule.dayOfWeek })[0] = schedule[0];
         }
     }
 
-    public removeSchedule(event: Event, day, schedules, i) {
+    public removeSchedule(event: Event, dayOfWeek, schedules, i) {
         event.preventDefault();
 
         this.alertController.create({
-            message: `Remove ${this.days[day]} schedule?`,
+            message: `Remove ${this.days[dayOfWeek]} schedule?`,
             buttons: [
                 {
                     text: 'NO',
@@ -188,6 +188,9 @@ export class ClinicPage implements OnInit {
                 {
                     text: 'YES',
                     handler: () => {
+                        if (this.mode === MODE.edit) {
+
+                        }
                         this.schedules.splice(i, 1);
                     }
                 }
@@ -195,11 +198,11 @@ export class ClinicPage implements OnInit {
         }).present();
     }
 
-    public removeTime(event: Event, day, time, times, i) {
+    public removeTime(event: Event, dayOfWeek, time, times, i) {
         event.preventDefault();
 
         this.alertController.create({
-            message: `Remove ${time.from} to ${time.to} for ${this.days[day]} schedule?`,
+            message: `Remove ${time.startTime} to ${time.endTime} for ${this.days[dayOfWeek]} schedule?`,
             buttons: [
                 {
                     text: 'NO',
@@ -253,14 +256,13 @@ export class ClinicPage implements OnInit {
     }
 
     public submitForm(event) {
-        // event.event.preventDefault();
         this.markFormAsDirty();
         this.validateForm();
         if (this.clinicForm.valid && this.hasContact() && this.hasSchedule()) {
 
             if (this.mode === MODE.add) {
                 const newClinic = {
-                    name: this.clinicForm.get('name').value,
+                    clinicName: this.clinicForm.get('clinicName').value,
                     address: this.clinicForm.get('address').value,
                     schedules: this.schedules.value,
                     contacts: this.filterContacts(this.contacts.value)
@@ -282,7 +284,7 @@ export class ClinicPage implements OnInit {
             } else {
                 const modifiedClinic = {
                     clinicId: this.clinic.id,
-                    clinicName: this.clinicForm.get('name').value,
+                    clinicName: this.clinicForm.get('clinicName').value,
                     address: this.clinicForm.get('address').value,
                 }
 
@@ -310,10 +312,10 @@ export class ClinicPage implements OnInit {
     }
 
     private validateForm() {
-        if (this.name.hasError('required')) {
-            this.errors.name = 'Name is required';
+        if (this.clinicName.hasError('required')) {
+            this.errors.clinicName = 'Clinic Name is required';
         } else {
-            this.errors.name = '';
+            this.errors.clinicName = '';
         }
 
         if (this.address.hasError('required')) {

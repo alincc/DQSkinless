@@ -119,12 +119,12 @@ export class ClinicManagerPage implements OnInit {
 
 	public displayTime(timeSlot) {
 		if (timeSlot && timeSlot.length > 0) {
-			let timeSlots = '';
+			let formattedTimeSlot = '';
 
 			timeSlot.forEach(time => {
-				timeSlots += `${time.startTime} to ${time.endTime}, `;
+				formattedTimeSlot += `${time.startTime} to ${time.endTime}, `;
 			});
-			return timeSlots.substring(1, timeSlots.length - 2);
+			return formattedTimeSlot.substring(1, formattedTimeSlot.length - 2);
 		}
 		return '';
 	}

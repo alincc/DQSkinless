@@ -17,7 +17,9 @@ export const CONFIG = {
         queueBoard: '/queue-board',
 
         createClinic: '/customclinic',
-        clinicDetailRecord: '/clinicdetails',        
+        clinicDetailRecord: '/clinicdetails',
+        clinicTimeSlots: '/clinictimeslots',
+        clinicContacts: '/cliniccontacts',
         getClinicAccessByUserId: '/clinicaccess/u/gbcid',
         getClinicRecordByUserId: '/clinicdetails/u',
         getClinicTimeSlotByClinicId: '/clinictimeslots/cidli',

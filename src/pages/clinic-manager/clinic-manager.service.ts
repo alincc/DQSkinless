@@ -152,4 +152,28 @@ export class ClinicManagerService {
     public getClinicContactByClinicId(clinicId) {
         return this.http.get(CONFIG.API.getClinicContactByClinicId, [clinicId]);
     }
+
+    public createClinicTimeslot(clinicTimeSlot) {
+        return this.http.post(CONFIG.API.clinicTimeSlots, clinicTimeSlot);
+    }
+
+    public updateClinicTimeslot(clinicTimeSlot) {
+        return this.http.put(CONFIG.API.clinicTimeSlots, clinicTimeSlot);
+    }
+
+    public deleteClinicTimeslot(clinicTimeSlotId) {
+        return this.http.delete(CONFIG.API.clinicTimeSlots, [clinicTimeSlotId]);
+    }
+
+    public createClinicContact(clinicContact) {
+        return this.http.post(CONFIG.API.clinicContacts, clinicContact);
+    }
+
+    public updateClinicContact(clinicContact) {
+        return this.http.put(CONFIG.API.clinicContacts, clinicContact);
+    }
+
+    public deleteClinicContact(clinicContactId) {
+        return this.http.delete(CONFIG.API.clinicContacts, [clinicContactId]);
+    }
 }
