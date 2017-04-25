@@ -150,12 +150,12 @@ export class ClinicPage implements OnInit {
     }
 
     private addSchedule(newSchedule) {
-        const schedule = this.schedules.value.filter(s => { return s.dayOfWeek === newSchedule.dayOfWeek });
+        const schedule = this.schedules.value.filter(s => { return s.day === newSchedule.day });
         if (schedule.length === 0) {
             this.schedules.push(
                 {
-                    dayOfWeek: newSchedule.dayOfWeek,
-                    timeSlot: [{
+                    day: newSchedule.day,
+                    times: [{
                         from: newSchedule.from,
                         to: newSchedule.to
                     }]
@@ -175,11 +175,11 @@ export class ClinicPage implements OnInit {
         }
     }
 
-    public removeSchedule(event: Event, dayOfWeek, schedules, i) {
+    public removeSchedule(event: Event, day, schedules, i) {
         event.preventDefault();
 
         this.alertController.create({
-            message: `Remove ${this.days[dayOfWeek]} schedule?`,
+            message: `Remove ${this.days[day]} schedule?`,
             buttons: [
                 {
                     text: 'NO',
@@ -195,11 +195,11 @@ export class ClinicPage implements OnInit {
         }).present();
     }
 
-    public removeTime(event: Event, dayOfWeek, time, times, i) {
+    public removeTime(event: Event, day, time, times, i) {
         event.preventDefault();
 
         this.alertController.create({
-            message: `Remove ${time.from} to ${time.to} for ${this.days[dayOfWeek]} schedule?`,
+            message: `Remove ${time.from} to ${time.to} for ${this.days[day]} schedule?`,
             buttons: [
                 {
                     text: 'NO',
