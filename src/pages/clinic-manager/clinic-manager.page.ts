@@ -18,9 +18,9 @@ export class ClinicManagerPage implements OnInit {
 
 	public allowableClinics: any;
 	public clinics: any;
-
-	public days: any;
 	public contactType: any;
+	public days: any;
+	public isManager: boolean;
 
 	private index: number;
 
@@ -40,6 +40,8 @@ export class ClinicManagerPage implements OnInit {
 				this.allowableClinics = response.result;
 			}
 		});
+
+		this.isManager = this.params.data && this.params.data.isManager ? this.params.data.isManager : false;
 	}
 
 	private getDefaults() {

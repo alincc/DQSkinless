@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AlertController, ModalController } from "ionic-angular";
+import { AlertController, ModalController, NavParams } from "ionic-angular";
 
 import { RootNavController } from '../../services/services';
 
@@ -12,18 +12,21 @@ import { SearchUserModal } from '../../components/search-user-modal/search-user-
 })
 export class AssistantManagerPage implements OnInit {
 
-	public allowableAssistants: number;
 	public assistants: any;
+	public isManager: boolean;
 
 	constructor(
 		private alertController: AlertController,
 		private modalController: ModalController,
+		private params: NavParams,
 		private rootNav: RootNavController) {
 		this.getDefaults();
 	}
 
 	private getDefaults() {
 		this.assistants = [];
+
+		this.isManager = this.params.data && this.params.data.isManager ? this.params.data.isManager : false;
 	}
 
 	public ngOnInit() {
@@ -67,7 +70,6 @@ export class AssistantManagerPage implements OnInit {
 					text: 'YES',
 					handler: () => {
 						this.assistants.splice(i, 1);
-						this.allowableAssistants++;
 					}
 				}
 			]

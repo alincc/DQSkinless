@@ -1,3 +1,10 @@
+<ion-header *ngIf="isManager">
+	<ion-navbar color="primary">
+		<ion-title>
+			Clinic Manager
+		</ion-title>
+	</ion-navbar>
+</ion-header>
 <ion-content #Content padding>
     <h3>Number of Clinics: {{ clinics.length }}</h3>
 
