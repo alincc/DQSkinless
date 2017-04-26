@@ -3,10 +3,10 @@ import { HttpService, Storage } from '../../services/services';
 import { CONFIG } from '../../config/config';
 
 @Injectable()
-export class ManagerService{
-	constructor(private http: HttpService,
-		private storage: Storage){}
-	private userId;
+export class ManagerService {
+    constructor(private http: HttpService,
+        private storage: Storage) { }
+    private userId;
 
     private getUserId() {
         if (!this.userId) {
@@ -15,12 +15,7 @@ export class ManagerService{
         return this.userId;
     }
 
-	public getClinicAccessByUserId() {
-        return this.http.get(CONFIG.API.getClinicAccessByUserId, [this.getUserId()]);
-    }
-
-    
-    public getClinicRecordById(clinicId) {
-        return this.http.get(CONFIG.API.clinicDetailRecord, [clinicId]);
+    public getClinicRecordByUserId() {
+        return this.http.get(CONFIG.API.getClinicRecordByUserId, [this.getUserId()]);
     }
 }

@@ -28,7 +28,7 @@ export class RegistrationPage {
 	constructor(
 		private nav: NavController,
 		private loginParams: NavParams,
-		private service : RegistrationService,
+		private service: RegistrationService,
 		private rootNav: RootNavController) {
 
 		this.params = {
@@ -37,7 +37,7 @@ export class RegistrationPage {
 			isLoggedAsDoctor: this.isDoctor()
 		};
 
-		switch(loginParams.data.step){
+		switch (loginParams.data.step) {
 			case 1:
 				this.root = StepOnePage;
 				break;
@@ -50,11 +50,12 @@ export class RegistrationPage {
 			case 4:
 				this.root = StepFourPage;
 		}
+
 		this.completedRegistration = false;
 	}
 
-	public isDoctor(){
-		if(!this._isDoctor){
+	public isDoctor() {
+		if (!this._isDoctor) {
 			this._isDoctor = this.loginParams.data.role;
 		}
 		return this._isDoctor === 1;
@@ -62,7 +63,7 @@ export class RegistrationPage {
 
 	public set step(_step: any) {
 		// update status
-		if(this._step && this._step !== _step){
+		if (this._step && this._step !== _step) {
 			this.service.updateStatus(_step).subscribe();
 		}
 		if (_step == 4) {

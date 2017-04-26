@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { App,NavController } from 'ionic-angular';
+import { App, NavController } from 'ionic-angular';
 
 import { SchedulePage } from '../schedule/schedule.page';
 import { PatientPage } from '../patient/patient.page';
@@ -8,7 +8,10 @@ import { LoginPage } from '../login/login.page';
 import { ManagerPage } from '../manager/manager.page';
 import { NotificationPage } from '../notification/notification.page';
 import { ProfilePage } from '../profile/profile.page';
+import { AssistantManagerPage } from '../assistant-manager/assistant-manager.page';
+
 import { RootNavController } from '../../services/services';
+
 @Component({
 	selector: 'tabs',
 	templateUrl: 'tabs.html'
@@ -20,24 +23,30 @@ export class TabsPage {
 	chat: any = ChatPage;
 
 	root: NavController;
-	constructor(private app : App,
+	constructor(private app: App,
 		private nav: NavController,
 		private rootNav: RootNavController) {
 		this.root = app.getRootNav();
 		this.rootNav.setRootNav(this.nav);
 	}
 
-	logout(){
+	logout() {
 		this.root.setRoot(LoginPage);
 	}
 
-	openManager(){
-		this.nav.push(ManagerPage);
+	openManager() {
+		this.rootNav.push(ManagerPage);
 	}
 
-	openProfile(){
-		this.nav.push(ProfilePage);
+	openAssistantManager() {
+		this.rootNav.push(AssistantManagerPage);
 	}
 
+	openClinicMembersManager() {
 
+	}
+
+	openProfile() {
+		this.rootNav.push(ProfilePage);
+	}
 }

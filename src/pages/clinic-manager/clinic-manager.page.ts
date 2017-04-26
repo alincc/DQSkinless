@@ -40,10 +40,6 @@ export class ClinicManagerPage implements OnInit {
 				this.allowableClinics = response.result;
 			}
 		});
-
-		if (this.params.data.parent && this.clinics.length > 0) {
-			this.params.data.parent.completedRegistration = true;
-		}
 	}
 
 	private getDefaults() {
@@ -57,8 +53,11 @@ export class ClinicManagerPage implements OnInit {
 
 		this.clinicManagerService.getClinicRecord().subscribe(response => {
 			if (response) {
-				console.log('getClinics', response);
 				this.clinics = response;
+
+				if (this.params.data.parent && this.clinics.length > 0) {
+					this.params.data.parent.completedRegistration = true;
+				}
 			}
 		});
 	}
