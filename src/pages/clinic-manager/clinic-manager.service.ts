@@ -34,9 +34,12 @@ export class ClinicManagerService {
 
     public createClinic(clinic) {
         clinic.userId = this.getUserId();
-        return this.http.post(CONFIG.API.createClinic, clinic);
+        return this.http.post(CONFIG.API.customclinic, clinic);
     }
 
+    public deleteClinic(clinicId) {
+        return this.http.delete(CONFIG.API.customclinic, [clinicId]);
+    }
 
     public getClinicRecord() {
         return this.getClinicRecordByUserId().map(response => {
@@ -68,15 +71,15 @@ export class ClinicManagerService {
                         });
                     }
 
-                    if (clinicContacts && clinicContacts.status) {
-                        clinicContacts.result.forEach(clinicContact => {
-                            this.pushClinicContact(clinic.contacts, clinicContact, false);
-                        });
-                    }
-
                     if (userContacts && userContacts.status) {
                         userContacts.result.forEach(userContact => {
                             this.pushClinicContact(clinic.contacts, userContact, true);
+                        });
+                    }
+
+                    if (clinicContacts && clinicContacts.status) {
+                        clinicContacts.result.forEach(clinicContact => {
+                            this.pushClinicContact(clinic.contacts, clinicContact, false);
                         });
                     }
 
@@ -142,10 +145,6 @@ export class ClinicManagerService {
         return this.http.put(CONFIG.API.clinicDetailRecord, clinic);
     }
 
-    public deleteClinicDetailRecord(clinicId) {
-        return this.http.delete(CONFIG.API.clinicDetailRecord, [clinicId]);
-    }
-
     public getClinicTimeSlotByClinicId(clinicId) {
         return this.http.get(CONFIG.API.getClinicTimeSlotByClinicId, [clinicId]);
     }
@@ -164,6 +163,11 @@ export class ClinicManagerService {
 
     public deleteClinicTimeslot(clinicTimeSlotId) {
         return this.http.delete(CONFIG.API.clinicTimeSlots, [clinicTimeSlotId]);
+    }
+
+    public delTimeSlotsByClinIdAndDayOfWeek(clinicId, dayOfWeek) {
+        const params = `/cid/${clinicId}/dow/${dayOfWeek}`
+        return this.http.delete(CONFIG.API.clinicTimeSlots + params);
     }
 
     public createClinicContact(clinicContact) {

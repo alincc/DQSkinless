@@ -47,7 +47,6 @@ export class ClinicPage implements OnInit {
     public ngOnInit() {
         this.clinic = this.params.get('clinic') ? this.params.get('clinic') : {};
         this.schedules.value = this.clinic.schedules ? this.clinic.schedules : [];
-        console.log(this.schedules.value);
         this.contacts.value = this.clinic.contacts ? this.clinic.contacts : [];
         this.mode = this.params.get('mode') ? this.params.get('mode') : MODE.add;
         this.createClinicForm();
@@ -127,10 +126,6 @@ export class ClinicPage implements OnInit {
         });
     }
 
-    public isEditMode(): boolean {
-        return this.mode !== 'View';
-    }
-
     public createSchedule(event: Event) {
         event.preventDefault();
 
@@ -185,7 +180,7 @@ export class ClinicPage implements OnInit {
         }
     }
 
-    public removeSchedule(event: Event, dayOfWeek, schedules, i) {
+    public removeSchedule(event: Event, dayOfWeek, schedules, si) {
         event.preventDefault();
 
         this.alertController.create({
@@ -199,10 +194,14 @@ export class ClinicPage implements OnInit {
                     text: 'YES',
                     handler: () => {
                         if (this.mode === MODE.add) {
-                            this.schedules.splice(i, 1);
+                            this.schedules.splice(si, 1);
                         }
                         else {
-                            // TODO DELETE BY DAY OF WEEK + CLINIC ID
+                            this.clinicManagerService.delTimeSlotsByClinIdAndDayOfWeek(this.clinic.clinicId, dayOfWeek).subscribe(response => {
+                                if (response && response.status) {
+                                    this.schedules.splice(si, 1);
+                                }
+                            });
                         }
                     }
                 }
@@ -232,8 +231,11 @@ export class ClinicPage implements OnInit {
                         }
                         else {
                             if (deleteSchedule) {
-                                // TODO DELETE BY DAY OF WEEK + CLINIC ID
-                                this.schedules.splice(si, 1);
+                                this.clinicManagerService.delTimeSlotsByClinIdAndDayOfWeek(this.clinic.clinicId, schedule.dayOfWeek).subscribe(response => {
+                                    if (response && response.status) {
+                                        this.schedules.splice(si, 1);
+                                    }
+                                });
                             } else {
                                 this.clinicManagerService.deleteClinicTimeslot(time.id).subscribe(response => {
                                     if (response && response.status) {
@@ -259,12 +261,24 @@ export class ClinicPage implements OnInit {
             if (contact) {
                 if (this.mode === MODE.add) {
                     this.contacts.push({
-                        contactType: contact.contactType,
                         contact: contact.contact,
+                        contactType: contact.contactType,
                         isProfileContacts: false
                     });
                 } else {
-                    // TODO SOLO SAVE
+                    this.clinicManagerService.createClinicContact({
+                        clinicId: this.clinic.clinicId,
+                        contact: contact.contact,
+                        contactType: contact.contactType,
+                    }).subscribe(response => {
+                        if (response && response.status) {
+                            this.contacts.push({
+                                contact: contact.contact,
+                                contactType: contact.contactType,
+                                isProfileContacts: false
+                            });
+                        }
+                    })
                 }
 
                 this.clinicForm.markAsDirty();
@@ -273,9 +287,31 @@ export class ClinicPage implements OnInit {
         modal.present();
     }
 
-    public removeContact(event, item, idx) {
+    public removeContact(event, contact, idx) {
         event.preventDefault();
-        this.contacts.splice(idx, 1);
+        this.alertController.create({
+            message: `Remove ${contact.contact}?`,
+            buttons: [
+                {
+                    text: 'NO',
+                    role: 'cancel',
+                },
+                {
+                    text: 'YES',
+                    handler: () => {
+                        if (this.mode === MODE.add) {
+                            this.contacts.splice(idx, 1);
+                        } else {
+                            this.clinicManagerService.deleteClinicContact(contact.id).subscribe(response => {
+                                if (response && response.status) {
+                                    this.contacts.splice(idx, 1);
+                                }
+                            });
+                        }
+                    }
+                }
+            ]
+        }).present();
     }
 
     private hasContact() {

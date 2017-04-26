@@ -102,7 +102,7 @@ export class ClinicManagerPage implements OnInit {
 				{
 					text: 'YES',
 					handler: () => {
-						this.clinicManagerService.deleteClinicDetailRecord(clinic.clinicId).subscribe(response => {
+						this.clinicManagerService.deleteClinic(clinic.clinicId).subscribe(response => {
 							if (response && response.status) {
 								this.clinics.splice(i, 1);
 							}
