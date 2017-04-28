@@ -15,19 +15,19 @@
                 <ion-col col-12 col-sm-12 col-md-4>
                     <ion-label class="form-label">Username</ion-label>
                     <ion-item round>
-                        <ion-input name="userName" formControlName="userName"></ion-input>
+                        <ion-input name="username" formControlName="username"></ion-input>
                     </ion-item>
                 </ion-col>
                 <ion-col col-12 col-sm-12 col-md-4>
                     <ion-label class="form-label">Last Name</ion-label>
                     <ion-item round>
-                        <ion-input name="lastName" formControlName="lastName"></ion-input>
+                        <ion-input name="lastname" formControlName="lastname"></ion-input>
                     </ion-item>
                 </ion-col>
                 <ion-col col-12 col-sm-12 col-md-4>
                     <ion-label class="form-label">First Name</ion-label>
                     <ion-item round>
-                        <ion-input name="firstName" formControlName="firstName"></ion-input>
+                        <ion-input name="firstname" formControlName="firstname"></ion-input>
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -47,7 +47,7 @@
                 </ion-avatar>
                 <p>Name: {{ getFullName(user) }}</p>
                 <p>Email: {{ user.email }}</p>
-                <p>Contact No: {{ user.contactNo }}</p>
+                <p>Contact No: {{ getuserContacts(user.userContacts) }}</p>
             </ion-item>
         </ion-card>
     </div>

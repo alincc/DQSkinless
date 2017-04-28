@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { AlertController, ViewController } from "ionic-angular";
+import { AlertController, NavParams, ViewController } from "ionic-angular";
 
 import { SearchUserModalService } from './search-user-modal.service';
 
@@ -14,9 +14,13 @@ export class SearchUserModal implements OnInit {
     public searchForm: FormGroup;
     public users: any;
 
+    private message: any;
+    private role: any;
+
     constructor(
         private alertController: AlertController,
         private formBuilder: FormBuilder,
+        private params: NavParams,
         private viewController: ViewController,
         private searchUserModalService: SearchUserModalService) {
         this.getDefaults();
@@ -28,32 +32,30 @@ export class SearchUserModal implements OnInit {
 
     private getDefaults() {
         this.users = [];
+        this.message = this.params.data && this.params.data.message ? this.params.data.message : 'Select';
+        this.role = this.params.data && this.params.data.role ? this.params.data.role : 0;
     }
 
     private createSearchForm() {
         this.searchForm = this.formBuilder.group({
-            userName: '',
-            lastName: '',
-            firstName: ''
+            username: '',
+            lastname: '',
+            firstname: ''
         });
     }
 
     public search(event) {
-        // TODO
-        // this.searchUserModalService.getUsers(this.searchForm.value).subscribe(response => {
-        //     if (response && response.status) {
-        //         console.log(JSON.stringify(response));
-        //     }
-        // });
-
-        this.users = this.searchUserModalService.getUsers(this.searchForm.value);
-
-        event.dismissLoading();
+        this.searchUserModalService.getUsers(this.searchForm.value, this.role).subscribe(response => {
+            if (response) {
+                this.users = response.result;
+                event.dismissLoading();
+            }
+        }, error => event.dismissLoading());
     }
 
     public selectUser(user) {
         this.alertController.create({
-            message: `Select ${this.getFullName(user)}?`,
+            message: `${this.message} ${this.getFullName(user)}?`,
             buttons: [
                 {
                     text: 'NO',
@@ -68,8 +70,20 @@ export class SearchUserModal implements OnInit {
             ]
         }).present();
     }
-    
+
     public getFullName(user) {
-        return (user.lastName ? user.lastName + ', ' : '') + user.firstName + ' ' + (user.middleName ? user.middleName : '');
+        return (user.lastname ? user.lastname + ', ' : '') + user.firstname + ' ' + (user.middlename ? user.middlename : '');
+    }
+
+    public getuserContacts(userContacts) {
+        if (userContacts && userContacts.length > 0) {
+            let formattedUserContacts = '';
+
+            userContacts.forEach(userContact => {
+                formattedUserContacts += `${userContact.contact}, `;
+            });
+            return formattedUserContacts.substring(1, formattedUserContacts.length - 2);
+        }
+        return '';
     }
 }

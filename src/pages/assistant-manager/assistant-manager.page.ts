@@ -47,7 +47,10 @@ export class AssistantManagerPage implements OnInit {
 	}
 
 	public searchAssistant() {
-		let searchAssistantModal = this.modalController.create(SearchUserModal);
+		let searchAssistantModal = this.modalController.create(SearchUserModal, {
+			message: 'Add',
+			role: 2
+		});
 
 		searchAssistantModal.present();
 

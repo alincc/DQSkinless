@@ -64,6 +64,9 @@ export class RegistrationPage {
 	public set step(_step: any) {
 		// update status
 		if (this._step && this._step !== _step) {
+			if (_step === 4 && !this.isDoctor()) {
+				_step = 5;
+			}
 			this.service.updateStatus(_step).subscribe();
 		}
 		if (_step == 4) {
@@ -77,7 +80,6 @@ export class RegistrationPage {
 	}
 
 	public done() {
-		// TODO UPDAET STATUS TO 5
 		this.rootNav.setRoot(ManagerPage);
 		this.service.updateStatus(5).subscribe();
 	}

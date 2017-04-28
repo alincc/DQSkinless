@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/observable/of';
+
 import { HttpService, Storage } from '../../services/services';
-import { CONFIG } from '../../config/config'
+import { CONFIG } from '../../config/config';
 
 @Injectable()
 export class SearchUserModalService {
@@ -10,26 +15,73 @@ export class SearchUserModalService {
 
     }
 
-    public getUsers(param) {
-        // return this.http.get(CONFIG.API.getUsers);
+    public getUsers(criteria, role) {
+        console.log(role);
+        const doctorCriteria = this.createCriteria(criteria, 1);
+        const assistantCriteria = this.createCriteria(criteria, 2);
+        this.transformCriteria(doctorCriteria);
+        this.transformCriteria(assistantCriteria);
 
-        return [
-            {
-                lastName: 'last name',
-                firstName: 'first name',
-                middleName: 'middle name',
-                img: 'http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif',
-                email: 'user1@user.com',
-                contactNo: '9111111'
-            },
-            {
-                lastName: 'last name2',
-                firstName: 'first name2',
-                middleName: 'middle name2',
-                img: 'http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif',
-                email: 'user2@user.com',
-                contactNo: '9222222'
-            }
-        ]
+        if (role === 1) {
+            return this.getDoctors(doctorCriteria);
+        } else if (role === 2) {
+            return this.getAssistants(assistantCriteria);
+        } else {
+            const users = [];
+
+            return Observable.forkJoin([
+                this.getDoctors(doctorCriteria),
+                this.getAssistants(assistantCriteria)
+            ]).flatMap((data: any[]) => {
+
+                const doctors = data[0];
+                const assistants = data[1];
+
+                if (doctors && doctors.status) {
+                    doctors.result.forEach(doctor => users.push(doctor));
+                }
+
+                if (assistants && assistants.status) {
+                    assistants.result.forEach(assistant => users.push(assistant));
+                }
+
+                return Observable.of({
+                    result: users
+                });
+            });
+        }
+    }
+
+    private getDoctors(criteria) {
+        criteria.role = 1;
+        return this.http.post(CONFIG.API.searchUser, criteria);
+    }
+
+    private getAssistants(criteria) {
+        criteria.role = 2;
+        return this.http.post(CONFIG.API.searchUser, criteria);
+    }
+
+    private createCriteria(criteria, role) {
+        return {
+            username: criteria.username,
+            firstname: criteria.firstname,
+            lastname: criteria.lastname,
+            role: role
+        };
+    }
+
+    private transformCriteria(criteria) {
+        if (criteria.username.trim() === '') {
+            delete criteria.username;
+        }
+
+        if (criteria.firstname.trim() === '') {
+            delete criteria.firstname;
+        }
+
+        if (criteria.lastname.trim() === '') {
+            delete criteria.lastname;
+        }
     }
 }

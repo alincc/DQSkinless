@@ -118,6 +118,10 @@ export class ClinicManagerPage implements OnInit {
 		}).present();
 	}
 
+	public associateMember(clinicId) {
+		console.log(clinicId);
+	}
+
 	public displayTime(timeSlot) {
 		if (timeSlot && timeSlot.length > 0) {
 			let formattedTimeSlot = '';

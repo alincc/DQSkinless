@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { TabsPage } from '../tabs/tabs';
 import { App } from 'ionic-angular';
+
+import { LoginPage } from '../login/login.page';
+import { TabsPage } from '../tabs/tabs';
+
 import { ManagerService } from './manager.service';
-import { RootNavController } from '../../services/services';
+import { RootNavController, Storage } from '../../services/services';
 
 @Component({
 	selector: 'manager-page',
@@ -15,7 +18,8 @@ export class ManagerPage {
 
 	constructor(private app: App,
 		private service: ManagerService,
-		private root: RootNavController) {
+		private root: RootNavController,
+		private storage: Storage) {
 
 		service.getClinicRecordByUserId().subscribe(response => {
 			if (response && response.status) {
@@ -24,8 +28,13 @@ export class ManagerPage {
 		});
 	}
 
-	go(item) {
+	public go(item) {
 		this.root.loadInit(item.clinicId);
 		this.app.getRootNav().setRoot(TabsPage);
+	}
+
+	public logout() {
+		this.storage.clear();
+		this.root.setRoot(LoginPage);
 	}
 }	

@@ -11,7 +11,7 @@ import { ProfilePage } from '../profile/profile.page';
 import { AssistantManagerPage } from '../assistant-manager/assistant-manager.page';
 import { ClinicManagerPage } from '../clinic-manager/clinic-manager.page';
 
-import { RootNavController } from '../../services/services';
+import { RootNavController, Storage } from '../../services/services';
 
 @Component({
 	selector: 'tabs',
@@ -26,12 +26,14 @@ export class TabsPage {
 	root: NavController;
 	constructor(private app: App,
 		private nav: NavController,
-		private rootNav: RootNavController) {
+		private rootNav: RootNavController,
+		private storage: Storage) {
 		this.root = app.getRootNav();
 		this.rootNav.setRootNav(this.nav);
 	}
 
 	logout() {
+		this.storage.clear();
 		this.root.setRoot(LoginPage);
 	}
 

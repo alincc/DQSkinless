@@ -37,7 +37,7 @@ export class RootNavController {
 		this._rootNav.pop();
 	}
 
-	public loadInit(clinicId: number){
+	public loadInit(clinicId: number) {
 		// if(this.reloadPublisher){
 		// 	this.reloadPublisher.next(clinicId);
 		// }else{
@@ -55,7 +55,7 @@ export const STORAGE_KEYS = {
 export class Storage {
 
 	constructor(private local: LocalStorageService,
-		private session : SessionStorageService) {}
+		private session: SessionStorageService) { }
 
 	// userDetails
 	public get userDetails() { return this.local.retrieve(STORAGE_KEYS.USER_DETAILS); }
@@ -64,9 +64,12 @@ export class Storage {
 	public get token() { return this.local.retrieve(STORAGE_KEYS.TOKEN); }
 	public set token(data) { this.local.store(STORAGE_KEYS.TOKEN, data); }
 
-	
+	public clear() {
+		this.local.clear();
+	}
 }
-var _token : string;
+
+var _token: string;
 
 @Injectable()
 export class HttpService {
@@ -101,15 +104,13 @@ export class HttpService {
 		}
 	}
 
-	private 
-
 	public get(url: string, parameters: any, option?: any): Observable<any> {
 		let parameter: string = '';
-		if(Array.isArray(parameters)){
+		if (Array.isArray(parameters)) {
 			for (let _parameter of parameters) {
 				parameter += "/" + _parameter;
 			}
-		}else{
+		} else {
 			parameter += "/" + parameters
 		}
 
@@ -156,7 +157,7 @@ export class HttpService {
 		}
 	}
 
-	private getOptions = function(): RequestOptions {
+	private getOptions = function (): RequestOptions {
 		let headers = new Headers({ 'Content-Type': 'application/json' });
 		headers.append('Authorization', 'Bearer ' + _token);
 
@@ -169,13 +170,13 @@ export class HttpService {
 
 
 @Injectable()
-export class WebSocketFactory{
-	
-	
-	public connect(url:String): any{
-		var sock = new SockJS(Endpoint.environment + url, null, {headers : {Authorization : 'Bearer ' + _token}});
-		var connection : any = new Observable(publisher => {
-			
+export class WebSocketFactory {
+
+
+	public connect(url: String): any {
+		var sock = new SockJS(Endpoint.environment + url, null, { headers: { Authorization: 'Bearer ' + _token } });
+		var connection: any = new Observable(publisher => {
+
 			sock.onmessage = response => {
 				publisher.next(response.data);
 			}
@@ -185,14 +186,14 @@ export class WebSocketFactory{
 		});
 
 		return {
-			send : (message) => {sock.send(message)},
-			connection : connection,
-			then : (callback) => {
+			send: (message) => { sock.send(message) },
+			connection: connection,
+			then: (callback) => {
 				sock.onopen = response => {
 					callback(response)
 				}
 			},
-			close: () => {sock.close();}
+			close: () => { sock.close(); }
 		};
 
 	}

@@ -26,7 +26,7 @@ export class StepThreePage {
             if (this.params.data.isLoggedAsDoctor) {
                 this.nav.setRoot(StepFourPage, this.params.data, { animate: true, direction: 'forward' });
             } else {
-                this.rootNav.push(ManagerPage);
+                this.rootNav.setRoot(ManagerPage);
             }
         }
     }
