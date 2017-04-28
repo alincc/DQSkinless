@@ -181,4 +181,15 @@ export class ClinicManagerService {
     public deleteClinicContact(clinicContactId) {
         return this.http.delete(CONFIG.API.clinicContacts, [clinicContactId]);
     }
+
+    public createClinicAccessRecord(clinidId, userId, accessRole, userRole) {
+        const payload = {
+            clinidId: clinidId,
+            userId: userId,
+            accessRole: accessRole,
+            userRole: userRole
+        };
+
+        return this.http.post(CONFIG.API.clinicaccess, payload);
+    }
 }
