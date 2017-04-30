@@ -12,23 +12,27 @@
 	<div #ServingNow>
 		<ion-item color="primary" [hidden]="!serving">
 			<ion-avatar  item-left>
-				<img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
+				<!-- <img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg"> -->
+				<div>
+				{{getDefaultAvatar(serving)}}
+				</div>
 			</ion-avatar >
 			<h2 color="accent" (click)="view(0)">{{serving?.lastName}}, {{serving?.firstName}} {{serving?.middleName}}</h2>
 			<p>{{serving?.time | date: 'hh:mm a'}} </p>
 		</ion-item>
 	</div>
-	<div class="control-bar" [ngClass]="{'minimize': controlCss}">
+	<!-- TODO: [ngClass]="{'minimize': controlCss}" -->
+	<div class="control-bar" >
 		<ion-grid>
 			<ion-row>
 				<ion-col >
-					<xhr-button icon-only clear full (xhrClick)="done($event)">
+					<xhr-button icon-only clear full [disabled]="!serving" (xhrClick)="done($event)">
 						<ion-icon name="thumbs-up" color="accent"></ion-icon>
 						Done
 					</xhr-button>
 				</ion-col>
 				<ion-col>
-					<xhr-button icon-only clear full (xhrClick)="next($event)">
+					<xhr-button icon-only clear full [disabled]="!hasForQueue()" (xhrClick)="next($event)">
 						<ion-icon name="swap" color="accent"></ion-icon>
 						Next
 					</xhr-button>
@@ -40,20 +44,20 @@
 					</button>
 				</ion-col>
 				<ion-col col-0 >
-					<xhr-button icon-only  clear full>
+					<xhr-button #queueAgainBtn icon-only  clear full [disabled]="!serving" (xhrClick)="queueAgain($event)">
 						<ion-icon name="return-left" color="accent"></ion-icon>
 						Queue Again
 					</xhr-button>
 				</ion-col>
 				<ion-col col-0>
-					<xhr-button #remove icon-only clear full (xhrClick)="noShow($event)">
+					<xhr-button #removeBtn icon-only clear full [disabled]="!serving"(xhrClick)="noShow($event)">
 						<ion-icon name="eye-off" color="accent"></ion-icon>
 						No-Show
 					</xhr-button>
 				</ion-col>
 				<ion-col col-0>
-					<button ion-button icon-only  clear full (click)="toggleReOrder()">
-						<ion-icon name="list" color="accent" ></ion-icon>
+					<button ion-button icon-only  clear full (click)="toggleReOrder()" [disabled]="!(queue?.length > 1)">
+						<ion-icon name="shuffle" color="accent" ></ion-icon>
 						Re-Order
 					</button>
 				</ion-col>
@@ -61,23 +65,40 @@
 		</ion-grid>
 	</div>
 	<ion-list [reorder]="isReOrder" (ionItemReorder)="reorderItems($event)">
-		<ion-item-sliding *ngFor="let customer of queue;">
-			<button ion-item  (click)="view(0)">
-				<ion-avatar  item-left>
-					<img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
-				</ion-avatar >
-				<h3>{{customer.lastName}}, {{customer.firstName}} {{customer.middleName}}</h3>
-				<!-- <p>Time: {{customer.time}} </p> -->
-				<p>Date: {{customer.time | date : 'hh:mm a'}}</p>
-				<!-- <p>Hospital/Clinic: {{customer.clinic}}</p> -->
-			</button>
+			<animated-component *ngFor="let customer of queue;">
+		<ion-item-sliding >
+				<ion-item detail-push (click)="view(0)">
+					<ion-avatar  item-left>
+						<div>
+						{{getDefaultAvatar(customer)}}
+						</div>
+						<!-- <img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg"> -->
+					</ion-avatar >
+					<h3>{{customer.lastName}}, {{customer.firstName}} {{customer.middleName}}</h3>
+					<!-- <p>Time: {{customer.time}} </p> -->
+					<p>Time: {{customer.time | date : 'hh:mm a'}}</p>
+					<!-- <p>Hospital/Clinic: {{customer.clinic}}</p> -->
+					<ion-icon [name]="getTypeIcon(customer)"></ion-icon>
+					<ion-icon [name]="getStatusIcon(customer)"></ion-icon>
+				</ion-item>
 			<ion-item-options side="left">
-				<button ion-button color="danger">
+				<xhr-button color="danger" (xhrClick)="delete($event, customer)">
 					<ion-icon name="trash"></ion-icon>
 					Delete
-				</button>
+				</xhr-button>
+			</ion-item-options>
+			<ion-item-options side="right">
+				<xhr-button color="secondary" *ngFor="let button of getButtons(customer)" (xhrClick)="button.clickFn($event, customer)">
+					<ion-icon [name]="button.icon"></ion-icon>
+					{{button.name}}
+				</xhr-button>
+				<xhr-button color="secondary" (xhrClick)="serveNow($event, customer)">
+					<ion-icon name="clipboard"></ion-icon>
+					Serve Now
+				</xhr-button>
 			</ion-item-options>
 		</ion-item-sliding>
+			</animated-component>
 	</ion-list> 
 	<ion-fab bottom right>
 		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>

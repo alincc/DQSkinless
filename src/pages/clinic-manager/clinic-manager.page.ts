@@ -7,6 +7,8 @@ import { LOVS, MODE } from '../../constants/constants'
 
 import { ClinicPage } from './clinic/clinic.page';
 
+import { AssociateMemberPage } from './associate-member/associate-member.page';
+
 import { ClinicManagerService } from './clinic-manager.service';
 
 @Component({
@@ -119,7 +121,9 @@ export class ClinicManagerPage implements OnInit {
 	}
 
 	public associateMember(clinicId) {
-		console.log(clinicId);
+		this.rootNav.push(AssociateMemberPage, {
+			clinicId: clinicId
+		});
 	}
 
 	public displayTime(timeSlot) {

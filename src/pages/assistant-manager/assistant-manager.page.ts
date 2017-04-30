@@ -6,9 +6,12 @@ import { RootNavController } from '../../services/services';
 import { AccountCreationModal } from '../../components/account-creation-modal/account-creation-modal';
 import { SearchUserModal } from '../../components/search-user-modal/search-user-modal';
 
+import { AssistantManagerService } from './assistant-manager-service';
+
 @Component({
 	selector: 'assistant-manager-page',
-	templateUrl: 'assistant-manager.html'
+	templateUrl: 'assistant-manager.html',
+	providers: [AssistantManagerService]
 })
 export class AssistantManagerPage implements OnInit {
 
@@ -19,7 +22,8 @@ export class AssistantManagerPage implements OnInit {
 		private alertController: AlertController,
 		private modalController: ModalController,
 		private params: NavParams,
-		private rootNav: RootNavController) {
+		private rootNav: RootNavController,
+		private assistantManagerService: AssistantManagerService) {
 		this.getDefaults();
 	}
 
@@ -30,7 +34,11 @@ export class AssistantManagerPage implements OnInit {
 	}
 
 	public ngOnInit() {
-		// TODO GET ASSISTANTS
+		this.assistantManagerService.getAssistantsByClinic(this.rootNav.reloadPublisher.getValue()).subscribe(response => {
+			if (response && response.status) {
+				this.assistants = response.result;
+			}
+		});
 	}
 
 	public addAssistant() {
@@ -40,42 +48,28 @@ export class AssistantManagerPage implements OnInit {
 
 		accountCreationModal.onDidDismiss(assistant => {
 			if (assistant) {
-				console.log('assistant =>' + JSON.stringify(assistant));
-				this.assistants.push(assistant);
-			}
-		});
-	}
-
-	public searchAssistant() {
-		let searchAssistantModal = this.modalController.create(SearchUserModal, {
-			message: 'Add',
-			role: 2
-		});
-
-		searchAssistantModal.present();
-
-		searchAssistantModal.onDidDismiss(assistant => {
-			if (assistant) {
-				console.log('assistant =>' + JSON.stringify(assistant));
-			}
-		});
-	}
-
-	public deleteAssistant(assistant, i) {
-		this.alertController.create({
-			message: `Delete ${assistant.profile.fullName} as assistant?`,
-			buttons: [
-				{
-					text: 'NO',
-					role: 'cancel',
-				},
-				{
-					text: 'YES',
-					handler: () => {
-						this.assistants.splice(i, 1);
+				this.assistantManagerService.associateMember(this.rootNav.reloadPublisher.getValue(), assistant.userId).subscribe(response => {
+					if (response && response.status) {
+						this.assistants.push(assistant);
 					}
-				}
-			]
-		}).present();
+				});
+			}
+		});
+	}
+
+	public getFullName(user) {
+        return (user.lastname ? user.lastname + ', ' : '') + user.firstname + ' ' + (user.middlename ? user.middlename : '');
+    }
+
+    public displayContacts(contacts) {
+		if (contacts && contacts.length > 0) {
+			let formattedContacts = '';
+
+			contacts.forEach(contact => {
+				formattedContacts += `${contact.contact}, `;
+			});
+			return formattedContacts.substring(1, formattedContacts.length - 2);
+		}
+		return '';
 	}
 }

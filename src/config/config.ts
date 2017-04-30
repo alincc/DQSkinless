@@ -26,6 +26,8 @@ export const CONFIG = {
         getClinicTimeSlotByClinicId: '/clinictimeslots/cidli',
         getClinicContactByClinicId: '/cliniccontacts/cidli',
 
+        getAssistantsByClinic: '/assistantsByClinic',
+
         createAccount: '/users',
         searchUser: '/users/sbc'
     },

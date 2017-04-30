@@ -192,4 +192,19 @@ export class ClinicManagerService {
 
         return this.http.post(CONFIG.API.clinicaccess, payload);
     }
+
+    public associateMember(clinicId, userId) {
+        const payload = {
+            clinicId: clinicId,
+            userId: userId,
+            accessRole: 0,
+            userRole: 1
+        };
+
+        return this.http.post(CONFIG.API.clinicaccess, payload);
+    }
+
+    public getAssistantsByClinic(clinicId) {
+        return this.http.get(CONFIG.API.getAssistantsByClinic, [clinicId]);
+    }
 }

@@ -79,8 +79,9 @@ export class AccountCreationModal implements OnInit {
                 if (response && response.status) {
 
                     const assistantAccount = {
-                        username: this.email.value,
-                        password: response.result,
+                        userId: response.result.userId,
+                        username: response.result.username,
+                        password: response.result.password,
                     }
 
                     this.viewController.dismiss(assistantAccount).catch(() => { });
