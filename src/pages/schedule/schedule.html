@@ -9,8 +9,8 @@
 	</ion-navbar>
 </ion-header>
 <ion-content >
-	<div #ServingNow>
-		<ion-item color="primary" [hidden]="!serving">
+	<div #ServingNow class="serving">
+		<ion-item color="primary" *ngIf="serving" [@serve]>
 			<ion-avatar  item-left>
 				<!-- <img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg"> -->
 				<div>
@@ -65,8 +65,7 @@
 		</ion-grid>
 	</div>
 	<ion-list [reorder]="isReOrder" (ionItemReorder)="reorderItems($event)">
-			<animated-component *ngFor="let customer of queue;">
-		<ion-item-sliding >
+		<ion-item-sliding *ngFor="let customer of queue;trackBy:TrackByPatientId" [@queue]>
 				<ion-item detail-push (click)="view(0)">
 					<ion-avatar  item-left>
 						<div>
@@ -98,7 +97,6 @@
 				</xhr-button>
 			</ion-item-options>
 		</ion-item-sliding>
-			</animated-component>
 	</ion-list> 
 	<ion-fab bottom right>
 		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>

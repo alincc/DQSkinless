@@ -7,10 +7,37 @@ import { ScheduleService } from './schedule.service';
 import { QUEUE } from '../../constants/constants'
 import { AddQueueFormModal } from '../../components/add-queue-form-modal/add-queue-form.modal'
 import { XHRButton } from '../../components/xhr-button/xhr-button.component';
+import { trigger,
+  state,
+  style,
+  animate,
+  transition } from '@angular/animations';
 @Component({
 	selector: 'schedule-page',
 	templateUrl: 'schedule.html',
-	providers:[ ScheduleService ]
+	providers:[ ScheduleService ],
+	animations: [
+	  trigger('queue', [
+	    state('*', style({transform: 'translateX(0)'})),
+	    transition('void => *', [
+	      style({transform: 'translateX(-100%)'}),
+	      animate(300)
+	    ]),
+	    transition('* => void', [
+	      animate(300, style({transform: 'translateX(100%)'}))
+	    ])
+	  ]),
+	  trigger('serve', [
+	   state('*', style({transform: 'translateX(0)'})),
+	    transition('void => *', [
+	      style({transform: 'translateX(-100%)'}),
+	      animate(300)
+	    ]),
+	    transition('* => void', [
+	      animate(300, style({transform: 'translateX(100%)'}))
+	    ])
+	  ])
+	]
 })
 export class SchedulePage {
 	public queue: any[];
@@ -34,6 +61,7 @@ export class SchedulePage {
 	private connection: any;
 	private requestForRefresh: any;
 	private clinicId: any;
+	private servingState: string;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
 		private detector: ChangeDetectorRef,
@@ -228,6 +256,7 @@ export class SchedulePage {
 
 	done(xhr){
 		this.serving.status = QUEUE.STATUS.DONE;
+		this.servingState = 'done';
 		this.updateServing(xhr, () => {
 			this.ws.send(QUEUE.MAP.DONE);
 		});
@@ -260,6 +289,7 @@ export class SchedulePage {
 
 	queueAgain(xhr){
 		this.serving.status = QUEUE.STATUS.EN_ROUTE;
+		this.servingState = 'reque';
 		this.updateServing(xhr, () => {
 			this.ws.send(QUEUE.MAP.DONE);
 		});
@@ -267,6 +297,7 @@ export class SchedulePage {
 
 	noShow(xhr){
 		this.serving.status = QUEUE.STATUS.NO_SHOW;
+		this.servingState = 'done';
 		this.updateServing(xhr, () => {
 			this.ws.send(QUEUE.MAP.DONE);
 		});
@@ -449,6 +480,10 @@ export class SchedulePage {
 				}
 			}
 		]
+	}
+
+	private TrackByPatientId(index: number, item:any){
+		return item.id;
 	}
 
 }

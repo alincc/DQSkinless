@@ -5,6 +5,10 @@ schedule-page{
 
 	}
 	ion-content{
+		.serving{
+			background-color: $primary;
+		}
+
 		ion-item{	
 			ion-avatar{
 				img{
@@ -46,5 +50,8 @@ schedule-page{
 				background-color: $secondary-light;
 			}
 		}
+	}
+	.control-bar{
+		z-index: 99999;
 	}
 }
