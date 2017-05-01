@@ -33,9 +33,8 @@ export class ProfileForm implements OnInit {
     public errors: any;
     public genderList: any[];
     private contactType: any[] = LOVS.CONTACT_TYPE;
-    private contacts : ArraySubject = new ArraySubject();
+    private contacts: ArraySubject = new ArraySubject();
     private prc: AbstractControl;
-    private ptr: AbstractControl;
     private medicalArt: AbstractControl;
     private specialization: AbstractControl;
     private email: AbstractControl;
@@ -91,7 +90,7 @@ export class ProfileForm implements OnInit {
     private createProfileForm() {
         this.profileForm = this.formBuilder.group({
             prc: this.formType === 'doctor' ? [this.profile.prc, Validators.required] : [this.profile.prc],
-            ptr: this.formType === 'doctor' ? [this.profile.ptr, Validators.required] : [this.profile.ptr],
+            ptr: this.profile.ptr,
             medicalArt: this.formType === 'doctor' ? [this.profile.medicalArt, Validators.required] : [this.profile.medicalArt],
             specialization: this.formType === 'doctor' ? [this.profile.specialization, Validators.required] : [this.profile.specialization],
             email: [this.profile.email, [Validators.required, Validators.pattern(REGEX.EMAIL)]],
@@ -104,7 +103,6 @@ export class ProfileForm implements OnInit {
         });
 
         this.prc = this.profileForm.get('prc');
-        this.ptr = this.profileForm.get('ptr');
         this.medicalArt = this.profileForm.get('medicalArt');
         this.specialization = this.profileForm.get('specialization');
         this.email = this.profileForm.get('email');
@@ -119,16 +117,6 @@ export class ProfileForm implements OnInit {
                     this.errors.prc = 'PRC is required';
                 } else {
                     this.errors.prc = '';
-                }
-            }
-        );
-
-        this.ptr.valueChanges.subscribe(
-            newValue => {
-                if (this.ptr.hasError('required')) {
-                    this.errors.ptr = 'PTR is required';
-                } else {
-                    this.errors.ptr = '';
                 }
             }
         );
@@ -207,11 +195,9 @@ export class ProfileForm implements OnInit {
 
         //subcription for contacts
         this.contacts.subscribe(newValue => {
-            if(newValue)
+            if (newValue)
                 this.errors.contactNo = newValue.length ? '' : "Contact is required";
-        })
-
-
+        });
     }
 
     public submitForm(event) {
@@ -227,12 +213,12 @@ export class ProfileForm implements OnInit {
                 observable = this.service.addAsistantDetails(this.profile);
             }
             observable.subscribe(response => {
-                    if (response.status) {
-                        this.onSubmit.emit(this.profile);
-                    }
-                    event.dismissLoading();
-                })
-        }else{
+                if (response.status) {
+                    this.onSubmit.emit(this.profile);
+                }
+                event.dismissLoading();
+            })
+        } else {
             event.dismissLoading();
         }
     }
@@ -248,12 +234,6 @@ export class ProfileForm implements OnInit {
             this.errors.prc = 'PRC is required';
         } else {
             this.errors.prc = '';
-        }
-
-        if (this.ptr.hasError('required')) {
-            this.errors.ptr = 'PTR is required';
-        } else {
-            this.errors.ptr = '';
         }
 
         if (this.medicalArt.hasError('required')) {
@@ -327,31 +307,30 @@ export class ProfileForm implements OnInit {
             });
         modal.onDidDismiss(_return => {
             if (_return) {
-                if(this.contacts.value){
+                if (this.contacts.value) {
                     this.contacts.push(_return);
                 }
-                else{
+                else {
                     this.contacts.value = [_return];
                 }
-                // this.hasContact();
                 this.service.addContacts(_return).subscribe(response => {
-                        if(response.status){
-                            _return.id = response.result;
-                        }
-                    },err => {
-                       this.contacts.pop();
-                   });
+                    if (response.status) {
+                        _return.id = response.result;
+                    }
+                }, err => {
+                    this.contacts.pop();
+                });
             }
         });
         modal.present();
     }
 
-    public removeContact(event,item,idx){
+    public removeContact(event: Event, item, idx) {
         event.preventDefault();
         this.contacts.splice(idx, 1);
-        this.service.deleteContacts(item.id).subscribe(response => {}
-            ,err => {
-                this.contacts.splice(idx,0,item);
+        this.service.deleteContacts(item.id).subscribe(response => { }
+            , err => {
+                this.contacts.splice(idx, 0, item);
             });
     }
 
