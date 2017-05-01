@@ -4,7 +4,7 @@ import { ProfileFormService } from './profile-form.service';
 import { ModalController } from 'ionic-angular';
 
 import { LOVS } from '../../constants/constants';
-import { REGEX } from '../../config/config';
+import { REGEX, YEAR_RANGE } from '../../config/config';
 
 
 import { ContactModal } from '../contact-modal/contact-modal.component';
@@ -29,18 +29,26 @@ export class ProfileForm implements OnInit {
 
     private profileForm: FormGroup;
 
-    public medicalArts: any[];
-    public errors: any;
+    public contactType: any[];
+    public days: any[];
     public genderList: any[];
-    private contactType: any[] = LOVS.CONTACT_TYPE;
+    public medicalArts: any[];
+    public months: any[];
+    public years: any[];
+
+    public errors: any;
+
     private contacts: ArraySubject = new ArraySubject();
+    private today = new Date();
     private prc: AbstractControl;
     private medicalArt: AbstractControl;
     private specialization: AbstractControl;
     private email: AbstractControl;
     private lastName: AbstractControl;
     private firstName: AbstractControl;
-    private birthDate: AbstractControl;
+    private year: AbstractControl;
+    private month: AbstractControl;
+    private day: AbstractControl;
     private gender: AbstractControl;
 
     constructor(private formBuilder: FormBuilder,
@@ -51,7 +59,6 @@ export class ProfileForm implements OnInit {
 
     public ngOnInit() {
         this.profile = {};
-        this.createProfileForm();
         if (this.formType === 'doctor') {
             this.service.getDoctorDetails().subscribe(response => {
                 if (response && response.status) {
@@ -65,6 +72,7 @@ export class ProfileForm implements OnInit {
                 }
             });
         }
+        this.createProfileForm();
     }
 
     private getDefaults() {
@@ -77,14 +85,48 @@ export class ProfileForm implements OnInit {
             email: '',
             lastName: '',
             firstName: '',
-            birthDate: '',
+            year: '',
+            month: '',
+            day: '',
             gender: ''
         };
-        this.medicalArts = LOVS.MEDICAL_ARTS;
-        this.genderList = LOVS.GENDER;
+
         this.contactType = LOVS.CONTACT_TYPE;
+        this.years = [];
+        this.months = [];
+        this.days = [];
+        this.genderList = LOVS.GENDER;
+        this.medicalArts = LOVS.MEDICAL_ARTS;
+        this.createDateLov();
 
         this.mode = 'Edit';
+    }
+
+    private createDateLov() {
+        let minYear = this.today.getFullYear() - 100;
+
+        for (let i = 0; i <= YEAR_RANGE; i++) {
+            this.years.push(minYear.toString());
+            minYear++;
+        }
+
+        for (let i = 1; i <= 12; i++) {
+            this.months.push(this.leftPad(i.toString(), '0', 2));
+        }
+
+        this.createDaysLov(31);
+    }
+
+    private leftPad(num, pad, size) {
+        let s = num + '';
+        while (s.length < size) s = pad + s;
+        return s;
+    }
+
+    private createDaysLov(maxDay) {
+        for (let i = 1; i <= maxDay; i++) {
+            this.days.push(this.leftPad(i.toString(), '0', 2));
+        }
     }
 
     private createProfileForm() {
@@ -97,7 +139,9 @@ export class ProfileForm implements OnInit {
             lastName: [this.profile.lastName, Validators.required],
             firstName: [this.profile.firstName, Validators.required],
             middleName: this.profile.middleName,
-            birthDate: [this.profile.birthDate, Validators.required],
+            year: [this.profile.birthdate ? (new Date(this.profile.birthdate)).getFullYear() : '', Validators.required],
+            month: [this.profile.birthdate ? (new Date(this.profile.birthdate)).getMonth() : '', Validators.required],
+            day: [this.profile.birthdate ? (new Date(this.profile.birthdate)).getDay() : '', Validators.required],
             gender: [this.profile.gender, Validators.required],
             address: this.profile.address
         });
@@ -108,7 +152,9 @@ export class ProfileForm implements OnInit {
         this.email = this.profileForm.get('email');
         this.lastName = this.profileForm.get('lastName');
         this.firstName = this.profileForm.get('firstName');
-        this.birthDate = this.profileForm.get('birthDate');
+        this.year = this.profileForm.get('year');
+        this.month = this.profileForm.get('month');
+        this.day = this.profileForm.get('day');
         this.gender = this.profileForm.get('gender');
 
         this.prc.valueChanges.subscribe(
@@ -173,12 +219,32 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        this.birthDate.valueChanges.subscribe(
+        this.year.valueChanges.subscribe(
             newValue => {
-                if (this.birthDate.hasError('required')) {
-                    this.errors.birthDate = 'Birth Date is required';
+                if (this.year.hasError('required')) {
+                    this.errors.year = 'Birth Year is required';
                 } else {
-                    this.errors.birthDate = '';
+                    this.errors.year = '';
+                }
+            }
+        );
+
+        this.month.valueChanges.subscribe(
+            newValue => {
+                if (this.month.hasError('required')) {
+                    this.errors.month = 'Birth Month is required';
+                } else {
+                    this.errors.month = '';
+                }
+            }
+        );
+
+        this.day.valueChanges.subscribe(
+            newValue => {
+                if (this.day.hasError('required')) {
+                    this.errors.day = 'Birth Day is required';
+                } else {
+                    this.errors.day = '';
                 }
             }
         );
@@ -193,7 +259,6 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        //subcription for contacts
         this.contacts.subscribe(newValue => {
             if (newValue)
                 this.errors.contactNo = newValue.length ? '' : "Contact is required";
@@ -206,7 +271,7 @@ export class ProfileForm implements OnInit {
         if (this.profileForm.valid && this.hasContact()) {
             this.bindProfileDetails();
             let observable;
-            //store details
+            // store details
             if (this.formType === 'doctor') {
                 observable = this.service.setDoctorDetails(this.profile);
             } else {
@@ -217,7 +282,7 @@ export class ProfileForm implements OnInit {
                     this.onSubmit.emit(this.profile);
                 }
                 event.dismissLoading();
-            })
+            });
         } else {
             event.dismissLoading();
         }
@@ -268,10 +333,22 @@ export class ProfileForm implements OnInit {
             this.errors.firstName = '';
         }
 
-        if (this.birthDate.hasError('required')) {
-            this.errors.birthDate = 'Birth Date is required';
+        if (this.year.hasError('required')) {
+            this.errors.year = 'Birth Year is required';
         } else {
-            this.errors.birthDate = '';
+            this.errors.year = '';
+        }
+
+        if (this.month.hasError('required')) {
+            this.errors.month = 'Birth Month is required';
+        } else {
+            this.errors.month = '';
+        }
+
+        if (this.day.hasError('required')) {
+            this.errors.day = 'Birth Day is required';
+        } else {
+            this.errors.day = '';
         }
 
         if (this.gender.hasError('required')) {
@@ -290,7 +367,7 @@ export class ProfileForm implements OnInit {
         this.profile.lastname = this.profileForm.get('lastName').value;
         this.profile.firstname = this.profileForm.get('firstName').value;
         this.profile.middlename = this.profileForm.get('middleName').value;
-        this.profile.birthdate = this.profileForm.get('birthDate').value;
+        this.profile.birthdate = this.profileForm.get('year').value + '-' + this.profileForm.get('month').value + '-' + this.profileForm.get('day').value;
         this.profile.gender = this.profileForm.get('gender').value;
         this.profile.address = this.profileForm.get('address').value;
     }

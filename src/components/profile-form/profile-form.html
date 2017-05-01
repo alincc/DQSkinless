@@ -131,13 +131,47 @@
                     </div>
                 </ion-col>
                 <ion-col col-12 col-sm-6 col-md-6>
-                    <ion-label class="form-label">Birth Date <span *ngIf="isEditMode()">*</span></ion-label>
-                    <ion-item round>
-                        <ion-input type="date" name="birthDate" formControlName="birthDate" [disabled]="!isEditMode()"></ion-input>
-                    </ion-item>
-                    <div class="error-message" *ngIf="profileForm.get('birthDate')?.dirty &&  profileForm.get('birthDate').invalid">
-                        {{ errors.birthDate }}
-                    </div>
+                    <ion-row>
+                        <ion-col col-12 col-sm-12 col-md-12>
+                            <ion-label class="form-label">Birth Date <span *ngIf="isEditMode()">*</span></ion-label>
+                        </ion-col>
+
+                        <ion-col col-4 col-sm-4 col-md-4>
+                            <ion-item clean>
+                                <ion-select class="options" name="year" formControlName="year" placeholder="Year">
+                                    <ion-option *ngFor="let y of years" [value]="y">{{ y }}</ion-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col col-4 col-sm-4 col-md-4>
+                            <ion-item clean>
+                                <ion-select class="options" name="month" formControlName="month" placeholder="Month">
+                                    <ion-option *ngFor="let m of months" [value]="m">{{ m }}</ion-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col col-4 col-sm-4 col-md-4>
+                            <ion-item clean>
+                                <ion-select class="options" name="day" formControlName="day" placeholder="Day">
+                                    <ion-option *ngFor="let d of days" [value]="d">{{ d }}</ion-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col col-12 col-sm-12 col-md-12>
+                            <ion-item round *ngIf="!isEditMode()">
+                                <ion-input type="date" name="birthDate" formControlName="birthDate" [disabled]="!isEditMode()"></ion-input>
+                            </ion-item>
+                            <div class="error-message" *ngIf="profileForm.get('year')?.dirty &&  profileForm.get('year').invalid">
+                                {{ errors.year }}
+                            </div>
+                            <div class="error-message" *ngIf="profileForm.get('month')?.dirty &&  profileForm.get('month').invalid">
+                                {{ errors.month }}
+                            </div>
+                            <div class="error-message" *ngIf="profileForm.get('day')?.dirty &&  profileForm.get('day').invalid">
+                                {{ errors.day }}
+                            </div>
+                        </ion-col>
+                    </ion-row>
                 </ion-col>
             </ion-row>
             <ion-row>

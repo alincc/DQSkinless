@@ -3,6 +3,7 @@ export const CONFIG = {
     // Others
     API: {
         assistantDetails: '/assistantdetails',
+        getAssistantsByClinic: '/assistantsByClinic',
 
         doctorDetails: '/doctordetails',
         getNoOfClinics: '/doctordetails/clinics',
@@ -11,7 +12,9 @@ export const CONFIG = {
         changePassword: '/users/changepass',
         changeStatus: '/users/changestatus',
         contacts: '/usercontacts',
+        createAccount: '/users',
         getUserContacts: '/usercontacts/u',
+        searchUser: '/users/sbc',
 
         queue: '/queue',
         queueBoard: '/queue-board',
@@ -24,16 +27,10 @@ export const CONFIG = {
         getClinicAccessByUserId: '/clinicaccess/u/gbcid',
         getClinicRecordByUserId: '/clinicdetails/u',
         getClinicTimeSlotByClinicId: '/clinictimeslots/cidli',
-        getClinicContactByClinicId: '/cliniccontacts/cidli',
-
-        getAssistantsByClinic: '/assistantsByClinic',
-
-        createAccount: '/users',
-        searchUser: '/users/sbc'
+        getClinicContactByClinicId: '/cliniccontacts/cidli'
     },
     SOCKETS: {
         queue: '/queue-socket'
-
     }
 };
 
@@ -41,7 +38,6 @@ export const REGEX = {
     EMAIL: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     PASSWORD: /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.{8,})/
 }
-
 
 export const MESSAGES = {
     ERROR: {
@@ -53,6 +49,4 @@ export const MESSAGES = {
     }
 }
 
-export const HTTP_CONFIG = {
-
-}
+export const YEAR_RANGE = 100;
