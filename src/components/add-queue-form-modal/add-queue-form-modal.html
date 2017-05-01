@@ -21,7 +21,7 @@
 						<ion-item round>
 							<ion-input name="lastName" formControlName="lastName"></ion-input>
 						</ion-item>
-						<div class="error-message" *ngIf="lastName?.dirty &&  lastName.invalid">
+						<div class="error-message" *ngIf="lastName.invalid">
 							{{ errors.lastName }}
 						</div>
 					</div>
@@ -32,7 +32,7 @@
 						<ion-item round>
 							<ion-input name="firstName" formControlName="firstName"></ion-input>
 						</ion-item>
-						<div class="error-message" *ngIf="firstName?.dirty &&  firstName.invalid">
+						<div class="error-message" *ngIf="firstName.invalid">
 							{{ errors.firstName }}
 						</div>
 					</div>

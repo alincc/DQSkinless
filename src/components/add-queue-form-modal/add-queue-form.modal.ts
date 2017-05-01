@@ -88,6 +88,12 @@ export class AddQueueFormModal{
     }
 
     private validateForm(){
+        if (this.lastName.hasError('required')) {
+            this.errors.lastName = 'Last Name is required';
+        }
+        if (this.firstName.hasError('required')) {
+            this.errors.firstName = 'First Name is required';
+        }
     	return !Boolean(this.errors.lastName || this.errors.firstName);
     }
 
