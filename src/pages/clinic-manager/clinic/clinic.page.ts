@@ -61,7 +61,7 @@ export class ClinicPage implements OnInit {
         this.contacts = new ArraySubject([]);
 
         this.errors = {
-            name: '',
+            clinicName: '',
             address: '',
             schedule: '',
             contact: ''

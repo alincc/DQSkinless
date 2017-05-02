@@ -15,7 +15,7 @@
                         <ion-input name="clinicName" formControlName="clinicName"></ion-input>
                     </ion-item>
                     <div class="error-message" *ngIf="clinicForm.get('clinicName')?.dirty &&  clinicForm.get('clinicName').invalid">
-                        {{ errors.name }}
+                        {{ errors.clinicName }}
                     </div>
                 </ion-col>
             </ion-row>
