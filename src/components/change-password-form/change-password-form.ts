@@ -85,11 +85,8 @@ export class ChangePasswordForm implements OnInit {
             this.password.setErrors(null);
             this.errors.password = '';
         }
-
-        if (confirm === '') {
-            this.confirm.setErrors({ required: true });
-            this.errors.confirm = 'Password is required';
-        } else if (confirm !== password) {
+        
+        if (confirm !== password) {
             this.password.setErrors({ notMatch: true });
             this.confirm.setErrors({ notMatch: true });
             this.errors.confirm = 'Passwords do not match';

@@ -256,6 +256,8 @@ ion-content{
 	// Radio Buttons
 	ion-list[role="radiogroup"]{
 		display: inline-block;
+		width: 100%;
+		
 		ion-item{
 			border-bottom: 0 !important;
 			border-top: 0 !important;

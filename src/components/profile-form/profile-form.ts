@@ -258,11 +258,47 @@ export class ProfileForm implements OnInit {
                 }
             }
         );
+    }
 
-        this.contacts.subscribe(newValue => {
-            if (newValue)
-                this.errors.contactNo = newValue.length ? '' : "Contact is required";
+    public addContact(event: Event): void {
+        event.preventDefault();
+        let modal = this.modal.create(ContactModal,
+            {
+                header: "Add User Contact"
+            });
+        modal.onDidDismiss(_return => {
+            if (_return) {
+                if (this.contacts.value) {
+                    this.contacts.push(_return);
+                }
+                else {
+                    this.contacts.value = [_return];
+                }
+                this.service.addContacts(_return).subscribe(response => {
+                    if (response.status) {
+                        _return.id = response.result;
+                    }
+                }, err => {
+                    this.contacts.pop();
+                });
+            }
+            this.markFormAsDirty();
         });
+        modal.present();
+    }
+
+    public removeContact(event: Event, item, idx) {
+        event.preventDefault();
+        this.service.deleteContacts(item.id).subscribe(response => {
+            if (response && response.status) {
+                this.contacts.splice(idx, 1);
+            }
+        });
+        this.markFormAsDirty();
+    }
+
+    public hasContact() {
+        return this.contacts.value && this.contacts.value.length > 0;
     }
 
     public submitForm(event) {
@@ -295,67 +331,17 @@ export class ProfileForm implements OnInit {
     }
 
     private validateForm() {
-        if (this.prc.hasError('required')) {
-            this.errors.prc = 'PRC is required';
-        } else {
-            this.errors.prc = '';
-        }
-
-        if (this.medicalArt.hasError('required')) {
-            this.errors.medicalArt = 'Medical Arts is required';
-        } else {
-            this.errors.medicalArt = '';
-        }
-
-        if (this.specialization.hasError('required')) {
-            this.errors.specialization = 'Specialization is required';
-        } else {
-            this.errors.specialization = '';
-        }
-
-        if (this.email.hasError('required')) {
-            this.errors.email = 'Email is required.';
-        } else if (this.email.hasError('pattern')) {
-            this.errors.email = 'Invalid email address format';
-        } else {
-            this.errors.email = '';
-        }
-
-        if (this.lastName.hasError('required')) {
-            this.errors.lastName = 'Last Name is required';
-        } else {
-            this.errors.lastName = '';
-        }
-
-        if (this.firstName.hasError('required')) {
-            this.errors.firstName = 'First Name is required';
-        } else {
-            this.errors.firstName = '';
-        }
-
-        if (this.year.hasError('required')) {
-            this.errors.year = 'Birth Year is required';
-        } else {
-            this.errors.year = '';
-        }
-
-        if (this.month.hasError('required')) {
-            this.errors.month = 'Birth Month is required';
-        } else {
-            this.errors.month = '';
-        }
-
-        if (this.day.hasError('required')) {
-            this.errors.day = 'Birth Day is required';
-        } else {
-            this.errors.day = '';
-        }
-
-        if (this.gender.hasError('required')) {
-            this.errors.gender = 'Gender is required';
-        } else {
-            this.errors.gender = '';
-        }
+        this.errors.prc = this.prc.hasError('required') ? 'PRC is required' : '';
+        this.errors.medicalArt = this.medicalArt.hasError('required') ? 'Medical Arts is required' : '';
+        this.errors.specialization = this.specialization.hasError('required') ? 'Specialization is required' : '';
+        this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
+        this.errors.lastName = this.lastName.hasError('required') ? 'Last Name is required' : '';
+        this.errors.firstName = this.firstName.hasError('required') ? 'First Name is required' : '';
+        this.errors.year = this.year.hasError('required') ? 'Birth Year is required' : '';
+        this.errors.month = this.month.hasError('required') ? 'Birth Month is required' : '';
+        this.errors.day = this.day.hasError('required') ? 'Birth Day is required' : '';
+        this.errors.gender = this.gender.hasError('required') ? 'Gender is required' : '';
+        this.errors.contactNo = this.hasContact() ? '' : "Contact is required";
     }
 
     private bindProfileDetails() {
@@ -374,44 +360,5 @@ export class ProfileForm implements OnInit {
 
     public isEditMode(): boolean {
         return this.mode !== 'View';
-    }
-
-    public addContact(event: Event): void {
-        event.preventDefault();
-        let modal = this.modal.create(ContactModal,
-            {
-                header: "Add User Contact"
-            });
-        modal.onDidDismiss(_return => {
-            if (_return) {
-                if (this.contacts.value) {
-                    this.contacts.push(_return);
-                }
-                else {
-                    this.contacts.value = [_return];
-                }
-                this.service.addContacts(_return).subscribe(response => {
-                    if (response.status) {
-                        _return.id = response.result;
-                    }
-                }, err => {
-                    this.contacts.pop();
-                });
-            }
-        });
-        modal.present();
-    }
-
-    public removeContact(event: Event, item, idx) {
-        event.preventDefault();
-        this.contacts.splice(idx, 1);
-        this.service.deleteContacts(item.id).subscribe(response => { }
-            , err => {
-                this.contacts.splice(idx, 0, item);
-            });
-    }
-
-    public hasContact() {
-        return !Boolean(this.errors.contactNo);
     }
 }
