@@ -61,7 +61,7 @@ export class ProfileForm implements OnInit {
 
     public ngOnInit() {
         this.profile = {};
-        if (this.formType === 'doctor') {
+        if (this.formType === 'D') {
             this.service.getDoctorDetails().subscribe(response => {
                 if (response && response.status) {
                     this.profile = response.result;
@@ -78,7 +78,7 @@ export class ProfileForm implements OnInit {
     }
 
     private getDefaults() {
-        this.formType = 'nonDoctor';
+        this.formType = 'ND';
         this.errors = {
             prc: '',
             ptr: '',
@@ -134,10 +134,10 @@ export class ProfileForm implements OnInit {
 
     private createProfileForm() {
         this.profileForm = this.formBuilder.group({
-            prc: this.formType === 'doctor' ? [this.profile.prc, Validators.required] : [this.profile.prc],
+            prc: this.formType === 'D' ? [this.profile.prc, Validators.required] : [this.profile.prc],
             ptr: this.profile.ptr,
-            medicalArt: this.formType === 'doctor' ? [this.profile.medicalArt, Validators.required] : [this.profile.medicalArt],
-            specialization: this.formType === 'doctor' ? [this.profile.specialization, Validators.required] : [this.profile.specialization],
+            medicalArt: this.formType === 'D' ? [this.profile.medicalArt, Validators.required] : [this.profile.medicalArt],
+            specialization: this.formType === 'D' ? [this.profile.specialization, Validators.required] : [this.profile.specialization],
             email: [this.profile.email, [Validators.required, Validators.pattern(REGEX.EMAIL)]],
             lastName: [this.profile.lastName, Validators.required],
             firstName: [this.profile.firstName, Validators.required],
@@ -307,7 +307,7 @@ export class ProfileForm implements OnInit {
                 this.stackedServices.push(this.service.addContacts(contact));
             });
 
-            if (this.formType === 'doctor') {
+            if (this.formType === 'D') {
                 this.stackedServices.push(this.service.setDoctorDetails(this.profile));
             } else {
                 this.stackedServices.push(this.service.setAsistantDetails(this.profile));
