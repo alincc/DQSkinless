@@ -399,7 +399,7 @@ export class ClinicPage implements OnInit {
         }).forEach(contact => {
             delete contact['isProfileContacts'];
             newContacts.push(contact);
-        });;
+        });
 
         return newContacts;
     }

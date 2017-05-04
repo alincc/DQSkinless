@@ -8,13 +8,14 @@ import { REGEX, YEAR_RANGE } from '../../config/config';
 
 
 import { ContactModal } from '../contact-modal/contact-modal.component';
-import { ArraySubject } from '../../shared/model/model'
+import { ArraySubject } from '../../shared/model/model';
 
+import { StackedServices } from '../../services/services';
 
 @Component({
     selector: 'profile-form',
     templateUrl: 'profile-form.html',
-    providers: [ProfileFormService]
+    providers: [ProfileFormService, StackedServices]
 })
 export class ProfileForm implements OnInit {
 
@@ -53,7 +54,8 @@ export class ProfileForm implements OnInit {
 
     constructor(private formBuilder: FormBuilder,
         private service: ProfileFormService,
-        private modal: ModalController) {
+        private modal: ModalController,
+        private stackedServices: StackedServices) {
         this.getDefaults();
     }
 
@@ -99,6 +101,7 @@ export class ProfileForm implements OnInit {
         this.medicalArts = LOVS.MEDICAL_ARTS;
         this.createDateLov();
 
+        this.contacts = new ArraySubject([]);
         this.mode = 'Edit';
     }
 
@@ -262,39 +265,31 @@ export class ProfileForm implements OnInit {
 
     public addContact(event: Event): void {
         event.preventDefault();
+
         let modal = this.modal.create(ContactModal,
             {
                 header: "Add User Contact"
             });
-        modal.onDidDismiss(_return => {
-            if (_return) {
-                if (this.contacts.value) {
-                    this.contacts.push(_return);
-                }
-                else {
-                    this.contacts.value = [_return];
-                }
-                this.service.addContacts(_return).subscribe(response => {
-                    if (response.status) {
-                        _return.id = response.result;
-                    }
-                }, err => {
-                    this.contacts.pop();
-                });
+
+        modal.onDidDismiss(contact => {
+            if (contact) {
+                this.contacts.push(contact);
+                this.profileForm.get('address').markAsDirty();
             }
-            this.markFormAsDirty();
         });
+
         modal.present();
     }
 
     public removeContact(event: Event, item, idx) {
         event.preventDefault();
-        this.service.deleteContacts(item.id).subscribe(response => {
-            if (response && response.status) {
-                this.contacts.splice(idx, 1);
-            }
-        });
-        this.markFormAsDirty();
+
+        this.contacts.splice(idx, 1);
+        if (item.id) {
+            this.stackedServices.push(this.service.deleteContacts(item.id));
+        }
+
+        this.profileForm.get('address').markAsDirty();
     }
 
     public hasContact() {
@@ -304,21 +299,32 @@ export class ProfileForm implements OnInit {
     public submitForm(event) {
         this.markFormAsDirty();
         this.validateForm();
+
         if (this.profileForm.valid && this.hasContact()) {
             this.bindProfileDetails();
-            let observable;
-            // store details
-            if (this.formType === 'doctor') {
-                observable = this.service.setDoctorDetails(this.profile);
-            } else {
-                observable = this.service.addAsistantDetails(this.profile);
-            }
-            observable.subscribe(response => {
-                if (response.status) {
-                    this.onSubmit.emit(this.profile);
-                }
-                event.dismissLoading();
+
+            this.contacts.value.forEach(contact => {
+                this.stackedServices.push(this.service.addContacts(contact));
             });
+
+            if (this.formType === 'doctor') {
+                this.stackedServices.push(this.service.setDoctorDetails(this.profile));
+            } else {
+                this.stackedServices.push(this.service.setAsistantDetails(this.profile));
+            }
+
+            this.stackedServices.executeFork().subscribe(response => {
+
+                if (response) {
+                    const submit = response[this.stackedServices.lastIndex];
+
+                    if (submit && submit.status) {
+                        this.onSubmit.emit(this.profile);
+                    }
+                }
+
+                event.dismissLoading();
+            }, err => event.dismissLoading());
         } else {
             event.dismissLoading();
         }

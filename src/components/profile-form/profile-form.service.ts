@@ -19,7 +19,6 @@ export class ProfileFormService {
         return this.userId;
     }
 
-
     public setDoctorDetails(_parameter) {
         _parameter.userId = this.getUserId();
         return this.http.put(CONFIG.API.doctorDetails, _parameter);
@@ -28,12 +27,6 @@ export class ProfileFormService {
     public getDoctorDetails() {
         return this.http.get(CONFIG.API.doctorDetails, [this.getUserId()]);
     }
-
-    public addAsistantDetails(_parameter) {
-        _parameter.userId = this.getUserId();
-        return this.http.post(CONFIG.API.assistantDetails, _parameter);
-    }
-
 
     public setAsistantDetails(_parameter) {
         _parameter.userId = this.getUserId();
