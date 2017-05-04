@@ -64,7 +64,9 @@
 				<ion-col col-12 col-sm-6 col-md-6>
 					<div class="form-group">
 						<ion-label>Date</ion-label>
-						<ion-datetime displayFormat="MMMM DD YYYY" formControlName="schedule" [disabled]="isServeNow.value">
+						<ion-datetime displayFormat="MMMM DD YYYY" formControlName="schedule" [disabled]="isServeNow.value"
+						[min]="getMinDate()"
+						>
 						</ion-datetime>
 					</div>
 				</ion-col>

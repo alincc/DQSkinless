@@ -1,5 +1,5 @@
 import { Component, ViewChild,ChangeDetectorRef} from '@angular/core';
-import { PopoverController, Content, ModalController, LoadingController, AlertController} from 'ionic-angular';
+import { PopoverController, Content, ModalController, LoadingController, AlertController, Loading} from 'ionic-angular';
 import { MoreMenuPopover } from './more.popover';
 import { PatientProfilePage } from '../patient-profile/patient-profile.page';
 import { RootNavController } from '../../services/services';
@@ -12,6 +12,7 @@ import { trigger,
   style,
   animate,
   transition } from '@angular/animations';
+import { Utilities } from '../../utilities/utilities';
 @Component({
 	selector: 'schedule-page',
 	templateUrl: 'schedule.html',
@@ -62,6 +63,7 @@ export class SchedulePage {
 	private requestForRefresh: any;
 	private clinicId: any;
 	private servingState: string;
+	private loading:any;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
 		private detector: ChangeDetectorRef,
@@ -72,9 +74,13 @@ export class SchedulePage {
 		rootNav.reloadPublisher.subscribe(clinicId => {
 			this.initSchedule(clinicId);
 		})
+
 	}
 
 	initSchedule(clinicId){
+		let loading = this.createLoading();
+		loading.present();
+
 		this.controlCss = false;
 		this.isReOrder = false;
 		if(this.ws){
@@ -91,23 +97,26 @@ export class SchedulePage {
 		);
 		this.clinicId = clinicId;
 
-		var currentDate = new Date();
-		currentDate.setHours(0);
-		currentDate.setMinutes(0);
-		currentDate.setSeconds(0);
-		currentDate.setMilliseconds(0);
+		var currentDate = Utilities.clearTime(new Date());
 
 		this.service.getQueueBoardByIdAndClinic(clinicId,currentDate).subscribe(response => {
 			if(response.status){
 				this.queueBoard = response.result;
 				this.connection = this.ws.connection.subscribe(response => {
-					if(this.requestForRefresh){
-						clearTimeout(this.requestForRefresh);
+					console.log(response );
+					if(response === "A"){
+						this.fetchQueue( response => {
+							loading.dismiss();
+						});
+					}else{
+						if(this.requestForRefresh){
+							clearTimeout(this.requestForRefresh);
+						}
+						this.requestForRefresh = setTimeout(()=> {
+							this.requestForRefresh = null;
+							this.fetchQueue();
+						}, 3000);
 					}
-					this.requestForRefresh = setTimeout(()=> {
-						this.fetchQueue();
-						this.requestForRefresh = null;
-					}, 3000);
 				}, err => {
 					console.error(err);
 				}, () => {
@@ -119,7 +128,7 @@ export class SchedulePage {
 
 
 	fetchQueue(callback?, errorHandler?){
-		this.service.getQueueByBoardID(this.queueBoard.id).subscribe(response => {
+		return this.service.getQueueByBoardID(this.queueBoard.id).subscribe(response => {
 			if(response.status){
 				let newQueueList = [];
 				this.serving = null;
@@ -303,26 +312,33 @@ export class SchedulePage {
 		});
 	}
 
-	addQueue(){
-		let modal = this.modal.create(AddQueueFormModal);
+	private addOrEditQueue(customer? : any){
+		let modal = this.modal.create(AddQueueFormModal, customer);
 		modal.onDidDismiss(item => {
 			if(!item){
 				return;
 			}
-			var loading = this.loadingCtrl.create({
-				spinner: 'crescent',
-				cssClass: 'xhr-loading'
-			});
+			let loading = this.createLoading();
 			loading.present();
 
 			var parameter: any = item;
+			if(customer){
+				parameter.id = customer.id;
+			}
 			let parameterFactory = new Promise( (resolve, reject) =>{
 				if(item.isServeNow){
+					if(customer){
+						parameter.order = customer.order;
+						parameter.time = customer.time;
+						parameter.status = customer.status;
+					}else{
+						parameter.order = this.getNewOrder();
+						parameter.time = new Date();
+						parameter.status = QUEUE.STATUS.QUEUED;
+					}
 					parameter.type = QUEUE.TYPE.WALKIN;
 					parameter.boardId = this.queueBoard.id;
-					parameter.order = this.getNewOrder();
-					parameter.time = new Date();
-					parameter.status = QUEUE.STATUS.QUEUED;
+					
 					resolve(parameter);
 				}else{
 					this.service.getQueueBoardByIdAndClinic(this.clinicId, new Date(item.schedule))
@@ -343,7 +359,13 @@ export class SchedulePage {
 				}
 			})
 			parameterFactory.then( parameter => {
-				this.service.addQueue(parameter).subscribe(
+				let serviceCallback;
+				if(customer){
+					serviceCallback = this.service.updateQueue(parameter)
+				}else{
+					serviceCallback = this.service.addQueue(parameter)
+				}
+				serviceCallback.subscribe(
 					response => {
 						if(response.status){
 							this.ws.send(QUEUE.MAP.FETCH);
@@ -484,6 +506,13 @@ export class SchedulePage {
 
 	private TrackByPatientId(index: number, item:any){
 		return item.id;
+	}
+
+	private createLoading() : Loading {
+		return this.loadingCtrl.create({
+			spinner: 'crescent',
+			cssClass: 'xhr-loading'
+		});
 	}
 
 }

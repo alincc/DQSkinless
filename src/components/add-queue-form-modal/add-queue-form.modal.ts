@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { ViewController } from 'ionic-angular';
+import { ViewController, NavParams } from 'ionic-angular';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { QUEUE } from '../../constants/constants'
+import { Utilities } from '../../utilities/utilities';
 @Component({
 	selector: 'add-queue-form-modal',
 	templateUrl: 'add-queue-form-modal.html'
@@ -17,18 +18,19 @@ export class AddQueueFormModal{
     private errors: any;
 
     constructor(private formBuilder: FormBuilder,
-    	private view: ViewController){
-    	this.initFormGroup();
+    	private view: ViewController,
+        private param: NavParams){
+    	this.initFormGroup(param.data);
     }
 
-    private initFormGroup(){
+    private initFormGroup(data?){
     	this.queueForm = this.formBuilder.group({
-    		lastName: ["", Validators.required],
-            firstName: ["", Validators.required],
-            middleName: "",
-            isServeNow: [true],
-            schedule: [new Date()],
-            timeSlot: [new Date()]
+    		lastName: [data.lastName || "", Validators.required],
+            firstName: [data.firstName || "", Validators.required],
+            middleName: data.middleName || "",
+            isServeNow: [data.type? ( data.type === QUEUE.TYPE.WALKIN ? true : false ) :true],
+            schedule: [data.schedule || new Date()],
+            timeSlot: [data.timeSlot || new Date()]
         });
 
     	this.lastName = this.queueForm.get('lastName');
@@ -95,6 +97,14 @@ export class AddQueueFormModal{
             this.errors.firstName = 'First Name is required';
         }
     	return !Boolean(this.errors.lastName || this.errors.firstName);
+    }
+
+    private getMinDate() : any{
+        let dateNow = Utilities.clearTime(new Date());
+        dateNow.setDate(dateNow.getDate() + 1);
+        let month = (dateNow.getMonth() + 1).toString();
+        let date = (dateNow.getDate()).toString();
+        return dateNow.getFullYear() + '-' + ( month.length < 2 ? '0' : '' ) + month + '-' + ( date.length < 2 ? '0' : '' ) + date;
     }
 
 }
