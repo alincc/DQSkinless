@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, NavParams } from "ionic-angular";
+import { AlertController, LoadingController, NavParams } from "ionic-angular";
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/forkJoin';
 
 import { RootNavController } from '../../services/services';
 
 import { LOVS, MODE } from '../../constants/constants'
 
 import { ClinicPage } from './clinic/clinic.page';
-
 import { AssociateMemberPage } from './associate-member/associate-member.page';
 
 import { ClinicManagerService } from './clinic-manager.service';
@@ -24,10 +26,12 @@ export class ClinicManagerPage implements OnInit {
 	public days: any;
 	public isManager: boolean;
 
+	private loading: any;
 	private index: number;
 
 	constructor(
 		private alertController: AlertController,
+		private loadingController: LoadingController,
 		private params: NavParams,
 		private rootNav: RootNavController,
 		private clinicManagerService: ClinicManagerService) {
@@ -35,13 +39,32 @@ export class ClinicManagerPage implements OnInit {
 	}
 
 	public ngOnInit() {
-		this.getClinics();
+		this.clinics = [];
+		this.showLoading();
 
-		this.clinicManagerService.getNoOfClinics().subscribe(response => {
-			if (response && response.status) {
-				this.allowableClinics = response.result;
+		Observable.forkJoin([
+			this.clinicManagerService.getNoOfClinics().map(response => {
+				if (response && response.status) {
+					this.allowableClinics = response.result;
+					return Observable.of(response);
+				}
+			}),
+
+			this.clinicManagerService.getClinicRecord().map(response => {
+				if (response) {
+					this.clinics = response;
+
+					if (this.params.data.parent && this.clinics.length > 0) {
+						this.params.data.parent.completedRegistration = true;
+					}
+					return Observable.of(response);
+				}
+			})
+		]).subscribe(response => {
+			if (response) {
+				this.dismissLoading();
 			}
-		});
+		}, err => this.dismissLoading());
 
 		this.isManager = this.params.data && this.params.data.isManager ? this.params.data.isManager : false;
 	}
@@ -54,6 +77,7 @@ export class ClinicManagerPage implements OnInit {
 
 	private getClinics() {
 		this.clinics = [];
+		this.showLoading();
 
 		this.clinicManagerService.getClinicRecord().subscribe(response => {
 			if (response) {
@@ -62,8 +86,25 @@ export class ClinicManagerPage implements OnInit {
 				if (this.params.data.parent && this.clinics.length > 0) {
 					this.params.data.parent.completedRegistration = true;
 				}
+
+				this.dismissLoading();
 			}
 		});
+	}
+
+	private showLoading() {
+		this.loading = this.loadingController.create({
+			spinner: 'crescent',
+			cssClass: 'xhr-loading'
+		});
+		this.loading.present();
+	}
+
+
+	private dismissLoading() {
+		if (this.loading) {
+			this.loading.dismiss();
+		}
 	}
 
 	public clinicManagerCallback = (params) => {
