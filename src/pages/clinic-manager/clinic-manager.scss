@@ -11,4 +11,8 @@ clinic-manager-page {
     li {
         word-wrap: break-word;
     }
+
+    a {
+		color: $accent-dark;
+	}
 }
