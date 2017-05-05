@@ -11,7 +11,6 @@ import { CONFIG } from '../../config/config';
 @Injectable()
 export class ClinicManagerService {
 
-    private
     constructor(
         private http: HttpService,
         private storage: Storage) { }

@@ -15,6 +15,15 @@ export class SearchUserModalService {
 
     }
 
+    private userId;
+
+    public getUserId() {
+        if (!this.userId) {
+            this.userId = this.storage.userDetails.userId;
+        }
+        return this.userId;
+    }
+
     public getUsers(criteria, role) {
         const doctorCriteria = this.createCriteria(criteria, 1);
         const assistantCriteria = this.createCriteria(criteria, 2);

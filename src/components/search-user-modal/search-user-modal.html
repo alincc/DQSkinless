@@ -45,7 +45,7 @@
                 <ion-avatar item-left>
                     <img src="{{ user.img }}">
                 </ion-avatar>
-                <p>Name: {{ getFullName(user) }}</p>
+                <p>Name: {{ user.lastname ? getFullName(user) : 'Unregistered'}}</p>
                 <p>Email: {{ user.email }}</p>
                 <p>Contact No: {{ getuserContacts(user.userContacts) }}</p>
             </ion-item>
