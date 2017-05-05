@@ -18,7 +18,7 @@ export class ClinicManagerService {
 
     private userId;
 
-    private getUserId() {
+    public getUserId() {
         if (!this.userId) {
             this.userId = this.storage.userDetails.userId;
         }
