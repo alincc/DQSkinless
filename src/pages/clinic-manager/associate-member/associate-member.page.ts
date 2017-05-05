@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams } from "ionic-angular";
+import { LoadingController, ModalController, NavParams } from "ionic-angular";
 
 import { AccountCreationModal } from '../../../components/account-creation-modal/account-creation-modal';
 import { RootNavController } from '../../../services/services';
@@ -15,28 +15,50 @@ import { ClinicManagerService } from '../clinic-manager.service';
 export class AssociateMemberPage implements OnInit {
 
 	public members: any;
+	public userId: any;
 
 	private clinicId: any;
+	private loading: any;
 
 	constructor(
 		private params: NavParams,
 		private root: RootNavController,
+		private loadingController: LoadingController,
 		private modalController: ModalController,
 		private clinicManagerService: ClinicManagerService) {
 		this.getDefaults();
 	}
 
 	public ngOnInit() {
+		this.showLoading();
+
 		this.clinicManagerService.getClinicMember(this.clinicId).subscribe(response => {
 			if (response && response.status) {
 				this.members = response.result;
+				this.dismissLoading();
 			}
-		});
+		}, err => this.dismissLoading());
 	}
 
 	private getDefaults() {
 		this.clinicId = this.params.data && this.params.data.clinicId ? this.params.data.clinicId : null;
 		this.members = [];
+		this.userId = this.clinicManagerService.getUserId();
+	}
+
+	private showLoading() {
+		this.loading = this.loadingController.create({
+			spinner: 'crescent',
+			cssClass: 'xhr-loading'
+		});
+		this.loading.present();
+	}
+
+
+	private dismissLoading() {
+		if (this.loading) {
+			this.loading.dismiss();
+		}
 	}
 
 	public getFullName(user) {
@@ -78,7 +100,7 @@ export class AssociateMemberPage implements OnInit {
 	}
 
 	public deleteMember(event, member) {
-		
+
 	}
 
 	public displayContacts(contacts) {
