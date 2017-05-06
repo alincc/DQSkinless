@@ -3,8 +3,7 @@ export const CONFIG = {
     // Others
     API: {
         assistantDetails: '/assistantdetails',
-        getAssistantsByClinic: '/assistantsByClinic',
-
+        
         doctorDetails: '/doctordetails',
         getNoOfClinics: '/doctordetails/clinics',
 
@@ -27,7 +26,8 @@ export const CONFIG = {
         getClinicAccessByUserId: '/clinicaccess/u/gbcid',
         getClinicRecordByUserId: '/clinicdetails/u',
         getClinicTimeSlotByClinicId: '/clinictimeslots/cidli',
-        getClinicContactByClinicId: '/cliniccontacts/cidli'
+        getClinicContactByClinicId: '/cliniccontacts/cidli',
+        getClinicMember: `/members/clnid`
     },
     SOCKETS: {
         queue: '/queue-socket'
