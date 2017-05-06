@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { App, NavController } from 'ionic-angular';
+import { App, AlertController, NavController } from 'ionic-angular';
 
 import { SchedulePage } from '../schedule/schedule.page';
 import { PatientPage } from '../patient/patient.page';
@@ -23,7 +23,9 @@ export class TabsPage {
 	chat: any = ChatPage;
 
 	root: NavController;
-	constructor(private app: App,
+	constructor(
+		private app: App,
+		private alertController: AlertController,
 		private nav: NavController,
 		private rootNav: RootNavController,
 		private storage: Storage) {
@@ -31,20 +33,33 @@ export class TabsPage {
 		this.rootNav.setRootNav(this.nav);
 	}
 
-	logout() {
-		this.storage.clear();
-		this.root.setRoot(LoginPage);
+	public logout() {
+		this.alertController.create({
+			message: `Are you sure you want to logout?`,
+			buttons: [
+				{
+					text: 'NO',
+					role: 'cancel',
+				},
+				{
+					text: 'YES',
+					handler: () => {
+						this.storage.clear();
+						this.app.getRootNav().setRoot(LoginPage);
+					}
+				}]
+		}).present();
 	}
 
-	openManager() {
+	public openManager() {
 		this.rootNav.push(ManagerPage);
 	}
 
-	openClinicManager() {
+	public openClinicManager() {
 		this.rootNav.push(ClinicManagerPage, { isManager: true });
 	}
 
-	openProfile() {
+	public openProfile() {
 		this.rootNav.push(ProfilePage);
 	}
 }
