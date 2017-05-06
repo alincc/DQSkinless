@@ -19,6 +19,7 @@ import { Device } from '@ionic-native/device';
 import { Keyboard } from '@ionic-native/keyboard';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { Network } from '@ionic-native/network';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { StatusBar } from '@ionic-native/status-bar';
     Device,
     Keyboard,
     SplashScreen,
-    StatusBar
+    StatusBar,
+    Network
   ]
 })
 export class AppModule { }
