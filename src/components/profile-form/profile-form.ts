@@ -224,12 +224,14 @@ export class ProfileForm implements OnInit {
             if (this.formType === 'doctor') {
                 observable = this.service.setDoctorDetails(this.profile);
             } else {
-                observable = this.service.addAsistantDetails(this.profile);
+                observable = this.service.setAsistantDetails(this.profile);
             }
             observable.subscribe(response => {
                     if (response.status) {
                         this.onSubmit.emit(this.profile);
                     }
+                    event.dismissLoading();
+                }, err => {
                     event.dismissLoading();
                 })
         }else{
