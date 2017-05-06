@@ -30,6 +30,16 @@ export class AssociateMemberPage implements OnInit {
 	}
 
 	public ngOnInit() {
+		this.getMembers();
+	}
+
+	private getDefaults() {
+		this.clinicId = this.params.data && this.params.data.clinicId ? this.params.data.clinicId : null;
+		this.members = [];
+		this.userId = this.clinicManagerService.getUserId();
+	}
+
+	private getMembers() {
 		this.showLoading();
 
 		this.clinicManagerService.getClinicMember(this.clinicId).subscribe(response => {
@@ -38,12 +48,6 @@ export class AssociateMemberPage implements OnInit {
 				this.dismissLoading();
 			}
 		}, err => this.dismissLoading());
-	}
-
-	private getDefaults() {
-		this.clinicId = this.params.data && this.params.data.clinicId ? this.params.data.clinicId : null;
-		this.members = [];
-		this.userId = this.clinicManagerService.getUserId();
 	}
 
 	private showLoading() {
@@ -72,9 +76,9 @@ export class AssociateMemberPage implements OnInit {
 
 		accountCreationModal.onDidDismiss(newMember => {
 			if (newMember) {
-				this.clinicManagerService.associateMember(this.root.reloadPublisher.getValue(), newMember.userId).subscribe(response => {
+				this.clinicManagerService.associateMember(this.root.reloadPublisher.getValue(), newMember.userId, 1, 2).subscribe(response => {
 					if (response && response.status) {
-						this.members.push(newMember);
+						this.getMembers();
 					}
 				});
 			}
@@ -88,30 +92,23 @@ export class AssociateMemberPage implements OnInit {
 
 		searchUserModal.present();
 
-		searchUserModal.onDidDismiss(assistant => {
-			if (assistant) {
-				this.clinicManagerService.associateMember(this.clinicId, assistant.userId).subscribe(response => {
+		searchUserModal.onDidDismiss(user => {
+			if (user) {
+				// TODO set user role
+				this.clinicManagerService.associateMember(this.clinicId, user.userId, 1, 1).subscribe(response => {
 					if (response && response.status) {
-						this.members.push(assistant);
+						this.getMembers();
 					}
 				});
 			}
 		});
 	}
 
-	public deleteMember(event, member) {
-
+	public editRole(event, member) {
+		// TODO
 	}
 
-	public displayContacts(contacts) {
-		if (contacts && contacts.length > 0) {
-			let formattedContacts = '';
-
-			contacts.forEach(contact => {
-				formattedContacts += `${contact.contact}, `;
-			});
-			return formattedContacts.substring(1, formattedContacts.length - 2);
-		}
-		return '';
+	public deleteMember(event, member) {
+		// TODO
 	}
 }

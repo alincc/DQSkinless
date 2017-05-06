@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, ViewController } from 'ionic-angular';
+import { AlertController, LoadingController, ViewController } from 'ionic-angular';
 
 import { AccountCreationModalService } from './account-creation-modal.service';
 import { REGEX } from '../../config/config';
@@ -16,10 +16,12 @@ export class AccountCreationModal implements OnInit {
     public errors: any;
 
     private email: AbstractControl;
+    private loading: any;
 
     constructor(
         private formBuilder: FormBuilder,
         private alertController: AlertController,
+        private loadingController: LoadingController,
         private viewController: ViewController,
         private accountCreationModalService: AccountCreationModalService) {
         this.getDefaults();
@@ -76,14 +78,11 @@ export class AccountCreationModal implements OnInit {
         this.validateForm();
 
         if (this.assistantForm.valid) {
+            this.showLoading();
             this.accountCreationModalService.createAccount(this.email.value).subscribe(response => {
                 if (response && response.status) {
 
-                    const assistantAccount = {
-                        userId: response.result.userId,
-                        username: response.result.username,
-                        password: response.result.password,
-                    }
+                    this.dismissLoading();
 
                     this.alertController.create({
                         message: `Account created! Pre-generated password sent to ${this.email.value}`,
@@ -91,13 +90,28 @@ export class AccountCreationModal implements OnInit {
                             {
                                 text: 'OK',
                                 handler: () => {
-                                    this.viewController.dismiss(assistantAccount).catch(() => { });
+                                    this.viewController.dismiss(response.result).catch(() => { });
                                 }
                             }
                         ]
                     }).present();
                 }
-            });
+            }, err => this.dismissLoading());
+        }
+    }
+
+    private showLoading() {
+        this.loading = this.loadingController.create({
+            spinner: 'crescent',
+            cssClass: 'xhr-loading'
+        });
+        this.loading.present();
+    }
+
+
+    private dismissLoading() {
+        if (this.loading) {
+            this.loading.dismiss();
         }
     }
 }
