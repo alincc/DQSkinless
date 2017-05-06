@@ -13,6 +13,10 @@ import { trigger,
   animate,
   transition } from '@angular/animations';
 import { Utilities } from '../../utilities/utilities';
+
+
+
+
 @Component({
 	selector: 'schedule-page',
 	templateUrl: 'schedule.html',
@@ -89,23 +93,32 @@ export class SchedulePage {
 		if(this.connection){
 			this.connection.unsubscribe();
 		}
-		this.ws = this.service.connectToQueue()
-		this.ws.then(
-			response => {
-				this.ws.send(clinicId);
-			}
-		);
+		
 		this.clinicId = clinicId;
 
 		var currentDate = Utilities.clearTime(new Date());
-
+		console.log("fetching Queue Board by clinic id and date");
 		this.service.getQueueBoardByIdAndClinic(clinicId,currentDate).subscribe(response => {
 			if(response.status){
+
+				//set queue board
 				this.queueBoard = response.result;
+
+				// connect to web socket
+				this.ws = this.service.connectToQueue()
+				this.ws.then(
+					response => {
+						this.ws.send(clinicId);
+					}
+				);
+				// subscribe to sock
+				console.log("subscribing to sock")
 				this.connection = this.ws.connection.subscribe(response => {
-					console.log(response );
+					console.log("subcsribed to sock with response " , response);
 					if(response === "A"){
+						console.log("fetching Queue");
 						this.fetchQueue( response => {
+							console.log("fetched Queue");
 							loading.dismiss();
 						});
 					}else{
@@ -122,6 +135,7 @@ export class SchedulePage {
 				}, () => {
 					console.log("closed");
 				})
+
 			}
 		});
 	}
