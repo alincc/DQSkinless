@@ -8,7 +8,6 @@ import { LoginPage } from '../login/login.page';
 import { ManagerPage } from '../manager/manager.page';
 import { NotificationPage } from '../notification/notification.page';
 import { ProfilePage } from '../profile/profile.page';
-import { AssistantManagerPage } from '../assistant-manager/assistant-manager.page';
 import { ClinicManagerPage } from '../clinic-manager/clinic-manager.page';
 
 import { RootNavController, Storage } from '../../services/services';
@@ -39,10 +38,6 @@ export class TabsPage {
 
 	openManager() {
 		this.rootNav.push(ManagerPage);
-	}
-
-	openAssistantManager() {
-		this.rootNav.push(AssistantManagerPage, { isManager: true });
 	}
 
 	openClinicManager() {

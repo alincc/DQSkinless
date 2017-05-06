@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController, NavParams } from "ionic-angular";
+import { LoadingController, ModalController, NavParams } from "ionic-angular";
 
-import { RootNavController } from '../../services/services';
+import { AccountCreationModal } from '../../../components/account-creation-modal/account-creation-modal';
+import { RootNavController } from '../../../services/services';
 import { SearchUserModal } from '../../../components/search-user-modal/search-user-modal';
 
 import { ClinicManagerService } from '../clinic-manager.service';
@@ -13,41 +14,104 @@ import { ClinicManagerService } from '../clinic-manager.service';
 })
 export class AssociateMemberPage implements OnInit {
 
-	public assistants: any;
+	public members: any;
+	public userId: any;
 
 	private clinicId: any;
+	private loading: any;
 
-    constructor(private clinicManagerService: ClinicManagerService,
-    	private params: NavParams,
-    	private modalController: ModalController) {
-    	this.clinicId = this.params.data && this.params.data.clinicId ? this.params.data.clinicId : null;
-    	this.assistants = [];
-    }
+	constructor(
+		private params: NavParams,
+		private root: RootNavController,
+		private loadingController: LoadingController,
+		private modalController: ModalController,
+		private clinicManagerService: ClinicManagerService) {
+		this.getDefaults();
+	}
 
-    public ngOnInit() {
-    	this.clinicManagerService.getAssistantsByClinic(this.clinicId).subscribe(response => {
+	public ngOnInit() {
+		this.showLoading();
+
+		this.clinicManagerService.getClinicMember(this.clinicId).subscribe(response => {
 			if (response && response.status) {
-				this.assistants = response.result;
+				this.members = response.result;
+				this.dismissLoading();
 			}
-		});
-    }
+		}, err => this.dismissLoading());
+	}
 
-    public addAssistant() {
-		let accountCreationModal = this.modalController.create(SearchUserModal, {
-			message: 'Associate',
-			role: 2
+	private getDefaults() {
+		this.clinicId = this.params.data && this.params.data.clinicId ? this.params.data.clinicId : null;
+		this.members = [];
+		this.userId = this.clinicManagerService.getUserId();
+	}
+
+	private showLoading() {
+		this.loading = this.loadingController.create({
+			spinner: 'crescent',
+			cssClass: 'xhr-loading'
 		});
+		this.loading.present();
+	}
+
+
+	private dismissLoading() {
+		if (this.loading) {
+			this.loading.dismiss();
+		}
+	}
+
+	public getFullName(user) {
+		return (user.lastname ? user.lastname + ', ' : '') + user.firstname + ' ' + (user.middlename ? user.middlename : '');
+	}
+
+	public addAssistant() {
+		let accountCreationModal = this.modalController.create(AccountCreationModal);
 
 		accountCreationModal.present();
 
-		accountCreationModal.onDidDismiss(assistant => {
-			if (assistant) {
-				this.clinicManagerService.associateMember(this.clinicId	, assistant.userId).subscribe(response => {
+		accountCreationModal.onDidDismiss(newMember => {
+			if (newMember) {
+				this.clinicManagerService.associateMember(this.root.reloadPublisher.getValue(), newMember.userId).subscribe(response => {
 					if (response && response.status) {
-						this.assistants.push(assistant);
+						this.members.push(newMember);
 					}
 				});
 			}
 		});
+	}
+
+	public searchUser() {
+		let searchUserModal = this.modalController.create(SearchUserModal, {
+			message: 'Associate'
+		});
+
+		searchUserModal.present();
+
+		searchUserModal.onDidDismiss(assistant => {
+			if (assistant) {
+				this.clinicManagerService.associateMember(this.clinicId, assistant.userId).subscribe(response => {
+					if (response && response.status) {
+						this.members.push(assistant);
+					}
+				});
+			}
+		});
+	}
+
+	public deleteMember(event, member) {
+
+	}
+
+	public displayContacts(contacts) {
+		if (contacts && contacts.length > 0) {
+			let formattedContacts = '';
+
+			contacts.forEach(contact => {
+				formattedContacts += `${contact.contact}, `;
+			});
+			return formattedContacts.substring(1, formattedContacts.length - 2);
+		}
+		return '';
 	}
 }

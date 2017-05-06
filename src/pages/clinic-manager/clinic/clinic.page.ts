@@ -10,13 +10,14 @@ import { ContactModal } from '../../../components/contact-modal/contact-modal.co
 import { ScheduleModal } from '../../../components/schedule-modal/schedule-modal';
 
 import { ClinicManagerService } from '../clinic-manager.service';
+import { StackedServices } from '../../../services/services';
 
 import { ArraySubject } from '../../../shared/model/model'
 
 @Component({
     selector: 'clinic-page',
     templateUrl: 'clinic.html',
-    providers: [ClinicManagerService]
+    providers: [ClinicManagerService, StackedServices]
 })
 export class ClinicPage implements OnInit {
 
@@ -40,14 +41,16 @@ export class ClinicPage implements OnInit {
         private modalController: ModalController,
         private params: NavParams,
         private rootNav: RootNavController,
-        private clinicManagerService: ClinicManagerService) {
+        private clinicManagerService: ClinicManagerService,
+        private stackedServices: StackedServices) {
         this.getDefaults();
     }
 
     public ngOnInit() {
-        this.clinic = this.params.get('clinic') ? this.params.get('clinic') : {};
-        this.schedules.value = this.clinic.schedules ? this.clinic.schedules : [];
-        this.contacts.value = this.clinic.contacts ? this.clinic.contacts : [];
+
+        this.clinic = this.params.get('clinic') ? Object.assign({}, this.params.get('clinic')) : {};
+        this.schedules.value = this.clinic.schedules ? Object.assign([], this.clinic.schedules) : [];
+        this.contacts.value = this.clinic.contacts ? Object.assign([], this.clinic.contacts) : [];
         this.mode = this.params.get('mode') ? this.params.get('mode') : MODE.add;
         this.createClinicForm();
 
@@ -135,21 +138,9 @@ export class ClinicPage implements OnInit {
 
         scheduleModal.onDidDismiss(schedule => {
             if (schedule) {
-                if (this.mode === MODE.add) {
-                    this.addSchedule(schedule);
-                } else {
-                    this.clinicManagerService.createClinicTimeslot({
-                        clinicId: this.clinic.clinicId,
-                        dayOfWeek: schedule.dayOfWeek,
-                        startTime: schedule.startTime,
-                        endTime: schedule.endTime,
-                    }).subscribe(response => {
-                        if (response && response.result) {
-                            this.addSchedule(schedule);
-                        }
-                    });
-                }
-                this.clinicForm.markAsDirty();
+                this.addSchedule(schedule);
+
+                // this.clinicForm.markAsDirty();
             }
         });
     }
@@ -193,15 +184,9 @@ export class ClinicPage implements OnInit {
                 {
                     text: 'YES',
                     handler: () => {
-                        if (this.mode === MODE.add) {
-                            this.schedules.splice(si, 1);
-                        }
-                        else {
-                            this.clinicManagerService.delTimeSlotsByClinIdAndDayOfWeek(this.clinic.clinicId, dayOfWeek).subscribe(response => {
-                                if (response && response.status) {
-                                    this.schedules.splice(si, 1);
-                                }
-                            });
+                        this.schedules.splice(si, 1);
+                        if (this.mode !== MODE.add) {
+                            this.stackedServices.push(this.clinicManagerService.delTimeSlotsByClinIdAndDayOfWeek(this.clinic.clinicId, dayOfWeek));
                         }
                     }
                 }
@@ -226,22 +211,20 @@ export class ClinicPage implements OnInit {
                 {
                     text: 'YES',
                     handler: () => {
-                        if (this.mode === MODE.add) {
-                            schedule.timeSlot.splice(ti, 1);
+
+                        schedule.timeSlot.splice(ti, 1);
+
+                        if (deleteSchedule) {
+                            this.schedules.splice(si, 1);
                         }
-                        else {
+
+
+                        if (this.mode !== MODE.add && time.id) {
+
                             if (deleteSchedule) {
-                                this.clinicManagerService.delTimeSlotsByClinIdAndDayOfWeek(this.clinic.clinicId, schedule.dayOfWeek).subscribe(response => {
-                                    if (response && response.status) {
-                                        this.schedules.splice(si, 1);
-                                    }
-                                });
+                                this.stackedServices.push(this.clinicManagerService.delTimeSlotsByClinIdAndDayOfWeek(this.clinic.clinicId, schedule.dayOfWeek));
                             } else {
-                                this.clinicManagerService.deleteClinicTimeslot(time.id).subscribe(response => {
-                                    if (response && response.status) {
-                                        schedule.timeSlot.splice(ti, 1);
-                                    }
-                                });
+                                this.stackedServices.push(this.clinicManagerService.deleteClinicTimeslot(time.id));
                             }
 
                         }
@@ -259,29 +242,14 @@ export class ClinicPage implements OnInit {
             });
         modal.onDidDismiss(contact => {
             if (contact) {
-                if (this.mode === MODE.add) {
-                    this.contacts.push({
-                        contact: contact.contact,
-                        contactType: contact.contactType,
-                        isProfileContacts: false
-                    });
-                } else {
-                    this.clinicManagerService.createClinicContact({
-                        clinicId: this.clinic.clinicId,
-                        contact: contact.contact,
-                        contactType: contact.contactType,
-                    }).subscribe(response => {
-                        if (response && response.status) {
-                            this.contacts.push({
-                                contact: contact.contact,
-                                contactType: contact.contactType,
-                                isProfileContacts: false
-                            });
-                        }
-                    })
-                }
 
-                this.clinicForm.markAsDirty();
+                this.contacts.push({
+                    contact: contact.contact,
+                    contactType: contact.contactType,
+                    isProfileContacts: false
+                });
+
+                // this.clinicForm.markAsDirty();
             }
         });
         modal.present();
@@ -299,14 +267,9 @@ export class ClinicPage implements OnInit {
                 {
                     text: 'YES',
                     handler: () => {
-                        if (this.mode === MODE.add) {
-                            this.contacts.splice(idx, 1);
-                        } else {
-                            this.clinicManagerService.deleteClinicContact(contact.id).subscribe(response => {
-                                if (response && response.status) {
-                                    this.contacts.splice(idx, 1);
-                                }
-                            });
+                        this.contacts.splice(idx, 1);
+                        if (this.mode !== MODE.add && contact.id) {
+                            this.stackedServices.push(this.clinicManagerService.deleteClinicContact(contact.id));
                         }
                     }
                 }
@@ -349,23 +312,49 @@ export class ClinicPage implements OnInit {
                 });
 
             } else {
+
+                this.contacts.value.filter(contact => { return !contact.id }).forEach(contact => {
+                    this.stackedServices.push(this.clinicManagerService.createClinicContact({
+                        clinicId: this.clinic.clinicId,
+                        contact: contact.contact,
+                        contactType: contact.contactType,
+                    }));
+                });
+
+                this.schedules.value.forEach(schedule => {
+                    schedule.timeSlot.filter(time => { return !time.id }).forEach(time => {
+                        this.stackedServices.push(this.clinicManagerService.createClinicTimeslot({
+                            clinicId: this.clinic.clinicId,
+                            dayOfWeek: schedule.dayOfWeek,
+                            startTime: time.startTime,
+                            endTime: time.endTime,
+                        }));
+                    });
+                });
+
                 const modifiedClinic = {
                     clinicId: this.clinic.clinicId,
                     clinicName: this.clinicForm.get('clinicName').value,
                     address: this.clinicForm.get('address').value,
                 }
 
-                this.clinicManagerService.updateClinicDetailRecord(modifiedClinic).subscribe(response => {
-                    if (response && response.status) {
-                        const callback = this.params.get('callback');
-                        callback(response).then(() => {
-                            this.rootNav.pop();
-                        });
+                this.stackedServices.push(this.clinicManagerService.updateClinicDetailRecord(modifiedClinic));
+
+                this.stackedServices.executeFork().subscribe(response => {
+
+                    if (response) {
+                        const submit = response[this.stackedServices.lastIndex];
+
+                        if (submit && submit.status) {
+                            const callback = this.params.get('callback');
+                            callback(response).then(() => {
+                                this.rootNav.pop();
+                            });
+                        }
                     }
+
                     event.dismissLoading();
-                }, err => {
-                    event.dismissLoading();
-                });
+                }, err => event.dismissLoading());
             }
         } else {
             event.dismissLoading();
@@ -399,7 +388,7 @@ export class ClinicPage implements OnInit {
         }).forEach(contact => {
             delete contact['isProfileContacts'];
             newContacts.push(contact);
-        });;
+        });
 
         return newContacts;
     }

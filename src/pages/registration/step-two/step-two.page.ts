@@ -15,7 +15,7 @@ export class StepTwoPage {
     constructor(
         private nav: NavController,
         private params: NavParams) {
-        this.formType = params.data.isLoggedAsDoctor ? 'doctor' : 'nonDoctor';
+        this.formType = params.data.isLoggedAsDoctor ? 'D' : 'ND';
         params.data.parent.step = 2;
     }
 
