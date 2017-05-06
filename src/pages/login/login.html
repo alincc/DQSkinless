@@ -1,9 +1,11 @@
 <ion-content>
+	<div class='flex-box'>
 	<div center>
-		<img class="logo" src="assets/img/logo.jpg"/>
+		<img class="logo" src="assets/img/logo.png"/>
 	</div>
 	<form #form="ngForm" (submit)="xhr.submit($event)">
 		<ion-list no-lines>
+			<hr/>
 			<ion-label><ion-icon name="person"></ion-icon>Username</ion-label>
 			<ion-item round>
 				<ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
@@ -11,7 +13,7 @@
 
 			<ion-label ><ion-icon name="lock"></ion-icon>Password</ion-label>
 			<ion-item round>
-				<ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+				<ion-input type="password" [(ngModel)]="password" name="password" required clearInput></ion-input>
 			</ion-item>
 		</ion-list>
 		<div center>
@@ -19,4 +21,5 @@
 			[disabled]="form.invalid" (xhrClick)="login($event)"> Login </xhr-button>
 		</div>
 	</form>
+	</div>
 </ion-content>
