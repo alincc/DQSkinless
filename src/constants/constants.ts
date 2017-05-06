@@ -116,7 +116,9 @@ export const QUEUE = {
         NO_SHOW: "N",
         QUEUED: "Q",
         EN_ROUTE: "E",
-        RESCHED: "R"
+        RESCHED: "R",
+        OUT: 'O',
+        TRASH: 'T'
     },
     TYPE : {
         WALKIN :"W",

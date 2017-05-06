@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/of';
 
@@ -10,14 +11,13 @@ import { CONFIG } from '../../config/config';
 @Injectable()
 export class ClinicManagerService {
 
-    private
     constructor(
         private http: HttpService,
         private storage: Storage) { }
 
     private userId;
 
-    private getUserId() {
+    public getUserId() {
         if (!this.userId) {
             this.userId = this.storage.userDetails.userId;
         }
@@ -191,5 +191,20 @@ export class ClinicManagerService {
         };
 
         return this.http.post(CONFIG.API.clinicaccess, payload);
+    }
+
+    public associateMember(clinicId, userId) {
+        const payload = {
+            clinicId: clinicId,
+            userId: userId,
+            accessRole: 0,
+            userRole: 1
+        };
+
+        return this.http.post(CONFIG.API.clinicaccess, payload);
+    }
+
+    public getClinicMember(clinicId) {
+        return this.http.get(CONFIG.API.getClinicMember, [clinicId]);
     }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ViewController } from 'ionic-angular';
+import { AlertController, ViewController } from 'ionic-angular';
 
 import { AccountCreationModalService } from './account-creation-modal.service';
 import { REGEX } from '../../config/config';
@@ -19,6 +19,7 @@ export class AccountCreationModal implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
+        private alertController: AlertController,
         private viewController: ViewController,
         private accountCreationModalService: AccountCreationModalService) {
         this.getDefaults();
@@ -79,11 +80,22 @@ export class AccountCreationModal implements OnInit {
                 if (response && response.status) {
 
                     const assistantAccount = {
-                        username: this.email.value,
-                        password: response.result,
+                        userId: response.result.userId,
+                        username: response.result.username,
+                        password: response.result.password,
                     }
 
-                    this.viewController.dismiss(assistantAccount).catch(() => { });
+                    this.alertController.create({
+                        message: `Account created! Pre-generated password sent to ${this.email.value}`,
+                        buttons: [
+                            {
+                                text: 'OK',
+                                handler: () => {
+                                    this.viewController.dismiss(assistantAccount).catch(() => { });
+                                }
+                            }
+                        ]
+                    }).present();
                 }
             });
         }

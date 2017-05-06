@@ -5,12 +5,44 @@ schedule-page{
 
 	}
 	ion-content{
+		.serving{
+			background-color: $primary;
+		}
+
 		ion-item{	
-		ion-avatar>img{
-				height: 90px !important;
-				width: 90px !important;
-				margin-right: 10px;
+			ion-avatar{
+				img{
+					height: 90px !important;
+					width: 90px !important;
+					margin-right: 10px;
+				}
+				div{
+				    background-color: $accent-light;
+				    border-radius: 50%;
+				    height: 90px;
+				    width: 90px;
+				    display: table-cell;
+				    text-align: center;
+				    vertical-align: middle;
+				    font-size: 50px;
+				}
 			}
+		}
+
+		ion-list ion-item{
+			ion-avatar{
+				div{
+				    background-color: $accent-light;
+				    border-radius: 50%;
+				    height: 45px;
+				    width: 45px;
+				    display: table-cell;
+				    text-align: center;
+				    vertical-align: middle;
+				    font-size: 24px;
+				}
+			}
+			
 		}
 
 		ion-list{
@@ -18,5 +50,8 @@ schedule-page{
 				background-color: $secondary-light;
 			}
 		}
+	}
+	.control-bar{
+		z-index: 99999;
 	}
 }

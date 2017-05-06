@@ -3,8 +3,6 @@ import { NavController, AlertController } from 'ionic-angular';
 import { ManagerPage } from '../manager/manager.page';
 
 import { RegistrationPage } from '../registration/registration.page';
-// import { SchedulePage } from '../schedule/schedule.page'; // FOR REMOVAL
-// import { AssistantManagerPage } from '../assistant-manager/assistant-manager.page'; // FOR REMOVAL
 import { LoginService } from './login.service';
 
 

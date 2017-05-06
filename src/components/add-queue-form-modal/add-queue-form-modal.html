@@ -21,7 +21,7 @@
 						<ion-item round>
 							<ion-input name="lastName" formControlName="lastName"></ion-input>
 						</ion-item>
-						<div class="error-message" *ngIf="lastName?.dirty &&  lastName.invalid">
+						<div class="error-message" *ngIf="lastName.invalid">
 							{{ errors.lastName }}
 						</div>
 					</div>
@@ -32,7 +32,7 @@
 						<ion-item round>
 							<ion-input name="firstName" formControlName="firstName"></ion-input>
 						</ion-item>
-						<div class="error-message" *ngIf="firstName?.dirty &&  firstName.invalid">
+						<div class="error-message" *ngIf="firstName.invalid">
 							{{ errors.firstName }}
 						</div>
 					</div>
@@ -64,7 +64,9 @@
 				<ion-col col-12 col-sm-6 col-md-6>
 					<div class="form-group">
 						<ion-label>Date</ion-label>
-						<ion-datetime displayFormat="MMMM DD YYYY" formControlName="schedule" [disabled]="isServeNow.value">
+						<ion-datetime displayFormat="MMMM DD YYYY" formControlName="schedule" [disabled]="isServeNow.value"
+						[min]="getMinDate()"
+						>
 						</ion-datetime>
 					</div>
 				</ion-col>

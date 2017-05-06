@@ -1,1 +1,38 @@
-ASSOCIATED MEMBERS HERE
+<ion-header>
+	<ion-navbar color="primary">
+		<ion-title>
+			Associate Members
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+<ion-content #Content padding>
+	<ion-list>
+		<ion-item-sliding *ngFor="let member of members">
+			<ion-item>
+				<ion-avatar item-left>
+					<img src="http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif">
+				</ion-avatar>
+				<h2 *ngIf="userId === member.userId">YOU</h2>
+				<h2 *ngIf="userId !== member.userId">Name: {{ member.lastname ? getFullName(member) : 'Unregistered' }}</h2>
+				<!-- <h2>Contact No: {{ displayContacts(assistant.contacts) }}</h2> -->
+				<h2>Email: {{ member.email }}</h2>
+			</ion-item>
+			<ion-item-options side="left" *ngIf="userId !== member.userId">
+				<xhr-button color="danger" (xhrClick)="deleteMember($event, member)">
+					<ion-icon name="trash"></ion-icon>
+					Delete
+				</xhr-button>
+			</ion-item-options>
+		</ion-item-sliding>
+	</ion-list>
+	<ion-label *ngIf="members.length === 0">
+		No members added.
+	</ion-label>
+	<ion-fab bottom right>
+		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
+		<ion-fab-list side="left">
+			<button ion-fab color="accent" (click)="addAssistant()"><ion-icon name="add"></ion-icon></button>
+			<button ion-fab color="accent" (click)="searchUser()"><ion-icon name="search"></ion-icon></button>
+		</ion-fab-list>
+	</ion-fab>
+</ion-content>

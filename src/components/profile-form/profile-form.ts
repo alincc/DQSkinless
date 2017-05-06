@@ -4,17 +4,18 @@ import { ProfileFormService } from './profile-form.service';
 import { ModalController } from 'ionic-angular';
 
 import { LOVS } from '../../constants/constants';
-import { REGEX } from '../../config/config';
+import { REGEX, YEAR_RANGE } from '../../config/config';
 
 
 import { ContactModal } from '../contact-modal/contact-modal.component';
-import { ArraySubject } from '../../shared/model/model'
+import { ArraySubject } from '../../shared/model/model';
 
+import { StackedServices } from '../../services/services';
 
 @Component({
     selector: 'profile-form',
     templateUrl: 'profile-form.html',
-    providers: [ProfileFormService]
+    providers: [ProfileFormService, StackedServices]
 })
 export class ProfileForm implements OnInit {
 
@@ -29,31 +30,38 @@ export class ProfileForm implements OnInit {
 
     private profileForm: FormGroup;
 
-    public medicalArts: any[];
-    public errors: any;
+    public contactType: any[];
+    public days: any[];
     public genderList: any[];
-    private contactType: any[] = LOVS.CONTACT_TYPE;
-    private contacts : ArraySubject = new ArraySubject();
+    public medicalArts: any[];
+    public months: any[];
+    public years: any[];
+
+    public errors: any;
+
+    private contacts: ArraySubject = new ArraySubject();
+    private today = new Date();
     private prc: AbstractControl;
-    private ptr: AbstractControl;
     private medicalArt: AbstractControl;
     private specialization: AbstractControl;
     private email: AbstractControl;
     private lastName: AbstractControl;
     private firstName: AbstractControl;
-    private birthDate: AbstractControl;
+    private year: AbstractControl;
+    private month: AbstractControl;
+    private day: AbstractControl;
     private gender: AbstractControl;
 
     constructor(private formBuilder: FormBuilder,
         private service: ProfileFormService,
-        private modal: ModalController) {
+        private modal: ModalController,
+        private stackedServices: StackedServices) {
         this.getDefaults();
     }
 
     public ngOnInit() {
         this.profile = {};
-        this.createProfileForm();
-        if (this.formType === 'doctor') {
+        if (this.formType === 'D') {
             this.service.getDoctorDetails().subscribe(response => {
                 if (response && response.status) {
                     this.profile = response.result;
@@ -66,10 +74,11 @@ export class ProfileForm implements OnInit {
                 }
             });
         }
+        this.createProfileForm();
     }
 
     private getDefaults() {
-        this.formType = 'nonDoctor';
+        this.formType = 'ND';
         this.errors = {
             prc: '',
             ptr: '',
@@ -78,39 +87,77 @@ export class ProfileForm implements OnInit {
             email: '',
             lastName: '',
             firstName: '',
-            birthDate: '',
+            year: '',
+            month: '',
+            day: '',
             gender: ''
         };
-        this.medicalArts = LOVS.MEDICAL_ARTS;
-        this.genderList = LOVS.GENDER;
-        this.contactType = LOVS.CONTACT_TYPE;
 
+        this.contactType = LOVS.CONTACT_TYPE;
+        this.years = [];
+        this.months = [];
+        this.days = [];
+        this.genderList = LOVS.GENDER;
+        this.medicalArts = LOVS.MEDICAL_ARTS;
+        this.createDateLov();
+
+        this.contacts = new ArraySubject([]);
         this.mode = 'Edit';
+    }
+
+    private createDateLov() {
+        let minYear = this.today.getFullYear() - 100;
+
+        for (let i = 0; i <= YEAR_RANGE; i++) {
+            this.years.push(minYear.toString());
+            minYear++;
+        }
+
+        for (let i = 1; i <= 12; i++) {
+            this.months.push(this.leftPad(i.toString(), '0', 2));
+        }
+
+        this.createDaysLov(31);
+    }
+
+    private leftPad(num, pad, size) {
+        let s = num + '';
+        while (s.length < size) s = pad + s;
+        return s;
+    }
+
+    private createDaysLov(maxDay) {
+        for (let i = 1; i <= maxDay; i++) {
+            this.days.push(this.leftPad(i.toString(), '0', 2));
+        }
     }
 
     private createProfileForm() {
         this.profileForm = this.formBuilder.group({
-            prc: this.formType === 'doctor' ? [this.profile.prc, Validators.required] : [this.profile.prc],
-            ptr: this.formType === 'doctor' ? [this.profile.ptr, Validators.required] : [this.profile.ptr],
-            medicalArt: this.formType === 'doctor' ? [this.profile.medicalArt, Validators.required] : [this.profile.medicalArt],
-            specialization: this.formType === 'doctor' ? [this.profile.specialization, Validators.required] : [this.profile.specialization],
+            prc: this.formType === 'D' ? [this.profile.prc, Validators.required] : [this.profile.prc],
+            ptr: this.profile.ptr,
+            medicalArt: this.formType === 'D' ? [this.profile.medicalArt, Validators.required] : [this.profile.medicalArt],
+            specialization: this.formType === 'D' ? [this.profile.specialization, Validators.required] : [this.profile.specialization],
             email: [this.profile.email, [Validators.required, Validators.pattern(REGEX.EMAIL)]],
             lastName: [this.profile.lastName, Validators.required],
             firstName: [this.profile.firstName, Validators.required],
             middleName: this.profile.middleName,
-            birthDate: [this.profile.birthDate, Validators.required],
+            year: [this.profile.birthdate ? (new Date(this.profile.birthdate)).getFullYear() : '', Validators.required],
+            month: [this.profile.birthdate ? (new Date(this.profile.birthdate)).getMonth() : '', Validators.required],
+            day: [this.profile.birthdate ? (new Date(this.profile.birthdate)).getDay() : '', Validators.required],
             gender: [this.profile.gender, Validators.required],
             address: this.profile.address
         });
 
         this.prc = this.profileForm.get('prc');
-        this.ptr = this.profileForm.get('ptr');
         this.medicalArt = this.profileForm.get('medicalArt');
         this.specialization = this.profileForm.get('specialization');
         this.email = this.profileForm.get('email');
         this.lastName = this.profileForm.get('lastName');
         this.firstName = this.profileForm.get('firstName');
-        this.birthDate = this.profileForm.get('birthDate');
+        this.year = this.profileForm.get('year');
+        this.month = this.profileForm.get('month');
+        this.day = this.profileForm.get('day');
         this.gender = this.profileForm.get('gender');
 
         this.prc.valueChanges.subscribe(
@@ -119,16 +166,6 @@ export class ProfileForm implements OnInit {
                     this.errors.prc = 'PRC is required';
                 } else {
                     this.errors.prc = '';
-                }
-            }
-        );
-
-        this.ptr.valueChanges.subscribe(
-            newValue => {
-                if (this.ptr.hasError('required')) {
-                    this.errors.ptr = 'PTR is required';
-                } else {
-                    this.errors.ptr = '';
                 }
             }
         );
@@ -185,12 +222,32 @@ export class ProfileForm implements OnInit {
             }
         );
 
-        this.birthDate.valueChanges.subscribe(
+        this.year.valueChanges.subscribe(
             newValue => {
-                if (this.birthDate.hasError('required')) {
-                    this.errors.birthDate = 'Birth Date is required';
+                if (this.year.hasError('required')) {
+                    this.errors.year = 'Birth Year is required';
                 } else {
-                    this.errors.birthDate = '';
+                    this.errors.year = '';
+                }
+            }
+        );
+
+        this.month.valueChanges.subscribe(
+            newValue => {
+                if (this.month.hasError('required')) {
+                    this.errors.month = 'Birth Month is required';
+                } else {
+                    this.errors.month = '';
+                }
+            }
+        );
+
+        this.day.valueChanges.subscribe(
+            newValue => {
+                if (this.day.hasError('required')) {
+                    this.errors.day = 'Birth Day is required';
+                } else {
+                    this.errors.day = '';
                 }
             }
         );
@@ -204,37 +261,71 @@ export class ProfileForm implements OnInit {
                 }
             }
         );
+    }
 
-        //subcription for contacts
-        this.contacts.subscribe(newValue => {
-            if(newValue)
-                this.errors.contactNo = newValue.length ? '' : "Contact is required";
-        })
+    public addContact(event: Event): void {
+        event.preventDefault();
 
+        let modal = this.modal.create(ContactModal,
+            {
+                header: "Add User Contact"
+            });
 
+        modal.onDidDismiss(contact => {
+            if (contact) {
+                this.contacts.push(contact);
+                this.profileForm.get('address').markAsDirty();
+            }
+        });
+
+        modal.present();
+    }
+
+    public removeContact(event: Event, item, idx) {
+        event.preventDefault();
+
+        this.contacts.splice(idx, 1);
+        if (item.id) {
+            this.stackedServices.push(this.service.deleteContacts(item.id));
+        }
+
+        this.profileForm.get('address').markAsDirty();
+    }
+
+    public hasContact() {
+        return this.contacts.value && this.contacts.value.length > 0;
     }
 
     public submitForm(event) {
         this.markFormAsDirty();
         this.validateForm();
+
         if (this.profileForm.valid && this.hasContact()) {
             this.bindProfileDetails();
-            let observable;
-            //store details
-            if (this.formType === 'doctor') {
-                observable = this.service.setDoctorDetails(this.profile);
+
+            this.contacts.value.filter(contact => { return !contact.id }).forEach(contact => {
+                this.stackedServices.push(this.service.addContacts(contact));
+            });
+
+            if (this.formType === 'D') {
+                this.stackedServices.push(this.service.setDoctorDetails(this.profile));
             } else {
-                observable = this.service.setAsistantDetails(this.profile);
+                this.stackedServices.push(this.service.setAsistantDetails(this.profile));
             }
-            observable.subscribe(response => {
-                    if (response.status) {
+
+            this.stackedServices.executeFork().subscribe(response => {
+
+                if (response) {
+                    const submit = response[this.stackedServices.lastIndex];
+
+                    if (submit && submit.status) {
                         this.onSubmit.emit(this.profile);
                     }
-                    event.dismissLoading();
-                }, err => {
-                    event.dismissLoading();
-                })
-        }else{
+                }
+
+                event.dismissLoading();
+            }, err => event.dismissLoading());
+        } else {
             event.dismissLoading();
         }
     }
@@ -246,61 +337,17 @@ export class ProfileForm implements OnInit {
     }
 
     private validateForm() {
-        if (this.prc.hasError('required')) {
-            this.errors.prc = 'PRC is required';
-        } else {
-            this.errors.prc = '';
-        }
-
-        if (this.ptr.hasError('required')) {
-            this.errors.ptr = 'PTR is required';
-        } else {
-            this.errors.ptr = '';
-        }
-
-        if (this.medicalArt.hasError('required')) {
-            this.errors.medicalArt = 'Medical Arts is required';
-        } else {
-            this.errors.medicalArt = '';
-        }
-
-        if (this.specialization.hasError('required')) {
-            this.errors.specialization = 'Specialization is required';
-        } else {
-            this.errors.specialization = '';
-        }
-
-        if (this.email.hasError('required')) {
-            this.errors.email = 'Email is required.';
-        } else if (this.email.hasError('pattern')) {
-            this.errors.email = 'Invalid email address format';
-        } else {
-            this.errors.email = '';
-        }
-
-        if (this.lastName.hasError('required')) {
-            this.errors.lastName = 'Last Name is required';
-        } else {
-            this.errors.lastName = '';
-        }
-
-        if (this.firstName.hasError('required')) {
-            this.errors.firstName = 'First Name is required';
-        } else {
-            this.errors.firstName = '';
-        }
-
-        if (this.birthDate.hasError('required')) {
-            this.errors.birthDate = 'Birth Date is required';
-        } else {
-            this.errors.birthDate = '';
-        }
-
-        if (this.gender.hasError('required')) {
-            this.errors.gender = 'Gender is required';
-        } else {
-            this.errors.gender = '';
-        }
+        this.errors.prc = this.prc.hasError('required') ? 'PRC is required' : '';
+        this.errors.medicalArt = this.medicalArt.hasError('required') ? 'Medical Arts is required' : '';
+        this.errors.specialization = this.specialization.hasError('required') ? 'Specialization is required' : '';
+        this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
+        this.errors.lastName = this.lastName.hasError('required') ? 'Last Name is required' : '';
+        this.errors.firstName = this.firstName.hasError('required') ? 'First Name is required' : '';
+        this.errors.year = this.year.hasError('required') ? 'Birth Year is required' : '';
+        this.errors.month = this.month.hasError('required') ? 'Birth Month is required' : '';
+        this.errors.day = this.day.hasError('required') ? 'Birth Day is required' : '';
+        this.errors.gender = this.gender.hasError('required') ? 'Gender is required' : '';
+        this.errors.contactNo = this.hasContact() ? '' : "Contact is required";
     }
 
     private bindProfileDetails() {
@@ -312,52 +359,12 @@ export class ProfileForm implements OnInit {
         this.profile.lastname = this.profileForm.get('lastName').value;
         this.profile.firstname = this.profileForm.get('firstName').value;
         this.profile.middlename = this.profileForm.get('middleName').value;
-        this.profile.birthdate = this.profileForm.get('birthDate').value;
+        this.profile.birthdate = this.profileForm.get('year').value + '-' + this.profileForm.get('month').value + '-' + this.profileForm.get('day').value;
         this.profile.gender = this.profileForm.get('gender').value;
         this.profile.address = this.profileForm.get('address').value;
     }
 
     public isEditMode(): boolean {
         return this.mode !== 'View';
-    }
-
-    public addContact(event: Event): void {
-        event.preventDefault();
-        let modal = this.modal.create(ContactModal,
-            {
-                header: "Add User Contact"
-            });
-        modal.onDidDismiss(_return => {
-            if (_return) {
-                if(this.contacts.value){
-                    this.contacts.push(_return);
-                }
-                else{
-                    this.contacts.value = [_return];
-                }
-                // this.hasContact();
-                this.service.addContacts(_return).subscribe(response => {
-                        if(response.status){
-                            _return.id = response.result;
-                        }
-                    },err => {
-                       this.contacts.pop();
-                   });
-            }
-        });
-        modal.present();
-    }
-
-    public removeContact(event,item,idx){
-        event.preventDefault();
-        this.contacts.splice(idx, 1);
-        this.service.deleteContacts(item.id).subscribe(response => {}
-            ,err => {
-                this.contacts.splice(idx,0,item);
-            });
-    }
-
-    public hasContact() {
-        return !Boolean(this.errors.contactNo);
     }
 }
