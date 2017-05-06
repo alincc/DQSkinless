@@ -17,10 +17,10 @@
 				<h2>Email: {{ member.email }}</h2>
 			</ion-item>
 			<ion-item-options side="right" *ngIf="userId !== member.userId">
-				<xhr-button color="accent-dark" (xhrClick)="editRole($event, member)">
+				<!--<xhr-button color="accent-dark" (xhrClick)="editRole($event, member)">
 					<ion-icon name="people"></ion-icon>
-					Edit Role
-				</xhr-button>
+					Edit Access
+				</xhr-button>-->
 				<xhr-button color="danger" (xhrClick)="deleteMember($event, member)">
 					<ion-icon name="trash"></ion-icon>
 					Delete
