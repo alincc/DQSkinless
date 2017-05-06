@@ -1,5 +1,5 @@
 import { Component, ViewChild,ChangeDetectorRef} from '@angular/core';
-import { PopoverController, Content, ModalController, LoadingController} from 'ionic-angular';
+import { PopoverController, Content, ModalController, LoadingController, AlertController, Loading} from 'ionic-angular';
 import { MoreMenuPopover } from './more.popover';
 import { PatientProfilePage } from '../patient-profile/patient-profile.page';
 import { RootNavController } from '../../services/services';
@@ -7,10 +7,38 @@ import { ScheduleService } from './schedule.service';
 import { QUEUE } from '../../constants/constants'
 import { AddQueueFormModal } from '../../components/add-queue-form-modal/add-queue-form.modal'
 import { XHRButton } from '../../components/xhr-button/xhr-button.component';
+import { trigger,
+  state,
+  style,
+  animate,
+  transition } from '@angular/animations';
+import { Utilities } from '../../utilities/utilities';
 @Component({
 	selector: 'schedule-page',
 	templateUrl: 'schedule.html',
-	providers:[ ScheduleService ]
+	providers:[ ScheduleService ],
+	animations: [
+	  trigger('queue', [
+	    state('*', style({transform: 'translateX(0)'})),
+	    transition('void => *', [
+	      style({transform: 'translateX(-100%)'}),
+	      animate(300)
+	    ]),
+	    transition('* => void', [
+	      animate(300, style({transform: 'translateX(100%)'}))
+	    ])
+	  ]),
+	  trigger('serve', [
+	   state('*', style({transform: 'translateX(0)'})),
+	    transition('void => *', [
+	      style({transform: 'translateX(-100%)'}),
+	      animate(300)
+	    ]),
+	    transition('* => void', [
+	      animate(300, style({transform: 'translateX(100%)'}))
+	    ])
+	  ])
+	]
 })
 export class SchedulePage {
 	public queue: any[];
@@ -20,8 +48,10 @@ export class SchedulePage {
 	private set _servingNow(dom){
 		this.servingNow = dom.nativeElement;
 	}
-	@ViewChild('remove')
-	private remove : XHRButton;
+	@ViewChild('removeBtn')
+	private removeBtn : XHRButton;
+	@ViewChild('queueAgainBtn')
+	private queueAgainBtn : XHRButton;
 	private ws : any;
 	private servingNow: any;
 	private queueTopOffset: number;
@@ -32,18 +62,25 @@ export class SchedulePage {
 	private connection: any;
 	private requestForRefresh: any;
 	private clinicId: any;
+	private servingState: string;
+	private loading:any;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
 		private detector: ChangeDetectorRef,
 		private service : ScheduleService,
 		private modal: ModalController,
-		private loadingCtrl: LoadingController){
+		private loadingCtrl: LoadingController,
+		private alert: AlertController){
 		rootNav.reloadPublisher.subscribe(clinicId => {
 			this.initSchedule(clinicId);
 		})
+
 	}
 
 	initSchedule(clinicId){
+		let loading = this.createLoading();
+		loading.present();
+
 		this.controlCss = false;
 		this.isReOrder = false;
 		if(this.ws){
@@ -60,23 +97,26 @@ export class SchedulePage {
 		);
 		this.clinicId = clinicId;
 
-		var currentDate = new Date();
-		currentDate.setHours(0);
-		currentDate.setMinutes(0);
-		currentDate.setSeconds(0);
-		currentDate.setMilliseconds(0);
+		var currentDate = Utilities.clearTime(new Date());
 
 		this.service.getQueueBoardByIdAndClinic(clinicId,currentDate).subscribe(response => {
 			if(response.status){
 				this.queueBoard = response.result;
 				this.connection = this.ws.connection.subscribe(response => {
-					if(this.requestForRefresh){
-						clearTimeout(this.requestForRefresh);
+					console.log(response );
+					if(response === "A"){
+						this.fetchQueue( response => {
+							loading.dismiss();
+						});
+					}else{
+						if(this.requestForRefresh){
+							clearTimeout(this.requestForRefresh);
+						}
+						this.requestForRefresh = setTimeout(()=> {
+							this.requestForRefresh = null;
+							this.fetchQueue();
+						}, 3000);
 					}
-					this.requestForRefresh = setTimeout(()=> {
-						this.fetchQueue();
-						this.requestForRefresh = null;
-					}, 3000);
 				}, err => {
 					console.error(err);
 				}, () => {
@@ -88,17 +128,18 @@ export class SchedulePage {
 
 
 	fetchQueue(callback?, errorHandler?){
-		this.service.getQueueByBoardID(this.queueBoard.id).subscribe(response => {
+		return this.service.getQueueByBoardID(this.queueBoard.id).subscribe(response => {
 			if(response.status){
 				let newQueueList = [];
 				this.serving = null;
 				for(let item of response.result){
 					switch(item.status){
-						case "S":
+						case QUEUE.STATUS.SERVING:
 							this.serving = item;
 							break;
-						case "Q":
-						case "E":
+						case QUEUE.STATUS.QUEUED:
+						case QUEUE.STATUS.EN_ROUTE:
+						case QUEUE.STATUS.OUT:
 							newQueueList.push(item);
 							break;
 					}
@@ -155,7 +196,9 @@ export class SchedulePage {
 	}
 
 	showMore(event){
-		let popover = this.popover.create(MoreMenuPopover);
+		let popover = this.popover.create(MoreMenuPopover, {
+			disableButtons : !this.serving
+		});
 		popover.present({
 			ev: event 
 		});
@@ -166,7 +209,10 @@ export class SchedulePage {
 						this.toggleReOrder();
 						break;
 					case 1:
-						this.remove.click();
+						this.removeBtn.click();
+						break;
+					case 0:
+						this.queueAgainBtn.click();
 						break;
 				}
 		});
@@ -185,7 +231,7 @@ export class SchedulePage {
 	}
 
 	updateQueue(xhr, element, callback? , errCallback?){
-		this.service.updateQueue(element).subscribe(
+		this.updateQueueObservable(element).subscribe(
 			response => {
 				this.fetchQueue(
 					response => {
@@ -213,52 +259,86 @@ export class SchedulePage {
 			})
 	}
 
+	updateQueueObservable(element){
+		return this.service.updateQueue(element);
+	}
+
 	done(xhr){
 		this.serving.status = QUEUE.STATUS.DONE;
+		this.servingState = 'done';
 		this.updateServing(xhr, () => {
 			this.ws.send(QUEUE.MAP.DONE);
 		});
 	}
 
 	next(xhr){
-		this.serving = this.queue.splice(0,1)[0];
-		this.serving.status = QUEUE.STATUS.SERVING
-		this.updateServing(xhr, () => {
-			this.ws.send(QUEUE.MAP.NEXT);
+		this.preHookServingDone().then(response => {
+			for(var i = 0; i < this.queue.length; i++){
+				if(this.queue[i].status === QUEUE.STATUS.QUEUED){
+					this.serving = this.queue.splice(i,1)[0];
+					this.serving.status = QUEUE.STATUS.SERVING
+					this.updateServing(xhr, () => {
+						this.ws.send(QUEUE.MAP.NEXT);
+					});
+					return;
+				}
+			}
 		});
 	}
 
-	queueAgain(){
-		this.ws.send(QUEUE.MAP.FETCH);
+	hasForQueue(){
+		if(this.queue){
+			return Boolean(this.queue.find(item => {
+				return item.status === QUEUE.STATUS.QUEUED;
+			}))
+		}else{
+			return false;
+		}
 	}
 
-	noShow(xhr){
-		this.serving.status = QUEUE.STATUS.NO_SHOW;
+	queueAgain(xhr){
+		this.serving.status = QUEUE.STATUS.EN_ROUTE;
+		this.servingState = 'reque';
 		this.updateServing(xhr, () => {
 			this.ws.send(QUEUE.MAP.DONE);
 		});
 	}
 
-	addQueue(){
-		let modal = this.modal.create(AddQueueFormModal);
+	noShow(xhr){
+		this.serving.status = QUEUE.STATUS.NO_SHOW;
+		this.servingState = 'done';
+		this.updateServing(xhr, () => {
+			this.ws.send(QUEUE.MAP.DONE);
+		});
+	}
+
+	private addOrEditQueue(customer? : any){
+		let modal = this.modal.create(AddQueueFormModal, customer);
 		modal.onDidDismiss(item => {
 			if(!item){
 				return;
 			}
-			var loading = this.loadingCtrl.create({
-				spinner: 'crescent',
-				cssClass: 'xhr-loading'
-			});
+			let loading = this.createLoading();
 			loading.present();
 
 			var parameter: any = item;
+			if(customer){
+				parameter.id = customer.id;
+			}
 			let parameterFactory = new Promise( (resolve, reject) =>{
 				if(item.isServeNow){
+					if(customer){
+						parameter.order = customer.order;
+						parameter.time = customer.time;
+						parameter.status = customer.status;
+					}else{
+						parameter.order = this.getNewOrder();
+						parameter.time = new Date();
+						parameter.status = QUEUE.STATUS.QUEUED;
+					}
 					parameter.type = QUEUE.TYPE.WALKIN;
 					parameter.boardId = this.queueBoard.id;
-					parameter.order = this.getNewOrder();
-					parameter.time = new Date();
-					parameter.status = QUEUE.STATUS.QUEUED;
+					
 					resolve(parameter);
 				}else{
 					this.service.getQueueBoardByIdAndClinic(this.clinicId, new Date(item.schedule))
@@ -279,7 +359,13 @@ export class SchedulePage {
 				}
 			})
 			parameterFactory.then( parameter => {
-				this.service.addQueue(parameter).subscribe(
+				let serviceCallback;
+				if(customer){
+					serviceCallback = this.service.updateQueue(parameter)
+				}else{
+					serviceCallback = this.service.addQueue(parameter)
+				}
+				serviceCallback.subscribe(
 					response => {
 						if(response.status){
 							this.ws.send(QUEUE.MAP.FETCH);
@@ -299,8 +385,16 @@ export class SchedulePage {
 		modal.present();
 	}
 
+	public getDefaultAvatar(member){
+		if(member){
+			return member.lastName.substring(0,1).toUpperCase() + member.firstName.substring(0,1).toUpperCase();
+		}else{
+			return "?";
+		}
+	}
+
 	private getNewOrder(){
-		return this.queue[this.queue.length-1].order + 1000;
+		return  1000 + (this.queue.length ? this.queue[this.queue.length-1].order : 0);
 	}
 
 	private parseTimeSlot(timeSlot){
@@ -317,6 +411,108 @@ export class SchedulePage {
 		}
 	}
 
+	private getTypeIcon(customer){
+		return customer.type==='W'?'walk':'time';
+	}
+
+	private getStatusIcon(customer){
+		switch(customer.status){
+			case QUEUE.STATUS.EN_ROUTE:
+					return 'car';
+			case QUEUE.STATUS.QUEUED:
+					return 'flag';
+			case QUEUE.STATUS.OUT:
+					return 'cafe';
+		}
+	}
+
+	private serveNow(xhr,customer){
+		this.preHookServingDone().then(response => {
+			this.serving = customer;
+			this.serving.status = QUEUE.STATUS.SERVING
+			this.updateServing(xhr, () => {
+				this.ws.send(QUEUE.MAP.NEXT);
+			});
+			return;
+		});
+	}
+
+	private preHookServingDone(){
+	 	return new Promise((resolve, error) => {
+	 		if(this.serving){
+	 			this.alert.create({
+	 				message : 'You are currently serving ' + this.serving.lastName + ", " + this.serving.firstName + " " + this.serving.middleName + ", are you sure you want to get the next queue and tag current as done?",
+	 				buttons: [
+				      {
+				        text: 'No',
+				        role: 'cancel'
+				      },
+				      {
+				        text: 'Yes',
+				        handler: () => {
+					        this.serving.status = QUEUE.STATUS.DONE;
+					 		this.updateQueueObservable(this.serving).subscribe( response => {
+						 		resolve(response);
+					 		}, err => {
+						 		error(err);
+						 	});
+				        }
+				      }
+				    ]
+	 			}).present();
+		 	}else{
+		 		resolve()
+		 	}
+	 	});
+	}
+
+	private delete(xhr,customer){
+		customer.status = QUEUE.STATUS.TRASH;
+		this.updateQueue(xhr, customer, () => {
+			this.ws.send(QUEUE.MAP.DONE);
+		});
+	}
+
+	private arrived(xhr, customer){
+		customer.status = QUEUE.STATUS.QUEUED;
+		this.updateQueue(xhr, customer, () => {
+			this.ws.send(QUEUE.MAP.DONE);
+		});
+	}
+
+	private out(xhr, customer){
+		customer.status = QUEUE.STATUS.OUT;
+		this.updateQueue(xhr, customer, () => {
+			this.ws.send(QUEUE.MAP.DONE);
+		});
+	}
+
+	private getButtons(customer){
+		let isHere = customer.status === QUEUE.STATUS.QUEUED;
+		return [
+			{
+				name: isHere?'Going Out':'Arrived',
+				icon: isHere? 'cafe': 'flag'  ,
+				clickFn: (xhr,customer) => {
+					if(isHere){
+						return this.out(xhr, customer);
+					}else{
+						return this.arrived(xhr, customer);
+					}
+				}
+			}
+		]
+	}
+
+	private TrackByPatientId(index: number, item:any){
+		return item.id;
+	}
+
+	private createLoading() : Loading {
+		return this.loadingCtrl.create({
+			spinner: 'crescent',
+			cssClass: 'xhr-loading'
+		});
+	}
+
 }
-
-

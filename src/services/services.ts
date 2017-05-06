@@ -5,10 +5,11 @@ import { MESSAGES } from '../config/config';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Endpoint } from '../config/endpoint';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
 import * as SockJS from 'sockjs-client/dist/sockjs';
 import * as StompJS from 'stompjs/lib/stomp.js';
 
@@ -172,7 +173,6 @@ export class HttpService {
 @Injectable()
 export class WebSocketFactory {
 
-
 	public connect(url: String): any {
 		var sock = new SockJS(Endpoint.environment + url, null, { headers: { Authorization: 'Bearer ' + _token } });
 		var connection: any = new Observable(publisher => {
@@ -195,8 +195,28 @@ export class WebSocketFactory {
 			},
 			close: () => { sock.close(); }
 		};
+	}
+}
 
+
+@Injectable()
+export class StackedServices {
+
+	private stack: Observable<any>[];
+
+	constructor() {
+		this.stack = [];
 	}
 
+	public push(observable: Observable<any>) {
+		this.stack.push(observable);
+	}
 
+	public executeFork() {
+		return Observable.forkJoin(this.stack);
+	}
+
+	public get lastIndex() {
+		return this.stack.length - 1;
+	}
 }

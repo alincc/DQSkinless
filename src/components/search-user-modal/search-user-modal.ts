@@ -12,6 +12,7 @@ import { SearchUserModalService } from './search-user-modal.service';
 export class SearchUserModal implements OnInit {
 
     public searchForm: FormGroup;
+    public userId: any;
     public users: any;
 
     private message: any;
@@ -32,6 +33,7 @@ export class SearchUserModal implements OnInit {
 
     private getDefaults() {
         this.users = [];
+        this.userId = this.searchUserModalService.getUserId();
         this.message = this.params.data && this.params.data.message ? this.params.data.message : 'Select';
         this.role = this.params.data && this.params.data.role ? this.params.data.role : 0;
     }
@@ -47,10 +49,18 @@ export class SearchUserModal implements OnInit {
     public search(event) {
         this.searchUserModalService.getUsers(this.searchForm.value, this.role).subscribe(response => {
             if (response) {
-                this.users = response.result;
+                this.users = this.removeMySelf(response.result);
                 event.dismissLoading();
             }
         }, error => event.dismissLoading());
+    }
+
+    private removeMySelf(users) {
+        if (users) {
+            return users.filter(user => { return user.userId !== this.userId });
+        }
+
+        return users
     }
 
     public selectUser(user) {
