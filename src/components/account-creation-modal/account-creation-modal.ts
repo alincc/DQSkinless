@@ -73,7 +73,7 @@ export class AccountCreationModal implements OnInit {
                     }).present();
                 }
                 this.dismissLoading();
-            });
+            }, err => this.dismissLoading());
         }
     }
 

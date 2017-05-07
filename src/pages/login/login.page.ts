@@ -44,6 +44,6 @@ export class LoginPage {
 					}
 				}
 				event.dismissLoading();
-			});
+			}, err => event.dismissLoading());
 	}
 }
