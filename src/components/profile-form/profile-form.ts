@@ -162,107 +162,45 @@ export class ProfileForm implements OnInit {
         this.day = this.profileForm.get('day');
         this.gender = this.profileForm.get('gender');
 
-        this.prc.valueChanges.subscribe(
-            newValue => {
-                if (this.prc.hasError('required')) {
-                    this.errors.prc = 'PRC is required';
-                } else {
-                    this.errors.prc = '';
-                }
-            }
-        );
+        this.prc.valueChanges.subscribe(newValue => {
+            this.errors.prc = this.prc.hasError('required') ? 'PRC is required' : '';
+        });
 
-        this.medicalArt.valueChanges.subscribe(
-            newValue => {
-                if (this.medicalArt.hasError('required')) {
-                    this.errors.medicalArt = 'Medical Arts is required';
-                } else {
-                    this.errors.medicalArt = '';
-                }
-            }
-        );
+        this.medicalArt.valueChanges.subscribe(newValue => {
+            this.errors.medicalArt = this.medicalArt.hasError('required') ? 'Medical Arts is required' : '';
+        });
 
-        this.specialization.valueChanges.subscribe(
-            newValue => {
-                if (this.specialization.hasError('required')) {
-                    this.errors.specialization = 'Specialization is required';
-                } else {
-                    this.errors.specialization = '';
-                }
-            }
-        );
+        this.specialization.valueChanges.subscribe(newValue => {
+            this.errors.specialization = this.specialization.hasError('required') ? 'Specialization is required' : '';
+        });
 
-        this.email.valueChanges.subscribe(
-            newValue => {
-                if (this.email.hasError('required')) {
-                    this.errors.email = 'Email is required.';
-                } else if (this.email.hasError('pattern')) {
-                    this.errors.email = 'Invalid email address format';
-                } else {
-                    this.errors.email = '';
-                }
-            }
-        );
+        this.email.valueChanges.subscribe(newValue => {
+            this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
+        });
 
-        this.lastName.valueChanges.subscribe(
-            newValue => {
-                if (this.lastName.hasError('required')) {
-                    this.errors.lastName = 'Last Name is required';
-                } else {
-                    this.errors.lastName = '';
-                }
-            }
-        );
+        this.lastName.valueChanges.subscribe(newValue => {
+            this.errors.lastName = this.lastName.hasError('required') ? 'Last Name is required' : '';
+        });
 
-        this.firstName.valueChanges.subscribe(
-            newValue => {
-                if (this.firstName.hasError('required')) {
-                    this.errors.firstName = 'First Name is required';
-                } else {
-                    this.errors.firstName = '';
-                }
-            }
-        );
+        this.firstName.valueChanges.subscribe(newValue => {
+            this.errors.firstName = this.firstName.hasError('required') ? 'First Name is required' : '';
+        });
 
-        this.year.valueChanges.subscribe(
-            newValue => {
-                if (this.year.hasError('required')) {
-                    this.errors.year = 'Birth Year is required';
-                } else {
-                    this.errors.year = '';
-                }
-            }
-        );
+        this.year.valueChanges.subscribe(newValue => {
+            this.errors.year = this.year.hasError('required') ? 'Birth Year is required' : '';
+        });
 
-        this.month.valueChanges.subscribe(
-            newValue => {
-                if (this.month.hasError('required')) {
-                    this.errors.month = 'Birth Month is required';
-                } else {
-                    this.errors.month = '';
-                }
-            }
-        );
+        this.month.valueChanges.subscribe(newValue => {
+            this.errors.month = this.month.hasError('required') ? 'Birth Month is required' : '';
+        });
 
-        this.day.valueChanges.subscribe(
-            newValue => {
-                if (this.day.hasError('required')) {
-                    this.errors.day = 'Birth Day is required';
-                } else {
-                    this.errors.day = '';
-                }
-            }
-        );
+        this.day.valueChanges.subscribe(newValue => {
+            this.errors.day = this.day.hasError('required') ? 'Birth Day is required' : '';
+        });
 
-        this.gender.valueChanges.subscribe(
-            newValue => {
-                if (this.gender.hasError('required')) {
-                    this.errors.gender = 'Gender is required';
-                } else {
-                    this.errors.gender = '';
-                }
-            }
-        );
+        this.gender.valueChanges.subscribe(newValue => {
+            this.errors.gender = this.gender.hasError('required') ? 'Gender is required' : '';
+        });
     }
 
     public isEditMode(): boolean {
@@ -306,6 +244,7 @@ export class ProfileForm implements OnInit {
             if (contact) {
                 this.contacts.push(contact);
                 this.profileForm.get('address').markAsDirty();
+                this.hasContact();
             }
         });
 
@@ -318,13 +257,19 @@ export class ProfileForm implements OnInit {
         this.contacts.splice(idx, 1);
         if (item.id) {
             this.stack.push(this.service.deleteContacts(item.id));
+            this.hasContact();
         }
 
         this.profileForm.get('address').markAsDirty();
     }
 
     public hasContact() {
-        return this.contacts.value && this.contacts.value.length > 0;
+        if (this.contacts.value && this.contacts.value.length > 0) {
+            this.errors.contactNo = '';
+            return true;
+        }
+
+        return false;
     }
 
     private markFormAsDirty() {
