@@ -51,10 +51,8 @@ export class SearchUserModal implements OnInit {
             if (response) {
                 this.users = this.removeMySelf(response);
             }
-        },
-            err => event.dismissLoading(),
-            () => event.dismissLoading());
-
+            event.dismissLoading()
+        });
     }
 
     private removeMySelf(users) {

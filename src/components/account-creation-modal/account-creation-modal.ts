@@ -60,9 +60,6 @@ export class AccountCreationModal implements OnInit {
             this.showLoading();
             this.accountCreationModalService.createAccount(this.email.value).subscribe(response => {
                 if (response && response.status) {
-
-                    this.dismissLoading();
-
                     this.alertController.create({
                         message: `Account created! Pre-generated password sent to ${this.email.value}`,
                         buttons: [
@@ -75,7 +72,8 @@ export class AccountCreationModal implements OnInit {
                         ]
                     }).present();
                 }
-            }, err => this.dismissLoading());
+                this.dismissLoading();
+            });
         }
     }
 

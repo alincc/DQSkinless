@@ -85,7 +85,7 @@ export class ChangePasswordForm implements OnInit {
             this.password.setErrors(null);
             this.errors.password = '';
         }
-        
+
         if (confirm !== password) {
             this.password.setErrors({ notMatch: true });
             this.confirm.setErrors({ notMatch: true });
@@ -107,14 +107,11 @@ export class ChangePasswordForm implements OnInit {
         this.validateForm();
         if (this.changePasswordForm.valid) {
             this.service.changePassword(this.changePasswordForm.value).subscribe(response => {
-                event.dismissLoading();
                 if (response.status) {
                     this.onSubmit.emit(this.changePasswordForm.value);
                 }
-            }, err => {
                 event.dismissLoading();
-            }
-            );
+            });
         } else {
             event.dismissLoading();
         }
