@@ -8,9 +8,12 @@ import { HttpModule } from '@angular/http';
 import { Ng2Webstorage, LocalStorageService, SessionStorageService } from 'ngx-webstorage'
 import { components } from './components';
 import { pages } from './pages';
-
 // services
-import { RootNavController, Storage, HttpService,WebSocketFactory } from '../services/services';
+import { RootNavController,
+     Storage,
+     HttpService,
+     WebSocketFactory,
+     Images } from '../services/services';
 
 // native
 import { ActionSheet } from '@ionic-native/action-sheet';
@@ -19,6 +22,7 @@ import { Device } from '@ionic-native/device';
 import { Keyboard } from '@ionic-native/keyboard';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { File } from '@ionic-native/file';
 
 @NgModule({
   declarations: [
@@ -46,6 +50,7 @@ import { StatusBar } from '@ionic-native/status-bar';
     Storage,
     HttpService,
     WebSocketFactory,
+    Images,
 
     SessionStorageService,
     LocalStorageService,
@@ -55,7 +60,8 @@ import { StatusBar } from '@ionic-native/status-bar';
     Device,
     Keyboard,
     SplashScreen,
-    StatusBar
+    StatusBar,
+    File
   ]
 })
 export class AppModule { }
