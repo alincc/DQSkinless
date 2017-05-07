@@ -385,37 +385,6 @@ ion-content{
 	}
 }
 
-ion-item.item-holder {
-	border-bottom: 0 !important;
-	border-top: 0 !important;
-	background-color: transparent !important;
-	width: 100%;
-	padding: 0;
-
-	&.item-md {
-		padding: 0;
-		.item-inner {
-			box-shadow: none !important;
-			border: none !important;
-
-			padding: 0;
-		}
-	}
-
-	&.item-ios {
-		padding: 0;
-
-		.item-inner {
-			box-shadow: none !important;
-			border: none !important;
-
-			padding: 0;
-		}
-	}
-
-	
-}
-
 .control-bar{
 	ion-row{
 		background-color: $primary;
