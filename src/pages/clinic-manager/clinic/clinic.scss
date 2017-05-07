@@ -1,8 +1,5 @@
 clinic-page {
-    ion-icon.trash::before {
-        font-size: 20px;
-    }
-
+	
     .schedule-header{
 		ion-col{
 			&:last-child{
@@ -23,9 +20,5 @@ clinic-page {
                 }
 			}	
 		}	
-	}
-
-	a {
-		color: $accent-dark;
 	}
 }
