@@ -22,7 +22,6 @@ export class TabsPage {
 	patient: any = PatientPage;
 	chat: any = ChatPage;
 
-	private profilepic: string;
 	root: NavController;
 	constructor(private app: App,
 		private nav: NavController,
@@ -51,8 +50,7 @@ export class TabsPage {
 	}
 
 	getImage(){
-		this.images.getImage( this.storage.userDetails.userId + "_profile_pic.jpg").then(response => {
-			this.profilepic = response;
-		})
+		return this.images.getImage("arsy1494171341691");
 	}
+	
 }
