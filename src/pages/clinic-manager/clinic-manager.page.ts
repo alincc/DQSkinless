@@ -61,10 +61,8 @@ export class ClinicManagerPage implements OnInit {
 				}
 			})
 		]).subscribe(response => {
-			if (response) {
-				this.dismissLoading();
-			}
-		}, err => this.dismissLoading());
+			this.dismissLoading();
+		});
 
 		this.isManager = this.params.data && this.params.data.isManager ? this.params.data.isManager : false;
 	}
@@ -86,7 +84,6 @@ export class ClinicManagerPage implements OnInit {
 				if (this.params.data.parent && this.clinics.length > 0) {
 					this.params.data.parent.completedRegistration = true;
 				}
-
 				this.dismissLoading();
 			}
 		});
@@ -99,7 +96,6 @@ export class ClinicManagerPage implements OnInit {
 		});
 		this.loading.present();
 	}
-
 
 	private dismissLoading() {
 		if (this.loading) {
@@ -146,15 +142,17 @@ export class ClinicManagerPage implements OnInit {
 				{
 					text: 'YES',
 					handler: () => {
+						this.showLoading();
 						this.clinicManagerService.deleteClinic(clinic.clinicId).subscribe(response => {
 							if (response && response.status) {
 								this.clinics.splice(i, 1);
+								
+								if (this.params.data.parent && this.clinics.length === 0) {
+									this.params.data.parent.completedRegistration = false;
+								}
 							}
-						})
-
-						if (this.params.data.parent.completedRegistration && this.clinics.length === 0) {
-							this.params.data.parent.completedRegistration = false;
-						}
+							this.dismissLoading();
+						});
 					}
 				}
 			]

@@ -220,7 +220,7 @@ export class ClinicPage implements OnInit {
         event.preventDefault();
         let modal = this.modalController.create(ContactModal,
             {
-                header: 'Add User Contact'
+                header: 'Add Clinic Contact'
             });
         modal.onDidDismiss(contact => {
             if (contact) {
@@ -325,8 +325,6 @@ export class ClinicPage implements OnInit {
                         });
                     }
                     event.dismissLoading();
-                }, err => {
-                    event.dismissLoading();
                 });
 
             } else {
@@ -359,7 +357,6 @@ export class ClinicPage implements OnInit {
                 this.stack.push(this.clinicManagerService.updateClinicDetailRecord(modifiedClinic));
 
                 this.stack.executeFork().subscribe(response => {
-
                     if (response) {
                         const submit = response[this.stack.lastIndex];
 
@@ -370,9 +367,8 @@ export class ClinicPage implements OnInit {
                             });
                         }
                     }
-
                     event.dismissLoading();
-                }, err => event.dismissLoading());
+                });
             }
         } else {
             event.dismissLoading();

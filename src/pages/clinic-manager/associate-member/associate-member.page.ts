@@ -45,9 +45,9 @@ export class AssociateMemberPage implements OnInit {
 		this.clinicManagerService.getClinicMember(this.clinicId).subscribe(response => {
 			if (response && response.status) {
 				this.members = response.result;
-				this.dismissLoading();
 			}
-		}, err => this.dismissLoading());
+			this.dismissLoading();
+		});
 	}
 
 	private showLoading() {
@@ -57,7 +57,6 @@ export class AssociateMemberPage implements OnInit {
 		});
 		this.loading.present();
 	}
-
 
 	private dismissLoading() {
 		if (this.loading) {

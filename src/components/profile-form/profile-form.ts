@@ -63,25 +63,23 @@ export class ProfileForm implements OnInit {
     public ngOnInit() {
         this.profile = {};
         this.createProfileForm();
-        // this.showLoading();
+        this.showLoading();
         if (this.formType === 'D') {
             this.service.getDoctorDetails().subscribe(response => {
                 if (response && response.status) {
                     this.profile = response.result;
                     this.bindProfileFormValues();
-                    // this.dismissLoading();
                 }
+                this.dismissLoading();
             });
-            // , err => this.dismissLoading());
         } else {
             this.service.getAssistantDetails().subscribe(response => {
                 if (response && response.status) {
                     this.profile = response.result;
                     this.bindProfileFormValues();
-                    this.dismissLoading();
                 }
+                this.dismissLoading();
             });
-            // , err => this.dismissLoading());
         }
     }
 
@@ -172,7 +170,6 @@ export class ProfileForm implements OnInit {
         const bday = this.profile.birthdate ? new Date(+this.profile.birthdate) : null;
         this.profileForm.get('year').setValue(bday ? bday.getFullYear() : '');
         this.profileForm.get('month').setValue(bday ? bday.getMonth() : '');
-        console.log(bday.getDate());
         this.profileForm.get('day').setValue(bday ? bday.getDate() : '');
     }
 
@@ -376,7 +373,7 @@ export class ProfileForm implements OnInit {
                 }
 
                 event.dismissLoading();
-            }, err => event.dismissLoading());
+            });
         } else {
             event.dismissLoading();
         }
