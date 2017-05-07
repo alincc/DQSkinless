@@ -111,7 +111,7 @@ export class ChangePasswordForm implements OnInit {
                     this.onSubmit.emit(this.changePasswordForm.value);
                 }
                 event.dismissLoading();
-            });
+            }, err => event.dismissLoading());
         } else {
             event.dismissLoading();
         }

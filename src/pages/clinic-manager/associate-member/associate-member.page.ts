@@ -47,7 +47,7 @@ export class AssociateMemberPage implements OnInit {
 				this.members = response.result;
 			}
 			this.dismissLoading();
-		});
+		}, err => this.dismissLoading());
 	}
 
 	private showLoading() {

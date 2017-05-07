@@ -325,7 +325,7 @@ export class ClinicPage implements OnInit {
                         });
                     }
                     event.dismissLoading();
-                });
+                }, err => event.dismissLoading());
 
             } else {
 
@@ -368,7 +368,7 @@ export class ClinicPage implements OnInit {
                         }
                     }
                     event.dismissLoading();
-                });
+                }, err => event.dismissLoading());
             }
         } else {
             event.dismissLoading();

@@ -71,7 +71,7 @@ export class ProfileForm implements OnInit {
                     this.bindProfileFormValues();
                 }
                 this.dismissLoading();
-            });
+            }, err => this.dismissLoading());
         } else {
             this.service.getAssistantDetails().subscribe(response => {
                 if (response && response.status) {
@@ -79,7 +79,7 @@ export class ProfileForm implements OnInit {
                     this.bindProfileFormValues();
                 }
                 this.dismissLoading();
-            });
+            }, err => this.dismissLoading());
         }
     }
 
@@ -334,7 +334,7 @@ export class ProfileForm implements OnInit {
     private bindProfileDetails() {
         this.profile.prcNum = this.profileForm.get('prc').value;
         this.profile.ptr = this.profileForm.get('ptr').value;
-        this.profile.medicalart = this.profileForm.get('medicalArt').value;
+        this.profile.medicalArt = this.profileForm.get('medicalArt').value;
         this.profile.specialization = this.profileForm.get('specialization').value;
         this.profile.email = this.profileForm.get('email').value;
         this.profile.lastname = this.profileForm.get('lastName').value;
@@ -373,7 +373,7 @@ export class ProfileForm implements OnInit {
                 }
 
                 event.dismissLoading();
-            });
+            }, err => event.dismissLoading());
         } else {
             event.dismissLoading();
         }
