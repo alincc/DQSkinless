@@ -44,37 +44,16 @@ export class AccountCreationModal implements OnInit {
 
         this.email = this.assistantForm.get('email');
 
-        this.email.valueChanges.subscribe(
-            newValue => {
-                if (this.email.hasError('required')) {
-                    this.errors.email = 'Email is required.';
-                } else if (this.email.hasError('pattern')) {
-                    this.errors.email = 'Invalid email address format';
-                } else {
-                    this.errors.email = '';
-                }
-            }
-        );
-    }
-
-    private markFormAsDirty() {
-        Object.keys(this.assistantForm.controls).forEach(key => {
-            this.assistantForm.get(key).markAsDirty();
+        this.email.valueChanges.subscribe(newValue => {
+            this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
         });
     }
 
     private validateForm() {
-        if (this.email.hasError('required')) {
-            this.errors.email = 'Email is required.';
-        } else if (this.email.hasError('pattern')) {
-            this.errors.email = 'Invalid email address format';
-        } else {
-            this.errors.email = '';
-        }
+        this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
     }
 
     public save() {
-        this.markFormAsDirty();
         this.validateForm();
 
         if (this.assistantForm.valid) {
