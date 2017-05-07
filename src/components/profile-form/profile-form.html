@@ -138,14 +138,14 @@
 
                         <ion-col col-4 col-sm-4 col-md-4>
                             <ion-item clean>
-                                <ion-select class="options" name="year" formControlName="year" placeholder="Year">
+                                <ion-select class="options" name="year" formControlName="year" placeholder="Year" (ionChange)="changeYear()">
                                     <ion-option *ngFor="let y of years" [value]="y">{{ y }}</ion-option>
                                 </ion-select>
                             </ion-item>
                         </ion-col>
                         <ion-col col-4 col-sm-4 col-md-4>
                             <ion-item clean>
-                                <ion-select class="options" name="month" formControlName="month" placeholder="Month">
+                                <ion-select class="options" name="month" formControlName="month" placeholder="Month" (ionChange)="changeMonth()">
                                     <ion-option *ngFor="let m of months" [value]="m">{{ m }}</ion-option>
                                 </ion-select>
                             </ion-item>

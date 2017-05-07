@@ -10,12 +10,12 @@ import { REGEX, YEAR_RANGE } from '../../config/config';
 import { ContactModal } from '../contact-modal/contact-modal.component';
 import { ArraySubject } from '../../shared/model/model';
 
-import { StackedServices } from '../../services/services';
+import { StackedServices } from '../../utilities/utilities';
 
 @Component({
     selector: 'profile-form',
     templateUrl: 'profile-form.html',
-    providers: [ProfileFormService, StackedServices]
+    providers: [ProfileFormService]
 })
 export class ProfileForm implements OnInit {
 
@@ -37,8 +37,6 @@ export class ProfileForm implements OnInit {
     public months: any[];
     public years: any[];
 
-    public errors: any;
-
     private contacts: ArraySubject = new ArraySubject();
     private today = new Date();
     private prc: AbstractControl;
@@ -51,11 +49,13 @@ export class ProfileForm implements OnInit {
     private month: AbstractControl;
     private day: AbstractControl;
     private gender: AbstractControl;
+    private stack: StackedServices;
+
+    public errors: any;
 
     constructor(private formBuilder: FormBuilder,
         private service: ProfileFormService,
-        private modal: ModalController,
-        private stackedServices: StackedServices) {
+        private modal: ModalController) {
         this.getDefaults();
     }
 
@@ -103,6 +103,7 @@ export class ProfileForm implements OnInit {
 
         this.contacts = new ArraySubject([]);
         this.mode = 'Edit';
+        this.stack = new StackedServices([]);
     }
 
     private createDateLov() {
@@ -127,6 +128,7 @@ export class ProfileForm implements OnInit {
     }
 
     private createDaysLov(maxDay) {
+        this.days = [];
         for (let i = 1; i <= maxDay; i++) {
             this.days.push(this.leftPad(i.toString(), '0', 2));
         }
@@ -263,6 +265,35 @@ export class ProfileForm implements OnInit {
         );
     }
 
+    public isEditMode(): boolean {
+        return this.mode !== 'View';
+    }
+
+    public changeYear() {
+        this.clearMonthLOV();
+        this.clearDayLOV();
+    }
+
+    public changeMonth() {
+        this.clearDayLOV();
+        this.createDaysLov(this.getLastDayOfTheMonth(this.year.value, this.month.value));
+    }
+
+    private clearMonthLOV() {
+        this.month.setValue('');
+        this.month.markAsPristine();
+    }
+
+    private clearDayLOV() {
+        this.day.setValue('');
+        this.day.markAsPristine();
+    }
+
+    private getLastDayOfTheMonth(year, month) {
+        const fullYear = year ? Number(year) : (new Date()).getFullYear();
+        return month ? (new Date(fullYear, Number(month), 0, 23, 59, 59)).getDate() : 31;
+    }
+
     public addContact(event: Event): void {
         event.preventDefault();
 
@@ -286,7 +317,7 @@ export class ProfileForm implements OnInit {
 
         this.contacts.splice(idx, 1);
         if (item.id) {
-            this.stackedServices.push(this.service.deleteContacts(item.id));
+            this.stack.push(this.service.deleteContacts(item.id));
         }
 
         this.profileForm.get('address').markAsDirty();
@@ -294,40 +325,6 @@ export class ProfileForm implements OnInit {
 
     public hasContact() {
         return this.contacts.value && this.contacts.value.length > 0;
-    }
-
-    public submitForm(event) {
-        this.markFormAsDirty();
-        this.validateForm();
-
-        if (this.profileForm.valid && this.hasContact()) {
-            this.bindProfileDetails();
-
-            this.contacts.value.filter(contact => { return !contact.id }).forEach(contact => {
-                this.stackedServices.push(this.service.addContacts(contact));
-            });
-
-            if (this.formType === 'D') {
-                this.stackedServices.push(this.service.setDoctorDetails(this.profile));
-            } else {
-                this.stackedServices.push(this.service.setAsistantDetails(this.profile));
-            }
-
-            this.stackedServices.executeFork().subscribe(response => {
-
-                if (response) {
-                    const submit = response[this.stackedServices.lastIndex];
-
-                    if (submit && submit.status) {
-                        this.onSubmit.emit(this.profile);
-                    }
-                }
-
-                event.dismissLoading();
-            }, err => event.dismissLoading());
-        } else {
-            event.dismissLoading();
-        }
     }
 
     private markFormAsDirty() {
@@ -364,7 +361,37 @@ export class ProfileForm implements OnInit {
         this.profile.address = this.profileForm.get('address').value;
     }
 
-    public isEditMode(): boolean {
-        return this.mode !== 'View';
+    public submitForm(event) {
+        this.markFormAsDirty();
+        this.validateForm();
+
+        if (this.profileForm.valid && this.hasContact()) {
+            this.bindProfileDetails();
+
+            this.contacts.value.filter(contact => { return !contact.id }).forEach(contact => {
+                this.stack.push(this.service.addContacts(contact));
+            });
+
+            if (this.formType === 'D') {
+                this.stack.push(this.service.setDoctorDetails(this.profile));
+            } else {
+                this.stack.push(this.service.setAsistantDetails(this.profile));
+            }
+
+            this.stack.executeFork().subscribe(response => {
+
+                if (response) {
+                    const submit = response[this.stack.lastIndex];
+
+                    if (submit && submit.status) {
+                        this.onSubmit.emit(this.profile);
+                    }
+                }
+
+                event.dismissLoading();
+            }, err => event.dismissLoading());
+        } else {
+            event.dismissLoading();
+        }
     }
 }
