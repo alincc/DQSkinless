@@ -143,18 +143,21 @@ export class HttpService {
 	}
 
 	private errorHandler(err: any) {
-		if (err.status === 401) {
-			this.unauthorizedEvent.emit();
-		} else if (err.status === 404) {
-			this.errorEvent.emit(MESSAGES.ERROR.NOT_FOUND);
-		} else {
-			this.errorEvent.emit(err);
-		}
 		if (err instanceof Response) {
 			return Observable.throw(err);
-		}
-		if (err.status === 0) {
-			return err;
+		} else {
+			if (err.status === 401) {
+				this.unauthorizedEvent.emit();
+				return Observable.throw(err);
+			} else if (err.status === 404) {
+				this.errorEvent.emit(MESSAGES.ERROR.NOT_FOUND);
+				return Observable.throw(err);
+			} else if (err.status === 0) {
+				return err;
+			} else {
+				this.errorEvent.emit(err);
+				return Observable.throw(err);
+			}
 		}
 	}
 
