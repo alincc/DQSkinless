@@ -7,7 +7,7 @@
 </ion-header>
 <ion-content #Content padding>
 	<ion-list>
-		<ion-item-sliding *ngFor="let member of members">
+		<ion-item-sliding *ngFor="let member of members; let mi = index">
 			<ion-item>
 				<ion-avatar item-left>
 					<img src="http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif">
@@ -15,13 +15,16 @@
 				<h2 *ngIf="userId === member.userId">YOU</h2>
 				<h2 *ngIf="userId !== member.userId">Name: {{ member.lastname ? getFullName(member) : 'Unregistered' }}</h2>
 				<h2>Email: {{ member.email }}</h2>
+				<h2>Access: {{ member.email }}</h2>
+				<h2>Role: {{ accessRole[member.accessRole] }}</h2>
+				<h2>Expiry: {{ userRole[member.userRole] }}</h2>
 			</ion-item>
 			<ion-item-options side="right" *ngIf="userId !== member.userId">
 				<!--<xhr-button color="accent-dark" (xhrClick)="editRole($event, member)">
 					<ion-icon name="people"></ion-icon>
 					Edit Access
 				</xhr-button>-->
-				<xhr-button color="danger" (xhrClick)="deleteMember($event, member)">
+				<xhr-button color="danger" (xhrClick)="deleteMember($event, member, mi)">
 					<ion-icon name="trash"></ion-icon>
 					Delete
 				</xhr-button>

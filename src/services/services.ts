@@ -151,10 +151,11 @@ export class HttpService {
 			} else if (err.status === 404) {
 				this.errorEvent.emit(MESSAGES.ERROR.NOT_FOUND);
 			} else if (err.status === 0) {
-				return err;
+				this.errorEvent.emit(err.errorDescription);
 			} else {
 				this.errorEvent.emit(err);
 			}
+			return err;
 		}
 	}
 

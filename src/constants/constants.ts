@@ -25,10 +25,16 @@ export const LOVS = {
         'Male',
         'Female'
     ],
-    ROLES: {
-        doctor: 'doctor',
-        nonDoctor: 'nonDoctor',
-    },
+    ACCESS_ROLES: [
+        'Member',
+        'Admin',
+        'Super Admin'
+    ],
+    USER_ROLES: [
+        'Admin',
+        'Doctor',
+        'Assistant'
+    ],
     MEDICAL_ARTS: [
         'Audiologist',
         'Allergist',
@@ -104,13 +110,13 @@ export const MODE = {
 }
 
 export const QUEUE = {
-    MAP : {
-        DONE : "D",
-        NEXT : "N",
-        FETCH : "F",
+    MAP: {
+        DONE: "D",
+        NEXT: "N",
+        FETCH: "F",
         REQUEUE: "R"
     },
-    STATUS : {
+    STATUS: {
         DONE: "D",
         SERVING: "S",
         NO_SHOW: "N",
@@ -120,9 +126,9 @@ export const QUEUE = {
         OUT: 'O',
         TRASH: 'T'
     },
-    TYPE : {
-        WALKIN :"W",
-        SCHEDULED : "S"
+    TYPE: {
+        WALKIN: "W",
+        SCHEDULED: "S"
     }
 }
-    
+
