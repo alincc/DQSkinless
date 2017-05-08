@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { App, AlertController } from 'ionic-angular';
+import { App, LoadingController, AlertController } from 'ionic-angular';
 
 import { LoginPage } from '../login/login.page';
 import { TabsPage } from '../tabs/tabs';
@@ -15,10 +15,12 @@ import { RootNavController, Storage } from '../../services/services';
 export class ManagerPage implements OnInit {
 
 	private clinics: any[];
+	private loading: any;
 
 	constructor(
 		private app: App,
 		private alertController: AlertController,
+		private loadingController: LoadingController,
 		private managerService: ManagerService,
 		private root: RootNavController,
 		private storage: Storage) {
@@ -26,11 +28,27 @@ export class ManagerPage implements OnInit {
 	}
 
 	public ngOnInit() {
+		this.showLoading();
 		this.managerService.getClinicRecordByUserId().subscribe(response => {
 			if (response && response.status) {
 				this.clinics = response.result;
 			}
+			this.dismissLoading();
+		}, err => this.dismissLoading());
+	}
+
+	private showLoading() {
+		this.loading = this.loadingController.create({
+			spinner: 'crescent',
+			cssClass: 'xhr-loading'
 		});
+		this.loading.present();
+	}
+
+	private dismissLoading() {
+		if (this.loading) {
+			this.loading.dismiss();
+		}
 	}
 
 	public go(clinic) {
