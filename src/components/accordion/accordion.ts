@@ -6,6 +6,7 @@ import { Component, Input } from '@angular/core';
 })
 export class Accordion {
     @Input() header: string;
+    @Input() numbering: string;
     @Input() subHeader?: string;
     @Input() open?: boolean = false;
 }
