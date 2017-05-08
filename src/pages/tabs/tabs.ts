@@ -33,6 +33,9 @@ export class TabsPage {
 		private images: Images) {
 		this.root = app.getRootNav();
 		this.rootNav.setRootNav(this.nav);
+		this.images.getImage( this.storage.userDetails.userId + "_profile_pic.jpg").then(response => {
+			this.profilepic = response;
+		})
 	}
 
 	public logout() {
@@ -63,11 +66,5 @@ export class TabsPage {
 
 	public openProfile() {
 		this.rootNav.push(ProfilePage);
-	}
-
-	getImage(){
-		this.images.getImage( this.storage.userDetails.userId + "_profile_pic.jpg").then(response => {
-			this.profilepic = response;
-		})
 	}
 }

@@ -10,5 +10,14 @@ tabs{
 	.tabbar{
 		background: $primary-light !important;
 	}
+	.img-container{
+		padding: 5px;
+		img{
+			height: 150px;
+			width: auto;
+		border-radius: 20px;
+
+		}
+	}
 
 }
