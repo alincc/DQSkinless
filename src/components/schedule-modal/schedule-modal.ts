@@ -55,40 +55,30 @@ export class ScheduleModal {
         this.to = this.scheduleForm.get('to');
 
         this.day.valueChanges.subscribe(newValue => {
-            if (this.day.hasError('required')) {
-                this.errors.day = 'Day of Week is required'
-            } else {
-                this.errors.day = '';
-            }
+            this.errors.day = this.day.hasError('required') ? 'Day of Week is required' : '';
         });
 
         this.from.valueChanges.subscribe(newValue => {
-            if (this.from.hasError('required')) {
-                this.errors.from = 'From is required'
-            } else {
-                this.errors.from = '';
-            }
+            this.errors.from = this.from.hasError('required') ? 'From is required' : '';
         });
 
         this.to.valueChanges.subscribe(newValue => {
-            if (this.to.hasError('required')) {
-                this.errors.to = 'To is required'
-            } else {
-                this.errors.to = '';
-            }
+            this.errors.to = this.to.hasError('required') ? 'To is required' : '';
         });
     }
 
     public save() {
         this.markFormAsDirty();
         this.validateForm();
-        const newSchedule = {
-            dayOfWeek: this.scheduleForm.get('day').value,
-            startTime: this.formatTime(this.scheduleForm.get('from').value),
-            endTime: this.formatTime(this.scheduleForm.get('to').value)
-        }
 
         if (this.scheduleForm.valid) {
+
+            const newSchedule = {
+                dayOfWeek: this.scheduleForm.get('day').value,
+                startTime: this.formatTime(this.scheduleForm.get('from').value),
+                endTime: this.formatTime(this.scheduleForm.get('to').value)
+            }
+
             this.viewController.dismiss(newSchedule).catch(() => { });
         }
     }
@@ -100,23 +90,9 @@ export class ScheduleModal {
     }
 
     private validateForm() {
-        if (this.day.hasError('required')) {
-            this.errors.day = 'Day of Week is required';
-        } else {
-            this.errors.day = '';
-        }
-
-        if (this.from.hasError('required')) {
-            this.errors.from = 'From is required';
-        } else {
-            this.errors.from = '';
-        }
-
-        if (this.to.hasError('required')) {
-            this.errors.to = 'To is required';
-        } else {
-            this.errors.to = '';
-        }
+        this.errors.day = this.day.hasError('required') ? 'Day of Week is required' : '';
+        this.errors.from = this.from.hasError('required') ? 'From is required' : '';
+        this.errors.to = this.to.hasError('required') ? 'To is required' : '';
 
         if (!this.from.hasError('required') && !this.to.hasError('required')) {
             if (this.from.value === this.to.value) {

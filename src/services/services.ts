@@ -206,29 +206,6 @@ export class WebSocketFactory {
 	}
 }
 
-
-@Injectable()
-export class StackedServices {
-
-	private stack: Observable<any>[];
-
-	constructor() {
-		this.stack = [];
-	}
-
-	public push(observable: Observable<any>) {
-		this.stack.push(observable);
-	}
-
-	public executeFork() {
-		return Observable.forkJoin(this.stack);
-	}
-
-	public get lastIndex() {
-		return this.stack.length - 1;
-	}
-}
-
 const IMG_PATH = "diagram";
 
 

@@ -4,8 +4,11 @@ import { CONFIG } from '../../config/config';
 
 @Injectable()
 export class ManagerService {
-    constructor(private http: HttpService,
+
+    constructor(
+        private http: HttpService,
         private storage: Storage) { }
+
     private userId;
 
     private getUserId() {
