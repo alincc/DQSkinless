@@ -72,6 +72,4 @@ export class XHRButton{
 			this.loading.dismiss();
 		}
 	}
-
-
 }

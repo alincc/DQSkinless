@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, ModalController, NavParams } from "ionic-angular";
+import { AlertController, LoadingController, ModalController, NavParams } from "ionic-angular";
 
 import { AccountCreationModal } from '../../../components/account-creation-modal/account-creation-modal';
 import { RootNavController } from '../../../services/services';
 import { SearchUserModal } from '../../../components/search-user-modal/search-user-modal';
 
 import { ClinicManagerService } from '../clinic-manager.service';
+
+import { LOVS } from '../../../constants/constants';
 
 @Component({
 	selector: 'associate-member-page',
@@ -16,6 +18,8 @@ export class AssociateMemberPage implements OnInit {
 
 	public members: any;
 	public userId: any;
+	public accessRole: any;
+	public userRole: any;
 
 	private clinicId: any;
 	private loading: any;
@@ -23,6 +27,7 @@ export class AssociateMemberPage implements OnInit {
 	constructor(
 		private params: NavParams,
 		private root: RootNavController,
+		private alertController: AlertController,
 		private loadingController: LoadingController,
 		private modalController: ModalController,
 		private clinicManagerService: ClinicManagerService) {
@@ -37,6 +42,8 @@ export class AssociateMemberPage implements OnInit {
 		this.clinicId = this.params.data && this.params.data.clinicId ? this.params.data.clinicId : null;
 		this.members = [];
 		this.userId = this.clinicManagerService.getUserId();
+		this.accessRole = LOVS.ACCESS_ROLES;
+		this.userRole = LOVS.USER_ROLES;
 	}
 
 	private getMembers() {
@@ -45,8 +52,8 @@ export class AssociateMemberPage implements OnInit {
 		this.clinicManagerService.getClinicMember(this.clinicId).subscribe(response => {
 			if (response && response.status) {
 				this.members = response.result;
-				this.dismissLoading();
 			}
+			this.dismissLoading();
 		}, err => this.dismissLoading());
 	}
 
@@ -58,7 +65,6 @@ export class AssociateMemberPage implements OnInit {
 		this.loading.present();
 	}
 
-
 	private dismissLoading() {
 		if (this.loading) {
 			this.loading.dismiss();
@@ -66,7 +72,7 @@ export class AssociateMemberPage implements OnInit {
 	}
 
 	public getFullName(user) {
-		return (user.lastname ? user.lastname + ', ' : '') + user.firstname + ' ' + (user.middlename ? user.middlename : '');
+		return (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '');
 	}
 
 	public addAssistant() {
@@ -76,7 +82,7 @@ export class AssociateMemberPage implements OnInit {
 
 		accountCreationModal.onDidDismiss(newMember => {
 			if (newMember) {
-				this.clinicManagerService.associateMember(this.root.reloadPublisher.getValue(), newMember.userId, 1, 2).subscribe(response => {
+				this.clinicManagerService.associateMember(this.root.reloadPublisher.getValue(), newMember.userId, 0, 2).subscribe(response => {
 					if (response && response.status) {
 						this.getMembers();
 					}
@@ -94,21 +100,58 @@ export class AssociateMemberPage implements OnInit {
 
 		searchUserModal.onDidDismiss(user => {
 			if (user) {
-				// TODO set user role
-				this.clinicManagerService.associateMember(this.clinicId, user.userId, 1, 1).subscribe(response => {
-					if (response && response.status) {
-						this.getMembers();
-					}
-				});
+				if (!this.userAlreadyExist(user.userId)) {
+					this.clinicManagerService.associateMember(this.clinicId, user.userId, 0, user.userRole).subscribe(response => {
+						if (response && response.status) {
+							this.getMembers();
+						}
+					});
+				} else {
+					this.alertController.create({
+						message: `${user.lastname ? this.getFullName(user) : user.email} is already in this clinic`,
+						buttons: [
+							{
+								text: 'OK',
+								role: 'cancel',
+							}
+						]
+					}).present();
+				}
 			}
 		});
+	}
+
+	private userAlreadyExist(userId) {
+		return this.members.filter(member => { return member.userId === userId }).length > 0
 	}
 
 	public editRole(event, member) {
 		// TODO
 	}
 
-	public deleteMember(event, member) {
-		// TODO
+	public deleteMember(event, member, mi) {
+		event.preventDefault();
+
+		this.alertController.create({
+			message: `Remove ${this.getFullName(member)} from this clinic?`,
+			buttons: [
+				{
+					text: 'NO',
+					role: 'cancel',
+				},
+				{
+					text: 'YES',
+					handler: () => {
+						this.showLoading();
+						this.clinicManagerService.deleteClinicAccessByClinIdUserId(this.clinicId, member.userId).subscribe(response => {
+							if (response && response.status) {
+								this.members.splice(mi, 1);
+							}
+							this.dismissLoading();
+						}, err => this.dismissLoading());
+					}
+				}
+			]
+		}).present();
 	}
 }

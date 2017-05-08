@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileFormService } from './profile-form.service';
-import { ModalController } from 'ionic-angular';
+import { LoadingController, ModalController } from 'ionic-angular';
 
 import { LOVS } from '../../constants/constants';
 import { REGEX, YEAR_RANGE } from '../../config/config';
@@ -36,6 +36,7 @@ export class ProfileForm implements OnInit {
     public medicalArts: any[];
     public months: any[];
     public years: any[];
+    public errors: any;
 
     private contacts: ArraySubject = new ArraySubject();
     private today = new Date();
@@ -50,31 +51,36 @@ export class ProfileForm implements OnInit {
     private day: AbstractControl;
     private gender: AbstractControl;
     private stack: StackedServices;
-
-    public errors: any;
+    private loading: any;
 
     constructor(private formBuilder: FormBuilder,
         private service: ProfileFormService,
-        private modal: ModalController) {
+        private loadingController: LoadingController,
+        private modalController: ModalController) {
         this.getDefaults();
     }
 
     public ngOnInit() {
         this.profile = {};
+        this.createProfileForm();
+        this.showLoading();
         if (this.formType === 'D') {
             this.service.getDoctorDetails().subscribe(response => {
                 if (response && response.status) {
                     this.profile = response.result;
+                    this.bindProfileFormValues();
                 }
-            });
+                this.dismissLoading();
+            }, err => this.dismissLoading());
         } else {
             this.service.getAssistantDetails().subscribe(response => {
                 if (response && response.status) {
                     this.profile = response.result;
+                    this.bindProfileFormValues();
                 }
-            });
+                this.dismissLoading();
+            }, err => this.dismissLoading());
         }
-        this.createProfileForm();
     }
 
     private getDefaults() {
@@ -134,21 +140,54 @@ export class ProfileForm implements OnInit {
         }
     }
 
+    private showLoading() {
+        this.loading = this.loadingController.create({
+            spinner: 'crescent',
+            cssClass: 'xhr-loading'
+        });
+        this.loading.present();
+    }
+
+
+    private dismissLoading() {
+        if (this.loading) {
+            this.loading.dismiss();
+        }
+    }
+
+    private bindProfileFormValues() {
+        this.profileForm.get('prc').setValue(this.profile.prcNum);
+        this.profileForm.get('ptr').setValue(this.profile.ptr);
+        this.profileForm.get('medicalArt').setValue(this.profile.medicalArt);
+        this.profileForm.get('specialization').setValue(this.profile.specialization);
+        this.profileForm.get('email').setValue(this.profile.email);
+        this.profileForm.get('lastName').setValue(this.profile.lastname);
+        this.profileForm.get('firstName').setValue(this.profile.firstname);
+        this.profileForm.get('middleName').setValue(this.profile.middlename);
+        this.profileForm.get('gender').setValue(this.profile.gender);
+        this.profileForm.get('address').setValue(this.profile.address);
+
+        const bday = this.profile.birthdate ? new Date(+this.profile.birthdate) : null;
+        this.profileForm.get('year').setValue(bday ? bday.getFullYear() : '');
+        this.profileForm.get('month').setValue(bday ? bday.getMonth() : '');
+        this.profileForm.get('day').setValue(bday ? bday.getDate() : '');
+    }
+
     private createProfileForm() {
         this.profileForm = this.formBuilder.group({
-            prc: this.formType === 'D' ? [this.profile.prc, Validators.required] : [this.profile.prc],
-            ptr: this.profile.ptr,
-            medicalArt: this.formType === 'D' ? [this.profile.medicalArt, Validators.required] : [this.profile.medicalArt],
-            specialization: this.formType === 'D' ? [this.profile.specialization, Validators.required] : [this.profile.specialization],
-            email: [this.profile.email, [Validators.required, Validators.pattern(REGEX.EMAIL)]],
-            lastName: [this.profile.lastName, Validators.required],
-            firstName: [this.profile.firstName, Validators.required],
-            middleName: this.profile.middleName,
-            year: [this.profile.birthdate ? (new Date(this.profile.birthdate)).getFullYear() : '', Validators.required],
-            month: [this.profile.birthdate ? (new Date(this.profile.birthdate)).getMonth() : '', Validators.required],
-            day: [this.profile.birthdate ? (new Date(this.profile.birthdate)).getDay() : '', Validators.required],
-            gender: [this.profile.gender, Validators.required],
-            address: this.profile.address
+            prc: this.formType === 'D' ? ['', Validators.required] : [''],
+            ptr: '',
+            medicalArt: this.formType === 'D' ? ['', Validators.required] : [''],
+            specialization: this.formType === 'D' ? ['', Validators.required] : [''],
+            email: ['', [Validators.required, Validators.pattern(REGEX.EMAIL)]],
+            lastName: ['', Validators.required],
+            firstName: ['', Validators.required],
+            middleName: '',
+            year: ['', Validators.required],
+            month: ['', Validators.required],
+            day: ['', Validators.required],
+            gender: ['', Validators.required],
+            address: ''
         });
 
         this.prc = this.profileForm.get('prc');
@@ -235,7 +274,7 @@ export class ProfileForm implements OnInit {
     public addContact(event: Event): void {
         event.preventDefault();
 
-        let modal = this.modal.create(ContactModal,
+        let modal = this.modalController.create(ContactModal,
             {
                 header: "Add User Contact"
             });
