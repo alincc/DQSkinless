@@ -17,7 +17,7 @@
 			<ion-row>
 				<ion-col col-12 col-sm-12 col-md-12>
 					  <ion-label class="form-label">Contact Type*</ion-label>
-                        <ion-item class="item-holder">
+                        <ion-item clean>
                             <ion-select class="options" name="contactType" formControlName="contactType">
                                     <ion-option *ngFor="let type of contactTypeList;let idx = index" [value]="idx">{{ type }}</ion-option>
                                 </ion-select>

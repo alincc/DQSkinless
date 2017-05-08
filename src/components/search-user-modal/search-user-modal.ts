@@ -51,10 +51,8 @@ export class SearchUserModal implements OnInit {
             if (response) {
                 this.users = this.removeMySelf(response);
             }
-        },
-            err => event.dismissLoading(),
-            () => event.dismissLoading());
-
+            event.dismissLoading()
+        });
     }
 
     private removeMySelf(users) {
@@ -67,7 +65,7 @@ export class SearchUserModal implements OnInit {
 
     public selectUser(user) {
         this.alertController.create({
-            message: `${this.message} ${this.getFullName(user)}?`,
+            message: `${this.message} ${user.lastname ? this.getFullName(user) : user.email}?`,
             buttons: [
                 {
                     text: 'NO',
@@ -84,8 +82,7 @@ export class SearchUserModal implements OnInit {
     }
 
     public getFullName(user) {
-        return (user.lastname ? user.lastname + ', ' : '') + user.firstname + ' ' + (user.middlename ? user.middlename : '');
-    }
+        return (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '');    }
 
     public displayContacts(userContacts) {
         if (userContacts && userContacts.length > 0) {

@@ -199,4 +199,9 @@ export class ClinicManagerService {
     public getClinicMember(clinicId) {
         return this.http.get(CONFIG.API.getClinicMember, [clinicId]);
     }
+
+    public deleteClinicAccessByClinIdUserId(clinicId, userId) {
+        const param = `/u/${userId}/c/${clinicId}`;
+        return this.http.delete(CONFIG.API.clinicaccess + param);
+    }
 }
