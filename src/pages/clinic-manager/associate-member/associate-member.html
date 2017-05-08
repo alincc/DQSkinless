@@ -6,7 +6,7 @@
 	</ion-navbar>
 </ion-header>
 <ion-content #Content padding>
-	<ion-list>
+	<ion-list *ngIf="members">
 		<ion-item-sliding *ngFor="let member of members; let mi = index">
 			<ion-item>
 				<ion-avatar item-left>
@@ -31,9 +31,11 @@
 			</ion-item-options>
 		</ion-item-sliding>
 	</ion-list>
-	<ion-label *ngIf="members.length === 0">
-		No members added.
-	</ion-label>
+	<div class="speil" *ngIf="members?.length === 0" text-center>
+        <ion-label >
+            Add Associate by pressing the add button on the lower left of the screen and selecting on either search for existing or add.
+        </ion-label>
+    </div>
 	<ion-fab bottom right>
 		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
 		<ion-fab-list side="left">

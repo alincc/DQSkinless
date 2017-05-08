@@ -40,7 +40,6 @@ export class AssociateMemberPage implements OnInit {
 
 	private getDefaults() {
 		this.clinicId = this.params.data && this.params.data.clinicId ? this.params.data.clinicId : null;
-		this.members = [];
 		this.userId = this.clinicManagerService.getUserId();
 		this.accessRole = LOVS.ACCESS_ROLES;
 		this.userRole = LOVS.USER_ROLES;
