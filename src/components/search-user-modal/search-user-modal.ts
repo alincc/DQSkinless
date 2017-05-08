@@ -49,10 +49,12 @@ export class SearchUserModal implements OnInit {
     public search(event) {
         this.searchUserModalService.getUsers(this.searchForm.value, this.role).subscribe(response => {
             if (response) {
-                this.users = this.removeMySelf(response.result);
-                event.dismissLoading();
+                this.users = this.removeMySelf(response);
             }
-        }, error => event.dismissLoading());
+        },
+            err => event.dismissLoading(),
+            () => event.dismissLoading());
+
     }
 
     private removeMySelf(users) {
@@ -85,7 +87,7 @@ export class SearchUserModal implements OnInit {
         return (user.lastname ? user.lastname + ', ' : '') + user.firstname + ' ' + (user.middlename ? user.middlename : '');
     }
 
-    public getuserContacts(userContacts) {
+    public displayContacts(userContacts) {
         if (userContacts && userContacts.length > 0) {
             let formattedUserContacts = '';
 

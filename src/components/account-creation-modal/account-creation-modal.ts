@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, ViewController } from 'ionic-angular';
+import { AlertController, LoadingController, ViewController } from 'ionic-angular';
 
 import { AccountCreationModalService } from './account-creation-modal.service';
 import { REGEX } from '../../config/config';
@@ -16,10 +16,12 @@ export class AccountCreationModal implements OnInit {
     public errors: any;
 
     private email: AbstractControl;
+    private loading: any;
 
     constructor(
         private formBuilder: FormBuilder,
         private alertController: AlertController,
+        private loadingController: LoadingController,
         private viewController: ViewController,
         private accountCreationModalService: AccountCreationModalService) {
         this.getDefaults();
@@ -42,48 +44,24 @@ export class AccountCreationModal implements OnInit {
 
         this.email = this.assistantForm.get('email');
 
-        this.email.valueChanges.subscribe(
-            newValue => {
-                if (this.email.hasError('required')) {
-                    this.errors.email = 'Email is required.';
-                } else if (this.email.hasError('pattern')) {
-                    this.errors.email = 'Invalid email address format';
-                } else {
-                    this.errors.email = '';
-                }
-            }
-        );
-    }
-
-    private markFormAsDirty() {
-        Object.keys(this.assistantForm.controls).forEach(key => {
-            this.assistantForm.get(key).markAsDirty();
+        this.email.valueChanges.subscribe(newValue => {
+            this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
         });
     }
 
     private validateForm() {
-        if (this.email.hasError('required')) {
-            this.errors.email = 'Email is required.';
-        } else if (this.email.hasError('pattern')) {
-            this.errors.email = 'Invalid email address format';
-        } else {
-            this.errors.email = '';
-        }
+        this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
     }
 
     public save() {
-        this.markFormAsDirty();
         this.validateForm();
 
         if (this.assistantForm.valid) {
+            this.showLoading();
             this.accountCreationModalService.createAccount(this.email.value).subscribe(response => {
                 if (response && response.status) {
 
-                    const assistantAccount = {
-                        userId: response.result.userId,
-                        username: response.result.username,
-                        password: response.result.password,
-                    }
+                    this.dismissLoading();
 
                     this.alertController.create({
                         message: `Account created! Pre-generated password sent to ${this.email.value}`,
@@ -91,13 +69,28 @@ export class AccountCreationModal implements OnInit {
                             {
                                 text: 'OK',
                                 handler: () => {
-                                    this.viewController.dismiss(assistantAccount).catch(() => { });
+                                    this.viewController.dismiss(response.result).catch(() => { });
                                 }
                             }
                         ]
                     }).present();
                 }
-            });
+            }, err => this.dismissLoading());
+        }
+    }
+
+    private showLoading() {
+        this.loading = this.loadingController.create({
+            spinner: 'crescent',
+            cssClass: 'xhr-loading'
+        });
+        this.loading.present();
+    }
+
+
+    private dismissLoading() {
+        if (this.loading) {
+            this.loading.dismiss();
         }
     }
 }

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService, Storage } from '../../services/services';
 import { CONFIG } from '../../config/config'
-import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class ProfileFormService {

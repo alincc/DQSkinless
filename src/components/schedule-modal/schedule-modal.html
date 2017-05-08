@@ -17,7 +17,7 @@
             <ion-row>
                 <ion-col col-4 col-sm-4 col-md-4>
                     <ion-label class="form-label">Day of Week *</ion-label>
-                    <ion-item class="item-holder">
+                    <ion-item clean>
                         <ion-select class="options" name="day" formControlName="day">
                             <ion-option *ngFor="let day of days; let i = index" [value]="i">{{ day }}</ion-option>
                         </ion-select>
@@ -28,7 +28,7 @@
                 </ion-col>
                 <ion-col col-4 col-sm-4 col-md-4>
                     <ion-label class="form-label">From *</ion-label>
-                    <ion-item class="item-holder">
+                    <ion-item clean>
                         <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" name="from" formControlName="from"></ion-datetime>
                     </ion-item>
                     <div class="error-message" *ngIf="scheduleForm.get('from').dirty && scheduleForm.get('from').invalid">
@@ -37,7 +37,7 @@
                 </ion-col>
                 <ion-col col-4 col-sm-4 col-md-4>
                     <ion-label class="form-label">To *</ion-label>
-                    <ion-item class="item-holder">
+                    <ion-item clean>
                         <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm a" name="to" formControlName="to"></ion-datetime>
                     </ion-item>
                     <div class="error-message" *ngIf="scheduleForm.get('to').dirty && scheduleForm.get('to').invalid">
