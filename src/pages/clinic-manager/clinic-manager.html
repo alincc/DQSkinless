@@ -6,12 +6,12 @@
     </ion-navbar>
 </ion-header>
 <ion-content #Content padding>
-    <h2>Number of Clinics: {{ clinics.length }}</h2>
+    <h2> Remaining Clinic(s): {{ allowableClinics - clinics.length}}</h2>
     <hr/>
     <div class="clinic-container">
         <ion-card *ngFor="let clinic of clinics;let i=index">
             <ion-card-content>
-                <accordion [header]="clinic?.clinicName" [subHeader]="clinic?.address">
+                <accordion [header]="clinic?.clinicName" [subHeader]="clinic?.address" [numbering]="i+1">
                     <ion-grid>
                         <ion-row>
                             <ion-col col-4 col-sm-2 col-md-2>
