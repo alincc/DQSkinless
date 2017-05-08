@@ -54,6 +54,10 @@ export class ClinicPage implements OnInit {
         this.contacts.value = this.clinic.contacts ? Object.assign([], this.clinic.contacts) : [];
         this.mode = this.params.get('mode') ? this.params.get('mode') : MODE.add;
         this.createClinicForm();
+
+        if (this.mode === MODE.add) {
+            this.getUserContacts();
+        }
     }
 
     private getDefaults() {
@@ -88,6 +92,20 @@ export class ClinicPage implements OnInit {
 
         this.address.valueChanges.subscribe(newValue => {
             this.errors.address = this.address.hasError('required') ? 'Address is required' : '';
+        });
+    }
+
+    private getUserContacts() {
+        this.clinicManagerService.getUserContacts().subscribe(response => {
+            if (response && response.status) {
+                response.result.forEach(contact => {
+                    this.contacts.push({
+                        contactType: contact.contactType,
+                        contact: contact.contact,
+                        isProfileContacts: true
+                    });
+                });
+            }
         });
     }
 
@@ -209,7 +227,8 @@ export class ClinicPage implements OnInit {
 
                 this.contacts.push({
                     contact: contact.contact,
-                    contactType: contact.contactType
+                    contactType: contact.contactType,
+                    isProfileContacts: false
                 });
                 this.hasContact();
                 // this.clinicForm.markAsDirty();
@@ -272,6 +291,18 @@ export class ClinicPage implements OnInit {
         this.errors.schedule = this.hasSchedule() ? '' : "Schedule is required";
     }
 
+    private filterContacts(conacts) {
+        const newContacts = [];
+        this.contacts.value.filter(contact => {
+            return !contact.isProfileContacts;
+        }).forEach(contact => {
+            delete contact['isProfileContacts'];
+            newContacts.push(contact);
+        });
+
+        return newContacts;
+    }
+
     public submitForm(event) {
         this.markFormAsDirty();
         this.validateForm();
@@ -282,7 +313,7 @@ export class ClinicPage implements OnInit {
                     clinicName: this.clinicForm.get('clinicName').value,
                     address: this.clinicForm.get('address').value,
                     schedules: this.schedules.value,
-                    contacts: this.contacts.value
+                    contacts: this.filterContacts(this.contacts.value)
                 };
 
                 this.clinicManagerService.createClinic(newClinic).subscribe(response => {
