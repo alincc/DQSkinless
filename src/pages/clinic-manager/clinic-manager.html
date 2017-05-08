@@ -37,7 +37,7 @@
                             <ion-col col-12 col-sm-12 col-md-12>
                                 <a (click)="editClinic(clinic, i)" color="accent-dark">Edit&nbsp;&nbsp;&nbsp;</a>
                                 <a (click)="deleteClinic(clinic, i)" color="accent-dark">Delete&nbsp;&nbsp;&nbsp;</a>
-                                <a  *ngIf="isManager" (click)="associateMember(clinic.clinicId)" color="accent-dark">Associate Member</a>
+                                <a (click)="associateMember(clinic.clinicId)" color="accent-dark">Associate Member</a>
                             </ion-col>
                         </ion-row>
                     </ion-grid>

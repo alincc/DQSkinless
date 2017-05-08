@@ -55,15 +55,13 @@ export class ClinicManagerService {
             clinics.forEach(clinic => {
                 Observable.forkJoin([
                     this.getClinicTimeSlotByClinicId(clinic.clinicId),
-                    this.getClinicContactByClinicId(clinic.clinicId),
-                    this.getUserContacts()
+                    this.getClinicContactByClinicId(clinic.clinicId)
                 ]).map((data: any[]) => {
                     clinic.schedules = [];
                     clinic.contacts = [];
 
                     const clinicSchedules = data[0]
                     const clinicContacts = data[1];
-                    const userContacts = data[2];
 
                     if (clinicSchedules && clinicSchedules.status) {
                         clinicSchedules.result.forEach(clinicSchedule => {
@@ -71,15 +69,9 @@ export class ClinicManagerService {
                         });
                     }
 
-                    if (userContacts && userContacts.status) {
-                        userContacts.result.forEach(userContact => {
-                            this.pushClinicContact(clinic.contacts, userContact, true);
-                        });
-                    }
-
                     if (clinicContacts && clinicContacts.status) {
                         clinicContacts.result.forEach(clinicContact => {
-                            this.pushClinicContact(clinic.contacts, clinicContact, false);
+                            this.pushClinicContact(clinic.contacts, clinicContact);
                         });
                     }
 
@@ -97,13 +89,12 @@ export class ClinicManagerService {
         });
     }
 
-    private pushClinicContact(clinicContacts, data, isProfileContacts) {
+    private pushClinicContact(clinicContacts, data) {
         clinicContacts.push({
             id: data.id,
             clinicId: data.clinicId,
             contactType: data.contactType,
-            contact: data.contact,
-            isProfileContacts: isProfileContacts
+            contact: data.contact
         })
     }
 
