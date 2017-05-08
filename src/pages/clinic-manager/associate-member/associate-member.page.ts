@@ -82,7 +82,7 @@ export class AssociateMemberPage implements OnInit {
 
 		accountCreationModal.onDidDismiss(newMember => {
 			if (newMember) {
-				this.clinicManagerService.associateMember(this.root.reloadPublisher.getValue(), newMember.userId, 0, 2).subscribe(response => {
+				this.clinicManagerService.associateMember(this.clinicId, newMember.userId, 0, 2).subscribe(response => {
 					if (response && response.status) {
 						this.getMembers();
 					}
