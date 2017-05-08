@@ -1,12 +1,12 @@
 <div class="row accordion" (click)="open=!open">
     <div class="header" [ngClass]="{'open-header': open}">
         <div class="title" [ngClass]="{'open-title': open}">
-            <p><b>{{ header }}</b></p>
+            <h2><b>{{ header }}</b></h2>
             <p>{{ subHeader }}</p>
         </div>
         <div>
-            <ion-label class="accordion-toggle" color="accent-dark" [hidden]="open">+</ion-label>
-            <ion-label class="accordion-toggle" color="accent-dark" [hidden]="!open">-</ion-label>
+            <ion-icon name="ios-arrow-down" class="accordion-toggle" [hidden]="open"></ion-icon>
+            <ion-icon name="ios-arrow-up" class="accordion-toggle" [hidden]="!open"></ion-icon>
         </div>
     </div>
 </div>

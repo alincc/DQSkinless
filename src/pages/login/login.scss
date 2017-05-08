@@ -5,11 +5,14 @@ login-page{
 	    background-position: center;
 	    background-size: cover;
 		.scroll-content{
-		padding: 50px;
+		padding: 10%;
 	   
+
+
 			.logo{
 				width: 60%;
 				height: auto;
+				max-width: 150px;
 			}
 			ion-list{
 				margin: 50px 0px;
@@ -22,6 +25,26 @@ login-page{
 			}
 			xhr-button button {
 				box-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+			}
+			.size-container{
+				max-width: 450px;
+				margin: auto;
+			}
+
+			.flex-box{
+				display: flex;
+				flex-direction: column;
+				height: 100%;
+				.header{
+					flex: 1;
+				}
+				.content{
+					flex: 5;
+				}
+			}
+			.form-gap{
+				height: 10%;
+				max-height: 30px;
 			}
 		}
 	}

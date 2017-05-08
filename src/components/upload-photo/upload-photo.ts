@@ -18,9 +18,6 @@ export class UploadPhoto {
 		private images: Images,
 		private storage: Storage,
 		private alert: AlertController) { 
-		this.images.getImage(this.getImageName()).then(response => {
-			this.image = response.split(",", 2)[1];
-		})
 	}
 
 	public openCamera(){
