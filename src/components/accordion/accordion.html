@@ -1,7 +1,7 @@
 <div class="row accordion" (click)="open=!open">
     <div class="header" [ngClass]="{'open-header': open}">
         <div class="title" [ngClass]="{'open-title': open}">
-            <h2><b>{{ header }}</b></h2>
+            <h2><b>{{ numbering + '.'}} {{ header }}</b></h2>
             <p>{{ subHeader }}</p>
         </div>
         <div>
