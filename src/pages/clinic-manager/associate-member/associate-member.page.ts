@@ -129,9 +129,7 @@ export class AssociateMemberPage implements OnInit {
 		// TODO
 	}
 
-	public deleteMember(event, member, mi) {
-		event.preventDefault();
-
+	public deleteMember(member, mi) {
 		this.alertController.create({
 			message: `Remove ${this.getFullName(member)} from this clinic?`,
 			buttons: [
