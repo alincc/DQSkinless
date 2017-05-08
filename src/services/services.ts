@@ -143,17 +143,18 @@ export class HttpService {
 	}
 
 	private errorHandler(err: any) {
-		if (err.status === 401) {
-			this.unauthorizedEvent.emit();
-		} else if (err.status === 404) {
-			this.errorEvent.emit(MESSAGES.ERROR.NOT_FOUND);
-		} else {
-			this.errorEvent.emit(err);
-		}
 		if (err instanceof Response) {
 			return Observable.throw(err);
-		}
-		if (err.status === 0) {
+		} else {
+			if (err.status === 401) {
+				this.unauthorizedEvent.emit();
+			} else if (err.status === 404) {
+				this.errorEvent.emit(MESSAGES.ERROR.NOT_FOUND);
+			} else if (err.status === 0) {
+				this.errorEvent.emit(err.errorDescription);
+			} else {
+				this.errorEvent.emit(err);
+			}
 			return err;
 		}
 	}
@@ -195,28 +196,5 @@ export class WebSocketFactory {
 			},
 			close: () => { sock.close(); }
 		};
-	}
-}
-
-
-@Injectable()
-export class StackedServices {
-
-	private stack: Observable<any>[];
-
-	constructor() {
-		this.stack = [];
-	}
-
-	public push(observable: Observable<any>) {
-		this.stack.push(observable);
-	}
-
-	public executeFork() {
-		return Observable.forkJoin(this.stack);
-	}
-
-	public get lastIndex() {
-		return this.stack.length - 1;
 	}
 }

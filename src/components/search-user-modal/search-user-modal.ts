@@ -49,10 +49,10 @@ export class SearchUserModal implements OnInit {
     public search(event) {
         this.searchUserModalService.getUsers(this.searchForm.value, this.role).subscribe(response => {
             if (response) {
-                this.users = this.removeMySelf(response.result);
-                event.dismissLoading();
+                this.users = this.removeMySelf(response);
             }
-        }, error => event.dismissLoading());
+            event.dismissLoading()
+        });
     }
 
     private removeMySelf(users) {
@@ -65,7 +65,7 @@ export class SearchUserModal implements OnInit {
 
     public selectUser(user) {
         this.alertController.create({
-            message: `${this.message} ${this.getFullName(user)}?`,
+            message: `${this.message} ${user.lastname ? this.getFullName(user) : user.email}?`,
             buttons: [
                 {
                     text: 'NO',
@@ -82,10 +82,9 @@ export class SearchUserModal implements OnInit {
     }
 
     public getFullName(user) {
-        return (user.lastname ? user.lastname + ', ' : '') + user.firstname + ' ' + (user.middlename ? user.middlename : '');
-    }
+        return (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '');    }
 
-    public getuserContacts(userContacts) {
+    public displayContacts(userContacts) {
         if (userContacts && userContacts.length > 0) {
             let formattedUserContacts = '';
 
