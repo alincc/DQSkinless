@@ -81,7 +81,7 @@ export class SchedulePage {
 
 	}
 
-	initSchedule(clinicId){
+	public initSchedule(clinicId){
 		let loading = this.createLoading();
 		loading.present();
 
@@ -141,7 +141,7 @@ export class SchedulePage {
 	}
 
 
-	fetchQueue(callback?, errorHandler?){
+	public fetchQueue(callback?, errorHandler?){
 		return this.service.getQueueByBoardID(this.queueBoard.id).subscribe(response => {
 			if(response.status){
 				let newQueueList = [];
@@ -170,7 +170,7 @@ export class SchedulePage {
 		})
 	}
 
-	ngAfterViewInit(){
+	public ngAfterViewInit(){
 		this.queueTopOffset = this.servingNow.clientHeight;
 		this.content.ionScroll.subscribe(event => {
 			if(event.scrollTop > this.queueTopOffset){
@@ -189,7 +189,7 @@ export class SchedulePage {
 	}
 
 
-	reorderItems(indexes){
+	public reorderItems(indexes){
 		let element = this.queue.splice(indexes.from, 1)[0];
 
 	    // recompute order of element
@@ -209,7 +209,7 @@ export class SchedulePage {
 	    });
 	}
 
-	showMore(event){
+	public showMore(event){
 		let popover = this.popover.create(MoreMenuPopover, {
 			disableButtons : !this.serving
 		});
@@ -232,19 +232,19 @@ export class SchedulePage {
 		});
 	}
 
-	view(patientId){
+	public view(patientId){
 		this.rootNav.push(PatientProfilePage);
 	}
 
-	toggleReOrder(){
+	public toggleReOrder(){
 		this.isReOrder = !this.isReOrder;
 	}
 
-	updateServing(xhr, callback?, errCallback?){
+	public updateServing(xhr, callback?, errCallback?){
 		return this.updateQueue(xhr, this.serving, callback, errCallback);
 	}
 
-	updateQueue(xhr, element, callback? , errCallback?){
+	public updateQueue(xhr, element, callback? , errCallback?){
 		this.updateQueueObservable(element).subscribe(
 			response => {
 				this.fetchQueue(
@@ -273,11 +273,11 @@ export class SchedulePage {
 			})
 	}
 
-	updateQueueObservable(element){
+	public updateQueueObservable(element){
 		return this.service.updateQueue(element);
 	}
 
-	done(xhr){
+	public done(xhr){
 		this.serving.status = QUEUE.STATUS.DONE;
 		this.servingState = 'done';
 		this.updateServing(xhr, () => {
@@ -285,14 +285,15 @@ export class SchedulePage {
 		});
 	}
 
-	next(xhr){
+	public next(xhr){
 		this.preHookServingDone().then(response => {
 			for(var i = 0; i < this.queue.length; i++){
 				if(this.queue[i].status === QUEUE.STATUS.QUEUED){
-					this.serving = this.queue.splice(i,1)[0];
-					this.serving.status = QUEUE.STATUS.SERVING
-					this.updateServing(xhr, () => {
+					let serving = Object.assign({}, this.queue.splice(i,1)[0]);
+					serving.status = QUEUE.STATUS.SERVING
+					this.updateQueue(xhr,serving, () => {
 						this.ws.send(QUEUE.MAP.NEXT);
+						this.serving = serving;
 					});
 					return;
 				}
@@ -300,7 +301,7 @@ export class SchedulePage {
 		});
 	}
 
-	hasForQueue(){
+	public hasForQueue(){
 		if(this.queue){
 			return Boolean(this.queue.find(item => {
 				return item.status === QUEUE.STATUS.QUEUED;
@@ -310,7 +311,7 @@ export class SchedulePage {
 		}
 	}
 
-	queueAgain(xhr){
+	public queueAgain(xhr){
 		this.serving.status = QUEUE.STATUS.EN_ROUTE;
 		this.servingState = 'reque';
 		this.updateServing(xhr, () => {
@@ -318,7 +319,7 @@ export class SchedulePage {
 		});
 	}
 
-	noShow(xhr){
+	public noShow(xhr){
 		this.serving.status = QUEUE.STATUS.NO_SHOW;
 		this.servingState = 'done';
 		this.updateServing(xhr, () => {
@@ -442,10 +443,11 @@ export class SchedulePage {
 
 	private serveNow(xhr,customer){
 		this.preHookServingDone().then(response => {
-			this.serving = customer;
-			this.serving.status = QUEUE.STATUS.SERVING
-			this.updateServing(xhr, () => {
+			let serving = Object.assign({}, customer);
+			serving.status = QUEUE.STATUS.SERVING
+			this.updateQueue(xhr,serving, () => {
 				this.ws.send(QUEUE.MAP.NEXT);
+				this.serving = serving;
 			});
 			return;
 		});
