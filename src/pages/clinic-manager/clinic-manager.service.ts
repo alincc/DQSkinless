@@ -157,10 +157,6 @@ export class ClinicManagerService {
         return this.http.post(CONFIG.API.clinicTimeSlots, clinicTimeSlot);
     }
 
-    public updateClinicTimeslot(clinicTimeSlot) {
-        return this.http.put(CONFIG.API.clinicTimeSlots, clinicTimeSlot);
-    }
-
     public deleteClinicTimeslot(clinicTimeSlotId) {
         return this.http.delete(CONFIG.API.clinicTimeSlots, [clinicTimeSlotId]);
     }
@@ -172,10 +168,6 @@ export class ClinicManagerService {
 
     public createClinicContact(clinicContact) {
         return this.http.post(CONFIG.API.clinicContacts, clinicContact);
-    }
-
-    public updateClinicContact(clinicContact) {
-        return this.http.put(CONFIG.API.clinicContacts, clinicContact);
     }
 
     public deleteClinicContact(clinicContactId) {
@@ -193,12 +185,12 @@ export class ClinicManagerService {
         return this.http.post(CONFIG.API.clinicaccess, payload);
     }
 
-    public associateMember(clinicId, userId) {
+    public associateMember(clinicId, userId, accessRole, userRole) {
         const payload = {
             clinicId: clinicId,
             userId: userId,
-            accessRole: 0,
-            userRole: 1
+            accessRole: accessRole,
+            userRole: userRole
         };
 
         return this.http.post(CONFIG.API.clinicaccess, payload);
@@ -206,5 +198,10 @@ export class ClinicManagerService {
 
     public getClinicMember(clinicId) {
         return this.http.get(CONFIG.API.getClinicMember, [clinicId]);
+    }
+
+    public deleteClinicAccessByClinIdUserId(clinicId, userId) {
+        const param = `/u/${userId}/c/${clinicId}`;
+        return this.http.delete(CONFIG.API.clinicaccess + param);
     }
 }

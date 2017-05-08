@@ -47,7 +47,7 @@
                 </ion-avatar>
                 <p>Name: {{ user.lastname ? getFullName(user) : 'Unregistered'}}</p>
                 <p>Email: {{ user.email }}</p>
-                <p>Contact No: {{ getuserContacts(user.userContacts) }}</p>
+                <p>Contact No: {{ displayContacts(user.userContacts) }}</p>
             </ion-item>
         </ion-card>
     </div>

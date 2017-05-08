@@ -53,9 +53,7 @@ export class SearchUserModalService {
                     assistants.result.forEach(assistant => users.push(assistant));
                 }
 
-                return Observable.of({
-                    result: users
-                });
+                return Observable.of(users);
             });
         }
     }

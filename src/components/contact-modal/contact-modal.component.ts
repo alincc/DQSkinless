@@ -17,6 +17,7 @@ export class ContactModal {
 
 	private contactType: AbstractControl;
 	private contactDetail: AbstractControl;
+
 	constructor(private params: NavParams,
 		private formBuilder: FormBuilder,
 		private view: ViewController) {
@@ -30,22 +31,23 @@ export class ContactModal {
 
 		this.contactType = this.contactForm.get('contactType')
 		this.contactType.valueChanges.subscribe(newValue => {
-			if (this.contactType.hasError('required')) {
-				this.errors.contactType = 'Contact Type is required';
-			} else {
-				this.errors.contactType = '';
-			}
+			this.errors.contactType = this.contactType.hasError('required') ? 'Contact Type is required' : '';
 		});
 		this.contactDetail = this.contactForm.get('contactDetail');
 		this.contactDetail.valueChanges.subscribe(newValue => {
-			if (this.contactDetail.hasError('required')) {
-				this.errors.contactDetail = "Contact Detail is required";
-			} else if (this.contactDetail.hasError('pattern')) {
-				this.errors.contactDetail = "Contact Detail should consist of numbers only";
-			} else {
-				this.errors.contactDetail = '';
-			}
+			this.errors.contactDetail = this.contactDetail.hasError('required') ? 'Contact Detail is required' : this.contactDetail.hasError('pattern') ? 'Contact Detail should consist of numbers only' : '';
 		});
+	}
+
+	private markFormAsDirty() {
+		Object.keys(this.contactForm.controls).forEach(key => {
+			this.contactForm.get(key).markAsDirty();
+		});
+	}
+
+	private validateForm() {
+		this.errors.contactType = this.contactType.hasError('required') ? 'Contact Type is required' : '';
+		this.errors.contactDetail = this.contactDetail.hasError('required') ? 'Contact Detail is required' : this.contactDetail.hasError('pattern') ? 'Contact Detail should consist of numbers only' : '';
 	}
 
 	public save() {
@@ -56,28 +58,6 @@ export class ContactModal {
 				contactType: this.contactType.value,
 				contact: this.contactDetail.value
 			});
-		}
-	}
-
-	private markFormAsDirty() {
-		Object.keys(this.contactForm.controls).forEach(key => {
-			this.contactForm.get(key).markAsDirty();
-		});
-	}
-
-	private validateForm() {
-		if (this.contactType.hasError('required')) {
-			this.errors.contactType = 'Contact Type is required';
-		} else {
-			this.errors.contactType = '';
-		}
-
-		if (this.contactDetail.hasError('required')) {
-			this.errors.contactDetail = "Contact Detail is required";
-		} else if (this.contactDetail.hasError('pattern')) {
-			this.errors.contactDetail = "Contact Detail should consist of numbers only";
-		} else {
-			this.errors.contactDetail = '';
 		}
 	}
 }
