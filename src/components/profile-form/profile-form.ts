@@ -127,10 +127,6 @@ export class ProfileForm implements OnInit {
         this.createDaysLov(31);
     }
 
-    private getMiddleYear() {
-        return this.today.getFullYear() - 50;
-    }
-
     private leftPad(num, pad, size) {
         let s = num + '';
         while (s.length < size) s = pad + s;
@@ -172,7 +168,7 @@ export class ProfileForm implements OnInit {
         this.profileForm.get('address').setValue(this.profile.address);
 
         const bday = this.profile.birthdate ? new Date(+this.profile.birthdate) : null;
-        this.profileForm.get('year').setValue(bday ? bday.getFullYear() : this.getMiddleYear());
+        this.profileForm.get('year').setValue(bday ? bday.getFullYear() : '');
         this.profileForm.get('month').setValue(bday ? bday.getMonth() : '');
         this.profileForm.get('day').setValue(bday ? bday.getDate() : '');
     }
