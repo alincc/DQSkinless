@@ -1,17 +1,20 @@
 <ion-menu [content]="sideMenu">
   <ion-content>
     <ion-list>
-      <img src="https://tribzap2it.files.wordpress.com/2015/10/ken-jeong-dr-ken-abc.jpg">
+      <div class="img-container" text-center>
+        <img [src]="profilepic" *ngIf="profilepic">
+        <img src="assets/img/d.png" *ngIf="!profilepic">
+      </div>
       <button ion-item (click)="openProfile()" color="secondary">
         <ion-icon name="contact"></ion-icon>
         Account
       </button>
       <button ion-item (click)="openManager()" color="secondary">
         <ion-icon name="browsers"></ion-icon>
-        Change Group
+        Change Clinic
       </button>
       <button ion-item (click)="openClinicManager()" color="secondary">
-        <ion-icon name="browsers"></ion-icon>
+        <ion-icon name="folder-open"></ion-icon>
         Manage Clinics 
       </button>
       <button ion-item (click)="openManager()" color="secondary">

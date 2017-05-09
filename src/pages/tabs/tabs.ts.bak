@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { App, AlertController, NavController } from 'ionic-angular';
+import { App, NavController } from 'ionic-angular';
 
 import { SchedulePage } from '../schedule/schedule.page';
 import { PatientPage } from '../patient/patient.page';
@@ -22,49 +22,35 @@ export class TabsPage {
 	patient: any = PatientPage;
 	chat: any = ChatPage;
 
-	private profilepic: string;
 	root: NavController;
-	constructor(
-		private app: App,
-		private alertController: AlertController,
+	constructor(private app: App,
 		private nav: NavController,
 		private rootNav: RootNavController,
 		private storage: Storage,
 		private images: Images) {
 		this.root = app.getRootNav();
 		this.rootNav.setRootNav(this.nav);
-		this.images.getImage( this.storage.userDetails.userId + "_profile_pic.jpg").then(response => {
-			this.profilepic = response;
-		})
 	}
 
-	public logout() {
-		this.alertController.create({
-			message: `Are you sure you want to logout?`,
-			buttons: [
-				{
-					text: 'NO',
-					role: 'cancel',
-				},
-				{
-					text: 'YES',
-					handler: () => {
-						this.storage.clear();
-						this.app.getRootNav().setRoot(LoginPage);
-					}
-				}]
-		}).present();
+	logout() {
+		this.storage.clear();
+		this.root.setRoot(LoginPage);
 	}
 
-	public openManager() {
+	openManager() {
 		this.rootNav.push(ManagerPage);
 	}
 
-	public openClinicManager() {
+	openClinicManager() {
 		this.rootNav.push(ClinicManagerPage, { isManager: true });
 	}
 
-	public openProfile() {
+	openProfile() {
 		this.rootNav.push(ProfilePage);
 	}
+
+	getImage(){
+		return this.images.getImage("arsy1494171341691");
+	}
+	
 }

@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
-
+import { Images, Storage } from '../../services/services';
 @Component({
 	selector: 'upload-photo',
 	templateUrl: 'upload-photo.html'
@@ -14,7 +14,11 @@ export class UploadPhoto {
 	private isLoading: boolean;
 	constructor(private nav: NavController,
 		private params: NavParams,
-		private camera: Camera) { }
+		private camera: Camera,
+		private images: Images,
+		private storage: Storage,
+		private alert: AlertController) { 
+	}
 
 	public openCamera(){
 		this.isLoading = true;
@@ -43,11 +47,21 @@ export class UploadPhoto {
 	}
 
 	public skip(){
-		this.onSubmit.emit('Skip');
+		this.onSubmit.emit();
+	}
+
+	public getImageName(){
+		return this.storage.userDetails.userId + "_profile_pic.jpg";
 	}
 
 	public submit(){
-		this.onSubmit.emit('todo photo in base 64');
+		this.images.saveImage(this.getImageName(), this.image, { replace : true}).then(
+            resolve => {
+				this.onSubmit.emit(resolve);
+            }, err => {
+                this.alert.create("Something Went wrong application throws: " + err).present();
+            })
+
 	}
 
 }

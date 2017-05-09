@@ -11,12 +11,16 @@ clinic-page {
 		}	
 	}
 
-    .schedule-details{
+    .schedule-details, .contact-details{
 		ion-col{
 			&:last-child{
 				text-align: right;
                 ion-icon{
                     font-size: 28px;
+                    top: 50%; 
+                    margin-top: -14px;
+                    position: absolute;
+                    right: 5px;
                 }
 			}	
 		}	
