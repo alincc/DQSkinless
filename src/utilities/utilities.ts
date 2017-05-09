@@ -11,7 +11,6 @@ export class Utilities {
 		timeless.setHours(0);
 		return timeless;
 	}
-
 }
 
 export class StackedServices {
@@ -32,5 +31,19 @@ export class StackedServices {
 
 	public get lastIndex() {
 		return this.stack.length - 1;
+	}
+
+	public shiftStack() {
+		if (this.canShift()) {
+			this.stack.shift();
+		}
+	}
+
+	public clearStack() {
+		this.stack = [];
+	}
+
+	private canShift() {
+		return this.stack && this.stack.length >= 1;
 	}
 }

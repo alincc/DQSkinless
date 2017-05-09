@@ -15,9 +15,9 @@ export class ProfileFormService {
 
     private getUserId() {
         if (!this.userId) {
-            this.storage.accountSubject.subscribe( account => {
+            this.storage.accountSubject.subscribe(account => {
                 this.userId = account.userId;
-            })
+            });
         }
         return this.userId;
     }
@@ -47,5 +47,9 @@ export class ProfileFormService {
 
     public deleteContacts(_parameter) {
         return this.http.delete(CONFIG.API.contacts, _parameter);
+    }
+
+    public getUserContacts() {
+        return this.http.get(CONFIG.API.getUserContacts, [this.getUserId()]);
     }
 }
