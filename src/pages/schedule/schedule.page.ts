@@ -13,6 +13,7 @@ import { trigger,
   animate,
   transition } from '@angular/animations';
 import { Utilities } from '../../utilities/utilities';
+import { Storage } from '../../services/services';
 
 
 
@@ -74,11 +75,12 @@ export class SchedulePage {
 		private service : ScheduleService,
 		private modal: ModalController,
 		private loadingCtrl: LoadingController,
-		private alert: AlertController){
-		rootNav.reloadPublisher.subscribe(clinicId => {
-			this.initSchedule(clinicId);
+		private alert: AlertController,
+		private storage : Storage){
+		
+		this.storage.clinicSubject.subscribe(clinic => {
+			this.initSchedule(clinic.clinicId);
 		})
-
 	}
 
 	public initSchedule(clinicId){
@@ -287,16 +289,20 @@ export class SchedulePage {
 
 	public next(xhr){
 		this.preHookServingDone().then(response => {
-			for(var i = 0; i < this.queue.length; i++){
-				if(this.queue[i].status === QUEUE.STATUS.QUEUED){
-					let serving = Object.assign({}, this.queue.splice(i,1)[0]);
-					serving.status = QUEUE.STATUS.SERVING
-					this.updateQueue(xhr,serving, () => {
-						this.ws.send(QUEUE.MAP.NEXT);
-						this.serving = serving;
-					});
-					return;
+			if(response){
+				for(var i = 0; i < this.queue.length; i++){
+					if(this.queue[i].status === QUEUE.STATUS.QUEUED){
+						let serving = Object.assign({}, this.queue.splice(i,1)[0]);
+						serving.status = QUEUE.STATUS.SERVING
+						this.updateQueue(xhr,serving, () => {
+							this.ws.send(QUEUE.MAP.NEXT);
+							this.serving = serving;
+						});
+						return;
+					}
 				}
+			}else{
+				xhr.dismissLoading();
 			}
 		});
 	}
@@ -443,25 +449,31 @@ export class SchedulePage {
 
 	private serveNow(xhr,customer){
 		this.preHookServingDone().then(response => {
-			let serving = Object.assign({}, customer);
-			serving.status = QUEUE.STATUS.SERVING
-			this.updateQueue(xhr,serving, () => {
-				this.ws.send(QUEUE.MAP.NEXT);
-				this.serving = serving;
-			});
-			return;
+			if(response){
+				let serving = Object.assign({}, customer);
+				serving.status = QUEUE.STATUS.SERVING
+				this.updateQueue(xhr,serving, () => {
+					this.ws.send(QUEUE.MAP.NEXT);
+					this.serving = serving;
+				});
+			}else{
+				xhr.dismissLoading();
+			}
 		});
 	}
 
 	private preHookServingDone(){
-	 	return new Promise((resolve, error) => {
+	 	return new Promise((resolve, reject) => {
 	 		if(this.serving){
 	 			this.alert.create({
 	 				message : 'You are currently serving ' + this.serving.lastName + ", " + this.serving.firstName + " " + this.serving.middleName + ", are you sure you want to get the next queue and tag current as done?",
 	 				buttons: [
 				      {
 				        text: 'No',
-				        role: 'cancel'
+				        role: 'cancel',
+				        handler: () => {
+				        	resolve(false);
+				        }
 				      },
 				      {
 				        text: 'Yes',
@@ -470,14 +482,14 @@ export class SchedulePage {
 					 		this.updateQueueObservable(this.serving).subscribe( response => {
 						 		resolve(response);
 					 		}, err => {
-						 		error(err);
+						 		reject(err);
 						 	});
 				        }
 				      }
 				    ]
 	 			}).present();
 		 	}else{
-		 		resolve()
+		 		resolve(true)
 		 	}
 	 	});
 	}

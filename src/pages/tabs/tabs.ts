@@ -23,6 +23,8 @@ export class TabsPage {
 	chat: any = ChatPage;
 
 	private profilepic: string;
+	private userDetails: any;
+	private account: any;
 	root: NavController;
 	constructor(
 		private app: App,
@@ -33,8 +35,14 @@ export class TabsPage {
 		private images: Images) {
 		this.root = app.getRootNav();
 		this.rootNav.setRootNav(this.nav);
-		this.images.getImage( this.storage.userDetails.userId + "_profile_pic.jpg").then(response => {
+		this.images.getImage( this.storage.account.userId + "_profile_pic.jpg").then(response => {
 			this.profilepic = response;
+		})
+		storage.userDetailsSubject.subscribe(userDetails => {
+			this.userDetails = userDetails;
+		});
+		storage.accountSubject.subscribe(account => {
+			this.account = account;			
 		})
 	}
 
