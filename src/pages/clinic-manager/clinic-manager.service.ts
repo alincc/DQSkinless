@@ -21,18 +21,13 @@ export class ClinicManagerService {
         if (!this.userId) {
             this.storage.accountSubject.subscribe( account => {
                 this.userId = account.userId;
-            })
+            });
         }
         return this.userId;
     }
 
-
     public getNoOfClinics() {
         return this.http.get(CONFIG.API.getNoOfClinics, [this.getUserId()]);
-    }
-
-    public getUserContacts() {
-        return this.http.get(CONFIG.API.getUserContacts, [this.getUserId()]);
     }
 
     public createClinic(clinic) {
