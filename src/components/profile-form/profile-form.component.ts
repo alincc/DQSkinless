@@ -23,7 +23,6 @@ export class ProfileForm implements OnInit {
     @Input() usage: string;
 
     @Input() profile: any;
-    @Input() mode: string;
 
     @Output() onSubmit = new EventEmitter();
 
@@ -108,7 +107,6 @@ export class ProfileForm implements OnInit {
         this.createDateLov();
 
         this.contacts = new ArraySubject([]);
-        this.mode = 'Edit';
         this.stack = new StackedServices([]);
     }
 
@@ -240,10 +238,6 @@ export class ProfileForm implements OnInit {
         this.gender.valueChanges.subscribe(newValue => {
             this.errors.gender = this.gender.hasError('required') ? 'Gender is required' : '';
         });
-    }
-
-    public isEditMode(): boolean {
-        return this.mode !== 'View';
     }
 
     public changeYear() {

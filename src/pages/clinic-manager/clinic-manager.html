@@ -36,7 +36,7 @@
                         <ion-row class="actions-container">
                             <ion-col col-12 col-sm-12 col-md-12>
                                 <a (click)="editClinic(clinic, i)" color="accent-dark">Edit&nbsp;&nbsp;&nbsp;</a>
-                                <a (click)="deleteClinic(clinic, i)" color="accent-dark">Delete&nbsp;&nbsp;&nbsp;</a>
+                                <a *ngIf="clinics.length > 1" (click)="deleteClinic(clinic, i)" color="accent-dark">Delete&nbsp;&nbsp;&nbsp;</a>
                                 <a (click)="associateMember(clinic.clinicId)" color="accent-dark">Associate Member</a>
                             </ion-col>
                         </ion-row>
@@ -46,7 +46,7 @@
         </ion-card>
     </div>
     <div class="speil" *ngIf="clinics?.length === 0" text-center>
-        <ion-label >
+        <ion-label>
             Create Clinic by pressing the add button on the lower left of the screen.
         </ion-label>
     </div>

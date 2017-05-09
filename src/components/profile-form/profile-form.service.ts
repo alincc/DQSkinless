@@ -4,11 +4,13 @@ import { CONFIG } from '../../config/config'
 
 @Injectable()
 export class ProfileFormService {
+
     constructor(
         private http: HttpService,
         private storage: Storage) {
 
     }
+
     private userId;
 
     private getUserId() {
