@@ -21,7 +21,7 @@
 			<img [src]="'data:image/jpeg;base64,' + image" *ngIf="image">
 		</div>
 		<button ion-button round large color="accent"
-		(click)="submit()">Submit</button>
+		(click)="submit()" [disabled]="!image">Submit</button>
 		<button ion-button round large outline color="accent" (click)="skip()">Skip</button>
 	</div>
 </ion-content>

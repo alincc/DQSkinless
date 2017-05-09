@@ -40,7 +40,6 @@ export class AssociateMemberPage implements OnInit {
 
 	private getDefaults() {
 		this.clinicId = this.params.data && this.params.data.clinicId ? this.params.data.clinicId : null;
-		this.members = [];
 		this.userId = this.clinicManagerService.getUserId();
 		this.accessRole = LOVS.ACCESS_ROLES;
 		this.userRole = LOVS.USER_ROLES;
@@ -82,7 +81,7 @@ export class AssociateMemberPage implements OnInit {
 
 		accountCreationModal.onDidDismiss(newMember => {
 			if (newMember) {
-				this.clinicManagerService.associateMember(this.root.reloadPublisher.getValue(), newMember.userId, 0, 2).subscribe(response => {
+				this.clinicManagerService.associateMember(this.clinicId, newMember.userId, 0, 2).subscribe(response => {
 					if (response && response.status) {
 						this.getMembers();
 					}
@@ -129,9 +128,7 @@ export class AssociateMemberPage implements OnInit {
 		// TODO
 	}
 
-	public deleteMember(event, member, mi) {
-		event.preventDefault();
-
+	public deleteMember(member, mi) {
 		this.alertController.create({
 			message: `Remove ${this.getFullName(member)} from this clinic?`,
 			buttons: [

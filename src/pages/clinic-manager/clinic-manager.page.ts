@@ -84,8 +84,8 @@ export class ClinicManagerPage implements OnInit {
 				if (this.params.data.parent && this.clinics.length > 0) {
 					this.params.data.parent.completedRegistration = true;
 				}
-				this.dismissLoading();
 			}
+			this.dismissLoading();
 		}, err => this.dismissLoading());
 	}
 
