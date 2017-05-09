@@ -33,7 +33,7 @@ export class TabsPage {
 		private images: Images) {
 		this.root = app.getRootNav();
 		this.rootNav.setRootNav(this.nav);
-		this.images.getImage( this.storage.userDetails.userId + "_profile_pic.jpg").then(response => {
+		this.images.getImage(this.storage.userDetails.userId + "_profile_pic.jpg").then(response => {
 			this.profilepic = response;
 		})
 	}
@@ -65,6 +65,8 @@ export class TabsPage {
 	}
 
 	public openProfile() {
-		this.rootNav.push(ProfilePage);
+		this.rootNav.push(ProfilePage, {
+			formType: this.storage.userDetails.role === 1 ? 'D' : 'ND'
+		});
 	}
 }

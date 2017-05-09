@@ -1,19 +1,10 @@
 <ion-header>
 	<ion-navbar color="primary">
 		<ion-title>
-			Profile
+			Edit Profile
 		</ion-title>
 	</ion-navbar>
-	<ion-item color="primary">
-		<ion-avatar item-left>
-			<img src="https://tribzap2it.files.wordpress.com/2015/10/ken-jeong-dr-ken-abc.jpg">
-		</ion-avatar>
-		<h1>Doctor's Name</h1>
-		<p>doctorsemail@gmail.com</p>
-	</ion-item>
 </ion-header>
-<ion-content>
-	<ion-tabs tabsPlacement="top">
-		<ion-tab [root]="form" tabTitle="Information" tabIcon="information-circle"></ion-tab>
-	</ion-tabs>
+<ion-content #Content padding>
+	<profile-form (onSubmit)="submit($event)" [formType]="formType"></profile-form>
 </ion-content>
