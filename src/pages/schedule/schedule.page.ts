@@ -5,7 +5,7 @@ import { PatientProfilePage } from '../patient-profile/patient-profile.page';
 import { RootNavController } from '../../services/services';
 import { ScheduleService } from './schedule.service';
 import { QUEUE } from '../../constants/constants'
-import { AddQueueFormModal } from '../../components/add-queue-form-modal/add-queue-form.modal'
+import { AddQueueFormModal } from '../../components/add-queue-form-modal/add-queue-form.modal.component'
 import { XHRButton } from '../../components/xhr-button/xhr-button.component';
 import { trigger,
   state,
