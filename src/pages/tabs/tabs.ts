@@ -39,6 +39,7 @@ export class TabsPage {
 		storage.userDetailsSubject.subscribe(userDetails => {
 			this.userDetails = userDetails;
 		});
+
 		storage.accountSubject.subscribe(account => {
 			this.account = account;			
 			this.images.getImage( this.account.userId + "_profile_pic.jpg").then(response => {
@@ -75,7 +76,7 @@ export class TabsPage {
 
 	public openProfile() {
 		this.rootNav.push(ProfilePage, {
-			formType: this.storage.userDetails.role === 1 ? 'D' : 'ND'
+			formType: this.account.role === 1 ? 'D' : 'ND'
 		});
 	}
 }
