@@ -23,6 +23,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { File } from '@ionic-native/file';
+import { Network } from '@ionic-native/network';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { File } from '@ionic-native/file';
     Keyboard,
     SplashScreen,
     StatusBar,
-    File
+    File,
+    Network
   ]
 })
 export class AppModule { }
