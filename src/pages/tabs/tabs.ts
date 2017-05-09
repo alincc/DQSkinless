@@ -25,6 +25,7 @@ export class TabsPage {
 	private profilepic: string;
 	private userDetails: any;
 	private account: any;
+	private clinic: any;
 	root: NavController;
 	constructor(
 		private app: App,
@@ -44,6 +45,9 @@ export class TabsPage {
 			this.images.getImage( this.account.userId + "_profile_pic.jpg").then(response => {
 				this.profilepic = response;
 			})
+		});
+		storage.clinicSubject.subscribe(clinic => {
+			this.clinic = clinic;
 		})
 	}
 
