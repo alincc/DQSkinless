@@ -52,7 +52,7 @@ export class ManagerPage implements OnInit {
 	}
 
 	public go(clinic) {
-		this.root.loadInit(clinic.clinicId);
+		this.storage.clinic = clinic;
 		this.app.getRootNav().setRoot(TabsPage);
 	}
 

@@ -10,13 +10,17 @@ tabs{
 	.tabbar{
 		background: $primary-light !important;
 	}
-	.img-container{
-		padding: 5px;
-		img{
-			height: 150px;
-			width: auto;
-		border-radius: 20px;
-
+	.side-menu-header{
+		display: flex;
+		.img-container{
+			padding: 20px;
+			img{
+				height: 80px;
+				border-radius: 50%;
+			}
+		}
+		.account-detail{
+			flex:1;
 		}
 	}
 

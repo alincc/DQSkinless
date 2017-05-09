@@ -1,9 +1,15 @@
 <ion-menu [content]="sideMenu">
   <ion-content>
     <ion-list>
-      <div class="img-container" text-center>
-        <img [src]="profilepic" *ngIf="profilepic">
-        <img src="assets/img/d.png" *ngIf="!profilepic">
+      <div class="side-menu-header">
+        <div class="img-container">
+          <img [src]="profilepic" *ngIf="profilepic">
+          <img src="assets/img/d.png" *ngIf="!profilepic">
+        </div>
+        <div class="account-detail">
+          <h4>{{userDetails?.lastname}}, {{userDetails?.firstname}} {{userDetails?.middlename}}</h4>
+          <p>@{{account?.username}}</p>
+        </div>
       </div>
       <button ion-item (click)="openProfile()" color="secondary">
         <ion-icon name="contact"></ion-icon>
