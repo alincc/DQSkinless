@@ -51,7 +51,7 @@ export class UploadPhoto {
 	}
 
 	public getImageName(){
-		return this.storage.userDetails.userId + "_profile_pic.jpg";
+		return this.storage.account.userId + "_profile_pic.jpg";
 	}
 
 	public submit(){

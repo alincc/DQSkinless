@@ -11,7 +11,7 @@ export class RegistrationService {
 
     updateStatus(status){
         return this.http.put(CONFIG.API.changeStatus, {
-            userId : this.storage.userDetails.userId,
+            userId : this.storage.account.userId,
             status : status
         });
     }

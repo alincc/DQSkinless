@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, NavParams } from "ionic-angular";
 
-import { AccountCreationModal } from '../../../components/account-creation-modal/account-creation-modal';
+import { AccountCreationModal } from '../../../components/account-creation-modal/account-creation-modal.component';
 import { RootNavController } from '../../../services/services';
-import { SearchUserModal } from '../../../components/search-user-modal/search-user-modal';
+import { SearchUserModal } from '../../../components/search-user-modal/search-user-modal.component';
 
 import { ClinicManagerService } from '../clinic-manager.service';
 

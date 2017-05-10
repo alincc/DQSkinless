@@ -23,7 +23,6 @@ export class ProfileForm implements OnInit {
     @Input() usage: string;
 
     @Input() profile: any;
-    @Input() mode: string;
 
     @Output() onSubmit = new EventEmitter();
 
@@ -64,23 +63,32 @@ export class ProfileForm implements OnInit {
         this.profile = {};
         this.createProfileForm();
         this.showLoading();
-        if (this.formType === 'D') {
-            this.service.getDoctorDetails().subscribe(response => {
-                if (response && response.status) {
-                    this.profile = response.result;
+        const getProfileDetails$ = this.formType === 'D' ? this.service.getDoctorDetails() : this.service.getAssistantDetails();
+        const getContacts$ = this.service.getUserContacts();
+
+        this.stack.push(getProfileDetails$);
+        this.stack.push(getContacts$);
+        this.stack.executeFork().subscribe(response => {
+            if (response) {
+                const getProfileDetails = response[0];
+                const getContacts = response[1];
+
+                if (getProfileDetails && getProfileDetails.status) {
+                    this.profile = getProfileDetails.result;
                     this.bindProfileFormValues();
                 }
-                this.dismissLoading();
-            }, err => this.dismissLoading());
-        } else {
-            this.service.getAssistantDetails().subscribe(response => {
-                if (response && response.status) {
-                    this.profile = response.result;
-                    this.bindProfileFormValues();
+
+                if (getContacts && getContacts.status) {
+                    this.contacts.value = getContacts.result;
                 }
-                this.dismissLoading();
-            }, err => this.dismissLoading());
-        }
+            }
+
+            this.stack.clearStack();
+            this.dismissLoading();
+        }, err => {
+            this.stack.clearStack();
+            this.dismissLoading()
+        });
     }
 
     private getDefaults() {
@@ -107,8 +115,6 @@ export class ProfileForm implements OnInit {
         this.medicalArts = LOVS.MEDICAL_ARTS;
         this.createDateLov();
 
-        this.contacts = new ArraySubject([]);
-        this.mode = 'Edit';
         this.stack = new StackedServices([]);
     }
 
@@ -242,10 +248,6 @@ export class ProfileForm implements OnInit {
         });
     }
 
-    public isEditMode(): boolean {
-        return this.mode !== 'View';
-    }
-
     public changeYear() {
         this.clearMonthLOV();
         this.clearDayLOV();
@@ -363,7 +365,6 @@ export class ProfileForm implements OnInit {
             }
 
             this.stack.executeFork().subscribe(response => {
-
                 if (response) {
                     const submit = response[this.stack.lastIndex];
 
@@ -371,7 +372,6 @@ export class ProfileForm implements OnInit {
                         this.onSubmit.emit(this.profile);
                     }
                 }
-
                 event.dismissLoading();
             }, err => event.dismissLoading());
         } else {

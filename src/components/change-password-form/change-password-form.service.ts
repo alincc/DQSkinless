@@ -11,7 +11,7 @@ export class ChangePasswordService {
 
     public changePassword(changePasswordFormValue) {
         let _parameter = {
-            username: this.storage.userDetails.username,
+            username: this.storage.account.username,
             oldPassword: changePasswordFormValue.oldPassword,
             newPassword: changePasswordFormValue.password
         }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController } from 'ionic-angular';
-import { DrawingPad } from '../../components/drawing-pad/drawing-pad';
+import { DrawingPad } from '../../components/drawing-pad/drawing-pad.component';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import { Camera } from '@ionic-native/camera';
 // import { ImagePicker } from '@ionic-native/';

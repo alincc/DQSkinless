@@ -9,20 +9,23 @@ import { CONFIG } from '../../config/config';
 
 @Injectable()
 export class SearchUserModalService {
+    
+    private userId: any;
     constructor(
         private http: HttpService,
         private storage: Storage) {
 
     }
 
-    private userId;
-
     public getUserId() {
         if (!this.userId) {
-            this.userId = this.storage.userDetails.userId;
+            this.storage.accountSubject.subscribe( account => {
+                this.userId = account.userId;
+            })
         }
         return this.userId;
     }
+
 
     public getUsers(criteria, role) {
         const doctorCriteria = this.createCriteria(criteria, 1);
