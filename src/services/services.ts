@@ -73,7 +73,7 @@ export class Storage {
 	
 	public set account(data) { 
 		if(!this._accountSubject){
-			this._accountSubject = new BehaviorSubject(this.account || );
+			this._accountSubject = new BehaviorSubject(this.account || {});
 		}else{
 			this._accountSubject.next(data);
 		}
@@ -82,7 +82,7 @@ export class Storage {
 
 	public get accountSubject(){
 		if(!this._accountSubject){
-			this._accountSubject = new BehaviorSubject(this.account || );
+			this._accountSubject = new BehaviorSubject(this.account || {});
 		}
 		return this._accountSubject;
 	}
