@@ -1,30 +1,39 @@
 <ion-menu [content]="sideMenu">
   <ion-content>
-    <ion-list>
-      <div class="img-container" text-center>
-        <img [src]="profilepic" *ngIf="profilepic">
-        <img src="assets/img/d.png" *ngIf="!profilepic">
+      <div class="side-menu-header">
+        <div class="img-container">
+          <img [src]="profilepic" *ngIf="profilepic">
+          <img src="assets/img/d.png" *ngIf="!profilepic">
+        </div>
+        <div class="account-detail">
+          <h4>{{userDetails?.lastname}}, {{userDetails?.firstname}} {{userDetails?.middlename}}</h4>
+          <p>@{{account?.username}}</p>
+        </div>
       </div>
-      <button ion-item (click)="openProfile()" color="secondary">
-        <ion-icon name="contact"></ion-icon>
-        Account
-      </button>
-      <button ion-item (click)="openManager()" color="secondary">
-        <ion-icon name="browsers"></ion-icon>
-        Change Clinic
-      </button>
-      <button ion-item (click)="openClinicManager()" color="secondary">
-        <ion-icon name="folder-open"></ion-icon>
-        Manage Clinics 
-      </button>
-      <button ion-item (click)="openManager()" color="secondary">
-        <ion-icon name="cog"></ion-icon>
-        Settings
-      </button>
-      <button ion-item (click)="logout()" color="secondary">
-      <ion-icon name="exit"></ion-icon>
-        Log-out
-      </button>
+      <div (click)="openManager()" class="clinic-detail" text-left>
+        <p><b>{{clinic.clinicName}}</b><br>
+        {{clinic.address}}</p>
+        <ion-icon name="ios-arrow-down"></ion-icon>
+      </div>
+    <ion-list>
+      <ion-item-group>
+        <button ion-item (click)="openProfile()">
+          <ion-icon name="contact"></ion-icon>
+          Edit Account
+        </button>
+        <button ion-item (click)="openClinicManager()">
+          <ion-icon name="folder-open"></ion-icon>
+          Manage Clinics 
+        </button>
+      </ion-item-group>
+        <button ion-item (click)="openManager()">
+          <ion-icon name="cog"></ion-icon>
+          Settings
+        </button>
+        <button ion-item (click)="logout()">
+        <ion-icon name="exit"></ion-icon>
+          Log-out
+        </button>
     </ion-list>
   </ion-content>
 </ion-menu>

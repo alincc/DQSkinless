@@ -51,9 +51,11 @@ export class RootNavController {
 }
 
 export const STORAGE_KEYS = {
-	USER_DETAILS: 'userDetails',
+	ACCOUNT: 'account',
+	USER_DETAILS: 'user_details',
 	TOKEN: 'token',
-	CONFIG: 'config'
+	CONFIG: 'config',
+	CLINIC: 'clinic'
 }
 
 @Injectable()
@@ -62,10 +64,77 @@ export class Storage {
 	constructor(private local: LocalStorageService,
 		private session: SessionStorageService) { }
 
-	// userDetails
-	public get userDetails() { return this.local.retrieve(STORAGE_KEYS.USER_DETAILS); }
-	public set userDetails(data) { this.local.store(STORAGE_KEYS.USER_DETAILS, data); }
+	// account
+	private _accountSubject: BehaviorSubject<any>;
 
+	public get account() { 
+		return this.local.retrieve(STORAGE_KEYS.ACCOUNT); 
+	}
+	
+	public set account(data) { 
+		if(!this._accountSubject){
+			this._accountSubject = new BehaviorSubject(this.account);
+		}else{
+			this._accountSubject.next(data);
+		}
+		this.local.store(STORAGE_KEYS.ACCOUNT, data); 
+	}
+
+	public get accountSubject(){
+		if(!this._accountSubject){
+			this._accountSubject = new BehaviorSubject(this.account);
+		}
+		return this._accountSubject;
+	}
+
+	// user Details
+	private _userDetailsSubject: BehaviorSubject<any>;
+
+	public get userDetails() { 
+		return this.local.retrieve(STORAGE_KEYS.USER_DETAILS); 
+	}
+
+	public set userDetails(data) {
+		if(!this._userDetailsSubject){
+			this._userDetailsSubject = new BehaviorSubject(this.userDetails);
+		}else{
+			this._userDetailsSubject.next(data);
+		}
+		this.local.store(STORAGE_KEYS.USER_DETAILS, data); 
+	}
+
+	public get userDetailsSubject(){
+		if(this._userDetailsSubject){
+			this._userDetailsSubject = new BehaviorSubject(this.userDetails);
+		}
+		return this._userDetailsSubject;
+	}
+
+
+	// clinic details
+	private _clinicSubject: BehaviorSubject<any>;
+
+	public get clinic(){
+		return this.local.retrieve(STORAGE_KEYS.CLINIC);
+	}
+
+	public set clinic(data){
+		if(!this._clinicSubject){
+			this._clinicSubject = new BehaviorSubject(this.clinic);
+		}else{
+			this._clinicSubject.next(data);
+		}
+		this.local.store(STORAGE_KEYS.CLINIC, data); 
+	}
+
+	public get clinicSubject(){
+		if(this._clinicSubject){
+			this._clinicSubject = new BehaviorSubject(this.clinic);
+		}
+		return this._clinicSubject;
+	}
+
+	//token
 	public get token() { return this.local.retrieve(STORAGE_KEYS.TOKEN); }
 	public set token(data) { this.local.store(STORAGE_KEYS.TOKEN, data); }
 

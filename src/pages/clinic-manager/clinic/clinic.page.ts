@@ -7,7 +7,7 @@ import { RootNavController } from '../../../services/services';
 import { LOVS, MODE } from '../../../constants/constants'
 
 import { ContactModal } from '../../../components/contact-modal/contact-modal.component';
-import { ScheduleModal } from '../../../components/schedule-modal/schedule-modal';
+import { ScheduleModal } from '../../../components/schedule-modal/schedule-modal.component';
 
 import { ClinicManagerService } from '../clinic-manager.service';
 import { StackedServices } from '../../../utilities/utilities';

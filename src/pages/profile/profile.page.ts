@@ -1,15 +1,22 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { BlankPage } from '../blank/blank.page';
-import { ProfileForm } from '../../components/profile-form/profile-form';
+import { NavParams } from 'ionic-angular';
+import { RootNavController } from '../../services/services';
 
 @Component({
 	selector: 'profile-page',
 	templateUrl: 'profile.html'
 })
 export class ProfilePage {
-	blank: any = BlankPage;
-	public form: any = ProfileForm;
 
-	constructor(public nav: NavController) { }
+	public formType;
+
+	constructor(
+		private params: NavParams,
+		private rootNav: RootNavController) {
+		this.formType = this.params.data && this.params.data.formType ? this.params.data.formType : 'ND';
+	}
+
+	public submit(response) {
+		this.rootNav.pop();
+	}
 }

@@ -13,10 +13,13 @@ export class ManagerService {
 
     private getUserId() {
         if (!this.userId) {
-            this.userId = this.storage.userDetails.userId;
+            this.storage.accountSubject.subscribe( account => {
+                this.userId = account.userId;
+            })
         }
         return this.userId;
     }
+
 
     public getClinicRecordByUserId() {
         return this.http.get(CONFIG.API.getClinicRecordByUserId, [this.getUserId()]);
