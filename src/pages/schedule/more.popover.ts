@@ -5,12 +5,13 @@ import { ViewController, NavParams } from 'ionic-angular';
 	selector: "more-menu-popover",
 	template: `<ion-list>
       <ion-list-header>More...</ion-list-header>
-      <button ion-item (click)="return()" [disabled]="params.data.disableButtons"><ion-icon name="return-left" color="accent"></ion-icon>Queue Again</button>
-      <button ion-item (click)="remove()" [disabled]="params.data.disableButtons"><ion-icon name="eye-off" color="accent"></ion-icon>No-Show</button>
-      <button ion-item (click)="reorder()"><ion-icon name="shuffle" color="accent"></ion-icon>Re-Order</button>
+      <button ion-item (click)="return()" [disabled]="params.data.disableButtons || params.data.isAsst"><ion-icon name="return-left" color="accent"></ion-icon>Queue Again</button>
+      <button ion-item (click)="remove()" [disabled]="params.data.disableButtons || params.data.isAsst"><ion-icon name="eye-off" color="accent"></ion-icon>No-Show</button>
+      <button ion-item (click)="reorder()" [disabled]="params.data.isAsst"><ion-icon name="shuffle" color="accent"></ion-icon>Re-Order</button>
     </ion-list>`
 })
 export class MoreMenuPopover{
+	private isAsst: boolean;
 	constructor(public viewCtrl: ViewController,
 		private params: NavParams) {
 		console.log(params)

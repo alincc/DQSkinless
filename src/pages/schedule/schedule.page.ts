@@ -69,6 +69,7 @@ export class SchedulePage {
 	private clinicId: any;
 	private servingState: string;
 	private loading:any;
+	private account: any;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
 		private detector: ChangeDetectorRef,
@@ -80,6 +81,10 @@ export class SchedulePage {
 		
 		this.storage.clinicSubject.subscribe(clinic => {
 			this.initSchedule(clinic.clinicId);
+		})
+
+		this.storage.accountSubject.subscribe(account => {
+			this.account = account;
 		})
 	}
 
@@ -213,7 +218,8 @@ export class SchedulePage {
 
 	public showMore(event){
 		let popover = this.popover.create(MoreMenuPopover, {
-			disableButtons : !this.serving
+			disableButtons : !this.serving,
+			isAsst : this.account.role == 2
 		});
 		popover.present({
 			ev: event 
@@ -495,7 +501,7 @@ export class SchedulePage {
 	}
 
 	private delete(xhr,customer){
-		customer.status = QUEUE.STATUS.TRASH;
+		customer.status = QUEUE.STATUS.NO_SHOW;
 		this.updateQueue(xhr, customer, () => {
 			this.ws.send(QUEUE.MAP.DONE);
 		});
@@ -519,7 +525,7 @@ export class SchedulePage {
 		let isHere = customer.status === QUEUE.STATUS.QUEUED;
 		return [
 			{
-				name: isHere?'Going Out':'Arrived',
+				name: isHere? 'Away':'Arrived',
 				icon: isHere? 'cafe': 'flag'  ,
 				clickFn: (xhr,customer) => {
 					if(isHere){
