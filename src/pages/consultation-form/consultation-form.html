@@ -32,14 +32,14 @@
 </ion-item>
 <hr>
 <ion-label>Attachment</ion-label>
-<div center>
+<div text-center>
 <div frame *ngFor="let img of images" >
 	<img [src]="img">
 </div>
-	<button ion-button large color="accent" round (click)="addAttachment()" center><ion-icon name="attach"></ion-icon>Attach</button>
+	<button ion-button large color="accent" round (click)="addAttachment()" text-center><ion-icon name="attach"></ion-icon>Attach</button>
 </div>
 <hr>
-<div center>
+<div text-center>
 <button ion-button large color="accent" round>Submit</button>
 </div>
 </ion-content>
