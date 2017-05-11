@@ -92,7 +92,7 @@ export class AssociateMemberPage implements OnInit {
 
 		accountCreationModal.onDidDismiss(newMember => {
 			if (newMember) {
-				this.clinicManagerService.associateMember(this.clinicId, newMember.userId, 0, 2).subscribe(response => {
+				this.clinicManagerService.associateMember(this.clinicId, newMember.userId, 2, 2).subscribe(response => {
 					if (response && response.status) {
 						this.getMembers();
 					}
@@ -111,7 +111,7 @@ export class AssociateMemberPage implements OnInit {
 		searchUserModal.onDidDismiss(user => {
 			if (user) {
 				if (!this.userAlreadyExist(user.userId)) {
-					this.clinicManagerService.associateMember(this.clinicId, user.userId, 0, user.userRole).subscribe(response => {
+					this.clinicManagerService.associateMember(this.clinicId, user.userId, 2, user.userRole).subscribe(response => {
 						if (response && response.status) {
 							this.getMembers();
 						}
