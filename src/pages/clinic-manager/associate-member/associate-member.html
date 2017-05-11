@@ -19,10 +19,10 @@
 				<h2>Email: {{ member.email }}</h2>
 				<h2>Access: {{ accessRole[member.accessRole] }}</h2>
 				<h2>Role: {{ userRole[member.userRole] }}</h2>
-				<h2>Expiry: {{ member.expriy }}</h2>
+				<h2>Expiry Date: {{ member.expriy }}</h2>
 			</ion-item>
 			<ion-item-options side="right">
-				<button color="accent-dark" (click)="editAccess($event, member)">
+				<button ion-button color="secondary" (click)="editAccess(member)">
 					<ion-icon name="people"></ion-icon>
 					Edit Access
 				</button>

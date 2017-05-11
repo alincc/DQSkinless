@@ -127,22 +127,17 @@ export class ProfileForm implements OnInit {
         }
 
         for (let i = 1; i <= 12; i++) {
-            this.months.push(this.leftPad(i.toString(), '0', 2));
+
+            this.months.push((i.toString().length < 2 ? '0' : '') + i.toString());
         }
 
         this.createDaysLov(31);
     }
 
-    private leftPad(num, pad, size) {
-        let s = num + '';
-        while (s.length < size) s = pad + s;
-        return s;
-    }
-
     private createDaysLov(maxDay) {
         this.days = [];
         for (let i = 1; i <= maxDay; i++) {
-            this.days.push(this.leftPad(i.toString(), '0', 2));
+            this.days.push((i.toString().length < 2 ? '0' : '') + i.toString());
         }
     }
 
