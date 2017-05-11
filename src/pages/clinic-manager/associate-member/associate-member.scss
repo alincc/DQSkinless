@@ -1,9 +1,5 @@
-search-user-modal {
-    .user-list {
-        margin-top: 30px;
-    }
-    
-    ion-item{
+associate-member-page {    
+    ion-list ion-item{
         ion-avatar{
             div{
                 background-color: $accent-light;
@@ -16,5 +12,9 @@ search-user-modal {
                 font-size: 24px;
 				}
         }
+    }
+
+    .me {
+        background-color: $secondary;
     }
 }

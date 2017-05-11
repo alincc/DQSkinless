@@ -354,7 +354,7 @@ export class ProfileForm implements OnInit {
         if (this.profileForm.valid && this.hasContact()) {
             this.bindProfileDetails();
 
-            this.contacts.value.filter(contact => { return !contact.id }).forEach(contact => {
+            this.contacts.value.filter(contact => !contact.id).forEach(contact => {
                 this.stack.push(this.service.addContacts(contact));
             });
 

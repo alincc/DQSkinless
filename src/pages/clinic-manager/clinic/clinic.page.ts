@@ -108,7 +108,7 @@ export class ClinicPage implements OnInit {
     }
 
     private addSchedule(newSchedule) {
-        const schedule = this.schedules.value.filter(s => { return s.dayOfWeek === newSchedule.dayOfWeek });
+        const schedule = this.schedules.value.filter(s => s.dayOfWeek === newSchedule.dayOfWeek);
         if (schedule.length === 0) {
             this.schedules.push(
                 {
@@ -129,7 +129,7 @@ export class ClinicPage implements OnInit {
                 return new Date('1970/01/01 ' + a.startTime).getTime() - new Date('1970/01/01 ' + b.startTime).getTime();
             });
 
-            this.schedules.value.filter(s => { return s.dayOfWeek === newSchedule.dayOfWeek })[0] = schedule[0];
+            this.schedules.value.filter(s => s.dayOfWeek === newSchedule.dayOfWeek)[0] = schedule[0];
         }
     }
 
@@ -298,7 +298,7 @@ export class ClinicPage implements OnInit {
 
             } else {
 
-                this.contacts.value.filter(contact => { return !contact.id }).forEach(contact => {
+                this.contacts.value.filter(contact => !contact.id).forEach(contact => {
                     this.stack.push(this.clinicManagerService.createClinicContact({
                         clinicId: this.clinic.clinicId,
                         contact: contact.contact,
@@ -307,7 +307,7 @@ export class ClinicPage implements OnInit {
                 });
 
                 this.schedules.value.forEach(schedule => {
-                    schedule.timeSlot.filter(time => { return !time.id }).forEach(time => {
+                    schedule.timeSlot.filter(time => !time.id).forEach(time => {
                         this.stack.push(this.clinicManagerService.createClinicTimeslot({
                             clinicId: this.clinic.clinicId,
                             dayOfWeek: schedule.dayOfWeek,
