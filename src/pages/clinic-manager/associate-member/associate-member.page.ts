@@ -43,14 +43,17 @@ export class AssociateMemberPage implements OnInit {
 		this.userId = this.clinicManagerService.getUserId();
 		this.accessRole = LOVS.ACCESS_ROLES;
 		this.userRole = LOVS.USER_ROLES;
+		this.members = [];
 	}
 
 	private getMembers() {
 		this.showLoading();
-
 		this.clinicManagerService.getClinicMember(this.clinicId).subscribe(response => {
 			if (response && response.status) {
-				this.members = response.result;
+
+				const me = response.result.find(m => m.userId === this.userId);
+				this.members = response.result.filter(m => m.userId !== this.userId);
+				this.members.splice(0, 0, me);
 			}
 			this.dismissLoading();
 		}, err => this.dismissLoading());
@@ -70,6 +73,14 @@ export class AssociateMemberPage implements OnInit {
 		}
 	}
 
+	public getDefaultAvatar(member) {
+		if (member && member.lastname) {
+			return member.lastname.substring(0, 1).toUpperCase() + member.firstname.substring(0, 1).toUpperCase();
+		} else {
+			return "?";
+		}
+	}
+
 	public getFullName(user) {
 		return (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '');
 	}
@@ -81,7 +92,7 @@ export class AssociateMemberPage implements OnInit {
 
 		accountCreationModal.onDidDismiss(newMember => {
 			if (newMember) {
-				this.clinicManagerService.associateMember(this.clinicId, newMember.userId, 0, 2).subscribe(response => {
+				this.clinicManagerService.associateMember(this.clinicId, newMember.userId, 2, 2).subscribe(response => {
 					if (response && response.status) {
 						this.getMembers();
 					}
@@ -100,7 +111,7 @@ export class AssociateMemberPage implements OnInit {
 		searchUserModal.onDidDismiss(user => {
 			if (user) {
 				if (!this.userAlreadyExist(user.userId)) {
-					this.clinicManagerService.associateMember(this.clinicId, user.userId, 0, user.userRole).subscribe(response => {
+					this.clinicManagerService.associateMember(this.clinicId, user.userId, 2, user.userRole).subscribe(response => {
 						if (response && response.status) {
 							this.getMembers();
 						}
@@ -121,7 +132,7 @@ export class AssociateMemberPage implements OnInit {
 	}
 
 	private userAlreadyExist(userId) {
-		return this.members.filter(member => { return member.userId === userId }).length > 0
+		return this.members.filter(member => member.userId === userId).length > 0
 	}
 
 	public editRole(event, member) {

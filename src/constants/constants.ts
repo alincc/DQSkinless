@@ -26,9 +26,9 @@ export const LOVS = {
         'Female'
     ],
     ACCESS_ROLES: [
-        'Member',
+        'Owner',
         'Admin',
-        'Super Admin'
+        'Member'
     ],
     USER_ROLES: [
         'Admin',
