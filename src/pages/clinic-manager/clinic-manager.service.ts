@@ -99,7 +99,7 @@ export class ClinicManagerService {
     }
 
     private pushClinicSchedule(clinicSchedules, data) {
-        const schedule = clinicSchedules.filter(clinicSchedule => { return clinicSchedule.dayOfWeek === data.dayOfWeek });
+        const schedule = clinicSchedules.filter(clinicSchedule => clinicSchedule.dayOfWeek === data.dayOfWeek);
         if (schedule.length === 0) {
             clinicSchedules.push(
                 {
@@ -123,7 +123,7 @@ export class ClinicManagerService {
                 return new Date('1970/01/01 ' + a.startTime).getTime() - new Date('1970/01/01 ' + b.startTime).getTime();
             });
 
-            clinicSchedules.filter(clinicSchedule => { return clinicSchedule.dayOfWeek === data.dayOfWeek })[0] = schedule[0];
+            clinicSchedules.filter(clinicSchedule => clinicSchedule.dayOfWeek === data.dayOfWeek)[0] = schedule[0];
         }
     }
 

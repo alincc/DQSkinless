@@ -55,7 +55,7 @@ export class SearchUserModal implements OnInit {
 
     private removeMySelf(users) {
         if (users) {
-            return users.filter(user => { return user.userId !== this.searchUserModalService.getUserId() });
+            return users.filter(user => user.userId !== this.searchUserModalService.getUserId());
         }
 
         return users
@@ -79,8 +79,17 @@ export class SearchUserModal implements OnInit {
         }).present();
     }
 
+    public getDefaultAvatar(member) {
+        if (member && member.lastname) {
+            return member.lastname.substring(0, 1).toUpperCase() + member.firstname.substring(0, 1).toUpperCase();
+        } else {
+            return "?";
+        }
+    }
+
     public getFullName(user) {
-        return (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '');    }
+        return (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '');
+    }
 
     public displayContacts(userContacts) {
         if (userContacts && userContacts.length > 0) {
