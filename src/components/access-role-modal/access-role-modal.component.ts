@@ -38,7 +38,7 @@ export class AccessRoleModal implements OnInit {
         this.accessRoles = [];
         this.accessRoles = this.accessRoles.concat(LOVS.ACCESS_ROLES);
         this.accessRoles.splice(0, 1);
-        this.member = this.params.get('member') ? Object.assign({}, this.params.get('member')) : '';
+        this.member = this.params.get('member') ? Object.assign({}, this.params.get('member')) : {};
     }
 
     private createAccessForm() {
