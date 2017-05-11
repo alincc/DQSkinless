@@ -13,9 +13,11 @@ export class ClinicSelectionService {
 
     private getUserId() {
         if (!this.userId) {
-            this.storage.accountSubject.subscribe( account => {
-                this.userId = account.userId;
-            })
+            this.storage.accountSubject.subscribe(account => {
+                if (account) {
+                    this.userId = account.userId;
+                }
+            });
         }
         return this.userId;
     }

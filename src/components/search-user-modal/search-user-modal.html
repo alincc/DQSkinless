@@ -43,7 +43,10 @@
         <ion-card *ngFor="let user of users" (click)="selectUser(user)">
             <ion-item>
                 <ion-avatar item-left>
-                    <img src="{{ user.img }}">
+                    <!--<img src="{{ user.img }}">-->
+                    <div>
+                        {{ getDefaultAvatar(user) }}
+                    </div>
                 </ion-avatar>
                 <p>Name: {{ user.lastname ? getFullName(user) : 'Unregistered'}}</p>
                 <p>Email: {{ user.email }}</p>

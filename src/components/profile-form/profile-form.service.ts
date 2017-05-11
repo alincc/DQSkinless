@@ -16,7 +16,9 @@ export class ProfileFormService {
     private getUserId() {
         if (!this.userId) {
             this.storage.accountSubject.subscribe(account => {
-                this.userId = account.userId;
+                if (account) {
+                    this.userId = account.userId;
+                }
             });
         }
         return this.userId;
