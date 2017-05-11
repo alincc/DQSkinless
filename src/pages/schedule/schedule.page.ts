@@ -173,7 +173,8 @@ export class SchedulePage {
 				this.queue = newQueueList;
 				if(callback){
 					callback(response);
-				}	
+				}
+				this.detector.detectChanges();
 			}
 		}, err=> {
 			if(errorHandler){
