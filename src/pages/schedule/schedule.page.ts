@@ -1,9 +1,13 @@
 import { Component, ViewChild,ChangeDetectorRef} from '@angular/core';
 import { PopoverController, Content, ModalController, LoadingController, AlertController, Loading} from 'ionic-angular';
 import { MoreMenuPopover } from './more.popover';
+
 import { PatientProfilePage } from '../patient-profile/patient-profile.page';
-import { RootNavController } from '../../services/services';
+import { ScheduleHistoryPage } from '../schedule-history/schedule-history.page';
+
 import { ScheduleService } from './schedule.service';
+
+import { RootNavController } from '../../services/services';
 import { QUEUE } from '../../constants/constants'
 import { AddQueueFormModal } from '../../components/add-queue-form-modal/add-queue-form.modal.component'
 import { XHRButton } from '../../components/xhr-button/xhr-button.component';
@@ -14,6 +18,7 @@ import { trigger,
   transition } from '@angular/animations';
 import { Utilities } from '../../utilities/utilities';
 import { Storage } from '../../services/services';
+
 
 
 
@@ -547,6 +552,10 @@ export class SchedulePage {
 			spinner: 'crescent',
 			cssClass: 'xhr-loading'
 		});
+	}
+
+	private goToSchedule(){
+		this.rootNav.push(ScheduleHistoryPage);
 	}
 
 }
