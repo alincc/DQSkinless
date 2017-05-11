@@ -15,18 +15,18 @@
 						{{ getDefaultAvatar(member) }}
 					</div>
 				</ion-avatar>
-				<h2 *ngIf="userId !== member.userId">Name: {{ member.lastname ? getFullName(member) : 'Unregistered' }}</h2>
+				<h2>Name: {{ member.lastname ? getFullName(member) : 'Unregistered' }}</h2>
 				<h2>Email: {{ member.email }}</h2>
-				<h2>Access: {{ member.email }}</h2>
-				<h2>Role: {{ accessRole[member.accessRole] }}</h2>
-				<h2>Expiry: {{ userRole[member.userRole] }}</h2>
+				<h2>Access: {{ accessRole[member.accessRole] }}</h2>
+				<h2>Role: {{ userRole[member.userRole] }}</h2>
+				<h2>Expiry: {{ member.expriy }}</h2>
 			</ion-item>
-			<ion-item-options side="right" *ngIf="userId !== member.userId">
-				<!--<xhr-button color="accent-dark" (xhrClick)="editRole($event, member)">
+			<ion-item-options side="right">
+				<button color="accent-dark" (click)="editAccess($event, member)">
 					<ion-icon name="people"></ion-icon>
 					Edit Access
-				</xhr-button>-->
-				<button ion-button color="danger" (click)="deleteMember(member, mi)">
+				</button>
+				<button ion-button color="danger" (click)="deleteMember(member, mi)" *ngIf="userId !== member.userId">
 					<ion-icon name="close"></ion-icon>
 					Delete
 				</button>
