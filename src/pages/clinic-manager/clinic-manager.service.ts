@@ -77,10 +77,7 @@ export class ClinicManagerService {
 
                     return clinic;
 
-                }).subscribe(clinic => {
-                    console.log(`Retrieved clinic details for user: ${this.getUserId()}`);
-                    console.log(JSON.stringify(clinic));
-                });
+                }).subscribe();
 
                 customClinic.push(clinic);
             });

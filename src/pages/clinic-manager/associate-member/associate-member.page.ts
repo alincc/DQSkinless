@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, NavParams } from "ionic-angular";
 
 import { AccountCreationModal } from '../../../components/account-creation-modal/account-creation-modal.component';
-import { RootNavController } from '../../../services/services';
+import { AccessRoleModal } from '../../../components/access-role-modal/access-role-modal.component';
 import { SearchUserModal } from '../../../components/search-user-modal/search-user-modal.component';
 
 import { ClinicManagerService } from '../clinic-manager.service';
+import { RootNavController } from '../../../services/services';
 
 import { LOVS } from '../../../constants/constants';
 
@@ -135,8 +136,23 @@ export class AssociateMemberPage implements OnInit {
 		return this.members.filter(member => member.userId === userId).length > 0
 	}
 
-	public editRole(event, member) {
-		// TODO
+	public editAccess(member) {
+		let accessRoleModal = this.modalController.create(AccessRoleModal, {
+			member: {
+				memberId: member.userId,
+				clinicId: this.clinicId,
+				accessRole: member.accessRole,
+				roleExpiryDate: member.roleExpiryDate
+			}
+		});
+
+		accessRoleModal.present();
+
+		accessRoleModal.onDidDismiss(access => {
+			if (access) {
+				this.getMembers();
+			}
+		});
 	}
 
 	public deleteMember(member, mi) {
