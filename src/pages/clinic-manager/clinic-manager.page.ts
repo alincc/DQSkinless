@@ -185,9 +185,10 @@ export class ClinicManagerPage implements OnInit {
 		}).present();
 	}
 
-	public associateMember(clinicId) {
+	public associateMember(clinic) {
 		this.rootNav.push(AssociateMemberPage, {
-			clinicId: clinicId,
+			clinicId: clinic.clinicId,
+			accessRole: clinic.accessRole,
 			isManager: this.isManager
 		});
 	}

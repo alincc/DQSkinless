@@ -37,9 +37,9 @@
                         </ion-row>
                         <ion-row class="actions-container">
                             <ion-col col-12 col-sm-12 col-md-12>
-                                <a *ngIf="!isManager || accessRole !== 2" (click)="editClinic(clinic, i)" color="accent-dark">Edit&nbsp;&nbsp;&nbsp;</a>
-                                <a *ngIf="clinics.length > 1 && (!isManager || accessRole === 0)" (click)="deleteClinic(clinic, i)" color="accent-dark">Delete&nbsp;&nbsp;&nbsp;</a>
-                                <a (click)="associateMember(clinic.clinicId)" color="accent-dark">Associated Member</a>
+                                <a *ngIf="!isManager || clinic.accessRole !== 2" (click)="editClinic(clinic, i)" color="accent-dark">Edit&nbsp;&nbsp;&nbsp;</a>
+                                <a *ngIf="clinics.length > 1 && (!isManager || clinic.accessRole === 0)" (click)="deleteClinic(clinic, i)" color="accent-dark">Delete&nbsp;&nbsp;&nbsp;</a>
+                                <a (click)="associateMember(clinic)" color="accent-dark">Associated Member</a>
                             </ion-col>
                         </ion-row>
                     </ion-grid>
