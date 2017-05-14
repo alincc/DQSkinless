@@ -6,7 +6,7 @@ import { AccessRoleModal } from '../../../components/access-role-modal/access-ro
 import { SearchUserModal } from '../../../components/search-user-modal/search-user-modal.component';
 
 import { ClinicManagerService } from '../clinic-manager.service';
-import { RootNavController } from '../../../services/services';
+import { RootNavController, Storage } from '../../../services/services';
 
 import { LOVS } from '../../../constants/constants';
 
@@ -29,10 +29,11 @@ export class AssociateMemberPage implements OnInit {
 
 	constructor(
 		private params: NavParams,
-		private root: RootNavController,
 		private alertController: AlertController,
 		private loadingController: LoadingController,
 		private modalController: ModalController,
+		private root: RootNavController,
+		private storage: Storage,
 		private clinicManagerService: ClinicManagerService) {
 		this.getDefaults();
 	}
@@ -48,7 +49,7 @@ export class AssociateMemberPage implements OnInit {
 		this.accessRoles = LOVS.ACCESS_ROLES;
 		this.userRole = LOVS.USER_ROLES;
 		this.members = [];
-		this.clinicManagerService.getAccessRole().subscribe(accessRole => {
+		this.storage.accessRoleSubject.subscribe(accessRole => {
 			if (accessRole) {
 				this.accessRole = accessRole.accessRole;
 			}
