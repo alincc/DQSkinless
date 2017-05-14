@@ -74,7 +74,7 @@ export class Storage {
 
 	public set account(data) {
 		if (!this._accountSubject) {
-			this._accountSubject = new BehaviorSubject(this.account || {});
+			this._accountSubject = new BehaviorSubject(this.account);
 		} else {
 			this._accountSubject.next(data);
 		}
@@ -83,7 +83,7 @@ export class Storage {
 
 	public get accountSubject() {
 		if (!this._accountSubject) {
-			this._accountSubject = new BehaviorSubject(this.account || {});
+			this._accountSubject = new BehaviorSubject(this.account);
 		}
 		return this._accountSubject;
 	}
@@ -97,7 +97,7 @@ export class Storage {
 
 	public set userDetails(data) {
 		if (!this._userDetailsSubject) {
-			this._userDetailsSubject = new BehaviorSubject(this.userDetails || {});
+			this._userDetailsSubject = new BehaviorSubject(this.userDetails);
 		} else {
 			this._userDetailsSubject.next(data);
 		}
@@ -106,7 +106,7 @@ export class Storage {
 
 	public get userDetailsSubject() {
 		if (!this._userDetailsSubject) {
-			this._userDetailsSubject = new BehaviorSubject(this.userDetails || {});
+			this._userDetailsSubject = new BehaviorSubject(this.userDetails);
 		}
 		return this._userDetailsSubject;
 	}
@@ -121,7 +121,7 @@ export class Storage {
 
 	public set clinic(data) {
 		if (!this._clinicSubject) {
-			this._clinicSubject = new BehaviorSubject(this.clinic || {});
+			this._clinicSubject = new BehaviorSubject(this.clinic);
 		} else {
 			this._clinicSubject.next(data);
 		}
@@ -130,7 +130,7 @@ export class Storage {
 
 	public get clinicSubject() {
 		if (!this._clinicSubject) {
-			this._clinicSubject = new BehaviorSubject(this.clinic || {});
+			this._clinicSubject = new BehaviorSubject(this.clinic);
 		}
 		return this._clinicSubject;
 	}
@@ -144,7 +144,7 @@ export class Storage {
 
 	public set accessRole(data) {
 		if (!this._accessRoleSubject) {
-			this._accessRoleSubject = new BehaviorSubject(this.accessRole || {});
+			this._accessRoleSubject = new BehaviorSubject(this.accessRole);
 		} else {
 			this._accessRoleSubject.next(data);
 		}
@@ -153,7 +153,7 @@ export class Storage {
 
 	public get accessRoleSubject() {
 		if (!this._accessRoleSubject) {
-			this._accessRoleSubject = new BehaviorSubject(this.accessRole || {});
+			this._accessRoleSubject = new BehaviorSubject(this.accessRole);
 		}
 		return this._accessRoleSubject;
 	}
