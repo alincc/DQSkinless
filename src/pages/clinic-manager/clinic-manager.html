@@ -53,6 +53,6 @@
         </ion-label>
     </div>
     <ion-fab bottom right *ngIf="!isManager || accessRole === 0">
-        <button ion-fab color="accent" (click)="addClinic()"><ion-icon name="add"></ion-icon></button>
+        <button ion-fab color="accent" [disabled]="ownedClinics.length === allowableClinics" (click)="addClinic()"><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 </ion-content>

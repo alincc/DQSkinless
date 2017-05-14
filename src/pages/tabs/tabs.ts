@@ -48,8 +48,7 @@ export class TabsPage {
 				this.account = account;
 				this.images.getImage(this.account.userId + "_profile_pic.jpg").then(response => {
 					this.profilepic = response;
-				})
-
+				});
 			}
 		});
 
