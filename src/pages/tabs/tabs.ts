@@ -38,18 +38,25 @@ export class TabsPage {
 		this.rootNav.setRootNav(this.nav);
 
 		storage.userDetailsSubject.subscribe(userDetails => {
-			this.userDetails = userDetails;
+			if (userDetails) {
+				this.userDetails = userDetails;
+			}
 		});
 
 		storage.accountSubject.subscribe(account => {
-			this.account = account;
-			this.images.getImage(this.account.userId + "_profile_pic.jpg").then(response => {
-				this.profilepic = response;
-			})
+			if (account) {
+				this.account = account;
+				this.images.getImage(this.account.userId + "_profile_pic.jpg").then(response => {
+					this.profilepic = response;
+				})
+
+			}
 		});
 
 		storage.clinicSubject.subscribe(clinic => {
-			this.clinic = clinic;
+			if (clinic) {
+				this.clinic = clinic;
+			}
 		});
 	}
 
