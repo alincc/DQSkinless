@@ -1,28 +1,30 @@
 <ion-content>
 	<div class='flex-box'>
-	<div text-center class="header">
-		<img class="logo" src="assets/img/logo.png"/>
-	</div>
-	<form #form="ngForm" (submit)="xhr.submit($event)" class="content">
-		<div class="size-container">
-		<ion-list no-lines>
-			<hr/>
-			<ion-label><ion-icon name="person"></ion-icon>Username</ion-label>
-			<ion-item round>
-				<ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
-			</ion-item>
+		<div text-center class="header">
+			<img class="logo" src="assets/img/logo.png" />
+		</div>
+		<form #form="ngForm" (submit)="xhr.submit($event)" class="content">
+			<div class="size-container">
+				<ion-list no-lines>
+					<hr/>
+					<ion-label>
+						<ion-icon name="person"></ion-icon>Username</ion-label>
+					<ion-item round>
+						<ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
+					</ion-item>
 
-			<ion-label ><ion-icon name="lock"></ion-icon>Password</ion-label>
-			<ion-item round>
-				<ion-input type="password" [(ngModel)]="password" name="password" required clearInput></ion-input>
-			</ion-item>
-		</ion-list>
-		</div>
-		<div class="form-gap"></div>
-		<div text-center>
-			<xhr-button #xhr wd-md round large color="accent"
-			[disabled]="form.invalid" (xhrClick)="login($event)"> Login </xhr-button>
-		</div>
-	</form>
+					<ion-label>
+						<ion-icon name="lock"></ion-icon>Password</ion-label>
+					<ion-item round>
+						<ion-input type="password" [(ngModel)]="password" name="password" required clearInput></ion-input>
+					</ion-item>
+					<ion-label class="form-action-link" color="accent-dark" (click)="forgotPassword($event)">Forgot Password</ion-label>
+				</ion-list>
+			</div>
+			<div class="form-gap"></div>
+			<div text-center>
+				<xhr-button #xhr wd-md round large color="accent" [disabled]="form.invalid" (xhrClick)="login($event)"> Login </xhr-button>
+			</div>
+		</form>
 	</div>
 </ion-content>

@@ -14,6 +14,7 @@ export const CONFIG = {
         createAccount: '/users',
         getUserContacts: '/usercontacts/u',
         searchUser: '/users/sbc',
+        resetPassword: '/users/passwdres',
 
         queue: '/queue',
         queueBoard: '/queue-board',
