@@ -7,6 +7,7 @@ import { SearchUserModal } from '../../../components/search-user-modal/search-us
 
 import { ClinicManagerService } from '../clinic-manager.service';
 import { RootNavController, Storage } from '../../../services/services';
+import { Utilities } from '../../../utilities/utilities';
 
 import { LOVS } from '../../../constants/constants';
 
@@ -64,11 +65,17 @@ export class AssociateMemberPage implements OnInit {
 				const me = response.result.find(m => m.userId === this.userId);
 				this.members = response.result.filter(m => m.userId !== this.userId);
 				this.members.splice(0, 0, me);
+				this.formatMembersExpiryDate();
 			}
 			this.dismissLoading();
 		}, err => this.dismissLoading());
 	}
 
+	private formatMembersExpiryDate() {
+		this.members.forEach(member => {
+			member.roleExpiryDate = member.roleExpiryDate ? Utilities.clearTime(new Date(+member.roleExpiryDate)) : '';
+		});
+	}
 	private showLoading() {
 		this.loading = this.loadingController.create({
 			spinner: 'crescent',

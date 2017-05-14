@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 
@@ -10,6 +11,11 @@ export class Utilities {
 		timeless.setMinutes(0);
 		timeless.setHours(0);
 		return timeless;
+	}
+
+	public static transformDate(date: Date) {
+		const d = new DatePipe('pt-PT').transform(date, 'yyyy-MM-dd');
+		return d;
 	}
 }
 

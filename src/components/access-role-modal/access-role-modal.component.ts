@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { LoadingController, NavParams, ViewController } from 'ionic-angular';
 
 import { AccessRoleModalService } from './access-role-modal.service';
@@ -14,6 +14,7 @@ import { Utilities } from '../../utilities/utilities';
 })
 export class AccessRoleModal implements OnInit {
 
+    public roleExpiryDateControl: AbstractControl;
     public accessForm: FormGroup;
     public accessRoles: any;
 
@@ -46,11 +47,13 @@ export class AccessRoleModal implements OnInit {
             accessRole: '',
             roleExpiryDate: ''
         });
+
+        this.roleExpiryDateControl = this.accessForm.get('roleExpiryDate');
     }
 
     private bindProfileFormValues() {
         this.accessForm.get('accessRole').setValue(this.member.accessRole);
-        this.accessForm.get('roleExpiryDate').setValue(this.member.roleExpiryDate);
+        this.roleExpiryDateControl.setValue(this.member.roleExpiryDate ? Utilities.transformDate(new Date(+this.member.roleExpiryDate)) : '');
     }
 
     private showLoading() {
@@ -75,8 +78,21 @@ export class AccessRoleModal implements OnInit {
         return dateNow.getFullYear() + '-' + (month.length < 2 ? '0' : '') + month + '-' + dateNow.getDate();
     }
 
+    public clearDate(control) {
+        control.setValue('');
+    }
+
     public save() {
-        // TODO saving
-        this.viewController.dismiss(this.accessForm.value).catch(() => { });
+        const payload = this.accessForm.value;
+        payload.userId = this.member.memberId;
+        payload.clinicId = this.member.clinicId;
+
+        this.showLoading();
+        this.accessRoleModalService.updateAccessExpiryProcess(payload).subscribe(response => {
+            if (response && response.status) {
+                this.viewController.dismiss(this.accessForm.value).catch(() => { });
+            }
+            this.dismissLoading();
+        }, err => this.dismissLoading());
     }
 }
