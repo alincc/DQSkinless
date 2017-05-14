@@ -152,7 +152,7 @@ export class Storage {
 	}
 
 	public get accessRoleSubject() {
-		if (this._accessRoleSubject) {
+		if (!this._accessRoleSubject) {
 			this._accessRoleSubject = new BehaviorSubject(this.accessRole || {});
 		}
 		return this._accessRoleSubject;

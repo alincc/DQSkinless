@@ -3,8 +3,9 @@ import { AlertController, LoadingController, NavParams } from "ionic-angular";
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/observable/of';
 
-import { RootNavController } from '../../services/services';
+import { RootNavController, Storage } from '../../services/services';
 
 import { LOVS, MODE } from '../../constants/constants'
 
@@ -27,6 +28,7 @@ export class ClinicManagerPage implements OnInit {
 	public isManager: boolean;
 
 	private accessRole;
+	private userRole;
 	private loading: any;
 
 	constructor(
@@ -34,6 +36,7 @@ export class ClinicManagerPage implements OnInit {
 		private loadingController: LoadingController,
 		private params: NavParams,
 		private rootNav: RootNavController,
+		private storage: Storage,
 		private clinicManagerService: ClinicManagerService) {
 		this.getDefaults();
 	}
@@ -42,7 +45,7 @@ export class ClinicManagerPage implements OnInit {
 		this.clinics = [];
 		this.showLoading();
 
-		if (this.accessRole === 0) {
+		if (this.accessRole === 0 || this.userRole === 1) {
 			Observable.forkJoin([
 				this.clinicManagerService.getNoOfClinics().map(response => {
 					if (response && response.status) {
@@ -84,11 +87,16 @@ export class ClinicManagerPage implements OnInit {
 		this.days = LOVS.DAYS;
 		this.contactType = LOVS.CONTACT_TYPE;
 		this.allowableClinics = 0;
-		this.clinicManagerService.getAccessRole().subscribe(accessRole => {
+		this.storage.accessRoleSubject.subscribe(accessRole => {
 			if (accessRole) {
 				this.accessRole = accessRole.accessRole;
 			}
 		});
+		this.storage.accountSubject.subscribe(account => {
+			if (account) {
+				this.userRole = account.role;
+			}
+		})
 		this.isManager = this.params.data && this.params.data.isManager ? this.params.data.isManager : false;
 	}
 

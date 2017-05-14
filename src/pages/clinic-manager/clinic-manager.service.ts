@@ -16,7 +16,6 @@ export class ClinicManagerService {
         private storage: Storage) { }
 
     private userId;
-    private accessRole;
 
     public getUserId() {
         if (!this.userId) {
@@ -27,10 +26,6 @@ export class ClinicManagerService {
             });
         }
         return this.userId;
-    }
-
-    public getAccessRole() {
-        return this.storage.accessRoleSubject;
     }
 
     public getNoOfClinics() {

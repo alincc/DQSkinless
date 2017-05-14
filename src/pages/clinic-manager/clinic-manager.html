@@ -6,7 +6,7 @@
     </ion-navbar>
 </ion-header>
 <ion-content #Content padding>
-    <div *ngIf="accessRole === 0">
+    <div *ngIf="!this.isManager || accessRole === 0">
         <h2> Remaining Clinic(s): {{ allowableClinics - clinics.length}}</h2>
         <hr/>
     </div>
