@@ -204,6 +204,10 @@ export class ClinicManagerService {
         return this.http.delete(CONFIG.API.clinicaccess + param);
     }
 
+    public getClinicAccessByUserId() {
+        return this.http.get(CONFIG.API.getClinicAccessByUserId, [this.getUserId()]);
+    }
+
     public getClinicAcessByUserIdAndClinicId(clinciId) {
         return this.http.get(CONFIG.API.clinicaccess, [`u/${this.getUserId()}`, `c/${clinciId}`]);
     }

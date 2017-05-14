@@ -7,7 +7,7 @@
 </ion-header>
 <ion-content #Content padding>
     <div *ngIf="!this.isManager || accessRole === 0">
-        <h2> Remaining Clinic(s): {{ allowableClinics - clinics.length}}</h2>
+        <h2> Remaining Clinic(s): {{ allowableClinics - ownedClinics.length}}</h2>
         <hr/>
     </div>
     <div class="clinic-container">
@@ -53,6 +53,6 @@
         </ion-label>
     </div>
     <ion-fab bottom right *ngIf="!isManager || accessRole === 0">
-        <button ion-fab color="accent" [disabled]="clinics.length === allowableClinics" (click)="addClinic()"><ion-icon name="add"></ion-icon></button>
+        <button ion-fab color="accent" [disabled]="ownedClinics.length === allowableClinics" (click)="addClinic()"><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 </ion-content>

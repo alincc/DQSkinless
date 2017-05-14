@@ -25,11 +25,13 @@ export class ClinicManagerPage implements OnInit {
 	public clinics: any;
 	public contactType: any;
 	public days: any;
+	public ownedClinics: any;
 	public isManager: boolean;
 
 	private accessRole;
 	private userRole;
 	private loading: any;
+	private clinicDetailsObservables: any;
 
 	constructor(
 		private alertController: AlertController,
@@ -43,31 +45,25 @@ export class ClinicManagerPage implements OnInit {
 
 	public ngOnInit() {
 		this.clinics = [];
+		this.ownedClinics = [];
 		this.showLoading();
 
-		if (this.accessRole === 0 || this.userRole === 1) {
-			Observable.forkJoin([
-				this.clinicManagerService.getNoOfClinics().map(response => {
-					if (response && response.status) {
-						this.allowableClinics = response.result;
-						return Observable.of(response);
-					}
-				}),
+		if (this.userRole === 1) {
+			this.clinicManagerService.getNoOfClinics().subscribe(response => {
+				if (response && response.status) {
+					this.allowableClinics = response.result;
+				}
+			});
+		}
 
-				this.clinicManagerService.getClinicRecord().map(response => {
-					if (response) {
-						this.clinics = response;
+		this.clinicDetailsObservables.push(
+			this.clinicManagerService.getClinicAccessByUserId().map(response => {
+				if (response && response.status) {
+					this.ownedClinics = response.result.filter(r => r.accessRole === 0);
+				}
+			}));
 
-						if (this.params.data.parent && this.clinics.length > 0) {
-							this.params.data.parent.completedRegistration = true;
-						}
-						return Observable.of(response);
-					}
-				})
-			]).subscribe(response => {
-				this.dismissLoading();
-			}, err => this.dismissLoading());
-		} else {
+		this.clinicDetailsObservables.push(
 			this.clinicManagerService.getClinicRecord().map(response => {
 				if (response) {
 					this.clinics = response;
@@ -77,16 +73,18 @@ export class ClinicManagerPage implements OnInit {
 					}
 					return Observable.of(response);
 				}
-			}).subscribe(response => {
-				this.dismissLoading();
-			}, err => this.dismissLoading());
-		}
+			}));
+
+		Observable.forkJoin(this.clinicDetailsObservables).subscribe(response => {
+			this.dismissLoading()
+		}, err => this.dismissLoading());
 	}
 
 	private getDefaults() {
 		this.days = LOVS.DAYS;
 		this.contactType = LOVS.CONTACT_TYPE;
 		this.allowableClinics = 0;
+		this.clinicDetailsObservables = [];
 		this.storage.accessRoleSubject.subscribe(accessRole => {
 			if (accessRole) {
 				this.accessRole = accessRole.accessRole;
@@ -102,17 +100,11 @@ export class ClinicManagerPage implements OnInit {
 
 	private getClinics() {
 		this.clinics = [];
+		this.ownedClinics = [];
 		this.showLoading();
 
-		this.clinicManagerService.getClinicRecord().subscribe(response => {
-			if (response) {
-				this.clinics = response;
-
-				if (this.params.data.parent && this.clinics.length > 0) {
-					this.params.data.parent.completedRegistration = true;
-				}
-			}
-			this.dismissLoading();
+		Observable.forkJoin(this.clinicDetailsObservables).subscribe(response => {
+			this.dismissLoading()
 		}, err => this.dismissLoading());
 	}
 
@@ -172,6 +164,7 @@ export class ClinicManagerPage implements OnInit {
 						this.clinicManagerService.deleteClinic(clinic.clinicId).subscribe(response => {
 							if (response && response.status) {
 								this.clinics.splice(i, 1);
+								this.ownedClinics.splice(0, 1);
 
 								if (this.params.data.parent && this.clinics.length === 0) {
 									this.params.data.parent.completedRegistration = false;
