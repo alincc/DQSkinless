@@ -67,20 +67,8 @@ export class ScheduleModal {
         });
     }
 
-    public save() {
-        this.markFormAsDirty();
-        this.validateForm();
-
-        if (this.scheduleForm.valid) {
-
-            const newSchedule = {
-                dayOfWeek: this.scheduleForm.get('day').value,
-                startTime: this.formatTime(this.scheduleForm.get('from').value),
-                endTime: this.formatTime(this.scheduleForm.get('to').value)
-            }
-
-            this.viewController.dismiss(newSchedule).catch(() => { });
-        }
+    private formatTime(time) {
+        return this.datePipe.transform(new Date('1970/01/01 ' + time), 'hh:mm a');
     }
 
     private markFormAsDirty() {
@@ -107,7 +95,19 @@ export class ScheduleModal {
         }
     }
 
-    private formatTime(time) {
-        return this.datePipe.transform(new Date('1970/01/01 ' + time), 'hh:mm a');
+    public save() {
+        this.markFormAsDirty();
+        this.validateForm();
+
+        if (this.scheduleForm.valid) {
+
+            const newSchedule = {
+                dayOfWeek: this.scheduleForm.get('day').value,
+                startTime: this.formatTime(this.scheduleForm.get('from').value),
+                endTime: this.formatTime(this.scheduleForm.get('to').value)
+            }
+
+            this.viewController.dismiss(newSchedule).catch(() => { });
+        }
     }
 }
