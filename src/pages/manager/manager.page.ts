@@ -52,8 +52,14 @@ export class ManagerPage implements OnInit {
 	}
 
 	public go(clinic) {
-		this.storage.clinic = clinic;
-		this.app.getRootNav().setRoot(TabsPage);
+		this.showLoading();
+		this.managerService.getClinicAcessByUserIdAndClinicId(clinic.clinicId).subscribe(response => {
+			if (response && response.status) {
+				this.storage.accessRole = { accessRole: response.result.accessRole };
+				this.storage.clinic = clinic;
+				this.app.getRootNav().setRoot(TabsPage);
+			} this.dismissLoading();
+		}, err => this.dismissLoading());
 	}
 
 	public logout() {

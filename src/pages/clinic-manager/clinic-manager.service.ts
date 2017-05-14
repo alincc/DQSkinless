@@ -16,6 +16,7 @@ export class ClinicManagerService {
         private storage: Storage) { }
 
     private userId;
+    private accessRole;
 
     public getUserId() {
         if (!this.userId) {
@@ -26,6 +27,10 @@ export class ClinicManagerService {
             });
         }
         return this.userId;
+    }
+
+    public getAccessRole() {
+        return this.storage.accessRoleSubject;
     }
 
     public getNoOfClinics() {
@@ -150,7 +155,7 @@ export class ClinicManagerService {
     }
 
     public delTimeSlotsByClinIdAndDayOfWeek(clinicId, dayOfWeek) {
-        const params = `/cid/${clinicId}/dow/${dayOfWeek}`
+        const params = `/cid/${clinicId}/dow/${dayOfWeek}`;
         return this.http.delete(CONFIG.API.clinicTimeSlots + params);
     }
 
