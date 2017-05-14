@@ -46,15 +46,11 @@ export class AssociateMemberPage implements OnInit {
 	private getDefaults() {
 		this.clinicId = this.params.data && this.params.data.clinicId ? this.params.data.clinicId : null;
 		this.isManager = this.params.data && this.params.data.isManager;
+		this.accessRole = this.params.data && this.params.data.accessRole;
 		this.userId = this.clinicManagerService.getUserId();
 		this.accessRoles = LOVS.ACCESS_ROLES;
 		this.userRole = LOVS.USER_ROLES;
 		this.members = [];
-		this.storage.accessRoleSubject.subscribe(accessRole => {
-			if (accessRole) {
-				this.accessRole = accessRole.accessRole;
-			}
-		});
 	}
 
 	private getMembers() {
