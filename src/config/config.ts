@@ -19,6 +19,7 @@ export const CONFIG = {
         queueBoard: '/queue-board',
 
         clinicaccess: '/clinicaccess',
+        updateAccessExpiryProcess: '/clinicaccess/accessroleexp',
         clinicDetailRecord: '/clinicdetails',
         clinicTimeSlots: '/clinictimeslots',
         clinicContacts: '/cliniccontacts',

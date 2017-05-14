@@ -105,7 +105,7 @@ export class Storage {
 	}
 
 	public get userDetailsSubject() {
-		if (this._userDetailsSubject) {
+		if (!this._userDetailsSubject) {
 			this._userDetailsSubject = new BehaviorSubject(this.userDetails || {});
 		}
 		return this._userDetailsSubject;
@@ -129,7 +129,7 @@ export class Storage {
 	}
 
 	public get clinicSubject() {
-		if (this._clinicSubject) {
+		if (!this._clinicSubject) {
 			this._clinicSubject = new BehaviorSubject(this.clinic || {});
 		}
 		return this._clinicSubject;

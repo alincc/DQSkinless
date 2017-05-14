@@ -19,7 +19,7 @@
 				<h2>Email: {{ member.email }}</h2>
 				<h2>Access: {{ accessRoles[member.accessRole] }}</h2>
 				<h2>Role: {{ userRole[member.userRole] }}</h2>
-				<h2>Expiry Date: {{ member.expriy }}</h2>
+				<h2>Expiry Date: {{ member.roleExpiryDate ? (member.roleExpiryDate | date : 'MMMM d, yyyy') : ''}}</h2>
 			</ion-item>
 			<ion-item-options side="right">
 				<button ion-button color="secondary" (click)="editAccess(member)" *ngIf="member.accessRole !== 0 && (!isManager || accessRole !== 2)">
