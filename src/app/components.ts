@@ -3,6 +3,7 @@ import { AccountCreationModal } from '../components/account-creation-modal/accou
 import { AccessRoleModal } from '../components/access-role-modal/access-role-modal.component';
 import { ChangePasswordForm } from '../components/change-password-form/change-password-form.component';
 import { DrawingPad } from '../components/drawing-pad/drawing-pad.component';
+import { ForgotPasswordModal } from '../components/forgot-password-modal/forgot-password-modal.component';
 import { ProfileForm } from '../components/profile-form/profile-form.component';
 import { UploadPhoto } from '../components/upload-photo/upload-photo.component';
 import { XHRButton } from '../components/xhr-button/xhr-button.component';
@@ -17,6 +18,7 @@ export const components = [
     AccessRoleModal,
     ChangePasswordForm,
     DrawingPad,
+    ForgotPasswordModal,
     ProfileForm,
     UploadPhoto,
     XHRButton,
