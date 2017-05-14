@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, NavParams } from "ionic-angular";
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/of';
 
 import { RootNavController, Storage } from '../../services/services';
+import { StackedServices } from '../../utilities/utilities';
 
 import { LOVS, MODE } from '../../constants/constants'
 
@@ -31,7 +31,7 @@ export class ClinicManagerPage implements OnInit {
 	private accessRole;
 	private userRole;
 	private loading: any;
-	private clinicDetailsObservables: any;
+	private clinicDetailsObservables: StackedServices;
 
 	constructor(
 		private alertController: AlertController,
@@ -61,6 +61,7 @@ export class ClinicManagerPage implements OnInit {
 				if (response && response.status) {
 					this.ownedClinics = response.result.filter(r => r.accessRole === 0);
 				}
+				return Observable.of(response);
 			}));
 
 		this.clinicDetailsObservables.push(
@@ -71,11 +72,11 @@ export class ClinicManagerPage implements OnInit {
 					if (this.params.data.parent && this.clinics.length > 0) {
 						this.params.data.parent.completedRegistration = true;
 					}
-					return Observable.of(response);
 				}
+				return Observable.of(response);
 			}));
 
-		Observable.forkJoin(this.clinicDetailsObservables).subscribe(response => {
+		this.clinicDetailsObservables.executeFork().subscribe(response => {
 			this.dismissLoading()
 		}, err => this.dismissLoading());
 	}
@@ -84,7 +85,7 @@ export class ClinicManagerPage implements OnInit {
 		this.days = LOVS.DAYS;
 		this.contactType = LOVS.CONTACT_TYPE;
 		this.allowableClinics = 0;
-		this.clinicDetailsObservables = [];
+		this.clinicDetailsObservables = new StackedServices([]);
 		this.storage.accessRoleSubject.subscribe(accessRole => {
 			if (accessRole) {
 				this.accessRole = accessRole.accessRole;
@@ -103,7 +104,7 @@ export class ClinicManagerPage implements OnInit {
 		this.ownedClinics = [];
 		this.showLoading();
 
-		Observable.forkJoin(this.clinicDetailsObservables).subscribe(response => {
+		this.clinicDetailsObservables.executeFork().subscribe(response => {
 			this.dismissLoading()
 		}, err => this.dismissLoading());
 	}
