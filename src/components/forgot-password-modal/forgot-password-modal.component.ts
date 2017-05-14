@@ -49,11 +49,26 @@ export class ForgotPasswordModal implements OnInit {
         });
     }
 
+    private showLoading() {
+        this.loading = this.loadingController.create({
+            spinner: 'crescent',
+            cssClass: 'xhr-loading'
+        });
+        this.loading.present();
+    }
+
+    private dismissLoading() {
+        if (this.loading) {
+            this.loading.dismiss();
+        }
+    }
+
     private validateForm() {
         this.errors.username = this.username.hasError('required') ? 'Username is required.' : this.username.hasError('pattern') ? 'Invalid Username address format' : '';
     }
 
     public save() {
+        this.username.markAsDirty();
         this.validateForm();
 
         if (this.forgotPasswordForm.valid) {
@@ -74,20 +89,6 @@ export class ForgotPasswordModal implements OnInit {
                 }
                 this.dismissLoading();
             }, err => this.dismissLoading());
-        }
-    }
-
-    private showLoading() {
-        this.loading = this.loadingController.create({
-            spinner: 'crescent',
-            cssClass: 'xhr-loading'
-        });
-        this.loading.present();
-    }
-
-    private dismissLoading() {
-        if (this.loading) {
-            this.loading.dismiss();
         }
     }
 }
