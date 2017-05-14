@@ -36,20 +36,21 @@ export class TabsPage {
 		private images: Images) {
 		this.root = app.getRootNav();
 		this.rootNav.setRootNav(this.nav);
-		
+
 		storage.userDetailsSubject.subscribe(userDetails => {
 			this.userDetails = userDetails;
 		});
 
 		storage.accountSubject.subscribe(account => {
-			this.account = account;			
-			this.images.getImage( this.account.userId + "_profile_pic.jpg").then(response => {
+			this.account = account;
+			this.images.getImage(this.account.userId + "_profile_pic.jpg").then(response => {
 				this.profilepic = response;
 			})
 		});
+
 		storage.clinicSubject.subscribe(clinic => {
 			this.clinic = clinic;
-		})
+		});
 	}
 
 	public logout() {

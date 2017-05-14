@@ -26,8 +26,8 @@ export class ClinicManagerPage implements OnInit {
 	public days: any;
 	public isManager: boolean;
 
+	private accessRole;
 	private loading: any;
-	private index: number;
 
 	constructor(
 		private alertController: AlertController,
@@ -42,14 +42,29 @@ export class ClinicManagerPage implements OnInit {
 		this.clinics = [];
 		this.showLoading();
 
-		Observable.forkJoin([
-			this.clinicManagerService.getNoOfClinics().map(response => {
-				if (response && response.status) {
-					this.allowableClinics = response.result;
-					return Observable.of(response);
-				}
-			}),
+		if (this.accessRole === 0) {
+			Observable.forkJoin([
+				this.clinicManagerService.getNoOfClinics().map(response => {
+					if (response && response.status) {
+						this.allowableClinics = response.result;
+						return Observable.of(response);
+					}
+				}),
 
+				this.clinicManagerService.getClinicRecord().map(response => {
+					if (response) {
+						this.clinics = response;
+
+						if (this.params.data.parent && this.clinics.length > 0) {
+							this.params.data.parent.completedRegistration = true;
+						}
+						return Observable.of(response);
+					}
+				})
+			]).subscribe(response => {
+				this.dismissLoading();
+			}, err => this.dismissLoading());
+		} else {
 			this.clinicManagerService.getClinicRecord().map(response => {
 				if (response) {
 					this.clinics = response;
@@ -59,18 +74,22 @@ export class ClinicManagerPage implements OnInit {
 					}
 					return Observable.of(response);
 				}
-			})
-		]).subscribe(response => {
-			this.dismissLoading();
-		}, err => this.dismissLoading());
-
-		this.isManager = this.params.data && this.params.data.isManager ? this.params.data.isManager : false;
+			}).subscribe(response => {
+				this.dismissLoading();
+			}, err => this.dismissLoading());
+		}
 	}
 
 	private getDefaults() {
 		this.days = LOVS.DAYS;
 		this.contactType = LOVS.CONTACT_TYPE;
 		this.allowableClinics = 0;
+		this.clinicManagerService.getAccessRole().subscribe(accessRole => {
+			if (accessRole) {
+				this.accessRole = accessRole.accessRole;
+			}
+		});
+		this.isManager = this.params.data && this.params.data.isManager ? this.params.data.isManager : false;
 	}
 
 	private getClinics() {
@@ -123,7 +142,6 @@ export class ClinicManagerPage implements OnInit {
 	}
 
 	public editClinic(clinic, index) {
-		this.index = index;
 		this.rootNav.push(ClinicPage, {
 			callback: this.clinicManagerCallback,
 			clinic: clinic,
@@ -161,7 +179,8 @@ export class ClinicManagerPage implements OnInit {
 
 	public associateMember(clinicId) {
 		this.rootNav.push(AssociateMemberPage, {
-			clinicId: clinicId
+			clinicId: clinicId,
+			isManager: this.isManager
 		});
 	}
 

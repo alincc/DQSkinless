@@ -20,7 +20,9 @@ export class AssociateMemberPage implements OnInit {
 	public members: any;
 	public userId: any;
 	public accessRole: any;
+	public accessRoles: any;
 	public userRole: any;
+	public isManager: boolean;
 
 	private clinicId: any;
 	private loading: any;
@@ -41,10 +43,16 @@ export class AssociateMemberPage implements OnInit {
 
 	private getDefaults() {
 		this.clinicId = this.params.data && this.params.data.clinicId ? this.params.data.clinicId : null;
+		this.isManager = this.params.data && this.params.data.isManager;
 		this.userId = this.clinicManagerService.getUserId();
-		this.accessRole = LOVS.ACCESS_ROLES;
+		this.accessRoles = LOVS.ACCESS_ROLES;
 		this.userRole = LOVS.USER_ROLES;
 		this.members = [];
+		this.clinicManagerService.getAccessRole().subscribe(accessRole => {
+			if (accessRole) {
+				this.accessRole = accessRole.accessRole;
+			}
+		});
 	}
 
 	private getMembers() {
