@@ -1,39 +1,48 @@
 <ion-header>
-	<ion-navbar color="primary">
-		<ion-title>
-			History
-		</ion-title>
-	</ion-navbar>
+    <ion-navbar color="primary">
+        <ion-title>
+            History
+        </ion-title>
+    </ion-navbar>
 </ion-header>
 <ion-content>
-	<div class="sub-header" text-center>
-		<button ion-button clear icon-only><ion-icon name="arrow-back"></ion-icon></button>
-		<ion-datetime displayFormat="MMMM DD YYYY">
-		</ion-datetime>
-		<button ion-button clear icon-only><ion-icon name="arrow-forward"></ion-icon></button>
-	</div>
-	<ion-list>
-		<ion-card>
-			<ion-item>
-			    <ion-avatar item-left color="primary">
-			      <h2>
-					PIC
-				  </h2>
-			    </ion-avatar>
-			    <h2>Name</h2>
-			    <p>Status</p>
-			  </ion-item>
-			<ion-card-content>
-				<ion-grid>
-					<ion-row>
-						<ion-col col-12 col-sm-12 col-md-12>
-							Content Here!!!
-							use ion-grid for label and values
-							make it responise where it becames 2 columns for bigger device you may use accordion for displaying additional information
-						</ion-col>
-					</ion-row>
-				</ion-grid>
-			</ion-card-content>
-		</ion-card>
-	</ion-list>
+    <div class="sub-header" text-center>
+        <button ion-button clear icon-only (click)="getPreviousDay()"><ion-icon name="arrow-back"></ion-icon></button>
+        <ion-datetime displayFormat="MMMM DD, YYYY" [(ngModel)]="myDate" (ionChange)="fetchHistory()">
+
+        </ion-datetime>
+        <button ion-button clear icon-only (click)="getNextDay()"><ion-icon name="arrow-forward"></ion-icon></button>
+    </div>
+    <ion-list>
+        <ion-grid>
+            <ion-row>
+                <ion-col col-sm-12 col-md-6 col-12 *ngFor="let customer of queue;trackBy:TrackByPatientId">
+                    <ion-card>
+                        <ion-item>
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col col-sm-1 col-md-2 col-2>
+                                        <ion-avatar item-left color="primary">
+                                            <img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
+                                        </ion-avatar>
+                                    </ion-col>
+                                    <ion-col col-7 col-sm-9 col-md-7>
+                                        <h2 class="customer-name">{{customer.lastName}}, {{customer.firstName}} {{customer.middleName}}</h2>
+                                        <p>Status: {{getStatus(customer)}}</p>
+                                        <p>Type: {{getType(customer)}}</p>
+
+                                    </ion-col>
+                                    <ion-col col-3 col-sm-2 col-md-3>
+                                        <p class="time-container">
+                                            {{customer.time | date : 'hh:mm a'}}
+                                        </p>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </ion-item>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-list>
 </ion-content>
