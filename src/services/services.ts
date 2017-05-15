@@ -73,12 +73,13 @@ export class Storage {
 	}
 
 	public set account(data) {
+		this.local.store(STORAGE_KEYS.ACCOUNT, data);
+
 		if (!this._accountSubject) {
-			this._accountSubject = new BehaviorSubject(this.account);
+			this._accountSubject = new BehaviorSubject(data);
 		} else {
 			this._accountSubject.next(data);
 		}
-		this.local.store(STORAGE_KEYS.ACCOUNT, data);
 	}
 
 	public get accountSubject() {
@@ -96,12 +97,13 @@ export class Storage {
 	}
 
 	public set userDetails(data) {
+		this.local.store(STORAGE_KEYS.USER_DETAILS, data);
+
 		if (!this._userDetailsSubject) {
-			this._userDetailsSubject = new BehaviorSubject(this.userDetails);
+			this._userDetailsSubject = new BehaviorSubject(data);
 		} else {
 			this._userDetailsSubject.next(data);
 		}
-		this.local.store(STORAGE_KEYS.USER_DETAILS, data);
 	}
 
 	public get userDetailsSubject() {
@@ -120,12 +122,13 @@ export class Storage {
 	}
 
 	public set clinic(data) {
+		this.local.store(STORAGE_KEYS.CLINIC, data);
+
 		if (!this._clinicSubject) {
-			this._clinicSubject = new BehaviorSubject(this.clinic);
+			this._clinicSubject = new BehaviorSubject(data);
 		} else {
 			this._clinicSubject.next(data);
 		}
-		this.local.store(STORAGE_KEYS.CLINIC, data);
 	}
 
 	public get clinicSubject() {
@@ -143,12 +146,13 @@ export class Storage {
 	}
 
 	public set accessRole(data) {
+		this.local.store(STORAGE_KEYS.ACCESS_ROLE, data);
+
 		if (!this._accessRoleSubject) {
-			this._accessRoleSubject = new BehaviorSubject(this.accessRole);
+			this._accessRoleSubject = new BehaviorSubject(data);
 		} else {
 			this._accessRoleSubject.next(data);
 		}
-		this.local.store(STORAGE_KEYS.ACCESS_ROLE, data);
 	}
 
 	public get accessRoleSubject() {
