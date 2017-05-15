@@ -1,7 +1,7 @@
 <ion-header>
 	<ion-navbar color="primary">
 		<ion-title>
-			Associate Members
+			Associated Members
 		</ion-title>
 	</ion-navbar>
 </ion-header>
@@ -17,16 +17,16 @@
 				</ion-avatar>
 				<h2>Name: {{ member.lastname ? getFullName(member) : 'Unregistered' }}</h2>
 				<h2>Email: {{ member.email }}</h2>
-				<h2>Access: {{ accessRole[member.accessRole] }}</h2>
+				<h2>Access: {{ accessRoles[member.accessRole] }}</h2>
 				<h2>Role: {{ userRole[member.userRole] }}</h2>
-				<h2>Expiry Date: {{ member.expriy }}</h2>
+				<h2>Expiry Date: {{ member.roleExpiryDate ? (member.roleExpiryDate | date : 'MMMM d, yyyy') : ''}}</h2>
 			</ion-item>
 			<ion-item-options side="right">
-				<button ion-button color="secondary" (click)="editAccess(member)">
+				<button ion-button color="secondary" (click)="editAccess(member)" *ngIf="member.accessRole !== 0 && (!isManager || accessRole !== 2)">
 					<ion-icon name="people"></ion-icon>
 					Edit Access
 				</button>
-				<button ion-button color="danger" (click)="deleteMember(member, mi)" *ngIf="userId !== member.userId">
+				<button ion-button color="danger" (click)="deleteMember(member, mi)" *ngIf="(member.accessRole !== 0 || userId !== member.userId) && (!isManager || accessRole === 0)">
 					<ion-icon name="close"></ion-icon>
 					Delete
 				</button>
@@ -38,7 +38,7 @@
 			Add Associate by pressing the add button on the lower left of the screen and selecting on either search for existing or add.
 		</ion-label>
 	</div>
-	<ion-fab bottom right>
+	<ion-fab bottom right *ngIf="!isManager || accessRole !== 2">
 		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
 		<ion-fab-list side="left">
 			<button ion-fab color="accent" (click)="addAssistant()"><ion-icon name="person-add"></ion-icon></button>

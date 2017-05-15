@@ -52,10 +52,11 @@ export class RootNavController {
 
 export const STORAGE_KEYS = {
 	ACCOUNT: 'account',
-	USER_DETAILS: 'user_details',
+	USER_DETAILS: 'userDetails',
 	TOKEN: 'token',
 	CONFIG: 'config',
-	CLINIC: 'clinic'
+	CLINIC: 'clinic',
+	ACCESS_ROLE: 'accessRole'
 }
 
 @Injectable()
@@ -67,22 +68,22 @@ export class Storage {
 	// account
 	private _accountSubject: BehaviorSubject<any>;
 
-	public get account() { 
-		return this.local.retrieve(STORAGE_KEYS.ACCOUNT); 
-	}
-	
-	public set account(data) { 
-		if(!this._accountSubject){
-			this._accountSubject = new BehaviorSubject(this.account || {});
-		}else{
-			this._accountSubject.next(data);
-		}
-		this.local.store(STORAGE_KEYS.ACCOUNT, data); 
+	public get account() {
+		return this.local.retrieve(STORAGE_KEYS.ACCOUNT);
 	}
 
-	public get accountSubject(){
-		if(!this._accountSubject){
-			this._accountSubject = new BehaviorSubject(this.account || {});
+	public set account(data) {
+		if (!this._accountSubject) {
+			this._accountSubject = new BehaviorSubject(this.account);
+		} else {
+			this._accountSubject.next(data);
+		}
+		this.local.store(STORAGE_KEYS.ACCOUNT, data);
+	}
+
+	public get accountSubject() {
+		if (!this._accountSubject) {
+			this._accountSubject = new BehaviorSubject(this.account);
 		}
 		return this._accountSubject;
 	}
@@ -90,22 +91,22 @@ export class Storage {
 	// user Details
 	private _userDetailsSubject: BehaviorSubject<any>;
 
-	public get userDetails() { 
-		return this.local.retrieve(STORAGE_KEYS.USER_DETAILS); 
+	public get userDetails() {
+		return this.local.retrieve(STORAGE_KEYS.USER_DETAILS);
 	}
 
 	public set userDetails(data) {
-		if(!this._userDetailsSubject){
-			this._userDetailsSubject = new BehaviorSubject(this.userDetails || {});
-		}else{
+		if (!this._userDetailsSubject) {
+			this._userDetailsSubject = new BehaviorSubject(this.userDetails);
+		} else {
 			this._userDetailsSubject.next(data);
 		}
-		this.local.store(STORAGE_KEYS.USER_DETAILS, data); 
+		this.local.store(STORAGE_KEYS.USER_DETAILS, data);
 	}
 
-	public get userDetailsSubject(){
-		if(this._userDetailsSubject){
-			this._userDetailsSubject = new BehaviorSubject(this.userDetails || {});
+	public get userDetailsSubject() {
+		if (!this._userDetailsSubject) {
+			this._userDetailsSubject = new BehaviorSubject(this.userDetails);
 		}
 		return this._userDetailsSubject;
 	}
@@ -114,31 +115,54 @@ export class Storage {
 	// clinic details
 	private _clinicSubject: BehaviorSubject<any>;
 
-	public get clinic(){
+	public get clinic() {
 		return this.local.retrieve(STORAGE_KEYS.CLINIC);
 	}
 
-	public set clinic(data){
-		if(!this._clinicSubject){
-			this._clinicSubject = new BehaviorSubject(this.clinic || {});
-		}else{
+	public set clinic(data) {
+		if (!this._clinicSubject) {
+			this._clinicSubject = new BehaviorSubject(this.clinic);
+		} else {
 			this._clinicSubject.next(data);
 		}
-		this.local.store(STORAGE_KEYS.CLINIC, data); 
+		this.local.store(STORAGE_KEYS.CLINIC, data);
 	}
 
-	public get clinicSubject(){
-		if(this._clinicSubject){
-			this._clinicSubject = new BehaviorSubject(this.clinic || {});
+	public get clinicSubject() {
+		if (!this._clinicSubject) {
+			this._clinicSubject = new BehaviorSubject(this.clinic);
 		}
 		return this._clinicSubject;
+	}
+
+	// access role
+	private _accessRoleSubject: BehaviorSubject<any>;
+
+	public get accessRole() {
+		return this.local.retrieve(STORAGE_KEYS.ACCESS_ROLE);
+	}
+
+	public set accessRole(data) {
+		if (!this._accessRoleSubject) {
+			this._accessRoleSubject = new BehaviorSubject(this.accessRole);
+		} else {
+			this._accessRoleSubject.next(data);
+		}
+		this.local.store(STORAGE_KEYS.ACCESS_ROLE, data);
+	}
+
+	public get accessRoleSubject() {
+		if (!this._accessRoleSubject) {
+			this._accessRoleSubject = new BehaviorSubject(this.accessRole);
+		}
+		return this._accessRoleSubject;
 	}
 
 	//token
 	public get token() { return this.local.retrieve(STORAGE_KEYS.TOKEN); }
 	public set token(data) { this.local.store(STORAGE_KEYS.TOKEN, data); }
 
-	public get config() { return this.local.retrieve(STORAGE_KEYS.CONFIG);}
+	public get config() { return this.local.retrieve(STORAGE_KEYS.CONFIG); }
 	public set config(data) { this.local.store(STORAGE_KEYS.CONFIG, data); }
 
 
@@ -283,129 +307,129 @@ const IMG_PATH = "diagram";
 export class Images {
 
 	constructor(private file: File,
-		private storage: Storage){
+		private storage: Storage) {
 	}
 
 	// save image locally and if connected to net sync to cloud
-	public saveImage(filename, content, contentType?): Promise<any>{
-		
+	public saveImage(filename, content, contentType?): Promise<any> {
+
 		return new Promise((resolve, reject) => {
 			// fetching path
-		    console.log("Starting to get Path.");
-		    let DataBlob = this.b64toBlob(content,contentType);
-		    let DataPath = this.getTargetSD();
-		    
-	    	let ImgPath = DataPath + IMG_PATH;
-		    this.checkAndCreateDirectory(DataPath, () => {
+			console.log("Starting to get Path.");
+			let DataBlob = this.b64toBlob(content, contentType);
+			let DataPath = this.getTargetSD();
 
-			    console.log("Path target is : " + ImgPath, 
-			    	"Resolving Path");
-			    this.file.resolveDirectoryUrl(ImgPath).then((dir) => {
+			let ImgPath = DataPath + IMG_PATH;
+			this.checkAndCreateDirectory(DataPath, () => {
 
-			        console.log("Access to the directory granted succesfully");
-			        this.file.writeFile(ImgPath, filename, DataBlob, {}).then( file => {
-			            console.log("File created succesfully.", file);
-			            resolve(file);
-			        }, err => {
-			        	console.log("File create was unsuccesfull", err);
-				        reject(err);
-			        })
+				console.log("Path target is : " + ImgPath,
+					"Resolving Path");
+				this.file.resolveDirectoryUrl(ImgPath).then((dir) => {
 
-			    }, err => {
-			        console.log('Unable to save file in path '+ ImgPath);
-			        reject(err);
-			    });
-		    })
+					console.log("Access to the directory granted succesfully");
+					this.file.writeFile(ImgPath, filename, DataBlob, {}).then(file => {
+						console.log("File created succesfully.", file);
+						resolve(file);
+					}, err => {
+						console.log("File create was unsuccesfull", err);
+						reject(err);
+					})
+
+				}, err => {
+					console.log('Unable to save file in path ' + ImgPath);
+					reject(err);
+				});
+			})
 		});
 	}
 
 	//check if directory is present;
-	private checkDirectory(DataPath : string, callback: any, errorHandler? : any){
-	    console.log("Check if dir exist:", DataPath);
+	private checkDirectory(DataPath: string, callback: any, errorHandler?: any) {
+		console.log("Check if dir exist:", DataPath);
 		this.file.checkDir(DataPath, IMG_PATH).then(resolve => {
-		 	console.log("directory exist");
-		 	callback(resolve);
-	    }, reject => {
-	    	errorHandler(reject);
-	    })
+			console.log("directory exist");
+			callback(resolve);
+		}, reject => {
+			errorHandler(reject);
+		})
 	}
 	//check if directory is present if not create new;
-	private checkAndCreateDirectory(DataPath: string, callback: any){
+	private checkAndCreateDirectory(DataPath: string, callback: any) {
 		this.checkDirectory(DataPath, resolve => {
 			callback(resolve);
 		}, err => {
 			console.log("creating directory");
-	    	this.file.createDir(DataPath, IMG_PATH, true).then(resolve => {
-	    		console.log("created dir: ",resolve);
-	    		callback(resolve);
-	    	}, err => {
-	    		throw err;
-	    	});
+			this.file.createDir(DataPath, IMG_PATH, true).then(resolve => {
+				console.log("created dir: ", resolve);
+				callback(resolve);
+			}, err => {
+				throw err;
+			});
 		})
 	}
 
-	public setTargetSD(target){
+	public setTargetSD(target) {
 		this.storage.config = this.storage.config.imgPath = target;
 	}
 
-	private getTargetSD() : string{
+	private getTargetSD(): string {
 		return this.storage.config && this.storage.config.imgPath ? this.file.externalCacheDirectory : this.file.cacheDirectory;
 	}
 
 	// sync image to cloud
-	private getFromCloud(){
+	private getFromCloud() {
 		//TODO: waitiing for api
 		return null;
 	}
 
 
 	//get base64 Image that auto sync from cloud when missing
-	public getImage(fileName): Promise<string>{
+	public getImage(fileName): Promise<string> {
 		console.log("fetching ", fileName)
 		return new Promise((resolve, reject) => {
 			let dataPath = this.getTargetSD();
 			let imgPath = dataPath + IMG_PATH;
 			this.checkDirectory(dataPath, response => {
-			    this.file.resolveDirectoryUrl(imgPath).then((dir) => {
-					this.file.readAsDataURL(imgPath, fileName).then( file => {
+				this.file.resolveDirectoryUrl(imgPath).then((dir) => {
+					this.file.readAsDataURL(imgPath, fileName).then(file => {
 						resolve(file);
 					})
 				}, err => {
-			        console.log("Access to the directory is not granted");
-					resolve(this.getFromCloud()); 		    	 
-			    });
+					console.log("Access to the directory is not granted");
+					resolve(this.getFromCloud());
+				});
 			}, err => {
 				console.log("Directory not found, maybe not created due to no existing img")
-				resolve(this.getFromCloud()); 		    	 
+				resolve(this.getFromCloud());
 			})
 			return null;
 		});
-		
+
 	}
 
 
 	private b64toBlob(b64Data, contentType?, sliceSize?) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
+		contentType = contentType || '';
+		sliceSize = sliceSize || 512;
 
-        var byteCharacters = atob(b64Data);
-        var byteArrays = [];
+		var byteCharacters = atob(b64Data);
+		var byteArrays = [];
 
-        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-            var slice = byteCharacters.slice(offset, offset + sliceSize);
+		for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+			var slice = byteCharacters.slice(offset, offset + sliceSize);
 
-            var byteNumbers = new Array(slice.length);
-            for (var i = 0; i < slice.length; i++) {
-                byteNumbers[i] = slice.charCodeAt(i);
-            }
+			var byteNumbers = new Array(slice.length);
+			for (var i = 0; i < slice.length; i++) {
+				byteNumbers[i] = slice.charCodeAt(i);
+			}
 
-            var byteArray = new Uint8Array(byteNumbers);
+			var byteArray = new Uint8Array(byteNumbers);
 
-            byteArrays.push(byteArray);
-        }
+			byteArrays.push(byteArray);
+		}
 
-      var blob = new Blob(byteArrays, {type: contentType});
-      return blob;
+		var blob = new Blob(byteArrays, { type: contentType });
+		return blob;
 	}
 
 }
