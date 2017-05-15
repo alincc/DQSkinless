@@ -83,6 +83,17 @@ export class ClinicManagerService {
             });
 
             return Observable.of(customClinic);
+        }).flatMap(customClinic => {
+
+            customClinic.forEach(c => {
+                this.getClinicAcessByUserIdAndClinicId(c.clinicId).subscribe(response => {
+                    if (response && response.status) {
+                        c.accessRole = response.result.accessRole;
+                    }
+                });
+            });
+
+            return Observable.of(customClinic);
         });
     }
 
@@ -150,7 +161,7 @@ export class ClinicManagerService {
     }
 
     public delTimeSlotsByClinIdAndDayOfWeek(clinicId, dayOfWeek) {
-        const params = `/cid/${clinicId}/dow/${dayOfWeek}`
+        const params = `/cid/${clinicId}/dow/${dayOfWeek}`;
         return this.http.delete(CONFIG.API.clinicTimeSlots + params);
     }
 
@@ -191,5 +202,13 @@ export class ClinicManagerService {
     public deleteClinicAccessByClinIdUserId(clinicId, userId) {
         const param = `/u/${userId}/c/${clinicId}`;
         return this.http.delete(CONFIG.API.clinicaccess + param);
+    }
+
+    public getClinicAccessByUserId() {
+        return this.http.get(CONFIG.API.getClinicAccessByUserId, [this.getUserId()]);
+    }
+
+    public getClinicAcessByUserIdAndClinicId(clinciId) {
+        return this.http.get(CONFIG.API.clinicaccess, [`u/${this.getUserId()}`, `c/${clinciId}`]);
     }
 }

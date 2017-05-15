@@ -14,11 +14,13 @@ export const CONFIG = {
         createAccount: '/users',
         getUserContacts: '/usercontacts/u',
         searchUser: '/users/sbc',
+        resetPassword: '/users/passwdres',
 
         queue: '/queue',
         queueBoard: '/queue-board',
 
         clinicaccess: '/clinicaccess',
+        updateAccessExpiryProcess: '/clinicaccess/accessroleexp',
         clinicDetailRecord: '/clinicdetails',
         clinicTimeSlots: '/clinictimeslots',
         clinicContacts: '/cliniccontacts',

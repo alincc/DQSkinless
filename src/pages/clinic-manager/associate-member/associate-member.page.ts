@@ -6,7 +6,8 @@ import { AccessRoleModal } from '../../../components/access-role-modal/access-ro
 import { SearchUserModal } from '../../../components/search-user-modal/search-user-modal.component';
 
 import { ClinicManagerService } from '../clinic-manager.service';
-import { RootNavController } from '../../../services/services';
+import { RootNavController, Storage } from '../../../services/services';
+import { Utilities } from '../../../utilities/utilities';
 
 import { LOVS } from '../../../constants/constants';
 
@@ -20,17 +21,20 @@ export class AssociateMemberPage implements OnInit {
 	public members: any;
 	public userId: any;
 	public accessRole: any;
+	public accessRoles: any;
 	public userRole: any;
+	public isManager: boolean;
 
 	private clinicId: any;
 	private loading: any;
 
 	constructor(
 		private params: NavParams,
-		private root: RootNavController,
 		private alertController: AlertController,
 		private loadingController: LoadingController,
 		private modalController: ModalController,
+		private root: RootNavController,
+		private storage: Storage,
 		private clinicManagerService: ClinicManagerService) {
 		this.getDefaults();
 	}
@@ -41,8 +45,10 @@ export class AssociateMemberPage implements OnInit {
 
 	private getDefaults() {
 		this.clinicId = this.params.data && this.params.data.clinicId ? this.params.data.clinicId : null;
+		this.isManager = this.params.data && this.params.data.isManager;
+		this.accessRole = this.params.data && this.params.data.accessRole;
 		this.userId = this.clinicManagerService.getUserId();
-		this.accessRole = LOVS.ACCESS_ROLES;
+		this.accessRoles = LOVS.ACCESS_ROLES;
 		this.userRole = LOVS.USER_ROLES;
 		this.members = [];
 	}
@@ -55,11 +61,17 @@ export class AssociateMemberPage implements OnInit {
 				const me = response.result.find(m => m.userId === this.userId);
 				this.members = response.result.filter(m => m.userId !== this.userId);
 				this.members.splice(0, 0, me);
+				this.formatMembersExpiryDate();
 			}
 			this.dismissLoading();
 		}, err => this.dismissLoading());
 	}
 
+	private formatMembersExpiryDate() {
+		this.members.forEach(member => {
+			member.roleExpiryDate = member.roleExpiryDate ? Utilities.clearTime(new Date(+member.roleExpiryDate)) : '';
+		});
+	}
 	private showLoading() {
 		this.loading = this.loadingController.create({
 			spinner: 'crescent',

@@ -2,20 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ViewController } from 'ionic-angular';
 
-import { AccountCreationModalService } from './account-creation-modal.service';
+import { ForgotPasswordModalService } from './forgot-password-modal.service';
 import { REGEX } from '../../config/config';
 
 @Component({
-    selector: 'account-creation-modal',
-    templateUrl: 'account-creation-modal.html',
-    providers: [AccountCreationModalService]
+    selector: 'forgot-password-modal',
+    templateUrl: 'forgot-password-modal.html',
+    providers: [ForgotPasswordModalService]
 })
-export class AccountCreationModal implements OnInit {
+export class ForgotPasswordModal implements OnInit {
 
-    public assistantForm: FormGroup;
+    public forgotPasswordForm: FormGroup;
     public errors: any;
 
-    private email: AbstractControl;
+    private username: AbstractControl;
     private loading: any;
 
     constructor(
@@ -23,29 +23,29 @@ export class AccountCreationModal implements OnInit {
         private alertController: AlertController,
         private loadingController: LoadingController,
         private viewController: ViewController,
-        private accountCreationModalService: AccountCreationModalService) {
+        private forgotPasswordModalService: ForgotPasswordModalService) {
         this.getDefaults();
     }
 
     private getDefaults() {
         this.errors = {
-            email: ''
+            username: ''
         };
     }
 
     public ngOnInit() {
-        this.createAssistantForm();
+        this.createForgotPasswordForm();
     }
 
-    private createAssistantForm() {
-        this.assistantForm = this.formBuilder.group({
-            email: ['', [Validators.required, Validators.pattern(REGEX.EMAIL)]]
+    private createForgotPasswordForm() {
+        this.forgotPasswordForm = this.formBuilder.group({
+            username: ['', [Validators.required, Validators.pattern(REGEX.EMAIL)]]
         });
 
-        this.email = this.assistantForm.get('email');
+        this.username = this.forgotPasswordForm.get('username');
 
-        this.email.valueChanges.subscribe(newValue => {
-            this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
+        this.username.valueChanges.subscribe(newValue => {
+            this.errors.username = this.username.hasError('required') ? 'Username is required.' : this.username.hasError('pattern') ? 'Invalid Username address format' : '';
         });
     }
 
@@ -64,19 +64,19 @@ export class AccountCreationModal implements OnInit {
     }
 
     private validateForm() {
-        this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
+        this.errors.username = this.username.hasError('required') ? 'Username is required.' : this.username.hasError('pattern') ? 'Invalid Username address format' : '';
     }
 
     public save() {
-        this.email.markAsDirty();
+        this.username.markAsDirty();
         this.validateForm();
 
-        if (this.assistantForm.valid) {
+        if (this.forgotPasswordForm.valid) {
             this.showLoading();
-            this.accountCreationModalService.createAccount(this.email.value).subscribe(response => {
+            this.forgotPasswordModalService.resetPassword(this.username.value).subscribe(response => {
                 if (response && response.status) {
                     this.alertController.create({
-                        message: `Account created! Pre-generated password sent to ${this.email.value}`,
+                        message: `Reset Password Successful! New password sent to ${this.username.value}`,
                         buttons: [
                             {
                                 text: 'OK',
