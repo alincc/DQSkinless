@@ -54,7 +54,7 @@
                         <ion-item clean>
                             <ion-select class="options" name="medicalArt" formControlName="medicalArt">
                                 <div *ngFor="let type of medicalArts; let i = index">
-                                    <ion-option *ngIf="i === 8" [value]="i">{{ type }}</ion-option>
+                                    <ion-option *ngIf="allowableMedicalArts.includes(i)" [value]="i">{{ type }}</ion-option>
                                 </div>
                             </ion-select>
                         </ion-item>
