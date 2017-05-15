@@ -168,6 +168,26 @@ export class Storage {
 
 	public clear() {
 		this.local.clear();
+		this.clearSubjects();
+	}
+
+	private clearSubjects() {
+
+		if (this._accountSubject) {
+			this._accountSubject.next(undefined);
+		}
+
+		if (this._userDetailsSubject) {
+			this._userDetailsSubject.next(undefined);
+		}
+
+		if (this._clinicSubject) {
+			this._clinicSubject.next(undefined);
+		}
+
+		if (this._accessRoleSubject) {
+			this._accessRoleSubject.next(undefined);
+		}
 	}
 }
 
