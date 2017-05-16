@@ -6,6 +6,7 @@ import { Storage } from '../services/services';
 import { LoginPage } from '../pages/login/login.page';
 import { HttpService } from '../services/services';
 import { MESSAGES } from '../config/config';
+import { Network } from '@ionic-native/network';
 
 @Component({
   templateUrl: 'app.html'
@@ -20,7 +21,8 @@ export class MyApp {
     private httpService: HttpService,
     private alertCtrl: AlertController,
     private splashscreen: SplashScreen,
-    private statusBar: StatusBar) {
+    private statusBar: StatusBar,
+    private network: Network) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -36,6 +38,23 @@ export class MyApp {
           this.rootPage = LoginPage;
         });
       });
+      
+      network.onConnect().subscribe(() => {
+        setTimeout(() => {
+          this.alert("connected");
+        }, 1000);
+
+        setTimeout(() => {
+          if(network.type != null)
+          this.alert(network.type);
+        }, 1000);
+      });
+
+      network.onDisconnect().subscribe(() => {
+        setTimeout(() => {
+          this.alert(MESSAGES.ERROR.NO_INTERNET);
+        }, 1000);
+      });            
     });
   }
 
