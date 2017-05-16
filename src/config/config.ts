@@ -44,7 +44,8 @@ export const REGEX = {
 export const MESSAGES = {
     ERROR: {
         GENERIC: 'Something went wrong...',
-        NOT_FOUND: 'Can\'t connect to server please check internet connection'
+        NOT_FOUND: 'Can\'t connect to server please check internet connection',
+        NO_INTERNET: 'Cannot reach server, this might due to poor internet connection'
     },
     SUCCESS: {
         GENERIC: 'Congrats'
