@@ -29,6 +29,7 @@ export class ProfileForm implements OnInit {
 
     private profileForm: FormGroup;
 
+    public allowableMedicalArts: any[];
     public contactType: any[];
     public days: any[];
     public genderList: any[];
@@ -107,6 +108,7 @@ export class ProfileForm implements OnInit {
             gender: ''
         };
 
+        this.allowableMedicalArts = LOVS.ALLOWABLE_MEDICAL_ARTS;
         this.contactType = LOVS.CONTACT_TYPE;
         this.years = [];
         this.months = [];
