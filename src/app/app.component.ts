@@ -1,5 +1,5 @@
 import { Component, ViewChild, EventEmitter } from '@angular/core';
-import { Platform, AlertController } from 'ionic-angular';
+import { Platform, AlertController, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '../services/services';
@@ -22,7 +22,8 @@ export class MyApp {
     private alertCtrl: AlertController,
     private splashscreen: SplashScreen,
     private statusBar: StatusBar,
-    private network: Network) {
+    private network: Network,
+    private toastCtrl: ToastController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -41,21 +42,31 @@ export class MyApp {
       
       network.onConnect().subscribe(() => {
         setTimeout(() => {
-          this.alert("connected");
+          this.presentToast("Connected");
         }, 1000);
 
         setTimeout(() => {
           if(network.type != null)
-          this.alert(network.type);
+          this.presentToast(network.type);
         }, 1000);
       });
 
       network.onDisconnect().subscribe(() => {
         setTimeout(() => {
-          this.alert(MESSAGES.ERROR.NO_INTERNET);
+          this.presentToast(MESSAGES.ERROR.NO_INTERNET);
         }, 1000);
       });            
     });
+  }
+
+  public presentToast(message){
+
+    let toast = this.toastCtrl.create({
+    message: message,
+    duration: 3000,
+    position: 'bottom'
+    });
+    toast.present();
   }
 
   private alert(_err) {
