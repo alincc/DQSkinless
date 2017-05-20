@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpService, Storage } from '../../services/services';
+import { HttpService, Storage } from '../../services';
 import { CONFIG } from '../../config/config';
 
 @Injectable()
@@ -23,10 +23,10 @@ export class ManagerService {
     }
 
     public getClinicRecordByUserId() {
-        return this.http.get(CONFIG.API.getClinicRecordByUserId, [this.getUserId()]);
+        return this.http.get(CONFIG.API.getClinicRecordByUserId, [this.getUserId()], {silentError: true});
     }
 
     public getClinicAcessByUserIdAndClinicId(clinciId) {
-        return this.http.get(CONFIG.API.clinicaccess, [`u/${this.getUserId()}`, `c/${clinciId}`]);
+        return this.http.get(CONFIG.API.clinicaccess, [`u/${this.getUserId()}`, `c/${clinciId}`], {silentError: true});
     }
 }

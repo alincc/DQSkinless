@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ModalController, NavParams } from "ionic-angular";
 
-import { RootNavController } from '../../../services/services';
+import { RootNavController } from '../../../services';
 
 import { LOVS, MODE } from '../../../constants/constants'
 

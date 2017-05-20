@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/of';
 
-import { HttpService, Storage } from '../../services/services';
+import { HttpService, Storage } from '../../services';
 import { CONFIG } from '../../config/config';
 
 @Injectable()

@@ -24,9 +24,9 @@
 			</ion-item-options>
 		</ion-item-sliding>
 	</ion-list>
-	<p *ngIf="clinics.length === 0">No Clinic Access. Contact your clinic administrator.</p>
+	<p *ngIf="clinics?.length === 0" text-center>No Clinic Access. Contact your clinic administrator.</p>
 
-	<ion-fab bottom right *ngIf="clinics.length === 0">
+	<ion-fab bottom right *ngIf="clinics?.length === 0">
 		<button ion-fab color="accent" (click)="logout()"><ion-icon name="power"></ion-icon></button>
 	</ion-fab>
 </ion-content>

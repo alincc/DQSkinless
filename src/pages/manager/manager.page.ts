@@ -5,7 +5,7 @@ import { LoginPage } from '../login/login.page';
 import { TabsPage } from '../tabs/tabs';
 
 import { ManagerService } from './manager.service';
-import { RootNavController, Storage } from '../../services/services';
+import { RootNavController, Storage } from '../../services';
 
 @Component({
 	selector: 'manager-page',
@@ -24,7 +24,6 @@ export class ManagerPage implements OnInit {
 		private managerService: ManagerService,
 		private root: RootNavController,
 		private storage: Storage) {
-		this.clinics = [];
 	}
 
 	public ngOnInit() {
@@ -32,6 +31,8 @@ export class ManagerPage implements OnInit {
 		this.managerService.getClinicRecordByUserId().subscribe(response => {
 			if (response && response.status) {
 				this.clinics = response.result;
+			}else{
+				this.clinics = [];
 			}
 			this.dismissLoading();
 		}, err => this.dismissLoading());

@@ -4,7 +4,7 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/of';
 
-import { HttpService, Storage } from '../../services/services';
+import { HttpService, Storage } from '../../services';
 import { CONFIG } from '../../config/config';
 
 @Injectable()
