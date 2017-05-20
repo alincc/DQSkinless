@@ -1,8 +1,21 @@
-schedule-history{
-	.sub-header{
-		display: table-row;
-		button, ion-datetime {
-			display: table-cell;
-		}
-	}
+schedule-history {
+    .sub-header {
+        display: table-row;
+        button,
+        ion-datetime {
+            display: table-cell;
+        }
+    }
+    .time-container {
+        text-align: right;
+    }
+    ion-content {
+        margin-top: 10px;
+    }
+    h2.customer-name {
+        white-space: normal;
+    }
+    .sub-header>button {
+        z-index: 99999;
+    }
 }

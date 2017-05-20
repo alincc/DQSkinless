@@ -25,6 +25,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { File } from '@ionic-native/file';
+import { Network } from '@ionic-native/network';
 import { OneSignal } from '@ionic-native/onesignal';
 import { SQLite } from '@ionic-native/sqlite';
 
@@ -61,8 +62,6 @@ import { SQLite } from '@ionic-native/sqlite';
     WebSocketFactory,
     Images,
     Push,
-    SQLite,
-    OneSignal,
     DB,
 
     //plugins
@@ -72,7 +71,10 @@ import { SQLite } from '@ionic-native/sqlite';
     Keyboard,
     SplashScreen,
     StatusBar,
-    File
+    File,
+    SQLite,
+    OneSignal,
+    Network
   ]
 })
 export class AppModule { }

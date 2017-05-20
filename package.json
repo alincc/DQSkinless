@@ -25,6 +25,7 @@
     "@ionic-native/device": "^3.5.0",
     "@ionic-native/file": "^3.6.1",
     "@ionic-native/keyboard": "^3.5.0",
+    "@ionic-native/network": "^3.6.1",
     "@ionic-native/onesignal": "^3.8.0",
     "@ionic-native/splash-screen": "^3.5.0",
     "@ionic-native/sqlite": "^3.8.1",

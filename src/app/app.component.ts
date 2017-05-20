@@ -1,10 +1,14 @@
 import { Component, ViewChild, EventEmitter } from '@angular/core';
 import { Platform, AlertController } from 'ionic-angular';
+//pluginm
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { LoginPage } from '../pages/login/login.page';
+import { Network } from '@ionic-native/network';
+//core
 import { HttpService, Push, Storage } from '../services';
 import { MESSAGES } from '../config/config';
+//pages
+import { LoginPage } from '../pages/login/login.page';
 
 @Component({
   templateUrl: 'app.html'
@@ -18,6 +22,7 @@ export class MyApp {
     private alertCtrl: AlertController,
     private splashscreen: SplashScreen,
     private statusBar: StatusBar,
+    private network: Network,
     private push: Push) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -45,6 +50,23 @@ export class MyApp {
           this.rootPage = LoginPage;
         });
       });
+      
+      network.onConnect().subscribe(() => {
+        setTimeout(() => {
+          this.alert("connected");
+        }, 1000);
+
+        setTimeout(() => {
+          if(network.type != null)
+          this.alert(network.type);
+        }, 1000);
+      });
+
+      network.onDisconnect().subscribe(() => {
+        setTimeout(() => {
+          this.alert(MESSAGES.ERROR.NO_INTERNET);
+        }, 1000);
+      });            
     });
   }
 

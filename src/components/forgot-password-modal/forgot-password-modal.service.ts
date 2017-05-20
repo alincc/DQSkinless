@@ -11,10 +11,6 @@ export class ForgotPasswordModalService {
     }
 
     public resetPassword(username) {
-        const payload = {
-            username: username
-        };
-        
-        return this.http.put(CONFIG.API.resetPassword, payload);
+        return this.http.put(CONFIG.API.resetPassword, username);
     }
 }
