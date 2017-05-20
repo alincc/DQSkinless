@@ -6,7 +6,7 @@ import { AccessRoleModal } from '../../../components/access-role-modal/access-ro
 import { SearchUserModal } from '../../../components/search-user-modal/search-user-modal.component';
 
 import { ClinicManagerService } from '../clinic-manager.service';
-import { RootNavController, Storage } from '../../../services/services';
+import { RootNavController, Storage } from '../../../services';
 import { Utilities } from '../../../utilities/utilities';
 
 import { LOVS } from '../../../constants/constants';

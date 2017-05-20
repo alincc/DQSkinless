@@ -52,3 +52,9 @@ export const MESSAGES = {
 }
 
 export const YEAR_RANGE = 100;
+
+export const ONE_SIGNAL = {
+    APP_ID : 'bd78e626-b77c-4b1e-9e98-ee6a55758ebf',
+    REST_KEY : 'NzgwZjBjZjYtM2NmYi00YjIzLWJiZTItZmU2OTA0MGUwZTEx',
+    PROJECT_NUMBER : '79472100423'
+}

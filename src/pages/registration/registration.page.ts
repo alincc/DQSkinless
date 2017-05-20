@@ -9,7 +9,7 @@ import { StepFourPage } from './step-four/step-four.page';
 
 import { RegistrationService } from './registration.service';
 
-import { RootNavController } from '../../services/services';
+import { RootNavController } from '../../services';
 
 @Component({
 	selector: 'registration-page',

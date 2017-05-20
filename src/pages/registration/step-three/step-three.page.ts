@@ -4,7 +4,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import { ManagerPage } from '../../../pages/manager/manager.page';
 import { StepFourPage } from '../step-four/step-four.page';
 
-import { RootNavController } from '../../../services/services';
+import { RootNavController } from '../../../services';
 
 @Component({
     selector: 'step-three',

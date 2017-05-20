@@ -5,5 +5,7 @@ import { Component } from '@angular/core';
 	templateUrl: 'chat.html'
 })
 export class ChatPage{
+
+	
 	
 }

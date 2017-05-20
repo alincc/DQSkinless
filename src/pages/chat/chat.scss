@@ -5,10 +5,17 @@ chat-page{
 			background: $light;
 		}
 	}
+
+	.chat-me, .chat-other{
+		width: 70%;
+	}
+
 	.chat-me{
 		background: $secondary;
+		float: right;
 	}
 	.chat-other{
 		background: $secondary-light;
+		float: left;
 	}
 }

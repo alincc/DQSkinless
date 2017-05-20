@@ -11,7 +11,7 @@ import { ProfilePage } from '../profile/profile.page';
 import { ClinicManagerPage } from '../clinic-manager/clinic-manager.page';
 import { ChangePasswordPage } from '../change-password/change-password.page';
 
-import { RootNavController, Storage, Images } from '../../services/services';
+import { RootNavController, Storage, Images } from '../../services';
 
 @Component({
 	selector: 'tabs',
