@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import { Storage } from './storage';
+import { DB_CONFIG } from '../config/config';
 
 
 interface Message{
@@ -39,8 +40,8 @@ export class DB{
 				resolve(this.session);
 			}else{
 				this.sql.create({
-					name:"MedAppWS.db",
-					location: 'default'
+					name: DB_CONFIG.DB_NAME,
+					location:  DB_CONFIG.LOCATION
 				}).then((session : SQLiteObject ) => {
 					session.executeSql('create table if not exists messages(id integer primary key autoincrement, name varchar(15), date date, message varchar(500), avatar varchar(100) , clinic integer, account integer, status integer default 0)', {})
 					.then(() => {
@@ -52,25 +53,20 @@ export class DB{
 		})
 	}
 
-	public storeMessage(payload : Message){
+	public executeSQL(sql: string , ...parameter){
 		return new Promise((resolve, reject) => {
 			this.openSession().then( session => {
-				session.executeSql('insert into messages(name,message,avatar, clinic, account) values (?,?,?,?,?)', [payload.name, payload.message, payload.avatar , payload.clinicId, this.account.id])
-				.then(resolve)
-				.catch(reject)
+				session.executeSql(sql,parameter)
+				.then(response => {
+					resolve(response)
+				})
+				.catch(err => {
+					reject(err);
+				});
 			}).catch(reject);
 		})
 	}
 
-	public getMessages(){
-		return new Promise((resolve, reject) => {
-			this.openSession().then( session => {
-				session.executeSql('select * from messages where clinic = ? and account = ?', [this.clinic.id, this.account.id])
-				.then(resolve)
-				.catch(reject)
-			}).catch(reject);
-		})
-	}
 
 	public markAsRead(id){
 		return new Promise((resolve, reject) => {

@@ -9,7 +9,8 @@ export const STORAGE_KEYS = {
 	TOKEN: 'token',
 	CONFIG: 'config',
 	CLINIC: 'clinic',
-	ACCESS_ROLE: 'accessRole'
+	ACCESS_ROLE: 'accessRole',
+	CLINIC_MEMBERS: 'clinicMembers'
 }
 
 @Injectable()
@@ -115,6 +116,29 @@ export class Storage {
 			this._accessRoleSubject = new BehaviorSubject(this.accessRole);
 		}
 		return this._accessRoleSubject;
+	}
+
+
+	private _clinicMembersSubject: BehaviorSubject<any>;
+
+	public get clinicMembers(){
+		return this.session.retrieve(STORAGE_KEYS.CLINIC_MEMBERS);
+	}
+
+	public set clinicMembers(data){
+		if (!this._clinicMembersSubject) {
+			this._clinicMembersSubject = new BehaviorSubject(this.clinicMembers);
+		} else {
+			this._clinicMembersSubject.next(data);
+		}
+		this.session.store(STORAGE_KEYS.CLINIC_MEMBERS, data);
+	}
+
+	public get clinicMembersSubject(){
+		if (!this._clinicMembersSubject) {
+			this._clinicMembersSubject = new BehaviorSubject(this.clinicMembers);
+		}
+		return this._clinicMembersSubject;
 	}
 
 	//token
