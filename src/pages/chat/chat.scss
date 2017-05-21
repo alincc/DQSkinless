@@ -13,9 +13,15 @@ chat-page{
 	.chat-me{
 		background: $secondary;
 		float: right;
+		ion-item {
+			background: $secondary;
+		}
 	}
 	.chat-other{
 		background: $secondary-light;
 		float: left;
+		ion-item {
+			background: $secondary-light;
+		}
 	}
 }
