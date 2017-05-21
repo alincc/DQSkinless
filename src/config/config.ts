@@ -57,5 +57,18 @@ export const YEAR_RANGE = 100;
 export const ONE_SIGNAL = {
     APP_ID : 'bd78e626-b77c-4b1e-9e98-ee6a55758ebf',
     REST_KEY : 'NzgwZjBjZjYtM2NmYi00YjIzLWJiZTItZmU2OTA0MGUwZTEx',
-    PROJECT_NUMBER : '79472100423'
+    PROJECT_NUMBER : '79472100423',
+    PUSH_TYPE: {
+        MESSAGES : 'messages'
+    }
+}
+
+export const DB_CONFIG = {
+    MESSAGE_LIMIT : 10,
+    DB_NAME: "MedAppWS.db",
+    LOCATION : 'default',
+    SQL: {
+        GET_INBOX : 'select * from messages where clinic = ? and account = ? limit ?',
+        STORE_TO_INBOX : "insert into messages(name,message,avatar, clinic, account) values (?,?,?,?,?)"
+    }
 }
