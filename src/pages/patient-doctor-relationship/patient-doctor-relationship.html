@@ -1,0 +1,54 @@
+<ion-header>
+    <ion-navbar color="secondary">
+        <ion-title>
+            {{ pageHeader }}
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content #Content padding>
+    <form [formGroup]="pdForm" #form="ngForm" (ngSubmit)="xhr.submit($event)">
+        <ion-grid>
+            <ion-row>
+                <ion-col col-4 col-sm-4 col-md-4>
+                    <ion-label class="form-label">Doctor *</ion-label>
+                    <ion-item round>
+                        <ion-input name="doctorId" formControlName="doctorId"></ion-input>
+                    </ion-item>
+                    <div class="error-message" *ngIf="pdForm.get('doctorId')?.dirty &&  pdForm.get('doctorId').invalid">
+                        {{ errors.doctorId }}
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-4 col-sm-4 col-md-4>
+                    <ion-label class="form-label">Relationship Type *</ion-label>
+                    <ion-item clean>
+                        <ion-select class="options" name="relationship" formControlName="relationship">
+                            <ion-option *ngFor="let relationship of relationships; let i = index" [value]="i">{{ relationship }}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                    <div class="error-message" *ngIf="pdForm.get('relationship').dirty &&  pdForm.get('relationship').invalid">
+                        {{ errors.relationship }}
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-4 col-sm-4 col-md-4>
+                    <ion-col col-6 col-sm-6 col-md-6>
+                        <ion-label class="form-label">Expiry Date</ion-label>
+                        <ion-item clean>
+                            <ion-datetime name="expiry" formControlName="expiry" [min]="getMinDate()">
+                            </ion-datetime>
+                        </ion-item>
+                    </ion-col>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <div text-center>
+            <xhr-button #xhr round large color="accent" type="submit" [disabled]="mode !== 'Edit' && (clinicForm.pristine || form.pristine)"
+                (xhrClick)="submitForm($event)">
+                Submit
+            </xhr-button>
+        </div>
+    </form>
+</ion-content>

@@ -103,6 +103,11 @@ export const LOVS = {
         'Friday',
         'Saturday',
         'Sunday'
+    ],
+    PD_RELATIONSHIP: [
+        'Shared',
+        'Transfered',
+        'Collaboration'
     ]
 }
 
