@@ -70,7 +70,7 @@ export const DB_CONFIG = {
     DB_NAME: "MedAppWS.db",
     LOCATION: 'default',
     SQL: {
-        GET_INBOX: 'select * from messages where clinic = ? and account = ? limit ?',
+        GET_INBOX: 'select * from messages where clinic = ? and account = ? order by id desc limit ?',
         STORE_TO_INBOX: "insert into messages(name,message,avatar, clinic, account) values (?,?,?,?,?)"
     }
 }

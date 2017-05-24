@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { DB } from './data-base';
+import { Storage } from '.';
 import { OneSignal, OSNotification } from '@ionic-native/onesignal';
 import { ONE_SIGNAL } from '../config/config';
 
@@ -16,7 +16,8 @@ export class Push{
 	private receivedObservable : any = {};
 	private openedObservable : any = {};
 
-	constructor(private push: OneSignal){
+	constructor(private storage : Storage,
+		private push: OneSignal){
 	}
 
 	public init(){

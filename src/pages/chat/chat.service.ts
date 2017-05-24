@@ -19,44 +19,42 @@ export class ChatServices{
 		){
 	}
 
-	private initConnections(inboxObserver){
-		this.storage.accountSubject.subscribe(response => {
-			this.userId = response.userId;
-			this.refreshInbox().then(response => {
-				inboxObserver.next(response);
-			});
-		});
-		this.storage.clinicSubject.subscribe(response => {
-			this.clinicId = response.clinicId;
-			this.refreshInbox().then(response => {
-				inboxObserver.next(response);
-			});
-		});
-		this.push.subscribeToRecievedPush(ONE_SIGNAL.PUSH_TYPE.MESSAGES).subscribe(payload => {
-			this.db.executeSQL(DB_CONFIG.SQL.STORE_TO_INBOX, payload.title , payload.body, null, payload.additionalData.clinic, this.userId )
-			.then(response => {
-				this.refreshInbox().then(_response => {
-					inboxObserver.next(_response);
-				});
-			}).catch(err => {
-				console.error(err);
-			});
-		});
-		this.getRecipientsList();
-	}
-
-	private refreshInbox() : Promise<any>{
+	private refreshInbox(callback) : void{
 		if(this.userId && this.clinicId){
-			return this.db.executeSQL(DB_CONFIG.SQL.GET_INBOX,
-					this.clinicId, this.userId, DB_CONFIG.MESSAGE_LIMIT );
-		}else{
-			return Promise.reject("incomplete parameter");
+			this.db.executeSQL(DB_CONFIG.SQL.GET_INBOX,
+					this.clinicId, this.userId, DB_CONFIG.MESSAGE_LIMIT ).then(callback);
 		}
 	}
 	
 	public getInbox() : Observable<any>{
 		return Observable.create(inboxObserver=>{
-			this.initConnections(inboxObserver);
+			this.storage.accountSubject.subscribe(account => {
+				this.userId = account.userId;
+				this.refreshInbox(response => {
+					inboxObserver.next(response);
+				})
+			});
+			this.storage.clinicSubject.subscribe(cilnic => {
+				this.clinicId = cilnic.clinicId;
+				this.refreshInbox(response => {
+					inboxObserver.next(response);
+				})
+			});
+			this.push.subscribeToRecievedPush(ONE_SIGNAL.PUSH_TYPE.MESSAGES).subscribe(payload => {
+				this.db.executeSQL(DB_CONFIG.SQL.STORE_TO_INBOX, payload.title, payload.body, null, payload.additionalData.clinic, this.storage.account.userId )
+				.then(response => {
+					this.refreshInbox(response => {
+						inboxObserver.next(response);
+					})
+				}).catch(err => {
+					console.error(err);
+				});
+
+				
+			});
+			this.getRecipientsList().subscribe(response => {
+				console.log(response);
+			});
 		}).share();
 	}
 
