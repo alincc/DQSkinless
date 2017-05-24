@@ -33,6 +33,9 @@ export const CONFIG = {
     },
     SOCKETS: {
         queue: '/queue-socket'
+    },
+    ONE_SIGNAL: {
+        create: 'https://onesignal.com/api/v1/notifications'
     }
 };
 

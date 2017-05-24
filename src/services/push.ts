@@ -72,7 +72,11 @@ export class Push{
 			shown: null,
 			payload : null,
 			displayType : null,
-			tags: tags
+			tags: tags,
+			data: {
+				type : ONE_SIGNAL.PUSH_TYPE.MESSAGES,
+				clinic : this.storage.clinic.clinicId
+			}
 		})
 	}
 
