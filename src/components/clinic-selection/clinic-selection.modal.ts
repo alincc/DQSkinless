@@ -5,7 +5,7 @@ import { LoginPage } from '../../pages/login/login.page';
 import { TabsPage } from '../../pages/tabs/tabs';
 
 import { ClinicSelectionService } from './clinic-selection.service';
-import { RootNavController, Storage } from '../../services/services';
+import { RootNavController, Storage } from '../../services';
 
 @Component({
     selector: 'clinic-selection',

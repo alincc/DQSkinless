@@ -9,24 +9,27 @@ import { ManagerPage } from '../manager/manager.page';
 import { NotificationPage } from '../notification/notification.page';
 import { ProfilePage } from '../profile/profile.page';
 import { ClinicManagerPage } from '../clinic-manager/clinic-manager.page';
+import { ChangePasswordPage } from '../change-password/change-password.page';
 
-import { RootNavController, Storage, Images } from '../../services/services';
+import { RootNavController, Storage, Images } from '../../services';
 
 @Component({
 	selector: 'tabs',
 	templateUrl: 'tabs.html'
 })
 export class TabsPage {
-	notification: any = NotificationPage;
-	schedule: any = SchedulePage;
-	patient: any = PatientPage;
-	chat: any = ChatPage;
+
+	public notification: any = NotificationPage;
+	public schedule: any = SchedulePage;
+	public patient: any = PatientPage;
+	public chat: any = ChatPage;
+
+	public root: NavController;
 
 	private profilepic: string;
 	private userDetails: any;
 	private account: any;
 	private clinic: any;
-	root: NavController;
 	constructor(
 		private app: App,
 		private alertController: AlertController,
@@ -36,20 +39,27 @@ export class TabsPage {
 		private images: Images) {
 		this.root = app.getRootNav();
 		this.rootNav.setRootNav(this.nav);
-		
+
 		storage.userDetailsSubject.subscribe(userDetails => {
-			this.userDetails = userDetails;
+			if (userDetails) {
+				this.userDetails = userDetails;
+			}
 		});
 
 		storage.accountSubject.subscribe(account => {
-			this.account = account;			
-			this.images.getImage( this.account.userId + "_profile_pic.jpg").then(response => {
-				this.profilepic = response;
-			})
+			if (account) {
+				this.account = account;
+				this.images.getImage(this.account.userId + "_profile_pic.jpg").then(response => {
+					this.profilepic = response;
+				});
+			}
 		});
+
 		storage.clinicSubject.subscribe(clinic => {
-			this.clinic = clinic;
-		})
+			if (clinic) {
+				this.clinic = clinic;
+			}
+		});
 	}
 
 	public logout() {
@@ -82,5 +92,9 @@ export class TabsPage {
 		this.rootNav.push(ProfilePage, {
 			formType: this.account.role === 1 ? 'D' : 'ND'
 		});
+	}
+
+	public openChangePassword() {
+		this.rootNav.push(ChangePasswordPage);
 	}
 }

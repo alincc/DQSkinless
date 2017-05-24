@@ -29,7 +29,7 @@ export class AccountCreationModal implements OnInit {
 
     private getDefaults() {
         this.errors = {
-            email: ['', [Validators.required, Validators.pattern(REGEX.EMAIL)]],
+            email: ''
         };
     }
 
@@ -39,7 +39,7 @@ export class AccountCreationModal implements OnInit {
 
     private createAssistantForm() {
         this.assistantForm = this.formBuilder.group({
-            email: ''
+            email: ['', [Validators.required, Validators.pattern(REGEX.EMAIL)]]
         });
 
         this.email = this.assistantForm.get('email');
@@ -49,11 +49,26 @@ export class AccountCreationModal implements OnInit {
         });
     }
 
+    private showLoading() {
+        this.loading = this.loadingController.create({
+            spinner: 'crescent',
+            cssClass: 'xhr-loading'
+        });
+        this.loading.present();
+    }
+
+    private dismissLoading() {
+        if (this.loading) {
+            this.loading.dismiss();
+        }
+    }
+
     private validateForm() {
         this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
     }
 
     public save() {
+        this.email.markAsDirty();
         this.validateForm();
 
         if (this.assistantForm.valid) {
@@ -74,21 +89,6 @@ export class AccountCreationModal implements OnInit {
                 }
                 this.dismissLoading();
             }, err => this.dismissLoading());
-        }
-    }
-
-    private showLoading() {
-        this.loading = this.loadingController.create({
-            spinner: 'crescent',
-            cssClass: 'xhr-loading'
-        });
-        this.loading.present();
-    }
-
-
-    private dismissLoading() {
-        if (this.loading) {
-            this.loading.dismiss();
         }
     }
 }

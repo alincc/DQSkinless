@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
-import { Images, Storage } from '../../services/services';
+import { Images, Storage } from '../../services';
 @Component({
 	selector: 'upload-photo',
 	templateUrl: 'upload-photo.html'

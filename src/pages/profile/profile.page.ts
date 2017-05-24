@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
-import { RootNavController } from '../../services/services';
+import { RootNavController } from '../../services';
 
 @Component({
 	selector: 'profile-page',

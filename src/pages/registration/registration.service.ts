@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpService, Storage } from '../../services/services';
+import { HttpService, Storage } from '../../services';
 import { CONFIG } from '../../config/config'
 
 @Injectable()

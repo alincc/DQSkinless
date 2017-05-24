@@ -1,0 +1,41 @@
+<ion-header>
+    <ion-toolbar color="secondary">
+        <ion-buttons start>
+            <button ion-button icon-only navPop><ion-icon name="close"></ion-icon></button>
+        </ion-buttons>
+        <ion-title>
+            Edit Access Role
+        </ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="save()"><ion-icon name="checkmark"></ion-icon></button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content #Content padding>
+    <form [formGroup]="accessForm" #form="ngForm">
+        <div class="row form-group">
+            <ion-grid>
+                <ion-row>
+                    <ion-col col-5 col-sm-5 col-md-5>
+                        <ion-label class="form-label">Access Role</ion-label>
+                        <ion-item clean>
+                            <ion-select class="options" name="accessRole" formControlName="accessRole">
+                                <ion-option *ngFor="let accessRole of accessRoles; let i = index" [value]="i + 1">{{ accessRole }}</ion-option>
+                            </ion-select>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col col-6 col-sm-6 col-md-6>
+                        <ion-label class="form-label">Expiry Date</ion-label>
+                        <ion-item clean>
+                            <ion-datetime name="roleExpiryDate" formControlName="roleExpiryDate" [min]="getMinDate()">
+                            </ion-datetime>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col col-1 col-sm-1 col-md-1>
+                        <ion-icon name="close" class="row-icon" *ngIf="roleExpiryDateControl.value" (click)="clearDate(roleExpiryDateControl)" color="accent-dark"></ion-icon>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </div>
+    </form>
+</ion-content>
