@@ -63,14 +63,14 @@ export class ChatServices{
 			this.getRecipientsList().subscribe(response =>{
 				let accountTag : any[];
 				response.result.forEach(item=>{
-					if(item.userId !== this.userId){
+					// if(item.userId !== this.userId){
 						if(accountTag){
 							accountTag.push({operator: "OR"});
-							accountTag.push([{field:"tag", key: PUSH_TAGS.USER_ID, relation: "=", value: item.userId}]);
+							accountTag.push({field:"tag", key: PUSH_TAGS.USER_ID, relation: "=", value: item.userId});
 						}else{
 							accountTag = [{field:"tag", key: PUSH_TAGS.USER_ID, relation: "=", value: item.userId}];
 						}
-					}
+					// }
 				})
 	        	let details = this.storage.userDetails;
 	        	let title = details.lastname + ", " + details.firstname + " " + details.middleName;
