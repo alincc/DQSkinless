@@ -4,6 +4,8 @@ import { AlertController, NavParams, ViewController } from "ionic-angular";
 
 import { SearchUserModalService } from './search-user-modal.service';
 
+import { Utilities } from '../../utilities/utilities';
+
 @Component({
     selector: 'search-user-modal',
     templateUrl: 'search-user-modal.html',
@@ -88,7 +90,7 @@ export class SearchUserModal implements OnInit {
     }
 
     public getFullName(user) {
-        return (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '');
+        return Utilities.getFullName(user);
     }
 
     public displayContacts(userContacts) {
