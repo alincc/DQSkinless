@@ -13,7 +13,9 @@ import { RootNavController,
      Storage,
      HttpService,
      WebSocketFactory,
-     Images } from '../services/services';
+     Images,
+     Push,
+     DB } from '../services';
 
 // native
 import { ActionSheet } from '@ionic-native/action-sheet';
@@ -23,6 +25,10 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { File } from '@ionic-native/file';
+import { Network } from '@ionic-native/network';
+import { OneSignal } from '@ionic-native/onesignal';
+import { SQLite } from '@ionic-native/sqlite';
+
 
 @NgModule({
   declarations: [
@@ -46,22 +52,29 @@ import { File } from '@ionic-native/file';
     components
   ],
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler },
+    SessionStorageService,
+    LocalStorageService,
+
+    //services
     RootNavController,
     Storage,
     HttpService,
     WebSocketFactory,
     Images,
+    Push,
+    DB,
 
-    SessionStorageService,
-    LocalStorageService,
-
+    //plugins
     ActionSheet,
     Camera,
     Device,
     Keyboard,
     SplashScreen,
     StatusBar,
-    File
+    File,
+    SQLite,
+    OneSignal,
+    Network
   ]
 })
 export class AppModule { }

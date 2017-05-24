@@ -14,11 +14,13 @@ export const CONFIG = {
         createAccount: '/users',
         getUserContacts: '/usercontacts/u',
         searchUser: '/users/sbc',
+        resetPassword: '/users/passwdres',
 
         queue: '/queue',
         queueBoard: '/queue-board',
 
         clinicaccess: '/clinicaccess',
+        updateAccessExpiryProcess: '/clinicaccess/accessroleexp',
         clinicDetailRecord: '/clinicdetails',
         clinicTimeSlots: '/clinictimeslots',
         clinicContacts: '/cliniccontacts',
@@ -42,7 +44,8 @@ export const REGEX = {
 export const MESSAGES = {
     ERROR: {
         GENERIC: 'Something went wrong...',
-        NOT_FOUND: 'Can\'t connect to server please check internet connection'
+        NOT_FOUND: 'Can\'t connect to server please check internet connection',
+        NO_INTERNET: 'Cannot reach server, this might due to poor internet connection'
     },
     SUCCESS: {
         GENERIC: 'Congrats'
@@ -50,3 +53,22 @@ export const MESSAGES = {
 }
 
 export const YEAR_RANGE = 100;
+
+export const ONE_SIGNAL = {
+    APP_ID : 'bd78e626-b77c-4b1e-9e98-ee6a55758ebf',
+    REST_KEY : 'NzgwZjBjZjYtM2NmYi00YjIzLWJiZTItZmU2OTA0MGUwZTEx',
+    PROJECT_NUMBER : '79472100423',
+    PUSH_TYPE: {
+        MESSAGES : 'messages'
+    }
+}
+
+export const DB_CONFIG = {
+    MESSAGE_LIMIT : 10,
+    DB_NAME: "MedAppWS.db",
+    LOCATION : 'default',
+    SQL: {
+        GET_INBOX : 'select * from messages where clinic = ? and account = ? order by id desc limit ?',
+        STORE_TO_INBOX : "insert into messages(name,message,avatar, clinic, account) values (?,?,?,?,?)"
+    }
+}

@@ -6,26 +6,34 @@ login-page{
 	    background-size: cover;
 		.scroll-content{
 		padding: 10%;
-	   
-
 
 			.logo{
 				width: 60%;
 				height: auto;
 				max-width: 150px;
 			}
+
 			ion-list{
 				margin: 50px 0px;
 				hr {
 					background-color: rgba(255,255,255,0.8);
 				}
 			}
-			ion-label{
+
+			ion-label {
 				color: $light;
 			}
+
+			ion-label.form-action-link {
+				color: $accent-dark;
+				text-align: right;
+				text-decoration: underline;
+			}
+
 			xhr-button button {
 				box-shadow: 2px 2px 8px rgba(0,0,0,0.8);
 			}
+
 			.size-container{
 				max-width: 450px;
 				margin: auto;
@@ -42,6 +50,7 @@ login-page{
 					flex: 5;
 				}
 			}
+
 			.form-gap{
 				height: 10%;
 				max-height: 30px;

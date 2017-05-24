@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/of';
 
-import { HttpService, Storage } from '../../services/services';
+import { HttpService, Storage } from '../../services';
 import { CONFIG } from '../../config/config';
 
 @Injectable()
@@ -19,8 +19,10 @@ export class ClinicManagerService {
 
     public getUserId() {
         if (!this.userId) {
-            this.storage.accountSubject.subscribe( account => {
-                this.userId = account.userId;
+            this.storage.accountSubject.subscribe(account => {
+                if (account) {
+                    this.userId = account.userId;
+                }
             });
         }
         return this.userId;
@@ -75,12 +77,20 @@ export class ClinicManagerService {
 
                     return clinic;
 
-                }).subscribe(clinic => {
-                    console.log(`Retrieved clinic details for user: ${this.getUserId()}`);
-                    console.log(JSON.stringify(clinic));
-                });
+                }).subscribe();
 
                 customClinic.push(clinic);
+            });
+
+            return Observable.of(customClinic);
+        }).flatMap(customClinic => {
+
+            customClinic.forEach(c => {
+                this.getClinicAcessByUserIdAndClinicId(c.clinicId).subscribe(response => {
+                    if (response && response.status) {
+                        c.accessRole = response.result.accessRole;
+                    }
+                });
             });
 
             return Observable.of(customClinic);
@@ -97,7 +107,7 @@ export class ClinicManagerService {
     }
 
     private pushClinicSchedule(clinicSchedules, data) {
-        const schedule = clinicSchedules.filter(clinicSchedule => { return clinicSchedule.dayOfWeek === data.dayOfWeek });
+        const schedule = clinicSchedules.filter(clinicSchedule => clinicSchedule.dayOfWeek === data.dayOfWeek);
         if (schedule.length === 0) {
             clinicSchedules.push(
                 {
@@ -121,7 +131,7 @@ export class ClinicManagerService {
                 return new Date('1970/01/01 ' + a.startTime).getTime() - new Date('1970/01/01 ' + b.startTime).getTime();
             });
 
-            clinicSchedules.filter(clinicSchedule => { return clinicSchedule.dayOfWeek === data.dayOfWeek })[0] = schedule[0];
+            clinicSchedules.filter(clinicSchedule => clinicSchedule.dayOfWeek === data.dayOfWeek)[0] = schedule[0];
         }
     }
 
@@ -151,7 +161,7 @@ export class ClinicManagerService {
     }
 
     public delTimeSlotsByClinIdAndDayOfWeek(clinicId, dayOfWeek) {
-        const params = `/cid/${clinicId}/dow/${dayOfWeek}`
+        const params = `/cid/${clinicId}/dow/${dayOfWeek}`;
         return this.http.delete(CONFIG.API.clinicTimeSlots + params);
     }
 
@@ -192,5 +202,13 @@ export class ClinicManagerService {
     public deleteClinicAccessByClinIdUserId(clinicId, userId) {
         const param = `/u/${userId}/c/${clinicId}`;
         return this.http.delete(CONFIG.API.clinicaccess + param);
+    }
+
+    public getClinicAccessByUserId() {
+        return this.http.get(CONFIG.API.getClinicAccessByUserId, [this.getUserId()]);
+    }
+
+    public getClinicAcessByUserIdAndClinicId(clinciId) {
+        return this.http.get(CONFIG.API.clinicaccess, [`u/${this.getUserId()}`, `c/${clinciId}`]);
     }
 }

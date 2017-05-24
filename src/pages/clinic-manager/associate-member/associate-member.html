@@ -1,7 +1,7 @@
 <ion-header>
 	<ion-navbar color="primary">
 		<ion-title>
-			Associate Members
+			Associated Members
 		</ion-title>
 	</ion-navbar>
 </ion-header>
@@ -10,21 +10,23 @@
 		<ion-item-sliding *ngFor="let member of members; let mi = index">
 			<ion-item>
 				<ion-avatar item-left>
-					<img src="http://www.wannia.com/wp-content/themes/pintores/images/default_picture.gif">
+					<!-- <img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg"> -->
+					<div [ngClass]="{me: userId === member.userId}">
+						{{ getDefaultAvatar(member) }}
+					</div>
 				</ion-avatar>
-				<h2 *ngIf="userId === member.userId">YOU</h2>
-				<h2 *ngIf="userId !== member.userId">Name: {{ member.lastname ? getFullName(member) : 'Unregistered' }}</h2>
+				<h2>Name: {{ member.lastname ? getFullName(member) : 'Unregistered' }}</h2>
 				<h2>Email: {{ member.email }}</h2>
-				<h2>Access: {{ member.email }}</h2>
-				<h2>Role: {{ accessRole[member.accessRole] }}</h2>
-				<h2>Expiry: {{ userRole[member.userRole] }}</h2>
+				<h2>Access: {{ accessRoles[member.accessRole] }}</h2>
+				<h2>Role: {{ userRole[member.userRole] }}</h2>
+				<h2>Expiry Date: {{ member.roleExpiryDate ? (member.roleExpiryDate | date : 'MMMM d, yyyy') : ''}}</h2>
 			</ion-item>
-			<ion-item-options side="right" *ngIf="userId !== member.userId">
-				<!--<xhr-button color="accent-dark" (xhrClick)="editRole($event, member)">
+			<ion-item-options side="right">
+				<button ion-button color="secondary" (click)="editAccess(member)" *ngIf="member.accessRole !== 0 && (!isManager || accessRole !== 2)">
 					<ion-icon name="people"></ion-icon>
 					Edit Access
-				</xhr-button>-->
-				<button ion-button color="danger" (click)="deleteMember(member, mi)">
+				</button>
+				<button ion-button color="danger" (click)="deleteMember(member, mi)" *ngIf="(member.accessRole !== 0 || userId !== member.userId) && (!isManager || accessRole === 0)">
 					<ion-icon name="close"></ion-icon>
 					Delete
 				</button>
@@ -32,11 +34,11 @@
 		</ion-item-sliding>
 	</ion-list>
 	<div class="speil" *ngIf="members?.length === 0" text-center>
-        <ion-label >
-            Add Associate by pressing the add button on the lower left of the screen and selecting on either search for existing or add.
-        </ion-label>
-    </div>
-	<ion-fab bottom right>
+		<ion-label>
+			Add Associate by pressing the add button on the lower left of the screen and selecting on either search for existing or add.
+		</ion-label>
+	</div>
+	<ion-fab bottom right *ngIf="!isManager || accessRole !== 2">
 		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
 		<ion-fab-list side="left">
 			<button ion-fab color="accent" (click)="addAssistant()"><ion-icon name="person-add"></ion-icon></button>

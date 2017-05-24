@@ -10,9 +10,11 @@ import { MoreMenuPopover } from '../pages/schedule/more.popover';
 import { NotificationPage } from '../pages/notification/notification.page';
 import { PatientPage } from '../pages/patient/patient.page';
 import { PatientProfilePage } from '../pages/patient-profile/patient-profile.page';
+import { PatientDoctorRelationshipPage } from '../pages/patient-doctor-relationship/patient-doctor-relationship.page';
 import { ProfilePage } from '../pages/profile/profile.page';
 import { RegistrationPage } from '../pages/registration/registration.page';
 import { SchedulePage } from '../pages/schedule/schedule.page';
+import { ScheduleHistoryPage } from '../pages/schedule-history/schedule-history.page';
 import { StepOnePage } from '../pages/registration/step-one/step-one.page';
 import { StepTwoPage } from '../pages/registration/step-two/step-two.page';
 import { StepThreePage } from '../pages/registration/step-three/step-three.page';
@@ -24,6 +26,7 @@ import { ChangePasswordPage } from '../pages/change-password/change-password.pag
 export const pages: any[] = [
 	AssociateMemberPage,
 	BlankPage,
+	ChangePasswordPage,
 	ChatPage,
 	ClinicPage,
 	ClinicManagerPage,
@@ -33,15 +36,15 @@ export const pages: any[] = [
 	NotificationPage,
 	PatientPage,
 	PatientProfilePage,
+	PatientDoctorRelationshipPage,
 	MoreMenuPopover,
 	ProfilePage,
 	RegistrationPage,
 	SchedulePage,
+	ScheduleHistoryPage,
 	StepOnePage,
 	StepTwoPage,
 	StepThreePage,
 	StepFourPage,
-	TabsPage,
-
-	ChangePasswordPage,
+	TabsPage
 ]

@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, NavParams } from "ionic-angular";
 
 import { AccountCreationModal } from '../../../components/account-creation-modal/account-creation-modal.component';
-import { RootNavController } from '../../../services/services';
+import { AccessRoleModal } from '../../../components/access-role-modal/access-role-modal.component';
 import { SearchUserModal } from '../../../components/search-user-modal/search-user-modal.component';
 
 import { ClinicManagerService } from '../clinic-manager.service';
+import { RootNavController, Storage } from '../../../services';
+import { Utilities } from '../../../utilities/utilities';
 
 import { LOVS } from '../../../constants/constants';
 
@@ -19,17 +21,20 @@ export class AssociateMemberPage implements OnInit {
 	public members: any;
 	public userId: any;
 	public accessRole: any;
+	public accessRoles: any;
 	public userRole: any;
+	public isManager: boolean;
 
 	private clinicId: any;
 	private loading: any;
 
 	constructor(
 		private params: NavParams,
-		private root: RootNavController,
 		private alertController: AlertController,
 		private loadingController: LoadingController,
 		private modalController: ModalController,
+		private root: RootNavController,
+		private storage: Storage,
 		private clinicManagerService: ClinicManagerService) {
 		this.getDefaults();
 	}
@@ -40,22 +45,33 @@ export class AssociateMemberPage implements OnInit {
 
 	private getDefaults() {
 		this.clinicId = this.params.data && this.params.data.clinicId ? this.params.data.clinicId : null;
+		this.isManager = this.params.data && this.params.data.isManager;
+		this.accessRole = this.params.data && this.params.data.accessRole;
 		this.userId = this.clinicManagerService.getUserId();
-		this.accessRole = LOVS.ACCESS_ROLES;
+		this.accessRoles = LOVS.ACCESS_ROLES;
 		this.userRole = LOVS.USER_ROLES;
+		this.members = [];
 	}
 
 	private getMembers() {
 		this.showLoading();
-
 		this.clinicManagerService.getClinicMember(this.clinicId).subscribe(response => {
 			if (response && response.status) {
-				this.members = response.result;
+
+				const me = response.result.find(m => m.userId === this.userId);
+				this.members = response.result.filter(m => m.userId !== this.userId);
+				this.members.splice(0, 0, me);
+				this.formatMembersExpiryDate();
 			}
 			this.dismissLoading();
 		}, err => this.dismissLoading());
 	}
 
+	private formatMembersExpiryDate() {
+		this.members.forEach(member => {
+			member.roleExpiryDate = member.roleExpiryDate ? Utilities.clearTime(new Date(+member.roleExpiryDate)) : '';
+		});
+	}
 	private showLoading() {
 		this.loading = this.loadingController.create({
 			spinner: 'crescent',
@@ -70,6 +86,14 @@ export class AssociateMemberPage implements OnInit {
 		}
 	}
 
+	public getDefaultAvatar(member) {
+		if (member && member.lastname) {
+			return member.lastname.substring(0, 1).toUpperCase() + member.firstname.substring(0, 1).toUpperCase();
+		} else {
+			return "?";
+		}
+	}
+
 	public getFullName(user) {
 		return (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '');
 	}
@@ -81,7 +105,7 @@ export class AssociateMemberPage implements OnInit {
 
 		accountCreationModal.onDidDismiss(newMember => {
 			if (newMember) {
-				this.clinicManagerService.associateMember(this.clinicId, newMember.userId, 0, 2).subscribe(response => {
+				this.clinicManagerService.associateMember(this.clinicId, newMember.userId, 2, 2).subscribe(response => {
 					if (response && response.status) {
 						this.getMembers();
 					}
@@ -100,7 +124,7 @@ export class AssociateMemberPage implements OnInit {
 		searchUserModal.onDidDismiss(user => {
 			if (user) {
 				if (!this.userAlreadyExist(user.userId)) {
-					this.clinicManagerService.associateMember(this.clinicId, user.userId, 0, user.userRole).subscribe(response => {
+					this.clinicManagerService.associateMember(this.clinicId, user.userId, 2, user.userRole).subscribe(response => {
 						if (response && response.status) {
 							this.getMembers();
 						}
@@ -121,11 +145,26 @@ export class AssociateMemberPage implements OnInit {
 	}
 
 	private userAlreadyExist(userId) {
-		return this.members.filter(member => { return member.userId === userId }).length > 0
+		return this.members.filter(member => member.userId === userId).length > 0
 	}
 
-	public editRole(event, member) {
-		// TODO
+	public editAccess(member) {
+		let accessRoleModal = this.modalController.create(AccessRoleModal, {
+			member: {
+				memberId: member.userId,
+				clinicId: this.clinicId,
+				accessRole: member.accessRole,
+				roleExpiryDate: member.roleExpiryDate
+			}
+		});
+
+		accessRoleModal.present();
+
+		accessRoleModal.onDidDismiss(access => {
+			if (access) {
+				this.getMembers();
+			}
+		});
 	}
 
 	public deleteMember(member, mi) {

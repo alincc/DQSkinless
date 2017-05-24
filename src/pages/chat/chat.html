@@ -9,37 +9,34 @@
 	</ion-navbar>
 </ion-header>
 <ion-content>
-	<ion-grid>
-		<ion-row >
-			<ion-col offset-10 width-90>
-				<ion-card class="chat-me">
-					<ion-card-header>
-						Me
-					</ion-card-header>
-					<ion-card-content>
-						Let them in
-					</ion-card-content>
-				</ion-card>
-			</ion-col>
-		</ion-row>
-		<ion-row>
-			<ion-col width-90>
-				<ion-card class="chat-other">
-					<ion-card-header>
-						Assistant2
-					</ion-card-header>
-					<ion-card-content>
-						Ok doc!!!
-					</ion-card-content>
-				</ion-card>
-			</ion-col>
-		</ion-row>
-	</ion-grid>
+	<div class="chat-message" *ngFor="let message of messages" [ngSwitch]="message.name">
+		<ion-card class="chat-me" *ngSwitchCase="'Me'">
+			<ion-item>
+			    <h2>Me</h2>
+			    <p>{{message.date}}</p>
+			</ion-item>
+			<ion-card-content>
+				{{message.message}}
+			</ion-card-content>
+		</ion-card>
+		<ion-card class="chat-other" *ngSwitchDefault>
+			<ion-item>
+				<ion-avatar item-left>
+			      <img src="assets/img/d.png">
+			    </ion-avatar>
+			    <h2>{{message.name}}</h2>
+			    <p>{{message.date}}</p>
+			</ion-item>
+			<ion-card-content>
+				{{message.message}}
+			</ion-card-content>
+		</ion-card>
+	</div>
 </ion-content>
 <ion-footer>
 	<ion-toolbar color="secondary">
-	<form class="form-inline">
-	<ion-input placholder="Type a message"></ion-input> <button ion-button clear icon-only><ion-icon name="send"></ion-icon></button>
+	<form class="form-inline" (submit)="send()">
+	<ion-input placholder="Type a message" [(ngModel)]="msg" name="msg"></ion-input> <button ion-button clear icon-only><ion-icon name="send"></ion-icon></button>
 	</form>
 	</ion-toolbar>
 </ion-footer>

@@ -29,6 +29,7 @@ export class ProfileForm implements OnInit {
 
     private profileForm: FormGroup;
 
+    public allowableMedicalArts: any[];
     public contactType: any[];
     public days: any[];
     public genderList: any[];
@@ -107,6 +108,7 @@ export class ProfileForm implements OnInit {
             gender: ''
         };
 
+        this.allowableMedicalArts = LOVS.ALLOWABLE_MEDICAL_ARTS;
         this.contactType = LOVS.CONTACT_TYPE;
         this.years = [];
         this.months = [];
@@ -127,22 +129,17 @@ export class ProfileForm implements OnInit {
         }
 
         for (let i = 1; i <= 12; i++) {
-            this.months.push(this.leftPad(i.toString(), '0', 2));
+
+            this.months.push((i.toString().length < 2 ? '0' : '') + i.toString());
         }
 
         this.createDaysLov(31);
     }
 
-    private leftPad(num, pad, size) {
-        let s = num + '';
-        while (s.length < size) s = pad + s;
-        return s;
-    }
-
     private createDaysLov(maxDay) {
         this.days = [];
         for (let i = 1; i <= maxDay; i++) {
-            this.days.push(this.leftPad(i.toString(), '0', 2));
+            this.days.push((i.toString().length < 2 ? '0' : '') + i.toString());
         }
     }
 
@@ -354,7 +351,7 @@ export class ProfileForm implements OnInit {
         if (this.profileForm.valid && this.hasContact()) {
             this.bindProfileDetails();
 
-            this.contacts.value.filter(contact => { return !contact.id }).forEach(contact => {
+            this.contacts.value.filter(contact => !contact.id).forEach(contact => {
                 this.stack.push(this.service.addContacts(contact));
             });
 

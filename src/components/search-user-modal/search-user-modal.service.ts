@@ -4,7 +4,7 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/of';
 
-import { HttpService, Storage } from '../../services/services';
+import { HttpService, Storage } from '../../services';
 import { CONFIG } from '../../config/config';
 
 @Injectable()
@@ -19,9 +19,11 @@ export class SearchUserModalService {
 
     public getUserId() {
         if (!this.userId) {
-            this.storage.accountSubject.subscribe( account => {
-                this.userId = account.userId;
-            })
+            this.storage.accountSubject.subscribe(account => {
+                if (account) {
+                    this.userId = account.userId;
+                }
+            });
         }
         return this.userId;
     }

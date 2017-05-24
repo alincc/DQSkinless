@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { AlertController, ModalController, NavController } from 'ionic-angular';
 import { ManagerPage } from '../manager/manager.page';
+import { ForgotPasswordModal } from '../../components/forgot-password-modal/forgot-password-modal.component';
 
 import { RegistrationPage } from '../registration/registration.page';
 import { LoginService } from './login.service';
 
-
-import { RootNavController } from '../../services/services';
+import { RootNavController } from '../../services';
 
 @Component({
 	selector: 'login-page',
@@ -19,6 +19,7 @@ export class LoginPage {
 
 	constructor(
 		private alert: AlertController,
+		private modalController: ModalController,
 		private nav: NavController,
 		private rootNav: RootNavController,
 		private service: LoginService) {
@@ -31,7 +32,7 @@ export class LoginPage {
 				if (response.status) {
 					switch (response.result.principal.status) {
 						case 5:
-							this.rootNav.setRoot(ManagerPage);
+							this.rootNav.push(ManagerPage);
 							break;
 						case 0:
 							this.alert.create({
@@ -45,5 +46,12 @@ export class LoginPage {
 				}
 				event.dismissLoading();
 			}, err => event.dismissLoading());
+	}
+
+	public forgotPassword(event) {
+		event.preventDefault();
+
+		let forgotPasswordModal = this.modalController.create(ForgotPasswordModal);
+		forgotPasswordModal.present();
 	}
 }

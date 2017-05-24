@@ -5,10 +5,23 @@ chat-page{
 			background: $light;
 		}
 	}
+
+	.chat-me, .chat-other{
+		width: 70%;
+	}
+
 	.chat-me{
 		background: $secondary;
+		float: right;
+		ion-item {
+			background: $secondary;
+		}
 	}
 	.chat-other{
 		background: $secondary-light;
+		float: left;
+		ion-item {
+			background: $secondary-light;
+		}
 	}
 }

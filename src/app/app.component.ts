@@ -1,11 +1,14 @@
 import { Component, ViewChild, EventEmitter } from '@angular/core';
 import { Platform, AlertController } from 'ionic-angular';
+//pluginm
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { Storage } from '../services/services';
-import { LoginPage } from '../pages/login/login.page';
-import { HttpService } from '../services/services';
+import { Network } from '@ionic-native/network';
+//core
+import { HttpService, Push, Storage } from '../services';
 import { MESSAGES } from '../config/config';
+//pages
+import { LoginPage } from '../pages/login/login.page';
 
 @Component({
   templateUrl: 'app.html'
@@ -13,19 +16,30 @@ import { MESSAGES } from '../config/config';
 export class MyApp {
   private rootPage = LoginPage;
   private alertCallback: EventEmitter<any> = new EventEmitter();
-  @ViewChild('rootApp')
-  private app: any;
   constructor(platform: Platform,
     private storage: Storage,
     private httpService: HttpService,
     private alertCtrl: AlertController,
     private splashscreen: SplashScreen,
-    private statusBar: StatusBar) {
+    private statusBar: StatusBar,
+    private network: Network,
+    private push: Push) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashscreen.hide();
+      //cordova based plugin
+      if(platform.is('cordova')){
+        // push notification
+        push.init();
+        // push.receivedObservable.subscribe(response=>{
+        //   console.log('push',response);
+        // });
+        // push.openedObservable.subscribe(response =>{
+        //   console.log('opened', response);
+        // })
+      }
       //error message
       httpService.errorEvent.subscribe(_err => {
         this.alert(_err);
@@ -36,6 +50,23 @@ export class MyApp {
           this.rootPage = LoginPage;
         });
       });
+      
+      network.onConnect().subscribe(() => {
+        setTimeout(() => {
+          this.alert("connected");
+        }, 1000);
+
+        setTimeout(() => {
+          if(network.type != null)
+          this.alert(network.type);
+        }, 1000);
+      });
+
+      network.onDisconnect().subscribe(() => {
+        setTimeout(() => {
+          this.alert(MESSAGES.ERROR.NO_INTERNET);
+        }, 1000);
+      });            
     });
   }
 
@@ -56,5 +87,7 @@ export class MyApp {
     errorMessage.present();
     return this.alertCallback;
   }
+
+
 
 }
