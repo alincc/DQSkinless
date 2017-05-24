@@ -35,3 +35,4 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 *.orig
 src/config/endpoint.ts
+tslint.json
