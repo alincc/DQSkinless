@@ -1,16 +1,67 @@
 patient-profile-page{
-	ion-content{
-		line-height: none;
+
+
+	.patient-profile{
+		background: $primary;
+		color: $light;
+		padding: 20px 20px 3px 40px;
+		.detail-group{
+			display: table;
+			width: 100%;
+			ion-label, p{
+				display: table-cell;
+			}
+			ion-label{
+				font-weight: bold;
+			}
+		}
+		hr{
+			background: $light;
+		}
+		button[clear]{ 
+			color: $accent;
+			ion-icon{
+				margin-right: 10px;				
+				margin-right: 10px;				
+			}
+		}
 	}
 
-	ion-item {
-		button[icon-only]{
-			float:right;
-		}
-		ion-avatar img{
-			width: 90px !important;
-			height: 90px !important;
+	.profile-picture{
+		height: 80px;
+		width: 80px;
+		img{
+			border-radius: 50%;
+			height: 100%;
 		}
 	}
-	
+
+	ion-card{
+		margin-left: 50px !important;
+		.spot{
+			background: $accent;
+			height: 12px;
+			width: 12px;
+			border-radius: 50%;
+			position: absolute;
+			margin-top: -6px;
+			margin-left: -6px;
+			top: 50%;
+			left: 25px;
+		}
+		.stem{
+			height: 100%;
+			width: 2px;
+			background: $accent;
+			position: absolute;
+			margin-left: -1px;
+			left: 25px;
+			top: 0;
+		}
+
+	}
+
+	ion-item-group:last-child ion-item:last-child .stem{
+			height: 50%;
+	}
 }
