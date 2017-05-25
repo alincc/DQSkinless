@@ -15,7 +15,7 @@
 						{{ getDefaultAvatar(member) }}
 					</div>
 				</ion-avatar>
-				<h2>Name: {{ member.lastname ? getFullName(member) : 'Unregistered' }}</h2>
+				<h2>Name: {{ getFullName(member) }}</h2>
 				<h2>Email: {{ member.email }}</h2>
 				<h2>Access: {{ accessRoles[member.accessRole] }}</h2>
 				<h2>Role: {{ userRole[member.userRole] }}</h2>

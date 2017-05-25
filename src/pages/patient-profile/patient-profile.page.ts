@@ -21,6 +21,7 @@ export class PatientProfilePage {
 	public share() {
 		// TODO pass patient id
 		this.rootNav.push(PatientDoctorRelationshipPage, {
+			patientId: null,
 			pageHeader: 'Share Patient'
 		});
 	}

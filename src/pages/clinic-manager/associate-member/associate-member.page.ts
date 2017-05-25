@@ -72,6 +72,7 @@ export class AssociateMemberPage implements OnInit {
 			member.roleExpiryDate = member.roleExpiryDate ? Utilities.clearTime(new Date(+member.roleExpiryDate)) : '';
 		});
 	}
+	
 	private showLoading() {
 		this.loading = this.loadingController.create({
 			spinner: 'crescent',
@@ -95,7 +96,7 @@ export class AssociateMemberPage implements OnInit {
 	}
 
 	public getFullName(user) {
-		return (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '');
+		return Utilities.getFullName(user);
 	}
 
 	public addAssistant() {
