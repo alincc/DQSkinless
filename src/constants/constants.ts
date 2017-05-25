@@ -88,7 +88,7 @@ export const LOVS = {
     ],
     ALLOWABLE_MEDICAL_ARTS: [
         8
-    ],
+    ], /* FOR DELETION */
     CONTACT_TYPE: [
         'Home',
         'Mobile',
@@ -108,7 +108,10 @@ export const LOVS = {
         'Shared',
         'Transfered',
         'Collaboration'
-    ]
+    ],
+    ALLOWABLE_PD_REL: [
+        0
+    ] /* FOR DELETION */
 }
 
 export const MODE = {

@@ -1,31 +1,44 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavParams } from 'ionic-angular';
+import { LoadingController, ModalController, NavParams } from 'ionic-angular';
+
 import { RootNavController } from '../../services';
+import { PatientDoctorRelationshipService } from './patient-doctor-relationship.page.service';
+
 import { LOVS } from '../../constants/constants';
 import { Utilities } from '../../utilities/utilities';
 
+import { SearchUserModal } from '../../components/search-user-modal/search-user-modal.component';
+
 @Component({
     selector: 'patient-doctor-relationship-page',
-    templateUrl: 'patient-doctor-relationship.html'
+    templateUrl: 'patient-doctor-relationship.html',
+    providers: [PatientDoctorRelationshipService]
 })
 export class PatientDoctorRelationshipPage implements OnInit {
 
     public pdForm: FormGroup;
 
     public relationships: any;
+    public allowableRelationships: any;
     public errors: any;
     public pageHeader: string;
 
     private doctorId: AbstractControl;
+    private doctorName: AbstractControl;
     private relationship: AbstractControl;
+    private expiry: AbstractControl;
 
+    private loading: any;
     private patiendId: any;
 
     constructor(
         private formBuilder: FormBuilder,
+        private loadingController: LoadingController,
+        private modalController: ModalController,
         private params: NavParams,
-        private rootNav: RootNavController) {
+        private rootNav: RootNavController,
+        private pdrService: PatientDoctorRelationshipService) {
         this.getDefaults();
     }
 
@@ -34,9 +47,10 @@ export class PatientDoctorRelationshipPage implements OnInit {
         this.patiendId = this.params.get('patiendId') ? this.params.get('patiendId') : null;
 
         this.relationships = LOVS.PD_RELATIONSHIP;
+        this.allowableRelationships = LOVS.ALLOWABLE_PD_REL;
 
         this.errors = {
-            doctorId: '',
+            doctorName: '',
             relationship: ''
         }
     }
@@ -47,9 +61,23 @@ export class PatientDoctorRelationshipPage implements OnInit {
 
     private createPdForm() {
         this.pdForm = this.formBuilder.group({
-            doctorId: '',
-            relationship: '',
+            doctorId: ['', Validators.required],
+            doctorName: '',
+            relationship: ['', Validators.required],
             expiry: ''
+        });
+
+        this.doctorId = this.pdForm.get('doctorId');
+        this.doctorName = this.pdForm.get('doctorName');
+        this.relationship = this.pdForm.get('relationship');
+        this.expiry = this.pdForm.get('expiry');
+
+        this.doctorId.valueChanges.subscribe(newValue => {
+            this.errors.doctorId = this.doctorId.hasError('required') ? 'Doctor is required' : '';
+        });
+
+        this.relationship.valueChanges.subscribe(newValue => {
+            this.errors.relationship = this.relationship.hasError('required') ? 'Relationship is required' : '';
         });
     }
 
@@ -59,20 +87,62 @@ export class PatientDoctorRelationshipPage implements OnInit {
         });
     }
 
+    private validateForm() {
+        this.errors.doctorId = this.doctorId.hasError('required') ? 'Doctor is required' : '';
+        this.errors.relationship = this.relationship.hasError('required') ? 'Relationship is required' : '';
+    }
+
     public submitForm(event) {
-
-        // TODO saving
-
         this.markFormAsDirty();
+        this.validateForm();
 
-        this.rootNav.pop();
-        event.dismissLoading();
+        if (this.pdForm.valid) {
+
+            const payload = {
+                userId: this.doctorId.value,
+                patientId: this.patiendId,
+                startDate: null,
+                endDate: this.expiry.value,
+                access: this.relationship.value
+            };
+
+            console.log(payload);
+            // TODO
+            // this.pdrService.createPatientAccess(payload).subscribe(response => {
+            //     if (response && response.status) {
+
+            //     }
+
+            //     event.dismissLoading();
+            // }, err => event.dismissLoading());
+
+            event.dismissLoading();
+            this.rootNav.pop();
+        } else {
+            event.dismissLoading();
+        }
+    }
+
+    public searchUser() {
+        let searchUserModal = this.modalController.create(SearchUserModal);
+
+        searchUserModal.present();
+
+        searchUserModal.onDidDismiss(user => {
+            this.doctorName.markAsDirty();
+
+            if (user) {
+                this.doctorId.setValue(user.userId);
+                this.doctorName.setValue(this.getFullName(user));
+            }
+        });
+    }
+
+    private getFullName(user) {
+        return Utilities.getFullName(user);
     }
 
     public getMinDate(): any {
-        let dateNow = Utilities.clearTime(new Date());
-        dateNow.setDate(dateNow.getDate() + 1);
-        const month = dateNow.getMonth().toString();
-        return dateNow.getFullYear() + '-' + (month.length < 2 ? '0' : '') + month + '-' + dateNow.getDate();
+        return Utilities.getMinDate();
     }
 }

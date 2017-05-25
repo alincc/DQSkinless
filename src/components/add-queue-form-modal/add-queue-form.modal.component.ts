@@ -4,10 +4,10 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { QUEUE } from '../../constants/constants'
 import { Utilities } from '../../utilities/utilities';
 @Component({
-	selector: 'add-queue-form-modal',
-	templateUrl: 'add-queue-form-modal.html'
+    selector: 'add-queue-form-modal',
+    templateUrl: 'add-queue-form-modal.html'
 })
-export class AddQueueFormModal{
+export class AddQueueFormModal {
     private queueForm: FormGroup;
     private lastName: AbstractControl;
     private firstName: AbstractControl;
@@ -18,22 +18,22 @@ export class AddQueueFormModal{
     private errors: any;
 
     constructor(private formBuilder: FormBuilder,
-    	private view: ViewController,
-        private param: NavParams){
-    	this.initFormGroup(param.data);
+        private view: ViewController,
+        private param: NavParams) {
+        this.initFormGroup(param.data);
     }
 
-    private initFormGroup(data?){
-    	this.queueForm = this.formBuilder.group({
-    		lastName: [data.lastName || "", Validators.required],
+    private initFormGroup(data?) {
+        this.queueForm = this.formBuilder.group({
+            lastName: [data.lastName || "", Validators.required],
             firstName: [data.firstName || "", Validators.required],
             middleName: data.middleName || "",
-            isServeNow: [data.type? ( data.type === QUEUE.TYPE.WALKIN ? true : false ) :true],
+            isServeNow: [data.type ? (data.type === QUEUE.TYPE.WALKIN ? true : false) : true],
             schedule: [data.schedule || new Date()],
             timeSlot: [data.timeSlot || new Date()]
         });
 
-    	this.lastName = this.queueForm.get('lastName');
+        this.lastName = this.queueForm.get('lastName');
         this.firstName = this.queueForm.get('firstName');
         this.middleName = this.queueForm.get('middleName');
         this.isServeNow = this.queueForm.get('isServeNow');
@@ -63,10 +63,10 @@ export class AddQueueFormModal{
 
         this.isServeNow.valueChanges.subscribe(
             newValue => {
-                if(newValue){
+                if (newValue) {
                     this.schedule.setValue("");
                     this.timeSlot.setValue("");
-                }else{
+                } else {
                     this.schedule.setValue(new Date());
                     this.timeSlot.setValue(new Date());
                 }
@@ -76,35 +76,31 @@ export class AddQueueFormModal{
     }
 
 
-    private save(){
-    	if(this.validateForm()){
-	    	this.view.dismiss({
-	    		lastName: this.lastName.value,
-	    		firstName: this.firstName.value,
-	    		middleName: this.middleName.value,
+    private save() {
+        if (this.validateForm()) {
+            this.view.dismiss({
+                lastName: this.lastName.value,
+                firstName: this.firstName.value,
+                middleName: this.middleName.value,
                 isServeNow: this.isServeNow.value,
                 schedule: this.schedule.value,
                 timeSlot: this.timeSlot.value
-	    	})
-    	}
+            })
+        }
     }
 
-    private validateForm(){
+    private validateForm() {
         if (this.lastName.hasError('required')) {
             this.errors.lastName = 'Last Name is required';
         }
         if (this.firstName.hasError('required')) {
             this.errors.firstName = 'First Name is required';
         }
-    	return !Boolean(this.errors.lastName || this.errors.firstName);
+        return !Boolean(this.errors.lastName || this.errors.firstName);
     }
 
-    private getMinDate() : any{
-        let dateNow = Utilities.clearTime(new Date());
-        dateNow.setDate(dateNow.getDate() + 1);
-        let month = (dateNow.getMonth() + 1).toString();
-        let date = (dateNow.getDate()).toString();
-        return dateNow.getFullYear() + '-' + ( month.length < 2 ? '0' : '' ) + month + '-' + ( date.length < 2 ? '0' : '' ) + date;
+    public getMinDate(): any {
+        return Utilities.getMinDate();
     }
 
 }
