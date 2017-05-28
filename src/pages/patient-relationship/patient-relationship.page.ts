@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { LoadingController, ModalController, NavParams } from 'ionic-angular';
 
 import { RootNavController } from '../../services';
-import { PatientDoctorRelationshipService } from './patient-doctor-relationship.page.service';
+import { PatientRelationshipService } from './patient-relationship.service';
 
 import { LOVS } from '../../constants/constants';
 import { Utilities } from '../../utilities/utilities';
@@ -11,11 +11,11 @@ import { Utilities } from '../../utilities/utilities';
 import { SearchUserModal } from '../../components/search-user-modal/search-user-modal.component';
 
 @Component({
-    selector: 'patient-doctor-relationship-page',
-    templateUrl: 'patient-doctor-relationship.html',
-    providers: [PatientDoctorRelationshipService]
+    selector: 'patient-relationship-page',
+    templateUrl: 'patient-relationship.html',
+    providers: [PatientRelationshipService]
 })
-export class PatientDoctorRelationshipPage implements OnInit {
+export class PatientRelationshipPage implements OnInit {
 
     public pdForm: FormGroup;
 
@@ -38,7 +38,7 @@ export class PatientDoctorRelationshipPage implements OnInit {
         private modalController: ModalController,
         private params: NavParams,
         private rootNav: RootNavController,
-        private pdrService: PatientDoctorRelationshipService) {
+        private patientRelationshipService: PatientRelationshipService) {
         this.getDefaults();
     }
 
@@ -108,7 +108,7 @@ export class PatientDoctorRelationshipPage implements OnInit {
 
             console.log(payload);
             // TODO
-            // this.pdrService.createPatientAccess(payload).subscribe(response => {
+            // this.sharePatientService.createPatientAccess(payload).subscribe(response => {
             //     if (response && response.status) {
 
             //     }

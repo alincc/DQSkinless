@@ -10,7 +10,8 @@ import { MoreMenuPopover } from '../pages/schedule/more.popover';
 import { NotificationPage } from '../pages/notification/notification.page';
 import { PatientPage } from '../pages/patient/patient.page';
 import { PatientProfilePage } from '../pages/patient-profile/patient-profile.page';
-import { PatientDoctorRelationshipPage } from '../pages/patient-doctor-relationship/patient-doctor-relationship.page';
+import { PatientManagerPage } from '../pages/patient-manager/patient-manager.page';
+import { PatientRelationshipPage } from '../pages/patient-relationship/patient-relationship.page';
 import { ProfilePage } from '../pages/profile/profile.page';
 import { RegistrationPage } from '../pages/registration/registration.page';
 import { SchedulePage } from '../pages/schedule/schedule.page';
@@ -36,7 +37,8 @@ export const pages: any[] = [
 	NotificationPage,
 	PatientPage,
 	PatientProfilePage,
-	PatientDoctorRelationshipPage,
+	PatientManagerPage,
+	PatientRelationshipPage,
 	MoreMenuPopover,
 	ProfilePage,
 	RegistrationPage,
