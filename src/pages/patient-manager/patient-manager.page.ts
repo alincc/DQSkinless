@@ -5,6 +5,10 @@ import { LoadingController, ModalController, NavParams } from 'ionic-angular';
 import { RootNavController } from '../../services';
 import { PatientManagerService } from './patient-manager.service';
 
+import { CollaboratedPage } from './collaborated/collaborated.page'
+import { SharedPage } from './shared/shared.page';
+import { TransferredPage } from './transferred/transferred.page';
+
 @Component({
     selector: 'patient-manager-page',
     templateUrl: 'patient-manager.html',
@@ -12,8 +16,16 @@ import { PatientManagerService } from './patient-manager.service';
 })
 export class PatientManagerPage implements OnInit {
 
+    public collaborated = CollaboratedPage;
+    public shared = SharedPage;
+    public transferred = TransferredPage;
+
     private loading: any;
     private patiendId: any;
+
+    public patient = {
+        patiendId: this.patiendId
+    };
 
     constructor(
         private formBuilder: FormBuilder,
@@ -22,17 +34,9 @@ export class PatientManagerPage implements OnInit {
         private params: NavParams,
         private rootNav: RootNavController,
         private patientManagerService: PatientManagerService) {
-        this.getDefaults();
-    }
-
-    private getDefaults() {
         this.patiendId = this.params.get('patiendId') ? this.params.get('patiendId') : null;
     }
 
     public ngOnInit() {
-    }
-
-    public sharePatient() {
-        // this.rootNav.push()
     }
 }

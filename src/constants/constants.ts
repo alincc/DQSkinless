@@ -105,13 +105,11 @@ export const LOVS = {
         'Sunday'
     ],
     PD_RELATIONSHIP: [
+        'Owner',
         'Shared',
         'Transfered',
         'Collaboration'
-    ],
-    ALLOWABLE_PD_REL: [
-        0
-    ] /* FOR DELETION */
+    ]
 }
 
 export const MODE = {

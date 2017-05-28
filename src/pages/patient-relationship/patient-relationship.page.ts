@@ -17,7 +17,7 @@ import { SearchUserModal } from '../../components/search-user-modal/search-user-
 })
 export class PatientRelationshipPage implements OnInit {
 
-    public pdForm: FormGroup;
+    public pRelForm: FormGroup;
 
     public relationships: any;
     public allowableRelationships: any;
@@ -31,6 +31,7 @@ export class PatientRelationshipPage implements OnInit {
 
     private loading: any;
     private patiendId: any;
+    private pRel: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -45,9 +46,9 @@ export class PatientRelationshipPage implements OnInit {
     private getDefaults() {
         this.pageHeader = this.params.get('pageHeader') ? this.params.get('pageHeader') : 'Patient Doctor Relationship';
         this.patiendId = this.params.get('patiendId') ? this.params.get('patiendId') : null;
+        this.pRel = this.params.get('pRel') ? this.params.get('pRel') : null;
 
         this.relationships = LOVS.PD_RELATIONSHIP;
-        this.allowableRelationships = LOVS.ALLOWABLE_PD_REL;
 
         this.errors = {
             doctorName: '',
@@ -56,21 +57,21 @@ export class PatientRelationshipPage implements OnInit {
     }
 
     public ngOnInit() {
-        this.createPdForm();
+        this.createpRelForm();
     }
 
-    private createPdForm() {
-        this.pdForm = this.formBuilder.group({
+    private createpRelForm() {
+        this.pRelForm = this.formBuilder.group({
             doctorId: ['', Validators.required],
             doctorName: '',
             relationship: ['', Validators.required],
             expiry: ''
         });
 
-        this.doctorId = this.pdForm.get('doctorId');
-        this.doctorName = this.pdForm.get('doctorName');
-        this.relationship = this.pdForm.get('relationship');
-        this.expiry = this.pdForm.get('expiry');
+        this.doctorId = this.pRelForm.get('doctorId');
+        this.doctorName = this.pRelForm.get('doctorName');
+        this.relationship = this.pRelForm.get('relationship');
+        this.expiry = this.pRelForm.get('expiry');
 
         this.doctorId.valueChanges.subscribe(newValue => {
             this.errors.doctorId = this.doctorId.hasError('required') ? 'Doctor is required' : '';
@@ -79,11 +80,14 @@ export class PatientRelationshipPage implements OnInit {
         this.relationship.valueChanges.subscribe(newValue => {
             this.errors.relationship = this.relationship.hasError('required') ? 'Relationship is required' : '';
         });
+
+        console.log('this.pRel', this.pRel);
+        this.relationship.setValue(this.pRel);
     }
 
     private markFormAsDirty() {
-        Object.keys(this.pdForm.controls).forEach(key => {
-            this.pdForm.get(key).markAsDirty();
+        Object.keys(this.pRelForm.controls).forEach(key => {
+            this.pRelForm.get(key).markAsDirty();
         });
     }
 
@@ -96,7 +100,7 @@ export class PatientRelationshipPage implements OnInit {
         this.markFormAsDirty();
         this.validateForm();
 
-        if (this.pdForm.valid) {
+        if (this.pRelForm.valid) {
 
             const payload = {
                 userId: this.doctorId.value,
