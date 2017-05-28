@@ -3,7 +3,7 @@ import { HttpService, Storage } from '../../services';
 import { CONFIG } from '../../config/config';
 
 @Injectable()
-export class PatientDoctorRelationshipService {
+export class PatientRelationshipService {
 
     constructor(
         private http: HttpService,
