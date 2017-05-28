@@ -73,8 +73,8 @@ export class PatientRelationshipPage implements OnInit {
         this.relationship = this.pRelForm.get('relationship');
         this.expiry = this.pRelForm.get('expiry');
 
-        this.doctorId.valueChanges.subscribe(newValue => {
-            this.errors.doctorId = this.doctorId.hasError('required') ? 'Doctor is required' : '';
+        this.doctorName.valueChanges.subscribe(newValue => {
+            this.errors.doctorName = this.doctorId.hasError('required') ? 'Doctor is required' : '';
         });
 
         this.relationship.valueChanges.subscribe(newValue => {
@@ -97,9 +97,8 @@ export class PatientRelationshipPage implements OnInit {
         searchUserModal.present();
 
         searchUserModal.onDidDismiss(user => {
-            this.doctorName.markAsDirty();
-
             if (user) {
+                this.doctorName.markAsDirty();
                 this.doctorId.setValue(user.userId);
                 this.doctorName.setValue(this.getFullName(user));
             }
@@ -119,7 +118,7 @@ export class PatientRelationshipPage implements OnInit {
     }
 
     private validateForm() {
-        this.errors.doctorId = this.doctorId.hasError('required') && this.doctorName.hasError('required') ? 'Doctor is required' : '';
+        this.errors.doctorName = this.doctorId.hasError('required') && this.doctorName.hasError('required') ? 'Doctor is required' : '';
         this.errors.relationship = this.relationship.hasError('required') ? 'Relationship is required' : '';
     }
 
