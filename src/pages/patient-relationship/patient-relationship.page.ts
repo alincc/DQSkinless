@@ -63,7 +63,7 @@ export class PatientRelationshipPage implements OnInit {
     private createpRelForm() {
         this.pRelForm = this.formBuilder.group({
             doctorId: ['', Validators.required],
-            doctorName: '',
+            doctorName: ['', Validators.required],
             relationship: ['', Validators.required],
             expiry: ''
         });
@@ -91,8 +91,35 @@ export class PatientRelationshipPage implements OnInit {
         });
     }
 
+    public searchUser() {
+        let searchUserModal = this.modalController.create(SearchUserModal);
+
+        searchUserModal.present();
+
+        searchUserModal.onDidDismiss(user => {
+            this.doctorName.markAsDirty();
+
+            if (user) {
+                this.doctorId.setValue(user.userId);
+                this.doctorName.setValue(this.getFullName(user));
+            }
+        });
+    }
+
+    private getFullName(user) {
+        return Utilities.getFullName(user);
+    }
+
+    public getMinDate() {
+        return Utilities.getMinDate();
+    }
+
+    public clearDate(control) {
+        control.setValue('');
+    }
+
     private validateForm() {
-        this.errors.doctorId = this.doctorId.hasError('required') ? 'Doctor is required' : '';
+        this.errors.doctorId = this.doctorId.hasError('required') && this.doctorName.hasError('required') ? 'Doctor is required' : '';
         this.errors.relationship = this.relationship.hasError('required') ? 'Relationship is required' : '';
     }
 
@@ -125,32 +152,5 @@ export class PatientRelationshipPage implements OnInit {
         } else {
             event.dismissLoading();
         }
-    }
-
-    public searchUser() {
-        let searchUserModal = this.modalController.create(SearchUserModal);
-
-        searchUserModal.present();
-
-        searchUserModal.onDidDismiss(user => {
-            this.doctorName.markAsDirty();
-
-            if (user) {
-                this.doctorId.setValue(user.userId);
-                this.doctorName.setValue(this.getFullName(user));
-            }
-        });
-    }
-
-    private getFullName(user) {
-        return Utilities.getFullName(user);
-    }
-
-    public getMinDate() {
-        return Utilities.getMinDate();
-    }
-
-    public clearDate(control) {
-        control.setValue('');
     }
 }

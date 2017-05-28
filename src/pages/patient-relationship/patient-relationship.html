@@ -14,7 +14,7 @@
                     <ion-item round>
                         <ion-input name="doctorName" formControlName="doctorName" (click)="searchUser()"></ion-input>
                     </ion-item>
-                    <div class="error-message" *ngIf="pRelForm.get('doctorId')?.dirty &&  pRelForm.get('doctorId').invalid">
+                    <div class="error-message" *ngIf="doctorName.dirty &&  doctorName.invalid">
                         {{ errors.doctorId }}
                     </div>
                 </ion-col>

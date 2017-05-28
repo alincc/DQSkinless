@@ -14,7 +14,7 @@
                     <ion-item round>
                         <ion-input name="clinicName" formControlName="clinicName"></ion-input>
                     </ion-item>
-                    <div class="error-message" *ngIf="clinicForm.get('clinicName')?.dirty &&  clinicForm.get('clinicName').invalid">
+                    <div class="error-message" *ngIf="clinicName.dirty &&  clinicName.invalid">
                         {{ errors.clinicName }}
                     </div>
                 </ion-col>
@@ -25,7 +25,7 @@
                     <ion-item round>
                         <ion-textarea name="address" formControlName="address"></ion-textarea>
                     </ion-item>
-                    <div class="error-message" *ngIf="clinicForm.get('address')?.dirty &&  clinicForm.get('address').invalid">
+                    <div class="error-message" *ngIf="address.dirty &&  address.invalid">
                         {{ errors.address }}
                     </div>
                 </ion-col>
