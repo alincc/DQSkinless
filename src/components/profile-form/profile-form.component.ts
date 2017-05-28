@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileFormService } from './profile-form.service';
-import { LoadingController, ModalController } from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { LOVS } from '../../constants/constants';
 import { REGEX, YEAR_RANGE } from '../../config/config';
@@ -51,11 +52,11 @@ export class ProfileForm implements OnInit {
     private day: AbstractControl;
     private gender: AbstractControl;
     private stack: StackedServices;
-    private loading: any;
+
+    public isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(private formBuilder: FormBuilder,
         private service: ProfileFormService,
-        private loadingController: LoadingController,
         private modalController: ModalController) {
         this.getDefaults();
     }
@@ -63,7 +64,7 @@ export class ProfileForm implements OnInit {
     public ngOnInit() {
         this.profile = {};
         this.createProfileForm();
-        this.showLoading();
+        this.isLoading.next(true);
         const getProfileDetails$ = this.formType === 'D' ? this.service.getDoctorDetails() : this.service.getAssistantDetails();
         const getContacts$ = this.service.getUserContacts();
 
@@ -85,10 +86,10 @@ export class ProfileForm implements OnInit {
             }
 
             this.stack.clearStack();
-            this.dismissLoading();
+            this.isLoading.next(false);
         }, err => {
             this.stack.clearStack();
-            this.dismissLoading()
+            this.isLoading.next(false);
         });
     }
 
@@ -140,21 +141,6 @@ export class ProfileForm implements OnInit {
         this.days = [];
         for (let i = 1; i <= maxDay; i++) {
             this.days.push((i.toString().length < 2 ? '0' : '') + i.toString());
-        }
-    }
-
-    private showLoading() {
-        this.loading = this.loadingController.create({
-            spinner: 'crescent',
-            cssClass: 'xhr-loading'
-        });
-        this.loading.present();
-    }
-
-
-    private dismissLoading() {
-        if (this.loading) {
-            this.loading.dismiss();
         }
     }
 

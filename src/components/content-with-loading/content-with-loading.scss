@@ -6,13 +6,18 @@ content-with-loading{
 		width: 47px;
 		height: 9px;
 		position: absolute;
-		top: 18px;
-		left: 50%;
+		left: 45%;
 		transform: translate(-50%, -50%);
-			-o-transform: translate(-50%, -50%);
-			-ms-transform: translate(-50%, -50%);
-			-webkit-transform: translate(-50%, -50%);
-			-moz-transform: translate(-50%, -50%);
+		-o-transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+		-webkit-transform: translate(-50%, -50%);
+		-moz-transform: translate(-50%, -50%);
+		
+		-ms-transform: translateY(-50%);
+		-o-transform: translateY(-50%);
+		-webkit-transform: translateY(-50%);
+		top: 50%;
+		transform: translateY(-50%);
 	}
 	.cssload-loader > div {
 		content: " ";

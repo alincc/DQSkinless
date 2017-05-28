@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, NavParams } from "ionic-angular";
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 
@@ -33,6 +34,8 @@ export class ClinicManagerPage implements OnInit {
 	private loading: any;
 	private clinicDetailsObservables: StackedServices;
 
+	public isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
 	constructor(
 		private alertController: AlertController,
 		private loadingController: LoadingController,
@@ -46,14 +49,17 @@ export class ClinicManagerPage implements OnInit {
 	public ngOnInit() {
 		this.clinics = [];
 		this.ownedClinics = [];
-		this.showLoading();
+		this.isLoading.next(true);
 
 		if (this.userRole === 1) {
-			this.clinicManagerService.getNoOfClinics().subscribe(response => {
-				if (response && response.status) {
-					this.allowableClinics = response.result;
-				}
-			});
+			this.clinicDetailsObservables.push(
+				this.clinicManagerService.getNoOfClinics().map(response => {
+					if (response && response.status) {
+						this.allowableClinics = response.result;
+					}
+
+					return Observable.of(response);
+				}));
 		}
 
 		this.clinicDetailsObservables.push(
@@ -77,8 +83,8 @@ export class ClinicManagerPage implements OnInit {
 			}));
 
 		this.clinicDetailsObservables.executeFork().subscribe(response => {
-			this.dismissLoading()
-		}, err => this.dismissLoading());
+			this.isLoading.next(false);
+		}, err => this.isLoading.next(false));
 	}
 
 	private getDefaults() {
@@ -102,11 +108,11 @@ export class ClinicManagerPage implements OnInit {
 	private getClinics() {
 		this.clinics = [];
 		this.ownedClinics = [];
-		this.showLoading();
+		this.isLoading.next(true);
 
 		this.clinicDetailsObservables.executeFork().subscribe(response => {
-			this.dismissLoading()
-		}, err => this.dismissLoading());
+			this.isLoading.next(false);
+		}, err => this.isLoading.next(false));
 	}
 
 	private showLoading() {
