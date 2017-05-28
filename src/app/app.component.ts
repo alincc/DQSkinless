@@ -40,21 +40,21 @@ export class MyApp {
         });
       });
       
-      network.onConnect().subscribe(() => {
-        setTimeout(() => {
-          this.presentToast("Connected");
-        }, 1000);
+      // network.onConnect().subscribe(() => {
+      //   setTimeout(() => {
+      //     this.presentToast("Connected");
+      //   }, 1000);
 
-        setTimeout(() => {
-          if(network.type != null)
-          this.presentToast(network.type);
-        }, 1000);
-      });
+      //   setTimeout(() => {
+      //     if(network.type != null)
+      //     this.presentToast(network.type);
+      //   }, 1000);
+      // });
 
       network.onDisconnect().subscribe(() => {
         setTimeout(() => {
           this.presentToast(MESSAGES.ERROR.NO_INTERNET);
-        }, 1000);
+        }, 3000);
       });            
     });
   }
