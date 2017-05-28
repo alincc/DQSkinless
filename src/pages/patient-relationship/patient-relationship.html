@@ -25,18 +25,21 @@
                             <ion-option *ngFor="let relationship of relationships; let i = index" [value]="i">{{ relationship }}</ion-option>
                         </ion-select>
                     </ion-item>
-                    <div class="error-message" *ngIf="pRelForm.get('relationship').dirty &&  pRelForm.get('relationship').invalid">
+                    <div class="error-message" *ngIf="relationship.dirty &&  relationship.invalid">
                         {{ errors.relationship }}
                     </div>
                 </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col col-12 col-sm-6 col-md-3>
+                <ion-col col-11 col-sm-6 col-md-3>
                     <ion-label class="form-label">Expiry Date</ion-label>
                     <ion-item clean>
                         <ion-datetime name="expiry" formControlName="expiry" [min]="getMinDate()">
                         </ion-datetime>
                     </ion-item>
+                </ion-col>
+                <ion-col col-1 col-sm-1 col-md-1>
+                    <ion-icon name="close" class="row-icon" *ngIf="expiry.value" (click)="clearDate(expiry)" color="accent-dark"></ion-icon>
                 </ion-col>
             </ion-row>
         </ion-grid>

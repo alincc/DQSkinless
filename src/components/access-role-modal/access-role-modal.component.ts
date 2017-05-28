@@ -71,7 +71,7 @@ export class AccessRoleModal implements OnInit {
         }
     }
 
-    public getMinDate(): any {
+    public getMinDate() {
         return Utilities.getMinDate();
     }
 

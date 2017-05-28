@@ -97,7 +97,6 @@ export class ProfileForm implements OnInit {
         this.formType = 'ND';
         this.errors = {
             prc: '',
-            ptr: '',
             medicalArt: '',
             specialization: '',
             email: '',
