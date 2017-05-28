@@ -42,28 +42,10 @@ export class ScheduleHistoryPage {
 				//set queue board
 				this.queueBoard = response.result;
 
-				if (this.ws) {
-					this.ws.close();
-				}
-				if (this.connection) {
-					this.connection.unsubscribe();
-				}
-				// connect to web socket
-				this.ws = this.service.connectToQueue()
-				this.ws.then(
-					response => {
-						this.ws.send(this.clinicId);
-					}
-				);
-				// subscribe to sock
-				console.log("subscribing to sock")
-				this.connection = this.ws.connection.subscribe(response => {
-					console.log("subcsribed to sock with response ", response);
-
-					this.fetchQueue(response => {
+				this.fetchQueue(response => {
 						console.log("fetched Queue");
 					});
-				})
+				
 
 			}
 
