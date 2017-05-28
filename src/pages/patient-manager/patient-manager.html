@@ -5,8 +5,8 @@
         </ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content #Content padding>
-    <ion-fab bottom right>
-        <button ion-fab color="accent" (click)="sharePatient()"><ion-icon name="add"></ion-icon></button>
-    </ion-fab>
-</ion-content>
+<ion-tabs>
+    <ion-tab [root]="shared" [rootParams]="patient" tabTitle="Shared"></ion-tab>
+    <ion-tab [root]="transferred" [rootParams]="patient" tabTitle="Transferred"></ion-tab>
+    <ion-tab [root]="collaborated" [rootParams]="patient" tabTitle="Collaborated"></ion-tab>
+</ion-tabs>
