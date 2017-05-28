@@ -146,7 +146,11 @@ export class PatientRelationshipPage implements OnInit {
         return Utilities.getFullName(user);
     }
 
-    public getMinDate(): any {
+    public getMinDate() {
         return Utilities.getMinDate();
+    }
+
+    public clearDate(control) {
+        control.setValue('');
     }
 }

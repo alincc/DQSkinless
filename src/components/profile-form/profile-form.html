@@ -8,7 +8,7 @@
                         <ion-item round>
                             <ion-input name="lastName" formControlName="lastName"></ion-input>
                         </ion-item>
-                        <div class="error-message" *ngIf="profileForm.get('lastName')?.dirty &&  profileForm.get('lastName').invalid">
+                        <div class="error-message" *ngIf="lastName.dirty &&  lastName.invalid">
                             {{ errors.lastName }}
                         </div>
                     </ion-col>
@@ -17,7 +17,7 @@
                         <ion-item round>
                             <ion-input name="firstName" formControlName="firstName"></ion-input>
                         </ion-item>
-                        <div class="error-message" *ngIf="profileForm.get('firstName')?.dirty &&  profileForm.get('firstName').invalid">
+                        <div class="error-message" *ngIf="firstName.dirty &&  firstName.invalid">
                             {{ errors.firstName }}
                         </div>
                     </ion-col>
@@ -35,7 +35,7 @@
                             <ion-item round>
                                 <ion-input type="number" name="prc" formControlName="prc"></ion-input>
                             </ion-item>
-                            <div class="error-message" *ngIf="profileForm.get('prc')?.dirty && profileForm.get('prc').invalid">
+                            <div class="error-message" *ngIf="prc.dirty && prc.invalid">
                                 {{ errors.prc }}
                             </div>
                         </ion-col>
@@ -44,9 +44,6 @@
                             <ion-item round>
                                 <ion-input type="number" name="ptr" formControlName="ptr"></ion-input>
                             </ion-item>
-                            <div class="error-message" *ngIf="profileForm.get('ptr')?.dirty &&  profileForm.get('ptr').invalid">
-                                {{ errors.ptr }}
-                            </div>
                         </ion-col>
                     </ion-row>
                     <ion-row>
@@ -59,7 +56,7 @@
                                     </div>
                                 </ion-select>
                             </ion-item>
-                            <div class="error-message" *ngIf="profileForm.get('medicalArt')?.dirty &&  profileForm.get('medicalArt').invalid">
+                            <div class="error-message" *ngIf="medicalArt.dirty &&  medicalArt.invalid">
                                 {{ errors.medicalArt }}
                             </div>
                         </ion-col>
@@ -68,7 +65,7 @@
                             <ion-item round>
                                 <ion-input name="specialization" formControlName="specialization"></ion-input>
                             </ion-item>
-                            <div class="error-message" *ngIf="profileForm.get('specialization')?.dirty &&  profileForm.get('specialization').invalid">
+                            <div class="error-message" *ngIf="specialization.dirty &&  specialization.invalid">
                                 {{ errors.specialization }}
                             </div>
                         </ion-col>
@@ -80,7 +77,7 @@
                         <ion-item round>
                             <ion-input type="email" name="email" formControlName="email"></ion-input>
                         </ion-item>
-                        <div class="error-message" *ngIf="profileForm.get('email')?.dirty &&  profileForm.get('email').invalid">
+                        <div class="error-message" *ngIf="email.dirty &&  email.invalid">
                             {{ errors.email }}
                         </div>
                     </ion-col>
@@ -128,7 +125,7 @@
                                 <ion-label>{{ gender }}</ion-label>
                             </ion-item>
                         </ion-list>
-                        <div class="error-message" *ngIf="profileForm.get('gender')?.dirty &&  profileForm.get('gender').invalid">
+                        <div class="error-message" *ngIf="gender.dirty &&  gender.invalid">
                             {{ errors.gender }}
                         </div>
                     </ion-col>
@@ -160,13 +157,13 @@
                                 </ion-item>
                             </ion-col>
                             <ion-col col-12 col-sm-12 col-md-12>
-                                <div class="error-message" *ngIf="profileForm.get('year')?.dirty &&  profileForm.get('year').invalid">
+                                <div class="error-message" *ngIf="year.dirty &&  year.invalid">
                                     {{ errors.year }}
                                 </div>
-                                <div class="error-message" *ngIf="profileForm.get('month')?.dirty &&  profileForm.get('month').invalid">
+                                <div class="error-message" *ngIf="month.dirty &&  month.invalid">
                                     {{ errors.month }}
                                 </div>
-                                <div class="error-message" *ngIf="profileForm.get('day')?.dirty &&  profileForm.get('day').invalid">
+                                <div class="error-message" *ngIf="day.dirty &&  day.invalid">
                                     {{ errors.day }}
                                 </div>
                             </ion-col>
