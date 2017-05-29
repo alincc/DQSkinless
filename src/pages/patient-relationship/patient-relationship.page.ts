@@ -92,7 +92,9 @@ export class PatientRelationshipPage implements OnInit {
     }
 
     public searchUser() {
-        let searchUserModal = this.modalController.create(SearchUserModal);
+        let searchUserModal = this.modalController.create(SearchUserModal, {
+            pageHeader: 'Search Doctor'
+        });
 
         searchUserModal.present();
 

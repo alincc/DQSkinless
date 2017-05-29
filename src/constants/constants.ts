@@ -109,6 +109,11 @@ export const LOVS = {
         'Shared',
         'Transfered',
         'Collaboration'
+    ],
+    SEARCH_BY: [
+        'Username',
+        'Last name',
+        'First name'
     ]
 }
 
