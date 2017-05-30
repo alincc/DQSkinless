@@ -11,6 +11,7 @@ import { ContactModal } from '../components/contact-modal/contact-modal.componen
 import { ScheduleModal } from '../components/schedule-modal/schedule-modal.component';
 import { SearchUserModal } from '../components/search-user-modal/search-user-modal.component';
 import { AddQueueFormModal } from '../components/add-queue-form-modal/add-queue-form.modal.component';
+import { PatientForm } from '../components/patient-form/patient-form.component';
 
 export const components = [
     Accordion,
@@ -25,5 +26,6 @@ export const components = [
     ContactModal,
     ScheduleModal,
     SearchUserModal,
-    AddQueueFormModal
+    AddQueueFormModal,
+    PatientForm
 ];

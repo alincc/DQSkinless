@@ -21,7 +21,8 @@ export class PatientForm implements OnInit {
   private patientForm: FormGroup;
 
   private firstName: AbstractControl;
-  private lastName: AbstractControl
+  private lastName: AbstractControl;
+  private middleName: AbstractControl;
   private age: AbstractControl;
   private sex: AbstractControl;
   private address: AbstractControl;
@@ -46,6 +47,7 @@ export class PatientForm implements OnInit {
     this.errors = {
       firstName: '',
       lastName: '',
+      middleName: '',
       confirm: '',
       age: '',
       sex: '',
@@ -59,6 +61,7 @@ export class PatientForm implements OnInit {
     this.patientForm = this.formBuilder.group({
       firstName: '',
       lastName: '',
+      middleName: '',
       age: '',
       sex: '',
       address: '',
@@ -68,6 +71,7 @@ export class PatientForm implements OnInit {
 
     this.firstName = this.patientForm.get("firstName");
     this.lastName = this.patientForm.get("lastName");
+    this.middleName = this.patientForm.get("middleName");
     this.age = this.patientForm.get("age");
     this.sex = this.patientForm.get("sex");
     this.address = this.patientForm.get("address");
@@ -129,6 +133,7 @@ export class PatientForm implements OnInit {
   private bindPatientDetails(){
     this.patient.firstName = this.patientForm.get("firstName");
     this.patient.lastName = this.patientForm.get("lastName");
+    this.patient.middleName = this.patientForm.get("middleName");
     this.patient.age = this.patientForm.get("age");
     this.patient.sex = this.patientForm.get("sex");
     this.patient.address = this.patientForm.get("address");
