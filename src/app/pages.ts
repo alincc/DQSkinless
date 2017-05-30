@@ -20,6 +20,7 @@ import { StepTwoPage } from '../pages/registration/step-two/step-two.page';
 import { StepThreePage } from '../pages/registration/step-three/step-three.page';
 import { StepFourPage } from '../pages/registration/step-four/step-four.page';
 import { TabsPage } from '../pages/tabs/tabs';
+import { PatientInformationPage } from '../pages/patient-information/patient-information.page';
 
 import { ChangePasswordPage } from '../pages/change-password/change-password.page';
 
@@ -46,5 +47,6 @@ export const pages: any[] = [
 	StepTwoPage,
 	StepThreePage,
 	StepFourPage,
-	TabsPage
+	TabsPage,
+	PatientInformationPage
 ]
