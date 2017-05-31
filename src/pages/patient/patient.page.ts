@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { RootNavController } from '../../services';
+import { PatientInformationPage } from '../../pages/patient-information/patient-information.page';
 
 @Component({
 	selector: 'patient-page',
@@ -17,5 +18,9 @@ export class PatientPage{
 
 	public submit(response) {
 		this.rootNav.pop();
+	}
+
+	private goToAdd(){
+		this.rootNav.push(PatientInformationPage);
 	}
 }
