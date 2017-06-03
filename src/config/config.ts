@@ -29,7 +29,9 @@ export const CONFIG = {
         getClinicRecordByUserId: '/clinicdetails/u',
         getClinicTimeSlotByClinicId: '/clinictimeslots/cidli',
         getClinicContactByClinicId: '/cliniccontacts/cidli',
-        getClinicMember: `/members/clnid`
+        getClinicMember: `/members/clnid`,
+
+        patientDetails: '/patientdetails'
     },
     SOCKETS: {
         queue: '/queue-socket'

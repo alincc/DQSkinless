@@ -8,5 +8,8 @@ export class PatientService{
         private http: HttpService,
         private storage: Storage) { }
 
+        public addPatientDetails(_parameter) {
+        return this.http.post(CONFIG.API.patientDetails, _parameter);
+    }
         
 }
