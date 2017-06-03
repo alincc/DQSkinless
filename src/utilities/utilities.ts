@@ -13,10 +13,10 @@ export class Utilities {
 		return timeless;
 	}
 
-
-	public static getISODate(date: Date) {
-		let isoDate: String = date.getFullYear() + "-" + this.padDigits(date.getMonth() + 1, 2) + "-" + date.getDate() + "T00:00:00.000Z";
-		return isoDate;
+	public static getISODate(date: Date){
+		var tzoffset = date.getTimezoneOffset() * 60000; //offset in milliseconds
+		var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
+		return localISOTime;
 	}
 
 	public static padDigits(number, digits) {
@@ -26,6 +26,11 @@ export class Utilities {
 		const d = new DatePipe('pt-PT').transform(date, 'yyyy-MM-dd');
 		return d;
 		
+	}
+
+	public static transformDate2(date: Date, format: string){
+		const d = new DatePipe('pt-PT').transform(date, format);
+		return d;
 	}
 }
 

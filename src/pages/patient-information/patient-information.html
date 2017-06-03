@@ -1,13 +1,12 @@
-
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>patient-information</ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title>Add Patient</ion-title>
+    </ion-navbar>
 
 </ion-header>
 
 
 <ion-content #Content padding>
-  <patient-form (onSubmit)="submit($event)" [formType]="formType"></patient-form>
+    <patient-form (onSubmit)="submit($event)"></patient-form>
 </ion-content>
