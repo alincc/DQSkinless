@@ -1,119 +1,118 @@
 <ion-header>
-	<ion-navbar color="primary">
-		<button ion-button menuToggle>
+    <ion-navbar color="primary">
+        <button ion-button menuToggle>
 			<ion-icon name="menu"></ion-icon>
 		</button>
-		<ion-title>
-			Schedule
-		</ion-title>
-		<ion-buttons end>
-			<button ion-button clear icon-only (click)="goToSchedule()">
+        <ion-title>
+            Schedule
+        </ion-title>
+        <ion-buttons end>
+            <button ion-button clear icon-only (click)="goToSchedule()">
 				<ion-icon name="calendar" color="accent"></ion-icon>
 			</button>
-		</ion-buttons>
-	</ion-navbar>
+        </ion-buttons>
+    </ion-navbar>
 </ion-header>
-<ion-content >
-	<div #ServingNow class="serving">
-		<ion-item color="primary" *ngIf="serving" [@serve]>
-			<ion-avatar  item-left>
-				<!-- <img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg"> -->
-				<div>
-				{{getDefaultAvatar(serving)}}
-				</div>
-			</ion-avatar >
-			<h2 color="accent" (click)="view(0)">{{serving?.lastName}}, {{serving?.firstName}} {{serving?.middleName}}</h2>
-			<p>{{serving?.time | date: 'hh:mm a'}} </p>
-		</ion-item>
-	</div>
-	<!-- TODO: [ngClass]="{'minimize': controlCss}" -->
-	<div class="control-bar" >
-		<ion-grid>
-			<ion-row>
-				<ion-col >
-					<xhr-button icon-only clear full [disabled]="!serving || account.role != 1" (xhrClick)="done($event)">
-						<ion-icon name="thumbs-up" color="accent"></ion-icon>
-						Done
-					</xhr-button>
-				</ion-col>
-				<ion-col>
-					<xhr-button icon-only clear full [disabled]="!hasForQueue() || account.role != 1" (xhrClick)="next($event)">
-						<ion-icon name="swap" color="accent"></ion-icon>
-						Next
-					</xhr-button>
-				</ion-col>
-				<ion-col col-sm-0 col-md-0>
-					<button ion-button icon-only clear full (click)="showMore($event)">
+<ion-content>
+    <div #ServingNow class="serving">
+        <ion-item color="primary" *ngIf="serving" [@serve]>
+            <ion-avatar item-left>
+                <!-- <img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg"> -->
+                <div>
+                    {{getDefaultAvatar(serving)}}
+                </div>
+            </ion-avatar>
+            <h2 color="accent" (click)="view(0)">{{serving?.lastName}}, {{serving?.firstName}} {{serving?.middleName}}</h2>
+            <p>{{serving?.time | date: 'hh:mm a'}} </p>
+        </ion-item>
+    </div>
+    <!-- TODO: [ngClass]="{'minimize': controlCss}" -->
+    <div class="control-bar">
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <xhr-button icon-only clear full [disabled]="!serving || account.role != 1" (xhrClick)="done($event)">
+                        <ion-icon name="thumbs-up" color="accent"></ion-icon>
+                        Done
+                    </xhr-button>
+                </ion-col>
+                <ion-col>
+                    <xhr-button icon-only clear full [disabled]="!hasForQueue() || account.role != 1" (xhrClick)="next($event)">
+                        <ion-icon name="swap" color="accent"></ion-icon>
+                        Next
+                    </xhr-button>
+                </ion-col>
+                <ion-col col-sm-0 col-md-0>
+                    <button ion-button icon-only clear full (click)="showMore($event)">
 						<ion-icon name="more" color="accent"></ion-icon>
 						More
 					</button>
-				</ion-col>
-				<ion-col col-0 >
-					<xhr-button #queueAgainBtn icon-only  clear full [disabled]="!serving || account.role != 1" (xhrClick)="queueAgain($event)">
-						<ion-icon name="return-left" color="accent"></ion-icon>
-						Queue Again
-					</xhr-button>
-				</ion-col>
-				<ion-col col-0>
-					<xhr-button #removeBtn icon-only clear full [disabled]="!serving || account.role != 1"(xhrClick)="noShow($event)">
-						<ion-icon name="eye-off" color="accent"></ion-icon>
-						No-Show
-					</xhr-button>
-				</ion-col>
-				<ion-col col-0>
-					<button ion-button icon-only  clear full (click)="toggleReOrder()" [disabled]="account.role != 1">
+                </ion-col>
+                <ion-col col-0>
+                    <xhr-button #queueAgainBtn icon-only clear full [disabled]="!serving || account.role != 1" (xhrClick)="queueAgain($event)">
+                        <ion-icon name="return-left" color="accent"></ion-icon>
+                        Queue Again
+                    </xhr-button>
+                </ion-col>
+                <ion-col col-0>
+                    <xhr-button #removeBtn icon-only clear full [disabled]="!serving || account.role != 1" (xhrClick)="noShow($event)">
+                        <ion-icon name="eye-off" color="accent"></ion-icon>
+                        No-Show
+                    </xhr-button>
+                </ion-col>
+                <ion-col col-0>
+                    <button ion-button icon-only clear full (click)="toggleReOrder()" [disabled]="account.role != 1">
 						<ion-icon name="shuffle" color="accent" ></ion-icon>
 						Re-Order
 					</button>
-				</ion-col>
-			</ion-row>
-		</ion-grid>
-	</div>
-	<ion-list [reorder]="isReOrder" (ionItemReorder)="reorderItems($event)">
-		<ion-item-sliding *ngFor="let customer of queue;trackBy:TrackByPatientId" [@queue]>
-				<ion-item detail-push (click)="view(0)">
-					<ion-avatar  item-left>
-						<div>
-						{{getDefaultAvatar(customer)}}
-						</div>
-						<!-- <img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg"> -->
-					</ion-avatar >
-					<h3>{{customer.lastName}}, {{customer.firstName}} {{customer.middleName}}</h3>
-					<!-- <p>Time: {{customer.time}} </p> -->
-					<p>Time: {{customer.time | date : 'hh:mm a'}}</p>
-					<!-- <p>Hospital/Clinic: {{customer.clinic}}</p> -->
-					<ion-icon [name]="getTypeIcon(customer)"></ion-icon>
-					<ion-icon [name]="getStatusIcon(customer)"></ion-icon>
-				</ion-item>
-			<ion-item-options side="left">
-				<xhr-button color="danger" (xhrClick)="delete($event, customer)">
-					<ion-icon name="eye-off"></ion-icon>
-					No Show
-				</xhr-button>
-				<button ion-button color="secondary" (click)="addOrEditQueue( customer)">
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+    <ion-list [reorder]="isReOrder" (ionItemReorder)="reorderItems($event)">
+        <ion-item-sliding *ngFor="let customer of queue;trackBy:TrackByPatientId" [@queue]>
+            <ion-item detail-push (click)="view(customer.patientId)">
+                <ion-avatar item-left>
+                    <div>
+                        {{getDefaultAvatar(customer)}}
+                    </div>
+                    <!-- <img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg"> -->
+                </ion-avatar>
+                <h3>{{customer.lastName}}, {{customer.firstName}} {{customer.middleName}}</h3>
+                <!-- <p>Time: {{customer.time}} </p> -->
+                <p>Time: {{customer.time | date : 'hh:mm a'}}</p>
+                <!-- <p>Hospital/Clinic: {{customer.clinic}}</p> -->
+                <ion-icon [name]="getTypeIcon(customer)"></ion-icon>
+                <ion-icon [name]="getStatusIcon(customer)"></ion-icon>
+            </ion-item>
+            <ion-item-options side="left">
+                <xhr-button color="danger" (xhrClick)="delete($event, customer)">
+                    <ion-icon name="eye-off"></ion-icon>
+                    No Show
+                </xhr-button>
+                <button ion-button color="secondary" (click)="addOrEditQueue( customer)">
 					<ion-icon name="md-create"></ion-icon>
 					Edit
 				</button>
-			</ion-item-options>
-			<ion-item-options side="right">
-				<xhr-button color="secondary" *ngFor="let button of getButtons(customer)" (xhrClick)="button.clickFn($event, customer)">
-					<ion-icon [name]="button.icon"></ion-icon>
-					{{button.name}}
-				</xhr-button>
-				<xhr-button color="secondary" (xhrClick)="serveNow($event, customer)"
-				*ngIf="account.role == 1">
-					<ion-icon name="clipboard"></ion-icon>
-					Serve Now
-				</xhr-button>
-			</ion-item-options>
-		</ion-item-sliding>
-	</ion-list> 
-	<ion-fab bottom right>
-		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
-		<ion-fab-list side="left">
-			<button color="accent-light" ion-fab (click)="addOrEditQueue()"><ion-icon name="person-add"></ion-icon></button>
-			<button color="accent-light" ion-fab><ion-icon name="search"></ion-icon>
+            </ion-item-options>
+            <ion-item-options side="right">
+                <xhr-button color="secondary" *ngFor="let button of getButtons(customer)" (xhrClick)="button.clickFn($event, customer)">
+                    <ion-icon [name]="button.icon"></ion-icon>
+                    {{button.name}}
+                </xhr-button>
+                <xhr-button color="secondary" (xhrClick)="serveNow($event, customer)" *ngIf="account.role == 1">
+                    <ion-icon name="clipboard"></ion-icon>
+                    Serve Now
+                </xhr-button>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+    <ion-fab bottom right>
+        <button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
+        <ion-fab-list side="left">
+            <button color="accent-light" ion-fab (click)="addOrEditQueue()"><ion-icon name="person-add"></ion-icon></button>
+            <button color="accent-light" ion-fab><ion-icon name="search"></ion-icon>
 			</button>
-		</ion-fab-list>
-	</ion-fab>
+        </ion-fab-list>
+    </ion-fab>
 </ion-content>

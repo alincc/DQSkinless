@@ -3,15 +3,32 @@ import { RootNavController } from '../../services';
 import { timeline } from './timeline.mock';
 import { ConsultationFormPage } from '../consultation-form/consultation-form';
 import { PatientDoctorRelationshipPage } from '../patient-doctor-relationship/patient-doctor-relationship.page';
+import { PatientProfileService } from './patient-profile.service';
+import { NavParams } from "ionic-angular";
 
 @Component({
 	selector: 'patient-profile-page',
-	templateUrl: 'patient-profile.html'
+	templateUrl: 'patient-profile.html',
+	providers: [PatientProfileService]
 })
 export class PatientProfilePage {
 	public timeline: any;
-	constructor(private rootNav: RootNavController) {
+
+	private patientName;
+	private registrationDate;
+	private contact;
+	private age;
+	private address;
+	private patientId;
+
+	constructor(private rootNav: RootNavController,
+				private service: PatientProfileService,
+				private navParams: NavParams) {
 		this.timeline = timeline;
+
+		this.patientId = navParams.data;
+		
+		this.fetchPatientInformation();
 	}
 
 	open() {
@@ -23,5 +40,15 @@ export class PatientProfilePage {
 		this.rootNav.push(PatientDoctorRelationshipPage, {
 			pageHeader: 'Share Patient'
 		});
+	}
+
+	private fetchPatientInformation(){
+
+		this.service.getPatientDetails(this.patientId).subscribe(response =>{
+			if(response.status){
+				this.address = response.result.address;
+				this.patientName = response.result.lastname;
+			}
+		})
 	}
 }

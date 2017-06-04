@@ -28,7 +28,7 @@
                 </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col col-7 col-sm-6 col-md-6>
+                <ion-col col-7 col-sm-6 col-md-3>
                     <ion-label class="form-label">Gender *</ion-label>
                     <ion-list radio-group name="gender" formControlName="gender">
                         <ion-item *ngFor="let gender of genderList; let i = index">
@@ -40,7 +40,7 @@
                         {{ errors.gender }}
                     </div>
                 </ion-col>
-                <ion-col col-5 col-sm-5 col-md-6>
+                <ion-col col-5 col-sm-5 col-md-3>
                     <ion-label class="form-label">Age</ion-label>
                     <ion-item round>
                         <ion-input type="number" name="age" formControlName="age"></ion-input>
@@ -49,6 +49,7 @@
                         {{ errors.age }}
                     </div>
                 </ion-col>
+
             </ion-row>
             <ion-row>
                 <ion-col col-6 col-sm-6 col-md-6>
