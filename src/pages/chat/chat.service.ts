@@ -34,14 +34,20 @@ export class ChatServices{
 					inboxObserver.next(response);
 				})
 			});
-			this.storage.clinicSubject.subscribe(cilnic => {
-				this.clinicId = cilnic.clinicId;
+			this.storage.clinicSubject.subscribe(clinic => {
+				this.clinicId = clinic.clinicId;
 				this.refreshInbox(response => {
 					inboxObserver.next(response);
 				})
 			});
 			this.push.subscribeToRecievedPush(ONE_SIGNAL.PUSH_TYPE.MESSAGES).subscribe(payload => {
-				this.db.executeSQL(DB_CONFIG.SQL.STORE_TO_INBOX, payload.title, payload.body, null, payload.additionalData.clinic, this.storage.account.userId )
+				let sender;
+				if(payload.additionalData.userId === this.storage.account.userId){
+					sender = "Me";
+				}else{
+					sender = payload.title;
+				}
+				this.db.executeSQL(DB_CONFIG.SQL.STORE_TO_INBOX, sender, payload.body, null, payload.additionalData.clinic, this.storage.account.userId, payload.additionalData.userId )
 				.then(response => {
 					this.refreshInbox(response => {
 						inboxObserver.next(response);
@@ -66,15 +72,15 @@ export class ChatServices{
 					// if(item.userId !== this.userId){
 						if(accountTag){
 							accountTag.push({operator: "OR"});
-							accountTag.push({field:"tag", key: PUSH_TAGS.USER_ID, relation: "=", value: item.userId});
+							accountTag.push({field:"tag", key: PUSH_TAGS.USER_ID, relation: "=", value: item.userId + ""});
 						}else{
-							accountTag = [{field:"tag", key: PUSH_TAGS.USER_ID, relation: "=", value: item.userId}];
+							accountTag = [{field:"tag", key: PUSH_TAGS.USER_ID, relation: "=", value: item.userId + ""}];
 						}
 					// }
 				})
-	        	let details = this.storage.userDetails;
-	        	let title = details.lastname + ", " + details.firstname + " " + details.middleName;
-	        	this.push.sendMessage(title, msg, accountTag).then( response => {
+				let sender = this.getSender();
+	        	// this.db.executeSQL(DB_CONFIG.SQL.STORE_TO_INBOX, sender, msg, null, this.storage.clinic.clinicId, this.storage.account.userId);
+	        	this.push.sendMessage(sender, msg, accountTag, new Date()).subscribe( response => {
 	        		console.log(response);
         			resolve(response);
 	        	}, err => {
@@ -87,6 +93,11 @@ export class ChatServices{
 	}
 
 	public getRecipientsList(){
-        return this.http.get(CONFIG.API.getClinicMember, [this.clinicId]);
+        return this.http.get(CONFIG.API.getClinicMember, [this.clinicId || this.storage.clinic.clinicId]);
+	}
+
+	public getSender(){
+		let details = this.storage.userDetails;
+	    return details.lastname + ", " + details.firstname + (details.middleName ? (" " + details.middleName) : "");
 	}
 }
