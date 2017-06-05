@@ -65,6 +65,9 @@ export const ONE_SIGNAL = {
     PROJECT_NUMBER: '79472100423',
     PUSH_TYPE: {
         MESSAGES: 'messages'
+    },
+    API: {
+        CREATE : "https://onesignal.com/api/v1/notifications"
     }
 }
 
@@ -74,6 +77,7 @@ export const DB_CONFIG = {
     LOCATION: 'default',
     SQL: {
         GET_INBOX : 'select * from messages where clinic = ? and account = ? order by id desc limit ?',
-        STORE_TO_INBOX : "insert into messages(name,message,avatar, clinic, account) values (?,?,?,?,?)"
+        STORE_TO_INBOX : "insert into messages(name,message,avatar, clinic, account, userId) values (?,?,?,?,?,?)",
+        CREATE : 'create table if not exists messages(id integer primary key autoincrement, name varchar(15), date date, message varchar(500), avatar varchar(100) , clinic integer, account integer, status integer default 0, userId integer)'
     }
 }
