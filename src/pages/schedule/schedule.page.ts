@@ -103,8 +103,9 @@ export class SchedulePage {
 	}
 
 	public initSchedule(clinicId) {
-		let loading = this.createLoading();
-		loading.present();
+		// let loading = this.createLoading();
+		// loading.present();
+		this.queue = null;
 
 		this.controlCss = false;
 		this.isReOrder = false;
@@ -140,7 +141,7 @@ export class SchedulePage {
 						console.log("fetching Queue");
 						this.fetchQueue(response => {
 							console.log("fetched Queue");
-							loading.dismiss();
+							// loading.dismiss();
 						});
 					} else {
 						if (this.requestForRefresh) {

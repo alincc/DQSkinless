@@ -69,6 +69,7 @@
             </ion-row>
         </ion-grid>
     </div>
+    <content-with-loading [isLoading]="!queue">
     <ion-list [reorder]="isReOrder" (ionItemReorder)="reorderItems($event)">
         <ion-item-sliding *ngFor="let customer of queue;trackBy:TrackByPatientId" [@queue]>
             <ion-item detail-push (click)="view(customer.patientId)">
@@ -107,6 +108,7 @@
             </ion-item-options>
         </ion-item-sliding>
     </ion-list>
+    </content-with-loading>
     <ion-fab bottom right>
         <button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
         <ion-fab-list side="left">
