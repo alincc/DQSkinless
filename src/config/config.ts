@@ -30,12 +30,7 @@ export const CONFIG = {
         getClinicTimeSlotByClinicId: '/clinictimeslots/cidli',
         getClinicContactByClinicId: '/cliniccontacts/cidli',
         getClinicMember: `/members/clnid`,
-
-<<<<<<< HEAD
-        patientaccess: '/patientaccess'
-=======
         patientDetails: '/patientdetails'
->>>>>>> origin/patient-form
     },
     SOCKETS: {
         queue: '/queue-socket'
@@ -71,7 +66,7 @@ export const ONE_SIGNAL = {
         MESSAGES: 'messages'
     },
     API: {
-        CREATE : "https://onesignal.com/api/v1/notifications"
+        CREATE: "https://onesignal.com/api/v1/notifications"
     }
 }
 
@@ -80,8 +75,8 @@ export const DB_CONFIG = {
     DB_NAME: "MedAppWS.db",
     LOCATION: 'default',
     SQL: {
-        GET_INBOX : 'select * from messages where clinic = ? and account = ? order by id desc limit ?',
-        STORE_TO_INBOX : "insert into messages(name,message,avatar, clinic, account, userId) values (?,?,?,?,?,?)",
-        CREATE : 'create table if not exists messages(id integer primary key autoincrement, name varchar(15), date date, message varchar(500), avatar varchar(100) , clinic integer, account integer, status integer default 0, userId integer)'
+        GET_INBOX: 'select * from messages where clinic = ? and account = ? order by id desc limit ?',
+        STORE_TO_INBOX: "insert into messages(name,message,avatar, clinic, account, userId) values (?,?,?,?,?,?)",
+        CREATE: 'create table if not exists messages(id integer primary key autoincrement, name varchar(15), date date, message varchar(500), avatar varchar(100) , clinic integer, account integer, status integer default 0, userId integer)'
     }
 }
