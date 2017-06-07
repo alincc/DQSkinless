@@ -11,7 +11,7 @@ import { REGEX, YEAR_RANGE } from '../../config/config';
 import { ContactModal } from '../contact-modal/contact-modal.component';
 import { ArraySubject } from '../../shared/model/model';
 
-import { StackedServices } from '../../utilities/utilities';
+import { Utilities, StackedServices } from '../../utilities/utilities';
 
 @Component({
     selector: 'profile-form',
@@ -47,10 +47,8 @@ export class ProfileForm implements OnInit {
     private email: AbstractControl;
     private lastName: AbstractControl;
     private firstName: AbstractControl;
-    private year: AbstractControl;
-    private month: AbstractControl;
-    private day: AbstractControl;
     private gender: AbstractControl;
+    private birthDate: AbstractControl;
     private stack: StackedServices;
 
     public isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -102,10 +100,8 @@ export class ProfileForm implements OnInit {
             email: '',
             lastName: '',
             firstName: '',
-            year: '',
-            month: '',
-            day: '',
-            gender: ''
+            gender: '',
+            birthDate: ''
         };
 
         this.allowableMedicalArts = LOVS.ALLOWABLE_MEDICAL_ARTS;
@@ -153,12 +149,9 @@ export class ProfileForm implements OnInit {
         this.profileForm.get('firstName').setValue(this.profile.firstname);
         this.profileForm.get('middleName').setValue(this.profile.middlename);
         this.profileForm.get('gender').setValue(this.profile.gender);
+        const bday = this.profile.birthdate ? Utilities.getISODate(new Date(+this.profile.birthdate)) : '';
+        this.profileForm.get('birthDate').setValue(bday);
         this.profileForm.get('address').setValue(this.profile.address);
-
-        const bday = this.profile.birthdate ? new Date(+this.profile.birthdate) : null;
-        this.profileForm.get('year').setValue(bday ? bday.getFullYear() : '');
-        this.profileForm.get('month').setValue(bday ? bday.getMonth() : '');
-        this.profileForm.get('day').setValue(bday ? bday.getDate() : '');
     }
 
     private createProfileForm() {
@@ -171,10 +164,8 @@ export class ProfileForm implements OnInit {
             lastName: ['', Validators.required],
             firstName: ['', Validators.required],
             middleName: '',
-            year: ['', Validators.required],
-            month: ['', Validators.required],
-            day: ['', Validators.required],
             gender: ['', Validators.required],
+            birthDate: ['', Validators.required],
             address: ''
         });
 
@@ -184,10 +175,8 @@ export class ProfileForm implements OnInit {
         this.email = this.profileForm.get('email');
         this.lastName = this.profileForm.get('lastName');
         this.firstName = this.profileForm.get('firstName');
-        this.year = this.profileForm.get('year');
-        this.month = this.profileForm.get('month');
-        this.day = this.profileForm.get('day');
         this.gender = this.profileForm.get('gender');
+        this.birthDate = this.profileForm.get('birthDate');
 
         this.prc.valueChanges.subscribe(newValue => {
             this.errors.prc = this.prc.hasError('required') ? 'PRC is required' : '';
@@ -213,41 +202,13 @@ export class ProfileForm implements OnInit {
             this.errors.firstName = this.firstName.hasError('required') ? 'First Name is required' : '';
         });
 
-        this.year.valueChanges.subscribe(newValue => {
-            this.errors.year = this.year.hasError('required') ? 'Birth Year is required' : '';
-        });
-
-        this.month.valueChanges.subscribe(newValue => {
-            this.errors.month = this.month.hasError('required') ? 'Birth Month is required' : '';
-        });
-
-        this.day.valueChanges.subscribe(newValue => {
-            this.errors.day = this.day.hasError('required') ? 'Birth Day is required' : '';
-        });
-
         this.gender.valueChanges.subscribe(newValue => {
             this.errors.gender = this.gender.hasError('required') ? 'Gender is required' : '';
         });
-    }
 
-    public changeYear() {
-        this.clearMonthLOV();
-        this.clearDayLOV();
-    }
-
-    public changeMonth() {
-        this.clearDayLOV();
-        this.createDaysLov(this.getLastDayOfTheMonth(this.year.value, this.month.value));
-    }
-
-    private clearMonthLOV() {
-        this.month.setValue('');
-        this.month.markAsPristine();
-    }
-
-    private clearDayLOV() {
-        this.day.setValue('');
-        this.day.markAsPristine();
+        this.birthDate.valueChanges.subscribe(newValue => {
+            this.errors.birthDate = this.birthDate.hasError('required') ? 'Birth Date is required' : '';
+        });
     }
 
     private getLastDayOfTheMonth(year, month) {
@@ -308,10 +269,8 @@ export class ProfileForm implements OnInit {
         this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
         this.errors.lastName = this.lastName.hasError('required') ? 'Last Name is required' : '';
         this.errors.firstName = this.firstName.hasError('required') ? 'First Name is required' : '';
-        this.errors.year = this.year.hasError('required') ? 'Birth Year is required' : '';
-        this.errors.month = this.month.hasError('required') ? 'Birth Month is required' : '';
-        this.errors.day = this.day.hasError('required') ? 'Birth Day is required' : '';
         this.errors.gender = this.gender.hasError('required') ? 'Gender is required' : '';
+        this.errors.birthDate = this.birthDate.hasError('required') ? 'Birth Date is required' : '';
         this.errors.contactNo = this.hasContact() ? '' : "Contact is required";
     }
 
@@ -324,8 +283,8 @@ export class ProfileForm implements OnInit {
         this.profile.lastname = this.profileForm.get('lastName').value;
         this.profile.firstname = this.profileForm.get('firstName').value;
         this.profile.middlename = this.profileForm.get('middleName').value;
-        this.profile.birthdate = this.profileForm.get('year').value + '-' + this.profileForm.get('month').value + '-' + this.profileForm.get('day').value;
         this.profile.gender = this.profileForm.get('gender').value;
+        this.profile.birthdate = this.profileForm.get('birthDate').value;
         this.profile.address = this.profileForm.get('address').value;
     }
 
