@@ -28,6 +28,7 @@ import { File } from '@ionic-native/file';
 import { Network } from '@ionic-native/network';
 import { OneSignal } from '@ionic-native/onesignal';
 import { SQLite } from '@ionic-native/sqlite';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import { SQLite } from '@ionic-native/sqlite';
     File,
     SQLite,
     OneSignal,
-    Network
+    Network,
+    BackgroundMode
   ]
 })
 export class AppModule { }

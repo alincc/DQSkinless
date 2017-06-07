@@ -3,6 +3,8 @@ import { Platform, AlertController, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Network } from '@ionic-native/network';
+import { BackgroundMode } from '@ionic-native/background-mode';
+
 //core
 import { HttpService, Push, Storage } from '../services';
 import { MESSAGES } from '../config/config';
@@ -23,7 +25,8 @@ export class MyApp {
     private statusBar: StatusBar,
     private network: Network,
     private push: Push,
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    private backgroundMode: BackgroundMode) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -39,6 +42,8 @@ export class MyApp {
         // push.openedObservable.subscribe(response =>{
         //   console.log('opened', response);
         // })
+        //engable background mode
+        this.backgroundMode.enable();   
       }
       //error message
       httpService.errorEvent.subscribe(_err => {
@@ -66,7 +71,8 @@ export class MyApp {
         setTimeout(() => {
           this.presentToast(MESSAGES.ERROR.NO_INTERNET);
         }, 3000);
-      });            
+      });
+
     });
   }
 

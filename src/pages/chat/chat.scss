@@ -1,8 +1,16 @@
 chat-page{
+	.scroll-content{
+		display: flex;
+		flex-direction: column-reverse;
+	}
+
 	.form-inline{
 		display: flex;
 		ion-input{
 			background: $light;
+		}
+		.button{
+			width: 42px;
 		}
 	}
 
