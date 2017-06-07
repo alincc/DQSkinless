@@ -22,6 +22,7 @@ export class Utilities {
 	public static padDigits(number, digits) {
 		return Array(Math.max(digits - String(number).length + 1, 0)).join("0") + number;
 	}
+	
 	public static transformDate(date: Date) {
 		const d = new DatePipe('pt-PT').transform(date, 'yyyy-MM-dd');
 		return d;

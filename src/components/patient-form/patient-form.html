@@ -28,7 +28,18 @@
                 </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col col-7 col-sm-6 col-md-3>
+                <ion-col col-12 col-sm-12 col-md-3>
+                    <ion-label class="form-label">Legal Status *</ion-label>
+                    <ion-item clean>
+                        <ion-select class="options" name="legalStatus" formControlName="legalStatus">
+                            <ion-option *ngFor="let ls of legalStatusList; let i = index" [value]="i">{{ ls }}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                    <div class="error-message" *ngIf="legalStatus.dirty &&  legalStatus.invalid">
+                        {{ errors.legalStatus }}
+                    </div>
+                </ion-col>
+                <ion-col col-7 col-sm-7 col-md-3>
                     <ion-label class="form-label">Gender *</ion-label>
                     <ion-list radio-group name="gender" formControlName="gender">
                         <ion-item *ngFor="let gender of genderList; let i = index">
@@ -41,7 +52,7 @@
                     </div>
                 </ion-col>
                 <ion-col col-5 col-sm-5 col-md-3>
-                    <ion-label class="form-label">Age</ion-label>
+                    <ion-label class="form-label">Age *</ion-label>
                     <ion-item round>
                         <ion-input type="number" name="age" formControlName="age"></ion-input>
                     </ion-item>
@@ -49,11 +60,10 @@
                         {{ errors.age }}
                     </div>
                 </ion-col>
-
             </ion-row>
             <ion-row>
                 <ion-col col-6 col-sm-6 col-md-6>
-                    <ion-label class="form-label">Birth Date</ion-label>
+                    <ion-label class="form-label">Birth Date *</ion-label>
                     <ion-datetime displayFormat="MMMM DD, YYYY" formControlName="birthDate"></ion-datetime>
                     <div class="error-message" *ngIf="patientForm.get('birthDate')?.dirty &&  patientForm.get('birthDate').invalid">
                         {{ errors.birthDate }}
@@ -78,7 +88,7 @@
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <ion-label class="form-label">Address</ion-label>
+                    <ion-label class="form-label">Address *</ion-label>
                     <ion-item round>
                         <ion-textarea name="address" formControlName="address"></ion-textarea>
                     </ion-item>
