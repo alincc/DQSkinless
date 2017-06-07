@@ -12,6 +12,7 @@ import { ScheduleModal } from '../components/schedule-modal/schedule-modal.compo
 import { SearchUserModal } from '../components/search-user-modal/search-user-modal.component';
 import { AddQueueFormModal } from '../components/add-queue-form-modal/add-queue-form.modal.component';
 import { ContentWithLoading } from '../components/content-with-loading/content-with-loading.component';
+import { PatientForm } from '../components/patient-form/patient-form.component';
 
 export const components = [
     Accordion,
@@ -27,5 +28,6 @@ export const components = [
     ScheduleModal,
     SearchUserModal,
     AddQueueFormModal,
-    ContentWithLoading
+    ContentWithLoading,
+    PatientForm
 ];
