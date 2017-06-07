@@ -1,6 +1,7 @@
 import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Platform, Content } from 'ionic-angular';
 import { ChatServices } from './chat.service';
+import { chat_mock } from './chat.mock';
 
 @Component({
 	selector: 'chat-page',
@@ -13,6 +14,7 @@ export class ChatPage{
 	private msg: string;
 	@ViewChild(Content)
 	private content: Content;
+	private sending: boolean;
 
 	constructor(private service : ChatServices,
 		private platform : Platform,
@@ -27,24 +29,29 @@ export class ChatPage{
 				this.messages = [];
 				for (var i = 0; i < response.rows.length; i++) {
 					let item = response.rows.item(i);
-				    this.messages.unshift(item);
+				    this.messages.push(item);
 				}
 				this.detector.detectChanges();
 				if(snapToBottom){
 					this.content.scrollToBottom();
 				}
 			})
+		}else{
+			this.messages = chat_mock;
 		}
 	}
 
 
 	private send(){
+		this.sending = true;
 		let msg = this.msg;
 		this.service.sendMessage(msg).then(response => {
 			this.msg = "";
 			console.log(response);
+			this.sending = false;
 		}, err => {
 			console.log(err);
+			this.sending = false;
 		})
 	}
 }

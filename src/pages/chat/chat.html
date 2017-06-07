@@ -36,7 +36,9 @@
 <ion-footer>
 	<ion-toolbar color="secondary">
 	<form class="form-inline" (submit)="send()">
-	<ion-input placholder="Type a message" [(ngModel)]="msg" name="msg"></ion-input> <button ion-button clear icon-only><ion-icon name="send"></ion-icon></button>
+	<ion-input placholder="Type a message" [(ngModel)]="msg" name="msg" [disabled]="sending"></ion-input>
+	<button ion-button clear icon-only [disabled]="!msg || sending"><ion-icon name="send"  [hidden]="sending" ></ion-icon><ion-spinner name="dots" [hidden]="!sending"></ion-spinner></button>
+	
 	</form>
 	</ion-toolbar>
 </ion-footer>

@@ -20,6 +20,7 @@
     "@angular/platform-browser": "4.0.2",
     "@angular/platform-browser-dynamic": "4.0.2",
     "@ionic-native/action-sheet": "^3.5.0",
+    "@ionic-native/background-mode": "^3.12.1",
     "@ionic-native/camera": "^3.5.0",
     "@ionic-native/core": "^3.6.1",
     "@ionic-native/device": "^3.5.0",
