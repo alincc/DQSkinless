@@ -114,6 +114,13 @@ export const LOVS = {
         'Username',
         'Last name',
         'First name'
+    ],
+    LEGAL_STATUS: [
+        'Single',
+        'Married',
+        'Widowed',
+        'Separated',
+        'Divorced'
     ]
 }
 
