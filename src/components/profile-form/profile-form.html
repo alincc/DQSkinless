@@ -1,191 +1,190 @@
-<form [formGroup]="profileForm" #form="ngForm" (ngSubmit)="xhr.submit($event)">
-    <div class="row form-group">
-        <ion-grid>
-            <ion-row>
-                <ion-col col-12 col-sm-12 col-md-4>
-                    <ion-label class="form-label">Last Name *</ion-label>
-                    <ion-item round>
-                        <ion-input name="lastName" formControlName="lastName"></ion-input>
-                    </ion-item>
-                    <div class="error-message" *ngIf="profileForm.get('lastName')?.dirty &&  profileForm.get('lastName').invalid">
-                        {{ errors.lastName }}
-                    </div>
-                </ion-col>
-                <ion-col col-12 col-sm-12 col-md-4>
-                    <ion-label class="form-label">First Name *</ion-label>
-                    <ion-item round>
-                        <ion-input name="firstName" formControlName="firstName"></ion-input>
-                    </ion-item>
-                    <div class="error-message" *ngIf="profileForm.get('firstName')?.dirty &&  profileForm.get('firstName').invalid">
-                        {{ errors.firstName }}
-                    </div>
-                </ion-col>
-                <ion-col col-12 col-sm-12 col-md-4>
-                    <ion-label class="form-label">Middle Name</ion-label>
-                    <ion-item round>
-                        <ion-input name="middleName" formControlName="middleName"></ion-input>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-            <div [hidden]="formType !== 'D'">
+<content-with-loading [isLoading]="isLoading | async">
+    <form [formGroup]="profileForm" #form="ngForm" (ngSubmit)="xhr.submit($event)">
+        <div class="row form-group">
+            <ion-grid>
                 <ion-row>
-                    <ion-col col-12 col-sm-6 col-md-6>
-                        <ion-label class="form-label">PRC License *</ion-label>
+                    <ion-col col-12 col-sm-12 col-md-4>
+                        <ion-label class="form-label">Last Name *</ion-label>
                         <ion-item round>
-                            <ion-input type="number" name="prc" formControlName="prc"></ion-input>
+                            <ion-input name="lastName" formControlName="lastName"></ion-input>
                         </ion-item>
-                        <div class="error-message" *ngIf="profileForm.get('prc')?.dirty && profileForm.get('prc').invalid">
-                            {{ errors.prc }}
+                        <div class="error-message" *ngIf="lastName.dirty &&  lastName.invalid">
+                            {{ errors.lastName }}
                         </div>
                     </ion-col>
-                    <ion-col col-12 col-sm-6 col-md-6>
-                        <ion-label class="form-label">PTR</ion-label>
+                    <ion-col col-12 col-sm-12 col-md-4>
+                        <ion-label class="form-label">First Name *</ion-label>
                         <ion-item round>
-                            <ion-input type="number" name="ptr" formControlName="ptr"></ion-input>
+                            <ion-input name="firstName" formControlName="firstName"></ion-input>
                         </ion-item>
-                        <div class="error-message" *ngIf="profileForm.get('ptr')?.dirty &&  profileForm.get('ptr').invalid">
-                            {{ errors.ptr }}
+                        <div class="error-message" *ngIf="firstName.dirty &&  firstName.invalid">
+                            {{ errors.firstName }}
                         </div>
+                    </ion-col>
+                    <ion-col col-12 col-sm-12 col-md-4>
+                        <ion-label class="form-label">Middle Name</ion-label>
+                        <ion-item round>
+                            <ion-input name="middleName" formControlName="middleName"></ion-input>
+                        </ion-item>
                     </ion-col>
                 </ion-row>
-                <ion-row>
-                    <ion-col col-12 col-sm-6 col-md-6>
-                        <ion-label class="form-label">Medical Arts *</ion-label>
-                        <ion-item clean>
-                            <ion-select class="options" name="medicalArt" formControlName="medicalArt">
-                                <div *ngFor="let type of medicalArts; let i = index">
-                                    <ion-option *ngIf="allowableMedicalArts.includes(i)" [value]="i">{{ type }}</ion-option>
-                                </div>
-                            </ion-select>
-                        </ion-item>
-                        <div class="error-message" *ngIf="profileForm.get('medicalArt')?.dirty &&  profileForm.get('medicalArt').invalid">
-                            {{ errors.medicalArt }}
-                        </div>
-                    </ion-col>
-                    <ion-col col-12 col-sm-6 col-md-6>
-                        <ion-label class="form-label">Specialization *</ion-label>
-                        <ion-item round>
-                            <ion-input name="specialization" formControlName="specialization"></ion-input>
-                        </ion-item>
-                        <div class="error-message" *ngIf="profileForm.get('specialization')?.dirty &&  profileForm.get('specialization').invalid">
-                            {{ errors.specialization }}
-                        </div>
-                    </ion-col>
-                </ion-row>
-            </div>
-            <ion-row>
-                <ion-col col-12 col-sm-12 col-md-6>
-                    <ion-label class="form-label">Email *</ion-label>
-                    <ion-item round>
-                        <ion-input type="email" name="email" formControlName="email"></ion-input>
-                    </ion-item>
-                    <div class="error-message" *ngIf="profileForm.get('email')?.dirty &&  profileForm.get('email').invalid">
-                        {{ errors.email }}
-                    </div>
-                </ion-col>
-            </ion-row>
-            <ion-row class="contact-control">
-                <ion-col col-6 col-sm-5 col-md-4>
-                    <ion-label class="form-label">Contact *</ion-label>
-                </ion-col>
-                <ion-col col-6 col-sm-5 col-md-4>
-                    <ion-label class="form-link" (click)="addContact($event)" color="accent-dark">+ add Contact</ion-label>
-                </ion-col>
-            </ion-row>
-            <ion-row class="contact-header">
-                <ion-col col-4 col-sm-3 col-md-3>
-                    <ion-label class="form-label">Type</ion-label>
-                </ion-col>
-                <ion-col col-6 col-sm-6 col-md-4>
-                    <ion-label class="form-label">Detail</ion-label>
-                </ion-col>
-            </ion-row>
-            <ion-row class="contact-details" *ngFor="let contact of contacts.value;let idx=index">
-                <ion-col col-4 col-sm-3 col-md-3>
-                    <ion-label>{{contactType[contact?.contactType]}}</ion-label>
-                </ion-col>
-                <ion-col col-6 col-sm-6 col-md-4>
-                    <ion-label>{{contact?.contact}}</ion-label>
-                </ion-col>
-                <ion-col col-2 col-sm-1 col-md-1>
-                    <ion-icon name="close" (click)="removeContact($event,contact, idx)" color="accent-dark"></ion-icon>
-                </ion-col>
-            </ion-row>
-            <ion-row *ngIf="errors.contactNo">
-                <ion-col col-12 col-sm-12 col-md-12>
-                    <div class="error-message">
-                        {{ errors.contactNo }}
-                    </div>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col col-12 col-sm-6 col-md-6>
-                    <ion-label class="form-label">Gender *</ion-label>
-                    <ion-list radio-group name="gender" formControlName="gender">
-                        <ion-item *ngFor="let gender of genderList; let i = index">
-                            <ion-radio color="primary" [value]="i"></ion-radio>
-                            <ion-label>{{ gender }}</ion-label>
-                        </ion-item>
-                    </ion-list>
-                    <div class="error-message" *ngIf="profileForm.get('gender')?.dirty &&  profileForm.get('gender').invalid">
-                        {{ errors.gender }}
-                    </div>
-                </ion-col>
-                <ion-col col-12 col-sm-6 col-md-6>
+                <div [hidden]="formType !== 'D'">
                     <ion-row>
-                        <ion-col col-12 col-sm-12 col-md-12>
-                            <ion-label class="form-label">Birth Date *</ion-label>
-                        </ion-col>
-
-                        <ion-col col-4 col-sm-4 col-md-4>
-                            <ion-item clean>
-                                <ion-select class="options" name="year" formControlName="year" placeholder="Year" (ionChange)="changeYear()">
-                                    <ion-option *ngFor="let y of years" [value]="y">{{ y }}</ion-option>
-                                </ion-select>
+                        <ion-col col-12 col-sm-6 col-md-6>
+                            <ion-label class="form-label">PRC License *</ion-label>
+                            <ion-item round>
+                                <ion-input type="number" name="prc" formControlName="prc"></ion-input>
                             </ion-item>
-                        </ion-col>
-                        <ion-col col-4 col-sm-4 col-md-4>
-                            <ion-item clean>
-                                <ion-select class="options" name="month" formControlName="month" placeholder="Month" (ionChange)="changeMonth()">
-                                    <ion-option *ngFor="let m of months" [value]="m">{{ m }}</ion-option>
-                                </ion-select>
-                            </ion-item>
-                        </ion-col>
-                        <ion-col col-4 col-sm-4 col-md-4>
-                            <ion-item clean>
-                                <ion-select class="options" name="day" formControlName="day" placeholder="Day">
-                                    <ion-option *ngFor="let d of days" [value]="d">{{ d }}</ion-option>
-                                </ion-select>
-                            </ion-item>
-                        </ion-col>
-                        <ion-col col-12 col-sm-12 col-md-12>
-                            <div class="error-message" *ngIf="profileForm.get('year')?.dirty &&  profileForm.get('year').invalid">
-                                {{ errors.year }}
+                            <div class="error-message" *ngIf="prc.dirty && prc.invalid">
+                                {{ errors.prc }}
                             </div>
-                            <div class="error-message" *ngIf="profileForm.get('month')?.dirty &&  profileForm.get('month').invalid">
-                                {{ errors.month }}
+                        </ion-col>
+                        <ion-col col-12 col-sm-6 col-md-6>
+                            <ion-label class="form-label">PTR</ion-label>
+                            <ion-item round>
+                                <ion-input type="number" name="ptr" formControlName="ptr"></ion-input>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col col-12 col-sm-6 col-md-6>
+                            <ion-label class="form-label">Medical Arts *</ion-label>
+                            <ion-item clean>
+                                <ion-select class="options" name="medicalArt" formControlName="medicalArt">
+                                    <div *ngFor="let type of medicalArts; let i = index">
+                                        <ion-option *ngIf="allowableMedicalArts.includes(i)" [value]="i">{{ type }}</ion-option>
+                                    </div>
+                                </ion-select>
+                            </ion-item>
+                            <div class="error-message" *ngIf="medicalArt.dirty &&  medicalArt.invalid">
+                                {{ errors.medicalArt }}
                             </div>
-                            <div class="error-message" *ngIf="profileForm.get('day')?.dirty &&  profileForm.get('day').invalid">
-                                {{ errors.day }}
+                        </ion-col>
+                        <ion-col col-12 col-sm-6 col-md-6>
+                            <ion-label class="form-label">Specialization *</ion-label>
+                            <ion-item round>
+                                <ion-input name="specialization" formControlName="specialization"></ion-input>
+                            </ion-item>
+                            <div class="error-message" *ngIf="specialization.dirty &&  specialization.invalid">
+                                {{ errors.specialization }}
                             </div>
                         </ion-col>
                     </ion-row>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <ion-label class="form-label">Address</ion-label>
-                    <ion-item round>
-                        <ion-textarea name="address" formControlName="address"></ion-textarea>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
+                </div>
+                <ion-row>
+                    <ion-col col-12 col-sm-12 col-md-6>
+                        <ion-label class="form-label">Email *</ion-label>
+                        <ion-item round>
+                            <ion-input type="email" name="email" formControlName="email"></ion-input>
+                        </ion-item>
+                        <div class="error-message" *ngIf="email.dirty &&  email.invalid">
+                            {{ errors.email }}
+                        </div>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="contact-control">
+                    <ion-col col-6 col-sm-5 col-md-4>
+                        <ion-label class="form-label">Contact *</ion-label>
+                    </ion-col>
+                    <ion-col col-6 col-sm-5 col-md-4>
+                        <ion-label class="form-link" (click)="addContact($event)" color="accent-dark">+ add Contact</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="contact-header">
+                    <ion-col col-4 col-sm-3 col-md-3>
+                        <ion-label class="form-label">Type</ion-label>
+                    </ion-col>
+                    <ion-col col-6 col-sm-6 col-md-4>
+                        <ion-label class="form-label">Detail</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="contact-details" *ngFor="let contact of contacts.value;let idx=index">
+                    <ion-col col-4 col-sm-3 col-md-3>
+                        <ion-label>{{contactType[contact?.contactType]}}</ion-label>
+                    </ion-col>
+                    <ion-col col-6 col-sm-6 col-md-4>
+                        <ion-label>{{contact?.contact}}</ion-label>
+                    </ion-col>
+                    <ion-col col-2 col-sm-1 col-md-1>
+                        <ion-icon name="close" (click)="removeContact($event,contact, idx)" color="accent-dark"></ion-icon>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf="errors.contactNo">
+                    <ion-col col-12 col-sm-12 col-md-12>
+                        <div class="error-message">
+                            {{ errors.contactNo }}
+                        </div>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col col-12 col-sm-6 col-md-6>
+                        <ion-label class="form-label">Gender *</ion-label>
+                        <ion-list radio-group name="gender" formControlName="gender">
+                            <ion-item *ngFor="let gender of genderList; let i = index">
+                                <ion-radio color="primary" [value]="i"></ion-radio>
+                                <ion-label>{{ gender }}</ion-label>
+                            </ion-item>
+                        </ion-list>
+                        <div class="error-message" *ngIf="gender.dirty &&  gender.invalid">
+                            {{ errors.gender }}
+                        </div>
+                    </ion-col>
+                    <ion-col col-12 col-sm-6 col-md-6>
+                        <ion-row>
+                            <ion-col col-12 col-sm-12 col-md-12>
+                                <ion-label class="form-label">Birth Date *</ion-label>
+                            </ion-col>
 
-        </ion-grid>
-    </div>
-    <div text-center>
-        <xhr-button #xhr round large color="accent" type="submit" [disabled]="profileForm.pristine || form.pristine" (xhrClick)="submitForm($event)">
-            Submit
-        </xhr-button>
-    </div>
-</form>
+                            <ion-col col-4 col-sm-4 col-md-4>
+                                <ion-item clean>
+                                    <ion-select class="options" name="year" formControlName="year" placeholder="Year" (ionChange)="changeYear()">
+                                        <ion-option *ngFor="let y of years" [value]="y">{{ y }}</ion-option>
+                                    </ion-select>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col col-4 col-sm-4 col-md-4>
+                                <ion-item clean>
+                                    <ion-select class="options" name="month" formControlName="month" placeholder="Month" (ionChange)="changeMonth()">
+                                        <ion-option *ngFor="let m of months" [value]="m">{{ m }}</ion-option>
+                                    </ion-select>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col col-4 col-sm-4 col-md-4>
+                                <ion-item clean>
+                                    <ion-select class="options" name="day" formControlName="day" placeholder="Day">
+                                        <ion-option *ngFor="let d of days" [value]="d">{{ d }}</ion-option>
+                                    </ion-select>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col col-12 col-sm-12 col-md-12>
+                                <div class="error-message" *ngIf="year.dirty &&  year.invalid">
+                                    {{ errors.year }}
+                                </div>
+                                <div class="error-message" *ngIf="month.dirty &&  month.invalid">
+                                    {{ errors.month }}
+                                </div>
+                                <div class="error-message" *ngIf="day.dirty &&  day.invalid">
+                                    {{ errors.day }}
+                                </div>
+                            </ion-col>
+                        </ion-row>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <ion-label class="form-label">Address</ion-label>
+                        <ion-item round>
+                            <ion-textarea name="address" formControlName="address"></ion-textarea>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+
+            </ion-grid>
+        </div>
+        <div text-center>
+            <xhr-button #xhr round large color="accent" type="submit" [disabled]="profileForm.pristine || form.pristine" (xhrClick)="submitForm($event)">
+                Submit
+            </xhr-button>
+        </div>
+    </form>
+</content-with-loading>

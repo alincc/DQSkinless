@@ -88,7 +88,7 @@ export const LOVS = {
     ],
     ALLOWABLE_MEDICAL_ARTS: [
         8
-    ],
+    ], /* FOR DELETION */
     CONTACT_TYPE: [
         'Home',
         'Mobile',
@@ -105,9 +105,15 @@ export const LOVS = {
         'Sunday'
     ],
     PD_RELATIONSHIP: [
+        'Owner',
         'Shared',
         'Transfered',
         'Collaboration'
+    ],
+    SEARCH_BY: [
+        'Username',
+        'Last name',
+        'First name'
     ]
 }
 

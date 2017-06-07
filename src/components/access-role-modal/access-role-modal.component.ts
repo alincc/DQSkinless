@@ -71,11 +71,8 @@ export class AccessRoleModal implements OnInit {
         }
     }
 
-    public getMinDate(): any {
-        let dateNow = Utilities.clearTime(new Date());
-        dateNow.setDate(dateNow.getDate() + 1);
-        const month = dateNow.getMonth().toString();
-        return dateNow.getFullYear() + '-' + (month.length < 2 ? '0' : '') + month + '-' + dateNow.getDate();
+    public getMinDate() {
+        return Utilities.getMinDate();
     }
 
     public clearDate(control) {

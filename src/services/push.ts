@@ -2,11 +2,13 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Storage } from '.';
 import { OneSignal, OSNotification } from '@ionic-native/onesignal';
 import { ONE_SIGNAL } from '../config/config';
+import { Headers, Http, RequestOptions } from '@angular/http';
 
 export const PUSH_TAGS = {
 	USER_ID : "userId",
 	SPECIALIZATION :'specialization',
-	CLINIC : "clinic"
+	CLINIC : "clinic",
+	NAME : "firstname"
 }
 
 
@@ -17,7 +19,8 @@ export class Push{
 	private openedObservable : any = {};
 
 	constructor(private storage : Storage,
-		private push: OneSignal){
+		private push: OneSignal,
+		private http: Http){
 	}
 
 	public init(){
@@ -53,6 +56,19 @@ export class Push{
 			}
 		})
 		this.push.endInit();
+
+		//subscribe tags
+		this.storage.userDetailsSubject.subscribe( details => {
+			let tags = {};
+			tags[PUSH_TAGS.NAME] = details[PUSH_TAGS.NAME];
+			tags[PUSH_TAGS.USER_ID] = details[PUSH_TAGS.USER_ID];
+			tags[PUSH_TAGS.SPECIALIZATION] = details[PUSH_TAGS.SPECIALIZATION];
+			this.push.sendTags(tags)
+		});
+		//subscribe tags
+		this.storage.clinicSubject.subscribe( clinic => {
+			this.push.sendTag(PUSH_TAGS.CLINIC, clinic.clinicId);
+		})
 	}
 
 
@@ -63,17 +79,23 @@ export class Push{
 	}
 
 
-	public sendMessage(title, message, tags){
-		return this.push.postNotification({
-			app_id: ONE_SIGNAL.APP_ID,
+	public sendMessage(title, message, tags, timestamp){
+		let headers = new Headers({ 'Content-Type': 'application/json' });
+		headers.append('Authorization', 'Basic ' + ONE_SIGNAL.REST_KEY);
+		let options = new RequestOptions({ headers: headers }); 
+		return this.http.post(ONE_SIGNAL.API.CREATE, {
+			filters : tags,
 			contents : {"en": message},
 			headings : {"en": title},
-			isAppInFocus : null,
-			shown: null,
-			payload : null,
-			displayType : null,
-			tags: tags
-		})
+			app_id: ONE_SIGNAL.APP_ID,
+			data: {
+				type : ONE_SIGNAL.PUSH_TYPE.MESSAGES,
+				clinic : this.storage.clinic.clinicId,
+				timestamp : timestamp,
+				id : new Date().getTime(),
+				userId : this.storage.account.userId
+			}
+		}, options)
 	}
 
 	public subscribeToRecievedPush(key){

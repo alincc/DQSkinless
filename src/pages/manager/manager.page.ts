@@ -27,15 +27,13 @@ export class ManagerPage implements OnInit {
 	}
 
 	public ngOnInit() {
-		this.showLoading();
 		this.managerService.getClinicRecordByUserId().subscribe(response => {
 			if (response && response.status) {
 				this.clinics = response.result;
 			}else{
 				this.clinics = [];
 			}
-			this.dismissLoading();
-		}, err => this.dismissLoading());
+		}, err => console.error(err));
 	}
 
 	private showLoading() {

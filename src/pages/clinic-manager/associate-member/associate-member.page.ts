@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, NavParams } from "ionic-angular";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { AccountCreationModal } from '../../../components/account-creation-modal/account-creation-modal.component';
 import { AccessRoleModal } from '../../../components/access-role-modal/access-role-modal.component';
@@ -28,6 +29,8 @@ export class AssociateMemberPage implements OnInit {
 	private clinicId: any;
 	private loading: any;
 
+	public isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
 	constructor(
 		private params: NavParams,
 		private alertController: AlertController,
@@ -54,7 +57,7 @@ export class AssociateMemberPage implements OnInit {
 	}
 
 	private getMembers() {
-		this.showLoading();
+		this.isLoading.next(true);
 		this.clinicManagerService.getClinicMember(this.clinicId).subscribe(response => {
 			if (response && response.status) {
 
@@ -63,8 +66,8 @@ export class AssociateMemberPage implements OnInit {
 				this.members.splice(0, 0, me);
 				this.formatMembersExpiryDate();
 			}
-			this.dismissLoading();
-		}, err => this.dismissLoading());
+			this.isLoading.next(false);
+		}, err => this.isLoading.next(false));
 	}
 
 	private formatMembersExpiryDate() {
@@ -72,6 +75,7 @@ export class AssociateMemberPage implements OnInit {
 			member.roleExpiryDate = member.roleExpiryDate ? Utilities.clearTime(new Date(+member.roleExpiryDate)) : '';
 		});
 	}
+
 	private showLoading() {
 		this.loading = this.loadingController.create({
 			spinner: 'crescent',
@@ -95,7 +99,7 @@ export class AssociateMemberPage implements OnInit {
 	}
 
 	public getFullName(user) {
-		return (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '');
+		return Utilities.getFullName(user);
 	}
 
 	public addAssistant() {

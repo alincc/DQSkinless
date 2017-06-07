@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RootNavController } from '../../services';
 import { timeline } from './timeline.mock';
 import { ConsultationFormPage } from '../consultation-form/consultation-form';
-import { PatientDoctorRelationshipPage } from '../patient-doctor-relationship/patient-doctor-relationship.page';
+import { PatientManagerPage } from '../patient-manager/patient-manager.page';
 
 @Component({
 	selector: 'patient-profile-page',
@@ -20,8 +20,8 @@ export class PatientProfilePage {
 
 	public share() {
 		// TODO pass patient id
-		this.rootNav.push(PatientDoctorRelationshipPage, {
-			pageHeader: 'Share Patient'
+		this.rootNav.push(PatientManagerPage, {
+			patientId: null,
 		});
 	}
 }

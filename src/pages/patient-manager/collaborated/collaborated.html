@@ -1,0 +1,14 @@
+<ion-content #Content padding>
+    <!-- TODO transferred collaborated doctor list -->
+    <div class="tab-margin">
+        <div class="speil" *ngIf="collaboratedList?.length === 0" text-center>
+            <ion-label>
+                Patient does not have Collaboration History. Add Collaborator to patient by pressing the add button on the lower left of
+                the screen.
+            </ion-label>
+        </div>
+        <ion-fab bottom right>
+            <button ion-fab color="accent" (click)="collaboratePatient()" [disabled]="true"><ion-icon name="add"></ion-icon></button>
+        </ion-fab>
+    </div>
+</ion-content>

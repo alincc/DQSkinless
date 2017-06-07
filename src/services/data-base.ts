@@ -43,7 +43,7 @@ export class DB{
 					name: DB_CONFIG.DB_NAME,
 					location:  DB_CONFIG.LOCATION
 				}).then((session : SQLiteObject ) => {
-					session.executeSql('create table if not exists messages(id integer primary key autoincrement, name varchar(15), date date, message varchar(500), avatar varchar(100) , clinic integer, account integer, status integer default 0)', {})
+					session.executeSql(DB_CONFIG.SQL.CREATE, {})
 					.then(() => {
 						this.session = session;
 						resolve(this.session);
