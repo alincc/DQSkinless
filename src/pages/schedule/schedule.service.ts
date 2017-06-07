@@ -8,28 +8,29 @@ export class ScheduleService{
 
 	constructor( private websocketFactory : WebSocketFactory,
 		private http : HttpService){}
-	
-	public connectToQueue() : any{
+
+	public connectToQueue(): any {
 		return this.websocketFactory.connect(CONFIG.SOCKETS.queue);
 	}
 
-	public getQueueBoardByIdAndClinic(clinicId , date){
+	public getQueueBoardByIdAndClinic(clinicId, date) {
 		return this.http.get(CONFIG.API.queueBoard, [clinicId, date]);
 	}
 
-	
-	public getQueueByBoardID(boardId){
-		return this.http.get(CONFIG.API.queue, boardId, {silentError: true});
+	public getQueueByBoardID(boardId) {
+		return this.http.get(CONFIG.API.queue, boardId, { silentError: true });
 	}
 
-	public addQueue(queue: any){
+	public addQueue(queue: any) {
+
 		return this.http.post(CONFIG.API.queue, queue);
 	}
 
-	public updateQueue(queue: any){
+	public updateQueue(queue: any) {
 		return this.http.put(CONFIG.API.queue, queue);
 	}
 
-
-
+	public addPatientDetails(_parameter) {
+		return this.http.post(CONFIG.API.patientDetails, _parameter);
+	}
 }

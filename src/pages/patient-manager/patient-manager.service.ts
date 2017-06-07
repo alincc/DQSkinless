@@ -10,6 +10,6 @@ export class PatientManagerService {
         private storage: Storage) { }
 
     public createPatientAccess(payload) {
-        return this.http.post(CONFIG.API.patientaccess, payload);
+        return this.http.post(CONFIG.API.patientAccess, payload);
     }
 }
