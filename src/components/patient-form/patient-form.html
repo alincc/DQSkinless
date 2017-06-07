@@ -1,0 +1,98 @@
+<form [formGroup]="patientForm" #form="ngForm" (ngSubmit)="xhr.submit($event)">
+    <div class="row form-group">
+        <ion-grid>
+            <ion-row>
+                <ion-col col-12 col-sm-12 col-md-4>
+                    <ion-label class="form-label">Last Name *</ion-label>
+                    <ion-item round>
+                        <ion-input name="lastName" formControlName="lastName"></ion-input>
+                    </ion-item>
+                    <div class="error-message" *ngIf="patientForm.get('lastName')?.dirty &&  patientForm.get('lastName').invalid">
+                        {{ errors.lastName }}
+                    </div>
+                </ion-col>
+                <ion-col col-12 col-sm-12 col-md-4>
+                    <ion-label class="form-label">First Name *</ion-label>
+                    <ion-item round>
+                        <ion-input name="firstName" formControlName="firstName"></ion-input>
+                    </ion-item>
+                    <div class="error-message" *ngIf="patientForm.get('firstName')?.dirty &&  patientForm.get('firstName').invalid">
+                        {{ errors.firstName }}
+                    </div>
+                </ion-col>
+                <ion-col col-12 col-sm-12 col-md-4>
+                    <ion-label class="form-label">Middle Name</ion-label>
+                    <ion-item round>
+                        <ion-input name="middleName" formControlName="middleName"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-7 col-sm-6 col-md-3>
+                    <ion-label class="form-label">Gender *</ion-label>
+                    <ion-list radio-group name="gender" formControlName="gender">
+                        <ion-item *ngFor="let gender of genderList; let i = index">
+                            <ion-radio color="primary" [value]="i"></ion-radio>
+                            <ion-label>{{ gender }}</ion-label>
+                        </ion-item>
+                    </ion-list>
+                    <div class="error-message" *ngIf="patientForm.get('gender')?.dirty &&  patientForm.get('gender').invalid">
+                        {{ errors.gender }}
+                    </div>
+                </ion-col>
+                <ion-col col-5 col-sm-5 col-md-3>
+                    <ion-label class="form-label">Age</ion-label>
+                    <ion-item round>
+                        <ion-input type="number" name="age" formControlName="age"></ion-input>
+                    </ion-item>
+                    <div class="error-message" *ngIf="patientForm.get('age')?.dirty &&  patientForm.get('age').invalid">
+                        {{ errors.age }}
+                    </div>
+                </ion-col>
+
+            </ion-row>
+            <ion-row>
+                <ion-col col-6 col-sm-6 col-md-6>
+                    <ion-label class="form-label">Birth Date</ion-label>
+                    <ion-datetime displayFormat="MMMM DD, YYYY" formControlName="birthDate"></ion-datetime>
+                    <div class="error-message" *ngIf="patientForm.get('birthDate')?.dirty &&  patientForm.get('birthDate').invalid">
+                        {{ errors.birthDate }}
+                    </div>
+                </ion-col>
+                <ion-col col-6 col-sm-6 col-md-6>
+                    <ion-label class="form-label">Registration Date</ion-label>
+                    <ion-datetime #dateTime displayFormat="MMMM DD, YYYY" formControlName="registrationDate"></ion-datetime>
+                    <div class="error-message" *ngIf="patientForm.get('registrationDate')?.dirty &&  patientForm.get('registrationDate').invalid">
+                        {{ errors.registrationDate }}
+                    </div>
+                </ion-col>
+                <ion-col col-12 col-sm-12 col-md-6>
+                    <ion-label class="form-label">Email *</ion-label>
+                    <ion-item round>
+                        <ion-input type="email" name="email" formControlName="email"></ion-input>
+                    </ion-item>
+                    <div class="error-message" *ngIf="patientForm.get('email')?.dirty &&  patientForm.get('email').invalid">
+                        {{ errors.email }}
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-label class="form-label">Address</ion-label>
+                    <ion-item round>
+                        <ion-textarea name="address" formControlName="address"></ion-textarea>
+                    </ion-item>
+                    <div class="error-message" *ngIf="patientForm.get('address')?.dirty &&  patientForm.get('address').invalid">
+                        {{ errors.address }}
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+
+    <div text-center>
+        <xhr-button #xhr round large color="accent" type="submit" [disabled]="patientForm.pristine || form.pristine" (xhrClick)="submitForm($event)">
+            Submit
+        </xhr-button>
+    </div>
+</form>

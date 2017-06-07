@@ -1,4 +1,4 @@
-import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, Input } from '@angular/core';
 import { PopoverController, Content, ModalController, LoadingController, AlertController, Loading } from 'ionic-angular';
 import { MoreMenuPopover } from './more.popover';
 
@@ -77,6 +77,7 @@ export class SchedulePage {
 	private servingState: string;
 	private loading: any;
 	private account: any;
+	@Input() patient: any;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
 		private detector: ChangeDetectorRef,
@@ -97,6 +98,8 @@ export class SchedulePage {
 				this.account = account;
 			}
 		})
+
+		this.patient = {};
 	}
 
 	public initSchedule(clinicId) {
@@ -253,7 +256,7 @@ export class SchedulePage {
 	}
 
 	public view(patientId) {
-		this.rootNav.push(PatientProfilePage);
+		this.rootNav.push(PatientProfilePage, patientId);
 	}
 
 	public toggleReOrder() {
@@ -365,20 +368,36 @@ export class SchedulePage {
 				parameter.id = customer.id;
 			}
 			let parameterFactory = new Promise((resolve, reject) => {
+
+					parameter.type = QUEUE.TYPE.WALKIN;
+					parameter.boardId = this.queueBoard.id;
+
 				if (item.isServeNow) {
 					if (customer) {
 						parameter.order = customer.order;
 						parameter.time = customer.time;
 						parameter.status = customer.status;
+					resolve(parameter);
 					} else {
 						parameter.order = this.getNewOrder();
 						parameter.time = new Date();
 						parameter.status = QUEUE.STATUS.QUEUED;
-					}
-					parameter.type = QUEUE.TYPE.WALKIN;
-					parameter.boardId = this.queueBoard.id;
+						// parameter.patientId = this.AddPatientDetails(parameter);
 
-					resolve(parameter);
+						this.patient.firstname = parameter.firstName;
+						this.patient.middlename = parameter.middleName;
+						this.patient.lastname = parameter.lastName;
+						this.service.addPatientDetails(this.patient).subscribe(response => {
+							if (response.status) {
+								parameter.patientId = response.result;
+								resolve(parameter);
+							}
+							else {
+								reject(parameter);
+							}
+						});
+					}
+
 				} else {
 					this.service.getQueueBoardByIdAndClinic(this.clinicId, new Date(item.schedule))
 						.subscribe(response => {
@@ -397,7 +416,8 @@ export class SchedulePage {
 						})
 				}
 			})
-			parameterFactory.then(parameter => {
+
+		parameterFactory.then(parameter => {
 				let serviceCallback;
 				if (customer) {
 					serviceCallback = this.service.updateQueue(parameter)
@@ -421,7 +441,7 @@ export class SchedulePage {
 					});
 			});
 		});
-		modal.present();
+			modal.present();
 	}
 
 	public getDefaultAvatar(member) {
@@ -563,6 +583,35 @@ export class SchedulePage {
 
 	private goToSchedule() {
 		this.rootNav.push(ScheduleHistoryPage);
+	}
+
+	private AddPatientDetails(parameter) {
+		let serviceCallback;
+		let result;
+
+		this.patient.firstname = parameter.firstName;
+		this.patient.middlename = parameter.middleName;
+		this.patient.lastname = parameter.lastName;
+		serviceCallback = this.service.addPatientDetails(this.patient).subscribe(response => {
+			if (response.status) {
+				result = response.result.id;
+			}
+			else {
+				result = null;
+			}
+		});
+
+		return result;
+
+		// serviceCallback.subcsribe(response => {
+
+		// 	if(response.status){
+		// 		return response.result.id;
+		// 	}
+		// 	else{
+		// 		return null;
+		// 	}
+		// })
 	}
 
 }
