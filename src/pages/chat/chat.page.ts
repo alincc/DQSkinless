@@ -29,10 +29,10 @@ export class ChatPage{
 					let item = response.rows.item(i);
 				    this.messages.unshift(item);
 				}
+				this.detector.detectChanges();
 				if(snapToBottom){
 					this.content.scrollToBottom();
 				}
-				this.detector.detectChanges();
 			})
 		}
 	}
