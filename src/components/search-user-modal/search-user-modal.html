@@ -4,7 +4,7 @@
             <button ion-button icon-only navPop><ion-icon name="close"></ion-icon></button>
         </ion-buttons>
         <ion-title>
-            Search User
+            {{ pageHeader }}
         </ion-title>
     </ion-navbar>
 </ion-header>
@@ -12,23 +12,45 @@
     <form [formGroup]="searchForm" #form="ngForm" #form="ngForm" (ngSubmit)="xhr.submit($event)">
         <ion-grid>
             <ion-row>
-                <ion-col col-12 col-sm-12 col-md-4>
-                    <ion-label class="form-label">Username</ion-label>
-                    <ion-item round>
-                        <ion-input name="username" formControlName="username"></ion-input>
+                <ion-col col-12 col-sm-12 col-md-6>
+                    <ion-label class="form-label">Search By *</ion-label>
+                    <ion-item clean>
+                        <ion-select class="options" name="criteria" formControlName="criteria" (ionChange)="selectCriteria($event)">
+                            <ion-option *ngFor="let ct of criteriaTypes;let i = index" [value]="i">{{ ct }}</ion-option>
+                        </ion-select>
                     </ion-item>
+                    <div class="error-message" *ngIf="criteria.dirty &&  criteria.invalid">
+                        {{ errors.criteria }}
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-12 col-sm-12 col-md-4>
+                    <ion-label class="form-label">Username <span *ngIf="selectedCriteriaType === 0">*</span></ion-label>
+                    <ion-item round>
+                        <ion-input name="username" formControlName="username" [disabled]="selectedCriteriaType !== 0"></ion-input>
+                    </ion-item>
+                    <div class="error-message" *ngIf="username.dirty &&  username.invalid">
+                        {{ errors.username }}
+                    </div>
                 </ion-col>
                 <ion-col col-12 col-sm-12 col-md-4>
-                    <ion-label class="form-label">Last Name</ion-label>
+                    <ion-label class="form-label">Last Name <span *ngIf="selectedCriteriaType === 1">*</span></ion-label>
                     <ion-item round>
-                        <ion-input name="lastname" formControlName="lastname"></ion-input>
+                        <ion-input name="lastname" formControlName="lastname" [disabled]="selectedCriteriaType !== 1"></ion-input>
                     </ion-item>
+                    <div class="error-message" *ngIf="lastname.dirty &&  lastname.invalid">
+                        {{ errors.lastname }}
+                    </div>
                 </ion-col>
                 <ion-col col-12 col-sm-12 col-md-4>
-                    <ion-label class="form-label">First Name</ion-label>
+                    <ion-label class="form-label">First Name <span *ngIf="selectedCriteriaType === 2">*</span></ion-label>
                     <ion-item round>
-                        <ion-input name="firstname" formControlName="firstname"></ion-input>
+                        <ion-input name="firstname" formControlName="firstname" [disabled]="selectedCriteriaType !== 2"></ion-input>
                     </ion-item>
+                    <div class="error-message" *ngIf="firstname.dirty &&  firstname.invalid">
+                        {{ errors.firstname }}
+                    </div>
                 </ion-col>
             </ion-row>
         </ion-grid>
@@ -39,7 +61,7 @@
         </div>
     </form>
     <div class="user-list">
-        <div *ngIf="users && users.length === 0">User(s) not found</div>
+        <div *ngIf="haveSearched && users && users.length === 0">User(s) not found</div>
         <ion-card *ngFor="let user of users" (click)="selectUser(user)">
             <ion-item>
                 <ion-avatar item-left>
@@ -48,7 +70,7 @@
                         {{ getDefaultAvatar(user) }}
                     </div>
                 </ion-avatar>
-                <p>Name: {{ user.lastname ? getFullName(user) : 'Unregistered'}}</p>
+                <p>Name: {{ getFullName(user) }}</p>
                 <p>Email: {{ user.email }}</p>
                 <p>Contact No: {{ displayContacts(user.userContacts) }}</p>
             </ion-item>

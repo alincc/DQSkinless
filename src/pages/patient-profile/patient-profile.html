@@ -3,61 +3,78 @@
 		<ion-title>
 			Patient Profile
 		</ion-title>
+		<ion-buttons end>
+			
+			<button ion-button icon-only>
+				<ion-icon name="md-create" color="accent"></ion-icon>
+			</button>
+			<button ion-button icon-only clear full (click)="share()">
+				<ion-icon name="ios-contacts" color="accent"></ion-icon>
+			</button>
+		</ion-buttons>
 	</ion-navbar>
 </ion-header>
 <ion-content>
-	<ion-item color="primary">
-		<ion-avatar item-left>
+	<div class="patient-profile">
+		<div class="profile-picture">
 			<img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
-		</ion-avatar>
-		<button ion-button icon-only>
-		<ion-icon name="md-create" color="accent"></ion-icon>
-		</button>
-		<h1>Patient Name</h1>
-		<p>Patient Since: date</p>
-		<p>Contact No.: name</p>
-		<p>Age: 100</p>
-		<p>Address: QC</p>
-	</ion-item>
-	<div class="control-bar" [ngClass]="{'minimize': controlCss}"><ion-row color="primary">
-		<ion-col width-33 color="primary">
-			<button ion-button icon-only clear full>
-				<ion-icon name='call' color="accent"></ion-icon>
-				Call
-			</button>
-		</ion-col>
-		<ion-col width-33 color="primary">
-			<button ion-button icon-only clear full>
-				<ion-icon name="text" color="accent"></ion-icon>
-				Text
-			</button>
-		</ion-col>
-		<ion-col width-33 color="primary">
-			<button ion-button icon-only clear full (click)="share()">
-				<ion-icon name="link" color="accent"></ion-icon>
-				Share
-			</button>
-		</ion-col>
-	</ion-row>
+		</div>
+		<h4>Patient Name</h4>
+		<div class="detail-group">
+			<ion-label>Patient Since</ion-label>
+			<p text-right>1/2/2014</p>
+		</div>
+		<div class="detail-group">
+			<ion-label>Birth Date</ion-label>
+			<p text-right>11/26/1990</p>
+		</div>
+		<div class="detail-group">
+			<ion-label>Gender</ion-label>
+			<p text-right>Male</p>
+		</div>
+		<div class="detail-group">
+			<ion-label>Legal Status</ion-label>
+			<p text-right>Single</p>
+		</div>
+		<div class="detail-group">
+			<ion-label>Address</ion-label>
+			<p text-right>#66 Bonifacio Drv Pasong Tamo QC</p>
+		</div>
+		<hr/>
+		<ion-row>
+			<ion-col text-center>
+				<button ion-button clear full>
+					<ion-icon name='text' color="accent"></ion-icon>
+					Message
+				</button>
+			</ion-col>
+			<ion-col text-center>
+				<button ion-button clear full>
+					<ion-icon name='call' color="accent"></ion-icon>
+					Call
+				</button>
+			</ion-col>
+		</ion-row>
 	</div>
-	<hr>
 	<ion-list no-lines>
-	<ion-item-group *ngFor="let group of timeline">
-		<ion-item-divider>
-			{{group.yearGroup}}
-		</ion-item-divider>
-		<ion-item *ngFor="let transaction of group.transactions" (click)="open(transaction)">
-			<ion-card>
-				<ion-card-header>
-					{{transaction.description}}
-				</ion-card-header>
-				<ion-card-content>
-					<p>Timestamp: {{transaction.timestamp}}</p>
-					<p>Clinic: {{transaction.clinic}}</p>
-				</ion-card-content>
-			</ion-card>
-		</ion-item>
-	</ion-item-group>
+		<ion-item-group *ngFor="let group of timeline">
+			<ion-item-divider>
+				{{group.yearGroup}}
+			</ion-item-divider>
+			<ion-item *ngFor="let transaction of group.transactions" (click)="open(transaction)">
+				<ion-card>
+					<div class="spot"></div>
+					<div class="stem"></div>
+					<ion-card-header>
+						{{transaction.description}}
+					</ion-card-header>
+					<ion-card-content>
+						<p>Timestamp: {{transaction.timestamp}}</p>
+						<p>Clinic: {{transaction.clinic}}</p>
+					</ion-card-content>
+				</ion-card>
+			</ion-item>
+		</ion-item-group>
 	</ion-list>
 	<ion-fab bottom right>
 		<button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>

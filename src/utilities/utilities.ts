@@ -13,7 +13,6 @@ export class Utilities {
 		return timeless;
 	}
 
-
 	public static getISODate(date: Date) {
 		let isoDate: String = date.getFullYear() + "-" + this.padDigits(date.getMonth() + 1, 2) + "-" + date.getDate() + "T00:00:00.000Z";
 		return isoDate;
@@ -25,7 +24,17 @@ export class Utilities {
 	public static transformDate(date: Date) {
 		const d = new DatePipe('pt-PT').transform(date, 'yyyy-MM-dd');
 		return d;
-		
+	}
+
+	public static getFullName(user) {
+		return user.lastname ? (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '') : 'Unregistered';
+	}
+
+	public static getMinDate(): any {
+		let dateNow = Utilities.clearTime(new Date());
+		dateNow.setDate(dateNow.getDate() + 1);
+		const month = dateNow.getMonth().toString();
+		return dateNow.getFullYear() + '-' + (month.length < 2 ? '0' : '') + month + '-' + dateNow.getDate();
 	}
 }
 

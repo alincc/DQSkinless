@@ -23,10 +23,10 @@ export class ManagerService {
     }
 
     public getClinicRecordByUserId() {
-        return this.http.get(CONFIG.API.getClinicRecordByUserId, [this.getUserId()], {silentError: true});
+        return this.http.get(CONFIG.API.getClinicRecordByUserId, [this.getUserId()]);
     }
 
     public getClinicAcessByUserIdAndClinicId(clinciId) {
-        return this.http.get(CONFIG.API.clinicaccess, [`u/${this.getUserId()}`, `c/${clinciId}`], {silentError: true});
+        return this.http.get(CONFIG.API.clinicaccess, [`u/${this.getUserId()}`, `c/${clinciId}`]);
     }
 }

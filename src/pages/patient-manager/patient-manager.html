@@ -1,0 +1,12 @@
+<ion-header>
+    <ion-navbar color="secondary">
+        <ion-title>
+            Patient Manager
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-tabs>
+    <ion-tab [root]="shared" [rootParams]="patient" tabTitle="Shared"></ion-tab>
+    <ion-tab [root]="transferred" [rootParams]="patient" tabTitle="Transferred"></ion-tab>
+    <ion-tab [root]="collaborated" [rootParams]="patient" tabTitle="Collaborated"></ion-tab>
+</ion-tabs>

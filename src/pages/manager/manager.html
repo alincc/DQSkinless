@@ -6,26 +6,27 @@
 	</ion-navbar>
 </ion-header>
 <ion-content>
-	<ion-list>
-		<ion-item-sliding>
-			<button ion-item (click)="go(clinic)" *ngFor="let clinic of clinics; let idx = index">
-				<h2>{{idx+1}}. {{clinic?.clinicName}}</h2>
-				<p>Address: {{clinic?.address}}</p>
-			</button>
-			<ion-item-options side="left">
-				<button ion-button color="danger">
-					<ion-icon name="trash"></ion-icon>
-					Delete
+	<content-with-loading [isLoading]="!clinics">
+		<ion-list>
+			<ion-item-sliding>
+				<button ion-item (click)="go(clinic)" *ngFor="let clinic of clinics; let idx=index ">
+					<h2>{{idx+1}}. {{clinic?.clinicName}}</h2>
+					<p>Address: {{clinic?.address}}</p>
 				</button>
-				<button ion-button color="secondary">
-					<ion-icon name="md-create"></ion-icon>
-					Edit
-				</button>
-			</ion-item-options>
-		</ion-item-sliding>
-	</ion-list>
-	<p *ngIf="clinics?.length === 0" text-center>No Clinic Access. Contact your clinic administrator.</p>
-
+				<ion-item-options side="left">
+					<button ion-button color="danger">
+						<ion-icon name="trash"></ion-icon>
+						Delete
+					</button>
+					<button ion-button color="secondary">
+						<ion-icon name="md-create"></ion-icon>
+						Edit
+					</button>
+				</ion-item-options>
+			</ion-item-sliding>
+		</ion-list>
+		<p *ngIf="clinics?.length === 0" text-center>No Clinic Access. Contact your clinic administrator.</p>
+	</content-with-loading>
 	<ion-fab bottom right *ngIf="clinics?.length === 0">
 		<button ion-fab color="accent" (click)="logout()"><ion-icon name="power"></ion-icon></button>
 	</ion-fab>
