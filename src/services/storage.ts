@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { OneSignal } from '@ionic-native/onesignal';
 
@@ -21,124 +22,71 @@ export class Storage {
 		private push: OneSignal) { }
 
 	// account
-	private _accountSubject: BehaviorSubject<any>;
+	private _accountSubject = new BehaviorSubject<any>(undefined);
+	public accountSubject: Observable<any> = this._accountSubject.asObservable();
 
 	public get account() {
 		return this.local.retrieve(STORAGE_KEYS.ACCOUNT);
 	}
 
 	public set account(data) {
-		if (!this._accountSubject) {
-			this._accountSubject = new BehaviorSubject(this.account);
-		} else {
-			this._accountSubject.next(data);
-		}
+		this._accountSubject.next(data);
 		this.local.store(STORAGE_KEYS.ACCOUNT, data);
 		//accountId for push notif
-		this.push.sendTag('account',data.id);
-
-	}
-
-	public get accountSubject() {
-		if (!this._accountSubject) {
-			this._accountSubject = new BehaviorSubject(this.account || {});
-		}
-		return this._accountSubject;
+		this.push.sendTag('account', data.id);
 	}
 
 	// user Details
-	private _userDetailsSubject: BehaviorSubject<any>;
+	private _userDetailsSubject = new BehaviorSubject<any>(undefined);
+	public userDetailsSubject: Observable<any> = this._userDetailsSubject.asObservable();
 
 	public get userDetails() {
 		return this.local.retrieve(STORAGE_KEYS.USER_DETAILS);
 	}
 
 	public set userDetails(data) {
-		if (!this._userDetailsSubject) {
-			this._userDetailsSubject = new BehaviorSubject(this.userDetails);
-		} else {
-			this._userDetailsSubject.next(data);
-		}
+		this._userDetailsSubject.next(data);
 		this.local.store(STORAGE_KEYS.USER_DETAILS, data);
 	}
 
-	public get userDetailsSubject() {
-		if (!this._userDetailsSubject) {
-			this._userDetailsSubject = new BehaviorSubject(this.userDetails || {});
-		}
-		return this._userDetailsSubject;
-	}
-
-
 	// clinic details
-	private _clinicSubject: BehaviorSubject<any>;
+	private _clinicSubject = new BehaviorSubject<any>(undefined);
+	public clinicSubject: Observable<any> = this._clinicSubject.asObservable();
 
 	public get clinic() {
 		return this.local.retrieve(STORAGE_KEYS.CLINIC);
 	}
 
 	public set clinic(data) {
-		if (!this._clinicSubject) {
-			this._clinicSubject = new BehaviorSubject(this.clinic);
-		} else {
-			this._clinicSubject.next(data);
-		}
+		this._clinicSubject.next(data);
 		this.local.store(STORAGE_KEYS.CLINIC, data);
 		// tag clinic
 		this.push.sendTag('clinic', data.id);
 	}
 
-	public get clinicSubject() {
-		if (!this._clinicSubject) {
-			this._clinicSubject = new BehaviorSubject(this.clinic || {});
-		}
-		return this._clinicSubject;
-	}
-
 	// access role
-	private _accessRoleSubject: BehaviorSubject<any>;
+	private _accessRoleSubject = new BehaviorSubject<any>(undefined);
+	public accessRoleSubject: Observable<any> = this._accessRoleSubject.asObservable();
 
 	public get accessRole() {
 		return this.local.retrieve(STORAGE_KEYS.ACCESS_ROLE);
 	}
 
 	public set accessRole(data) {
-		if (!this._accessRoleSubject) {
-			this._accessRoleSubject = new BehaviorSubject(this.accessRole);
-		} else {
-			this._accessRoleSubject.next(data);
-		}
+		this._accessRoleSubject.next(data);
 		this.local.store(STORAGE_KEYS.ACCESS_ROLE, data);
 	}
 
-	public get accessRoleSubject() {
-		if (!this._accessRoleSubject) {
-			this._accessRoleSubject = new BehaviorSubject(this.accessRole || {});
-		}
-		return this._accessRoleSubject;
-	}
+	private _clinicMembersSubject = new BehaviorSubject<any>(undefined);
+	public clinicMembersSubject: Observable<any> = this._clinicMembersSubject.asObservable();
 
-
-	private _clinicMembersSubject: BehaviorSubject<any>;
-
-	public get clinicMembers(){
+	public get clinicMembers() {
 		return this.session.retrieve(STORAGE_KEYS.CLINIC_MEMBERS);
 	}
 
-	public set clinicMembers(data){
-		if (!this._clinicMembersSubject) {
-			this._clinicMembersSubject = new BehaviorSubject(this.clinicMembers);
-		} else {
-			this._clinicMembersSubject.next(data);
-		}
+	public set clinicMembers(data) {
+		this._clinicMembersSubject.next(data);
 		this.session.store(STORAGE_KEYS.CLINIC_MEMBERS, data);
-	}
-
-	public get clinicMembersSubject(){
-		if (!this._clinicMembersSubject) {
-			this._clinicMembersSubject = new BehaviorSubject(this.clinicMembers || {});
-		}
-		return this._clinicMembersSubject;
 	}
 
 	//token
