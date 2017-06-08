@@ -90,16 +90,13 @@ ion-content{
 		}
 	}
 
-	ion-item[clean]{
-		// padding-left : 0px !important;
-		// .item-inner{
-		// 	padding-right: 0px !important;
-		// }
+	ion-item[clean] {
 		border-bottom: 0 !important;
 		border-top: 0 !important;
 		background-color: transparent !important;
 		width: 100%;
 		padding: 0;
+		min-height: inherit;
 
 		&.item-md {
 			padding: 0;
@@ -409,13 +406,7 @@ ion-content{
 form {
 
 	.form-label{
-		margin: 2% 0 2% 0;
 		font-weight: bold;
-	}
-	
-	.form-link{
-		margin: 2% 0 2% 0;
-		// font-weight: bold;
 	}
 
 	.contact-control{

@@ -64,17 +64,21 @@
             <ion-row>
                 <ion-col col-6 col-sm-6 col-md-6>
                     <ion-label class="form-label">Birth Date *</ion-label>
-                    <ion-datetime displayFormat="MMMM DD, YYYY" formControlName="birthDate"></ion-datetime>
-                    <div class="error-message" *ngIf="patientForm.get('birthDate')?.dirty &&  patientForm.get('birthDate').invalid">
-                        {{ errors.birthDate }}
-                    </div>
+                    <ion-item clean>
+                        <ion-datetime displayFormat="MMMM DD, YYYY" formControlName="birthDate"></ion-datetime>
+                        <div class="error-message" *ngIf="patientForm.get('birthDate')?.dirty &&  patientForm.get('birthDate').invalid">
+                            {{ errors.birthDate }}
+                        </div>
+                    </ion-item>
                 </ion-col>
                 <ion-col col-6 col-sm-6 col-md-6>
                     <ion-label class="form-label">Registration Date</ion-label>
-                    <ion-datetime #dateTime displayFormat="MMMM DD, YYYY" formControlName="registrationDate"></ion-datetime>
-                    <div class="error-message" *ngIf="patientForm.get('registrationDate')?.dirty &&  patientForm.get('registrationDate').invalid">
-                        {{ errors.registrationDate }}
-                    </div>
+                    <ion-item clean>
+                        <ion-datetime #dateTime displayFormat="MMMM DD, YYYY" formControlName="registrationDate"></ion-datetime>
+                        <div class="error-message" *ngIf="patientForm.get('registrationDate')?.dirty &&  patientForm.get('registrationDate').invalid">
+                            {{ errors.registrationDate }}
+                        </div>
+                    </ion-item>
                 </ion-col>
                 <ion-col col-12 col-sm-12 col-md-6>
                     <ion-label class="form-label">Email *</ion-label>
