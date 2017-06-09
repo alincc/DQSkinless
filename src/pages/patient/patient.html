@@ -8,14 +8,16 @@
         </ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content>
+<ion-content #Content padding>
     <ion-searchbar></ion-searchbar>
-    <ion-list>
-        <button ion-item>
+    <content-with-loading [isLoading]="isLoading | async">
+        <ion-list>
+            <button ion-item>
 			<h3>1. Name of Patient</h3>
 		</button>
-    </ion-list>
-    <ion-fab bottom right (click)="goToAdd()">
-        <button ion-fab round color="accent"><ion-icon name="person-add" ></ion-icon></button>
-    </ion-fab>
+        </ion-list>
+        <ion-fab bottom right (click)="goToAdd()">
+            <button ion-fab round color="accent"><ion-icon name="person-add" ></ion-icon></button>
+        </ion-fab>
+    </content-with-loading>
 </ion-content>
