@@ -14,10 +14,10 @@
 		<ion-icon name="md-create" color="accent"></ion-icon>
 		</button>
         <h1>{{patientName}}</h1>
-        <p>Patient Since: date</p>
+        <p>Patient Since: {{registrationDate}}</p>
         <p>Contact No.: name</p>
-        <p>Age: 100</p>
-        <p>Address: {{Address}}</p>
+        <p>Age: {{age}}</p>
+        <p>Address: {{address}}</p>
     </ion-item>
     <div class="control-bar" [ngClass]="{'minimize': controlCss}">
         <ion-row color="primary">
@@ -63,5 +63,5 @@
     <ion-fab bottom right>
         <button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
     </ion-fab>
->>>>>>> origin/patient-form
+    >>>>>>> origin/patient-form
 </ion-content>

@@ -6,6 +6,7 @@ import { PatientManagerPage } from '../patient-manager/patient-manager.page';
 import { PatientDoctorRelationshipPage } from '../patient-doctor-relationship/patient-doctor-relationship.page';
 import { PatientProfileService } from './patient-profile.service';
 import { NavParams } from "ionic-angular";
+import { Utilities } from '../../utilities/utilities';
 
 @Component({
 	selector: 'patient-profile-page',
@@ -46,8 +47,12 @@ export class PatientProfilePage {
 
 		this.service.getPatientDetails(this.patientId).subscribe(response =>{
 			if(response.status){
+				
 				this.address = response.result.address;
-				this.patientName = response.result.lastname;
+				this.patientName = Utilities.getFullName(response.result);
+				this.address = response.result.address;
+				this.age = response.result.birthDate != null ? Utilities.getAge(response.result.birthDate) : "unknown";
+				this.registrationDate = response.result.startDate != null ? Utilities.transformDate( new Date(response.result.startDate)) : "unknown";
 			}
 		})
 	}

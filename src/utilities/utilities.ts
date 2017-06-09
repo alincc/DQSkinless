@@ -39,6 +39,21 @@ export class Utilities {
 		return dateNow.getFullYear() + '-' + (month.length < 2 ? '0' : '') + month + '-' + dateNow.getDate();
 	}
 
+	public static getAge(dob: number){
+		let dateNow = Utilities.clearTime(new Date());
+		let birthDate = Utilities.clearTime(new Date(dob));
+
+		let age = dateNow.getFullYear() - birthDate.getFullYear();
+
+		let dateCompare = Utilities.clearTime(new Date(dateNow.setFullYear(dateNow.getFullYear() - age)));
+
+		if(birthDate.getDate() > dateCompare.getDate()){
+			age--;
+		}
+
+		return age;
+	}
+
 	public static transformDate2(date: Date, format: string){
 		const d = new DatePipe('pt-PT').transform(date, format);
 		return d;
