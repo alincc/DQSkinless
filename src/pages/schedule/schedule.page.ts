@@ -396,6 +396,8 @@ export class SchedulePage {
 							else {
 								reject(parameter);
 							}
+						}, err => {
+							reject(err);
 						});
 					}
 
@@ -440,6 +442,8 @@ export class SchedulePage {
 					}, err => {
 						loading.dismiss();
 					});
+			}, err => {
+				loading.dismiss();
 			});
 		});
 			modal.present();

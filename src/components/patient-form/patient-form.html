@@ -39,7 +39,7 @@
                         {{ errors.legalStatus }}
                     </div>
                 </ion-col>
-                <ion-col col-7 col-sm-7 col-md-3>
+                <ion-col col-12 col-sm-12 col-md-3>
                     <ion-label class="form-label">Gender *</ion-label>
                     <ion-list radio-group name="gender" formControlName="gender">
                         <ion-item *ngFor="let gender of genderList; let i = index">
@@ -51,7 +51,7 @@
                         {{ errors.gender }}
                     </div>
                 </ion-col>
-                <ion-col col-5 col-sm-5 col-md-3>
+                <ion-col col-3 col-sm-3 col-md-1>
                     <ion-label class="form-label">Age *</ion-label>
                     <ion-item round>
                         <ion-input type="number" name="age" formControlName="age"></ion-input>
@@ -60,22 +60,51 @@
                         {{ errors.age }}
                     </div>
                 </ion-col>
+                <ion-col col-9 col-sm-9 col-md-3>
+                    <ion-label class="form-label">Birth Date *</ion-label>
+                    <ion-item clean>
+                        <ion-datetime displayFormat="MMMM DD, YYYY" formControlName="birthDate"></ion-datetime>
+                        <div class="error-message" *ngIf="patientForm.get('birthDate')?.dirty &&  patientForm.get('birthDate').invalid">
+                            {{ errors.birthDate }}
+                        </div>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row class="contact-control">
+                <ion-col col-6 col-sm-5 col-md-4>
+                    <ion-label class="form-label">Contact *</ion-label>
+                </ion-col>
+                <ion-col col-6 col-sm-5 col-md-4>
+                    <ion-label class="form-link" (click)="addContact($event)" color="accent-dark">+ add Contact</ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row class="contact-header">
+                <ion-col col-4 col-sm-3 col-md-3>
+                    <ion-label class="form-label">Type</ion-label>
+                </ion-col>
+                <ion-col col-6 col-sm-6 col-md-4>
+                    <ion-label class="form-label">Detail</ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row class="contact-details" *ngFor="let contact of contacts.value;let idx=index">
+                <ion-col col-4 col-sm-3 col-md-3>
+                    <ion-label>{{contactType[contact?.contactType]}}</ion-label>
+                </ion-col>
+                <ion-col col-6 col-sm-6 col-md-4>
+                    <ion-label>{{contact?.contact}}</ion-label>
+                </ion-col>
+                <ion-col col-2 col-sm-1 col-md-1>
+                    <ion-icon name="close" (click)="removeContact($event,contact, idx)" color="accent-dark"></ion-icon>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="errors.contactNo">
+                <ion-col col-12 col-sm-12 col-md-12>
+                    <div class="error-message">
+                        {{ errors.contactNo }}
+                    </div>
+                </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col col-6 col-sm-6 col-md-6>
-                    <ion-label class="form-label">Birth Date *</ion-label>
-                    <ion-datetime displayFormat="MMMM DD, YYYY" formControlName="birthDate"></ion-datetime>
-                    <div class="error-message" *ngIf="patientForm.get('birthDate')?.dirty &&  patientForm.get('birthDate').invalid">
-                        {{ errors.birthDate }}
-                    </div>
-                </ion-col>
-                <ion-col col-6 col-sm-6 col-md-6>
-                    <ion-label class="form-label">Registration Date</ion-label>
-                    <ion-datetime #dateTime displayFormat="MMMM DD, YYYY" formControlName="registrationDate"></ion-datetime>
-                    <div class="error-message" *ngIf="patientForm.get('registrationDate')?.dirty &&  patientForm.get('registrationDate').invalid">
-                        {{ errors.registrationDate }}
-                    </div>
-                </ion-col>
                 <ion-col col-12 col-sm-12 col-md-6>
                     <ion-label class="form-label">Email *</ion-label>
                     <ion-item round>
@@ -95,6 +124,17 @@
                     <div class="error-message" *ngIf="patientForm.get('address')?.dirty &&  patientForm.get('address').invalid">
                         {{ errors.address }}
                     </div>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-12 col-sm-12 col-md-3>
+                    <ion-label class="form-label">Registration Date</ion-label>
+                    <ion-item clean>
+                        <ion-datetime displayFormat="MMMM DD, YYYY" formControlName="registrationDate"></ion-datetime>
+                        <div class="error-message" *ngIf="patientForm.get('registrationDate')?.dirty &&  patientForm.get('registrationDate').invalid">
+                            {{ errors.registrationDate }}
+                        </div>
+                    </ion-item>
                 </ion-col>
             </ion-row>
         </ion-grid>
