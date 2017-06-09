@@ -4,6 +4,9 @@ import { LoadingController, ModalController } from 'ionic-angular';
 import { LOVS } from '../../constants/constants';
 import { REGEX } from '../../config/config';
 
+import { ContactModal } from '../contact-modal/contact-modal.component';
+import { ArraySubject } from '../../shared/model/model';
+
 import { PatientService } from './patient-form.service';
 import { StackedServices, Utilities } from '../../utilities/utilities';
 
@@ -18,9 +21,8 @@ export class PatientForm implements OnInit {
 
   @Output() onSubmit = new EventEmitter();
 
-  @ViewChild('dateTime') dateTime;
-
   private patientForm: FormGroup;
+  public contactType: any[];
   public genderList: any[];
   public legalStatusList: any[];
 
@@ -37,6 +39,8 @@ export class PatientForm implements OnInit {
   private birthDate: AbstractControl;
   private stack: StackedServices;
 
+  private contacts: ArraySubject = new ArraySubject([]);
+
   private errors: any;
 
   constructor(private formBuilder: FormBuilder,
@@ -49,6 +53,7 @@ export class PatientForm implements OnInit {
   public ngOnInit() {
     this.patient = {};
     this.createForm();
+    this.contactType = LOVS.CONTACT_TYPE;
   }
 
   private getDefaults() {
@@ -64,7 +69,8 @@ export class PatientForm implements OnInit {
       address: '',
       email: '',
       registrationDate: '',
-      birthDate: ''
+      birthDate: '',
+      contactNo: ''
     };
 
     this.genderList = LOVS.GENDER;
@@ -144,6 +150,7 @@ export class PatientForm implements OnInit {
     this.errors.registrationDate = this.registrationDate.hasError('required') ? 'Registration date is required' : '';
     this.errors.email = this.email.hasError('required') ? 'Email is required' : '';
     this.errors.birthDate = this.birthDate.hasError('required') ? 'Birth Date is required' : '';
+    this.errors.contactNo = this.hasContact() ? '' : "Contact is required";
   }
 
   private markFormAsDirty() {
@@ -165,13 +172,54 @@ export class PatientForm implements OnInit {
     this.patient.birthDate = this.patientForm.get('birthDate').value;
   }
 
+  public addContact(event: Event): void {
+    event.preventDefault();
+
+    let modal = this.modalController.create(ContactModal,
+      {
+        header: "Add User Contact"
+      });
+
+    modal.onDidDismiss(contact => {
+      if (contact) {
+        this.contacts.push(contact);
+        this.patientForm.get('middleName').markAsDirty();
+        this.hasContact();
+      }
+    });
+
+    modal.present();
+  }
+
+  public removeContact(event: Event, item, idx) {
+    event.preventDefault();
+
+    this.contacts.splice(idx, 1);
+    if (item.id) {
+      // TODO delete patient contact by patient id + contact id
+      // this.stack.push(this.service.deleteContacts(item.id));
+      this.hasContact();
+    }
+
+    this.patientForm.get('middleName').markAsDirty();
+  }
+
+  public hasContact() {
+    if (this.contacts.value && this.contacts.value.length > 0) {
+      this.errors.contactNo = '';
+      return true;
+    }
+
+    return false;
+  }
+
   private submitForm(event) {
     this.markFormAsDirty();
     this.validateForm();
 
     if (this.patientForm.valid) {
       this.bindPatientDetails();
-
+      this.patient.contacts = this.contacts.value;
       this.stack.push(this.service.addPatientDetails(this.patient));
 
       this.stack.executeFork().subscribe(response => {
