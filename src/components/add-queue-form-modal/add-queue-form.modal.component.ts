@@ -9,9 +9,9 @@ import { Utilities } from '../../utilities/utilities';
 })
 export class AddQueueFormModal {
     private queueForm: FormGroup;
-    private lastName: AbstractControl;
-    private firstName: AbstractControl;
-    private middleName: AbstractControl;
+    private lastName: string;
+    private firstName: string;
+    private middleName: string;
     private isServeNow: AbstractControl;
     private schedule: AbstractControl;
     private timeSlot: AbstractControl;
@@ -20,46 +20,50 @@ export class AddQueueFormModal {
     constructor(private formBuilder: FormBuilder,
         private view: ViewController,
         private param: NavParams) {
+        console.log(param.data);
         this.initFormGroup(param.data);
+        this.lastName = param.data.lastname;
+        this.firstName = param.data.firstname;
+        this.middleName = param.data.middlename;
     }
 
     private initFormGroup(data?) {
         this.queueForm = this.formBuilder.group({
-            lastName: [data.lastName || "", Validators.required],
-            firstName: [data.firstName || "", Validators.required],
-            middleName: data.middleName || "",
+            // lastName: [data.lastName || "", Validators.required],
+            // firstName: [data.firstName || "", Validators.required],
+            // middleName: data.middleName || "",
             isServeNow: [data.type ? (data.type === QUEUE.TYPE.WALKIN ? true : false) : true],
             schedule: [data.schedule || new Date()],
             timeSlot: [data.timeSlot || new Date()]
         });
 
-        this.lastName = this.queueForm.get('lastName');
-        this.firstName = this.queueForm.get('firstName');
-        this.middleName = this.queueForm.get('middleName');
+        // this.lastName = this.queueForm.get('lastName');
+        // this.firstName = this.queueForm.get('firstName');
+        // this.middleName = this.queueForm.get('middleName');
         this.isServeNow = this.queueForm.get('isServeNow');
         this.schedule = this.queueForm.get('schedule');
         this.timeSlot = this.queueForm.get('timeSlot');
 
         this.errors = {};
-        this.lastName.valueChanges.subscribe(
-            newValue => {
-                if (this.lastName.hasError('required')) {
-                    this.errors.lastName = 'Last Name is required';
-                } else {
-                    this.errors.lastName = '';
-                }
-            }
-        );
+        // this.lastName.valueChanges.subscribe(
+        //     newValue => {
+        //         if (this.lastName.hasError('required')) {
+        //             this.errors.lastName = 'Last Name is required';
+        //         } else {
+        //             this.errors.lastName = '';
+        //         }
+        //     }
+        // );
 
-        this.firstName.valueChanges.subscribe(
-            newValue => {
-                if (this.firstName.hasError('required')) {
-                    this.errors.firstName = 'First Name is required';
-                } else {
-                    this.errors.firstName = '';
-                }
-            }
-        );
+        // this.firstName.valueChanges.subscribe(
+        //     newValue => {
+        //         if (this.firstName.hasError('required')) {
+        //             this.errors.firstName = 'First Name is required';
+        //         } else {
+        //             this.errors.firstName = '';
+        //         }
+        //     }
+        // );
 
         this.isServeNow.valueChanges.subscribe(
             newValue => {
@@ -79,9 +83,10 @@ export class AddQueueFormModal {
     private save() {
         if (this.validateForm()) {
             this.view.dismiss({
-                lastName: this.lastName.value,
-                firstName: this.firstName.value,
-                middleName: this.middleName.value,
+                lastName: this.param.data.lastname,
+                firstName: this.param.data.firstname,
+                middleName: this.param.data.middlename,
+                id : this.param.data.id,
                 isServeNow: this.isServeNow.value,
                 schedule: this.schedule.value,
                 timeSlot: this.timeSlot.value
@@ -90,12 +95,12 @@ export class AddQueueFormModal {
     }
 
     private validateForm() {
-        if (this.lastName.hasError('required')) {
-            this.errors.lastName = 'Last Name is required';
-        }
-        if (this.firstName.hasError('required')) {
-            this.errors.firstName = 'First Name is required';
-        }
+        // if (this.lastName.hasError('required')) {
+        //     this.errors.lastName = 'Last Name is required';
+        // }
+        // if (this.firstName.hasError('required')) {
+        //     this.errors.firstName = 'First Name is required';
+        // }
         return !Boolean(this.errors.lastName || this.errors.firstName);
     }
 
