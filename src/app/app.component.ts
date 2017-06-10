@@ -16,6 +16,7 @@ import { LoginPage } from '../pages/login/login.page';
 })
 export class MyApp {
   private rootPage = LoginPage;
+  private toast;
   private alertCallback: EventEmitter<any> = new EventEmitter();
   constructor(platform: Platform,
     private storage: Storage,
@@ -50,22 +51,23 @@ export class MyApp {
         this.alert(_err);
       });
       //unauthorized access
-      httpService.unauthorizedEvent.subscribe(_err => {
+      httpService.unauthorizedEvent.subscribe(_err => { 
         this.alert(_err).subscribe(() => {
           this.rootPage = LoginPage;
         });
       });
       
-      // network.onConnect().subscribe(() => {
-      //   setTimeout(() => {
-      //     this.presentToast("Connected");
-      //   }, 1000);
+      network.onConnect().subscribe(() => {
+        setTimeout(() => {
+          this.toast.dismiss();
+          this.presentToast("Connected");
+        }, 1000);
 
-      //   setTimeout(() => {
-      //     if(network.type != null)
-      //     this.presentToast(network.type);
-      //   }, 1000);
-      // });
+        // setTimeout(() => {
+        //   if(network.type != null)
+        //   this.presentToast(network.type);
+        // }, 1000);
+      });
 
       network.onDisconnect().subscribe(() => {
         setTimeout(() => {
@@ -78,12 +80,21 @@ export class MyApp {
 
   public presentToast(message){
 
-    let toast = this.toastCtrl.create({
-    message: message,
-    duration: 3000,
-    position: 'bottom'
-    });
-    toast.present();
+    if (message === "Connected") {
+      this.toast = this.toastCtrl.create({
+        message: message,
+        duration: 3000,
+        position: 'top'
+      });
+      this.toast.present();
+    }
+    else {
+      this.toast = this.toastCtrl.create({
+        message: message,
+        position: 'top'
+      });
+      this.toast.present();
+    }
   }
 
   private alert(_err) {
