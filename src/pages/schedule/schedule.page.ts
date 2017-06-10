@@ -1,5 +1,5 @@
 import { Component, ViewChild, ChangeDetectorRef, Input } from '@angular/core';
-import { PopoverController, Content, ModalController, LoadingController, AlertController, Loading } from 'ionic-angular';
+import { PopoverController, Content, ModalController, LoadingController, AlertController, Loading, NavController } from 'ionic-angular';
 import { MoreMenuPopover } from './more.popover';
 
 import { PatientProfilePage } from '../patient-profile/patient-profile.page';
@@ -10,6 +10,7 @@ import { ScheduleService } from './schedule.service';
 import { RootNavController } from '../../services';
 import { QUEUE } from '../../constants/constants'
 import { AddQueueFormModal } from '../../components/add-queue-form-modal/add-queue-form.modal.component'
+import { PatientInformationPage } from '../patient-information/patient-information.page';
 import { XHRButton } from '../../components/xhr-button/xhr-button.component';
 import {
 	trigger,
@@ -85,7 +86,8 @@ export class SchedulePage {
 		private modal: ModalController,
 		private loadingCtrl: LoadingController,
 		private alert: AlertController,
-		private storage: Storage) {
+		private storage: Storage,
+		private nav: NavController) {
 
 		this.storage.clinicSubject.subscribe(clinic => {
 			if (clinic) {
@@ -355,7 +357,12 @@ export class SchedulePage {
 		});
 	}
 
-	private addOrEditQueue(customer?: any) {
+	private addNewPatient(){
+		this.nav.push(PatientInformationPage, this);
+	}
+
+	public addOrEditQueue(customer?: any) {
+		console.log(customer);
 		let modal = this.modal.create(AddQueueFormModal, customer);
 		modal.onDidDismiss(item => {
 			if (!item) {
@@ -365,41 +372,38 @@ export class SchedulePage {
 			loading.present();
 
 			var parameter: any = item;
-			if (customer) {
-				parameter.id = customer.id;
-			}
 			let parameterFactory = new Promise((resolve, reject) => {
 
 					parameter.type = QUEUE.TYPE.WALKIN;
 					parameter.boardId = this.queueBoard.id;
 
 				if (item.isServeNow) {
-					if (customer) {
-						parameter.order = customer.order;
-						parameter.time = customer.time;
-						parameter.status = customer.status;
-					resolve(parameter);
-					} else {
+					// if (customer) {
+					// 	parameter.order = customer.order;
+					// 	parameter.time = customer.time;
+					// 	parameter.status = customer.status;
+					// resolve(parameter);
+					// } else {
 						parameter.order = this.getNewOrder();
 						parameter.time = new Date();
 						parameter.status = QUEUE.STATUS.QUEUED;
 						// parameter.patientId = this.AddPatientDetails(parameter);
 
-						this.patient.firstname = parameter.firstName;
-						this.patient.middlename = parameter.middleName;
-						this.patient.lastname = parameter.lastName;
-						this.service.addPatientDetails(this.patient).subscribe(response => {
-							if (response.status) {
-								parameter.patientId = response.result;
+						// this.patient.firstname = parameter.firstName;
+						// this.patient.middlename = parameter.middleName;
+						// this.patient.lastname = parameter.lastName;
+						// this.service.addPatientDetails(this.patient).subscribe(response => {
+						// 	if (response.status) {
+						// 		parameter.patientId = response.result;
 								resolve(parameter);
-							}
-							else {
-								reject(parameter);
-							}
-						}, err => {
-							reject(err);
-						});
-					}
+						// 	}
+						// 	else {
+						// 		reject(parameter);
+						// 	}
+						// }, err => {
+						// 	reject(err);
+						// });
+					// }
 
 				} else {
 					this.service.getQueueBoardByIdAndClinic(this.clinicId, new Date(item.schedule))
@@ -422,11 +426,11 @@ export class SchedulePage {
 
 		parameterFactory.then(parameter => {
 				let serviceCallback;
-				if (customer) {
-					serviceCallback = this.service.updateQueue(parameter)
-				} else {
+				// if (customer) {
+				// 	serviceCallback = this.service.updateQueue(parameter)
+				// } else {
 					serviceCallback = this.service.addQueue(parameter)
-				}
+				// }
 				serviceCallback.subscribe(
 					response => {
 						if (response.status) {
