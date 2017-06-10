@@ -1,5 +1,5 @@
 import { Component, ViewChild, ChangeDetectorRef, Input } from '@angular/core';
-import { PopoverController, Content, ModalController, LoadingController, AlertController, Loading } from 'ionic-angular';
+import { PopoverController, Content, ModalController, LoadingController, AlertController, Loading, NavController } from 'ionic-angular';
 import { MoreMenuPopover } from './more.popover';
 
 import { PatientProfilePage } from '../patient-profile/patient-profile.page';
@@ -10,6 +10,7 @@ import { ScheduleService } from './schedule.service';
 import { RootNavController } from '../../services';
 import { QUEUE } from '../../constants/constants'
 import { AddQueueFormModal } from '../../components/add-queue-form-modal/add-queue-form.modal.component'
+import { PatientInformationPage } from '../patient-information/patient-information.page';
 import { XHRButton } from '../../components/xhr-button/xhr-button.component';
 import {
 	trigger,
@@ -85,7 +86,8 @@ export class SchedulePage {
 		private modal: ModalController,
 		private loadingCtrl: LoadingController,
 		private alert: AlertController,
-		private storage: Storage) {
+		private storage: Storage,
+		private nav: NavController) {
 
 		this.storage.clinicSubject.subscribe(clinic => {
 			if (clinic) {
@@ -355,7 +357,12 @@ export class SchedulePage {
 		});
 	}
 
-	private addOrEditQueue(customer?: any) {
+	private addNewPatient(){
+		this.nav.push(PatientInformationPage, this);
+	}
+
+	public addOrEditQueue(customer?: any) {
+		console.log(customer);
 		let modal = this.modal.create(AddQueueFormModal, customer);
 		modal.onDidDismiss(item => {
 			if (!item) {

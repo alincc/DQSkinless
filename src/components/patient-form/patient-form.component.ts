@@ -227,6 +227,7 @@ export class PatientForm implements OnInit {
           const submit = response[this.stack.lastIndex];
 
           if (submit && submit.status) {
+            this.patient["id"] = response[this.stack.lastIndex].result;
             this.onSubmit.emit(this.patient);
           }
         }

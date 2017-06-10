@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { NavParams, NavController } from 'ionic-angular';
 import { RootNavController } from '../../services';
 
 @Component({
@@ -10,7 +10,8 @@ export class PatientInformationPage {
 
   constructor( 
     private navParams: NavParams,
-    private rootNav: RootNavController
+    private rootNav: RootNavController,
+    private nav : NavController
     ) {
   }
 
@@ -19,7 +20,9 @@ export class PatientInformationPage {
   }
 
 	public submit(response) {
-		this.rootNav.pop();
+		// this.rootNav.pop();
+    this.nav.pop();
+    this.navParams.data.addOrEditQueue(response);
 	}
 
 }
