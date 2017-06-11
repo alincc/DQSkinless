@@ -10,11 +10,6 @@ import { MoreMenuPopover } from '../pages/schedule/more.popover';
 import { NotificationPage } from '../pages/notification/notification.page';
 import { PatientPage } from '../pages/patient/patient.page';
 import { PatientProfilePage } from '../pages/patient-profile/patient-profile.page';
-import { PatientManagerPage } from '../pages/patient-manager/patient-manager.page';
-import { CollaboratedPage } from '../pages/patient-manager/collaborated/collaborated.page';
-import { SharedPage } from '../pages/patient-manager/shared/shared.page';
-import { TransferredPage } from '../pages/patient-manager/transferred/transferred.page';
-import { PatientRelationshipPage } from '../pages/patient-relationship/patient-relationship.page';
 import { ProfilePage } from '../pages/profile/profile.page';
 import { RegistrationPage } from '../pages/registration/registration.page';
 import { SchedulePage } from '../pages/schedule/schedule.page';
@@ -41,11 +36,6 @@ export const pages: any[] = [
 	NotificationPage,
 	PatientPage,
 	PatientProfilePage,
-	PatientManagerPage,
-	CollaboratedPage,
-	SharedPage,
-	TransferredPage,
-	PatientRelationshipPage,
 	MoreMenuPopover,
 	ProfilePage,
 	RegistrationPage,
