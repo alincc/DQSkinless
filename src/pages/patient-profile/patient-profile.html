@@ -10,7 +10,7 @@
         <ion-avatar item-left>
             <img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
         </ion-avatar>
-        <button ion-button icon-only>
+        <button ion-button icon-only (click)="gotoEditPatient()">
 		<ion-icon name="md-create" color="accent"></ion-icon>
 		</button>
         <h1>{{patientName}}</h1>
@@ -63,5 +63,4 @@
     <ion-fab bottom right>
         <button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
     </ion-fab>
-    >>>>>>> origin/patient-form
 </ion-content>
