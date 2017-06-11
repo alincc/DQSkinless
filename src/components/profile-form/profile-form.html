@@ -51,9 +51,7 @@
                             <ion-label class="form-label">Medical Arts *</ion-label>
                             <ion-item clean>
                                 <ion-select class="options" name="medicalArt" formControlName="medicalArt">
-                                    <div *ngFor="let type of medicalArts; let i = index">
-                                        <ion-option *ngIf="allowableMedicalArts.includes(i)" [value]="i">{{ type }}</ion-option>
-                                    </div>
+                                    <ion-option *ngFor="let type of medicalArts; let i = index" [value]="i">{{ type }}</ion-option>
                                 </ion-select>
                             </ion-item>
                             <div class="error-message" *ngIf="medicalArt.dirty &&  medicalArt.invalid">
