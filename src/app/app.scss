@@ -1,6 +1,4 @@
 // http://ionicframework.com/docs/v2/theming/
-
-
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These
@@ -14,385 +12,324 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
-
-@media (max-device-width: 576px){
-	ion-col[col-0]{
-		display: none;		
-	}
-}
-
-@media (min-device-width: 576px) and (max-device-width: 767px){
-	ion-col[col-sm-0]{
-		display: none;		
-	}
-}
-
-@media (min-device-width: 768px){
-	ion-col[col-md-0]{
-		display: none;		
-	}
-}
-
-
-
-
-
-@each $color in map-keys($colors){
-	ion-col[color="#{$color}"]{
-		background-color: map-get($colors,$color);
-	}
-}
-
-
-
-ion-content{
-	.scroll-content{
-		transition: all 0.3s;
-	}
-
-	// Rounded Ion-Inputs
-	ion-item.item-input[round] {
-		display: inline-block;
-		border: 1px solid $primary-light !important;
-		box-shadow: none !important;
-		-webkit-border-radius: 4rem !important;
-		border-radius: 4rem !important;
-		height: 35px !important;
-		min-height: 35px !important;
-		padding-left: 8px;
-
-		button {
-			border-radius: 4.4rem !important;
-		}
-
-		ion-label {
-			display: none;
-		}
-
-		.select-icon-inner {
-			color: transparent !important;
-		}
-
-		.item-inner {
-			box-shadow: none !important;
-			border: none !important;
-		}
-
-		input.text-input-ios,
-		textarea.text-input-ios {
-			padding: 0px 5px 0px 5px;
-			margin: 0px 8px 0px 8px;
-		}
-
-		input.text-input-md,
-		textarea.tetext-input-mdxt {
-			margin: 0px 8px 0px 8px;
-		}
-	}
-
-	ion-item[clean] {
-		border-bottom: 0 !important;
-		border-top: 0 !important;
-		background-color: transparent !important;
-		width: 100%;
-		padding: 0;
-		min-height: inherit;
-
-		&.item-md {
-			padding: 0;
-			.item-inner {
-				box-shadow: none !important;
-				border: none !important;
-
-				padding: 0;
-			}
-		}
-
-		&.item-ios {
-			padding: 0;
-
-			.item-inner {
-				box-shadow: none !important;
-				border: none !important;
-
-				padding: 0;
-			}
-		}
-	}
-
-	// Rounded Ion-TextArea
-	ion-item.item-textarea[round], {
-		display: inline-block;
-		height: 60pt !important;
-		min-height: 60pt !important;
-		-webkit-border-radius: 15px !important;
-		border-radius: 15px !important;
-		box-shadow: none !important;
-
-		textarea {
-			margin: 5px !important;
-			min-height: 100% !important;
-		}
-	}
-
-	// Invalid Rounded Inputs that are not dirty, invalid and not disabled
-	ion-item.item-input[round]:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
-		display: inline-block;
-		border: 1px solid $primary-light !important;
-	}
-
-	// Invalid Rounded Inputs that are invalid and not disabled
-	ion-item.item-input[round].ng-invalid:not(.item-input-disabled) {
-		display: inline-block;
-		border: 1px solid $danger !important;
-	}
-
-	// Disabled Rounded Ion-Input and Ion-TextArea
-	ion-item.item-input-disabled[round] {	
-		display: inline-block;
-		border: 1px solid $primary-light;
-		background-color: $secondary;
-
-		ion-select {
-			div[class=select-text] {
-				color: $primary !important;
-			}
-		}
-
-		.text-input[disabled] {
-			opacity: 1 !important;
-			color: $primary !important;
-			background-color: transparent !important;
-		}
-	}
-
-	// Read-only Ion-Items usually in Forms
-	.read-only {
-		ion-item.item-input[round] {
-			display: inline-block;
-			border: 1px $light !important;
-			background-color: $light !important;
-		}
-	}
-
-	// Rounded Ion-datetime
-	ion-item.item-datetime[round] {
-		display: inline-block;
-		border: 1px solid $primary-light !important;
-		box-shadow: none !important;
-		-webkit-border-radius: 4.4em !important;
-		border-radius: 4.4rem !important;
-		height: 35px !important;
-		min-height: 35px !important;
-
-		button {
-			border-radius: 4.4rem !important;
-		}
-
-		ion-label {
-			display: none;
-		}
-
-		ion-datetime {
-			padding: 0px;
-		}	
-	}
-
-
-	// Rounded Select Inputs
-	ion-select {
-		max-width: 100%;
-		width: 100%;
-		border: 1px solid $primary-light !important;
-		-webkit-border-radius: 4.4em !important;
-		border-radius: 4.4rem !important;
-		height: 35px !important;
-		min-height: 35px !important;
-		padding: 0;
-		
-		&.select-ios {
-			padding: 0;
-		}
-	
-		&.select-md {
-			padding: 0;
-		}
-
-		button {
-			border-radius: 4.4rem !important;
-		}
-
-		.select-text {
-			min-width: 100%;
-			padding: 9px 15px;
-		}
-
-		.options {
-    		width: 100%;
-			max-width: 100%;
-			padding: 0;
-    	}
-
-		.select-icon-inner {
-			color: transparent !important;
-		}
-	}
-
-	// Invalid Rounded Select Inputs that are not dirty, invalid and not disabled
-	ion-select:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
-		display: inline-block;
-		border: 1px solid $primary-light !important;
-	}
-
-	// Invalid Rounded Select Inputs that are invalid and not disabled
-	ion-select.ng-invalid:not(.item-input-disabled) {
-		display: inline-block;
-		border: 1px solid $danger !important;
-	}
-
-	// Radio Buttons
-	ion-list[role="radiogroup"]{
-		display: inline-block;
-		width: 100%;
-		
-		ion-item{
-			border-bottom: 0 !important;
-			border-top: 0 !important;
-			background-color: transparent !important;
-
-			.item-inner {
-				border: none !important;
-				direction: rtl;
-			}
-
-			.input-wrapper{
-				direction: ltr;
-				ion-label{
-					white-space: normal;
-					font-size: 14px;
-				}
-			}
-			ion-radio{
-				margin-left: 2px !important;
-				.radio-icon{
-					background-color: $secondary;
-					border: 1px solid $primary-light;
-					border-radius: 50%;
-					height: 21px;
-					width: 21px;
-					&.radio-checked .radio-inner{
-						border-radius: 50% !important;
-						height: 15px !important;
-						width: 15px !important;
-						left: 12%;
-						top: 11%;
-						background-color: $primary;
-						border-width: 0px !important;
-						-webkit-transform: none !important;
-						transform: none !important;
-					}
-				}
-			}
-			&.item-ios .input-wrapper{
-				margin-left: 10px !important;
-			}
-		}
-		.item-radio-checked.item-ios ion-label{
-			color: $dark !important;
-		}
-
-	}
-
-	// Invalid Radio Group that are not dirty, invalid and not disabled
-	ion-list[role="radiogroup"]:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
-		display: inline-block;
-		border: none !important;
-	}
-
-	// Invalid Radio Group that are invalid and not disabled
-	ion-list[role="radiogroup"].ng-invalid:not(.item-input-disabled) {
-		display: inline-block;
-		border: 1px solid $danger !important;
-	}
-
-    .error-message{
-    	margin: 10px;
-    	text-align: left;
-    	color: $danger;
+@media (max-device-width: 576px) {
+    ion-col[col-0] {
+        display: none;
     }
-
-	// ION SEARCH BAR
-	
-	ion-searchbar{
-	    background: none !important;
-	    border: none !important;
-	    .searchbar-input{
-	    	border-bottom: 1px solid $primary-light !important;
-	    }
-	}
-
-	.searchbar-input-container{
-		.searchbar-input{
-			background: white !important;
-			border: 1px solid $primary-light !important;
-			-webkit-border-radius: 4.4em !important;
-			border-radius: 4.4rem !important;
-			color: $dark !important;
-			padding-left: 35px;
-			padding-right: 35px;
-		}
-	}
-
-	// ION DATE TIME
-	ion-datetime {
-		border: 1px solid $primary-light !important;
-		-webkit-border-radius: 4.4em !important;
-		border-radius: 4.4rem !important;
-		height: 35px !important;
-		min-height: 35px !important;
-		width: 100%;
-
-		button {
-			border-radius: 4.4rem !important;
-		}
-
-		&.datetime-ios {
-			padding: 0;
-		}
-	
-		&.datetime-md {
-			padding: 0;
-		}
-
-		.datetime-text {
-			padding: 9px 15px;
-		}
-	}
-
-	// Invalid Ion Datetime that are not dirty, invalid and not disabled
-	ion-datetime:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
-		display: inline-block;
-		border: 1px solid $primary-light !important;
-	}
-
-	// Invalid Ion Datetime that are invalid and not disabled
-	ion-datetime.ng-invalid:not(.item-input-disabled) {
-		display: inline-block;
-		border: 1px solid $danger !important;
-	}
 }
 
-.control-bar{
-	ion-row{
-		background-color: $primary;
-		button{
-			color: $accent;
-		}
+@media (min-device-width: 576px) and (max-device-width: 767px) {
+    ion-col[col-sm-0] {
+        display: none;
+    }
+}
 
-		
-	}
-    &.minimize{
-        ion-row{
+@media (min-device-width: 768px) {
+    ion-col[col-md-0] {
+        display: none;
+    }
+}
+
+@each $color in map-keys($colors) {
+    ion-col[color="#{$color}"] {
+        background-color: map-get($colors, $color);
+    }
+}
+
+ion-content {
+    .scroll-content {
+        transition: all 0.3s;
+    }
+    // Rounded Ion-Inputs
+    ion-item.item-input[round] {
+        display: inline-block;
+        border: 1px solid $primary-light !important;
+        box-shadow: none !important;
+        -webkit-border-radius: 4rem !important;
+        border-radius: 4rem !important;
+        height: 35px !important;
+        min-height: 35px !important;
+        padding-left: 8px;
+        button {
+            border-radius: 4.4rem !important;
+        }
+        ion-label {
+            display: none;
+        }
+        .select-icon-inner {
+            color: transparent !important;
+        }
+        .item-inner {
+            box-shadow: none !important;
+            border: none !important;
+        }
+        input.text-input-ios,
+        textarea.text-input-ios {
+            padding: 0px 5px 0px 5px;
+            margin: 0px 8px 0px 8px;
+        }
+        input.text-input-md,
+        textarea.tetext-input-mdxt {
+            margin: 0px 8px 0px 8px;
+        }
+    }
+    ion-item[clean] {
+        border-bottom: 0 !important;
+        border-top: 0 !important;
+        background-color: transparent !important;
+        width: 100%;
+        padding: 0;
+        min-height: inherit;
+        &.item-md {
+            padding: 0;
+            .item-inner {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0;
+            }
+        }
+        &.item-ios {
+            padding: 0;
+            .item-inner {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0;
+            }
+        }
+    }
+    // Rounded Ion-TextArea
+    ion-item.item-textarea[round],
+    {
+        display: inline-block;
+        height: 60pt !important;
+        min-height: 60pt !important;
+        -webkit-border-radius: 15px !important;
+        border-radius: 15px !important;
+        box-shadow: none !important;
+        textarea {
+            margin: 5px !important;
+            min-height: 100% !important;
+        }
+    }
+    // Invalid Rounded Inputs that are not dirty, invalid and not disabled
+    ion-item.item-input[round]:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
+        display: inline-block;
+        border: 1px solid $primary-light !important;
+    }
+    // Invalid Rounded Inputs that are invalid and not disabled
+    ion-item.item-input[round].ng-invalid:not(.item-input-disabled) {
+        display: inline-block;
+        border: 1px solid $danger !important;
+    }
+    // Disabled Rounded Ion-Input and Ion-TextArea
+    ion-item.item-input-disabled[round] {
+        display: inline-block;
+        border: 1px solid $primary-light;
+        background-color: $secondary;
+        ion-select {
+            div[class=select-text] {
+                color: $primary !important;
+            }
+        }
+        .text-input[disabled] {
+            opacity: 1 !important;
+            color: $primary !important;
+            background-color: transparent !important;
+        }
+    }
+    // Read-only Ion-Items usually in Forms
+    .read-only {
+        ion-item.item-input[round] {
+            display: inline-block;
+            border: 1px $light !important;
+            background-color: $light !important;
+        }
+    }
+    // Rounded Ion-datetime
+    ion-item.item-datetime[round] {
+        display: inline-block;
+        border: 1px solid $primary-light !important;
+        box-shadow: none !important;
+        -webkit-border-radius: 4.4em !important;
+        border-radius: 4.4rem !important;
+        height: 35px !important;
+        min-height: 35px !important;
+        button {
+            border-radius: 4.4rem !important;
+        }
+        ion-label {
+            display: none;
+        }
+        ion-datetime {
+            padding: 0px;
+        }
+    }
+    // Rounded Select Inputs
+    ion-select {
+        max-width: 100%;
+        width: 100%;
+        border: 1px solid $primary-light !important;
+        -webkit-border-radius: 4.4em !important;
+        border-radius: 4.4rem !important;
+        height: 35px !important;
+        min-height: 35px !important;
+        padding: 0;
+        &.select-ios {
+            padding: 0;
+        }
+        &.select-md {
+            padding: 0;
+        }
+        button {
+            border-radius: 4.4rem !important;
+        }
+        .select-text {
+            min-width: 100%;
+            padding: 9px 15px;
+        }
+        .options {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
+        }
+        .select-icon-inner {
+            color: transparent !important;
+        }
+    }
+    // Invalid Rounded Select Inputs that are not dirty, invalid and not disabled
+    ion-select:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
+        display: inline-block;
+        border: 1px solid $primary-light !important;
+    }
+    // Invalid Rounded Select Inputs that are invalid and not disabled
+    ion-select.ng-invalid:not(.item-input-disabled) {
+        display: inline-block;
+        border: 1px solid $danger !important;
+    }
+    // Radio Buttons
+    ion-list[role="radiogroup"] {
+        display: inline-block;
+        width: 100%;
+        ion-item {
+            border-bottom: 0 !important;
+            border-top: 0 !important;
+            background-color: transparent !important;
+            .item-inner {
+                border: none !important;
+                direction: rtl;
+            }
+            .input-wrapper {
+                direction: ltr;
+                ion-label {
+                    white-space: normal;
+                    font-size: 14px;
+                }
+            }
+            ion-radio {
+                margin-left: 2px !important;
+                .radio-icon {
+                    background-color: $secondary;
+                    border: 1px solid $primary-light;
+                    border-radius: 50%;
+                    height: 21px;
+                    width: 21px;
+                    &.radio-checked .radio-inner {
+                        border-radius: 50% !important;
+                        height: 15px !important;
+                        width: 15px !important;
+                        left: 12%;
+                        top: 11%;
+                        background-color: $primary;
+                        border-width: 0px !important;
+                        -webkit-transform: none !important;
+                        transform: none !important;
+                    }
+                }
+            }
+            &.item-ios .input-wrapper {
+                margin-left: 10px !important;
+            }
+        }
+        .item-radio-checked.item-ios ion-label {
+            color: $dark !important;
+        }
+    }
+    // Invalid Radio Group that are not dirty, invalid and not disabled
+    ion-list[role="radiogroup"]:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
+        display: inline-block;
+        border: none !important;
+    }
+    // Invalid Radio Group that are invalid and not disabled
+    ion-list[role="radiogroup"].ng-invalid:not(.item-input-disabled) {
+        display: inline-block;
+        border: 1px solid $danger !important;
+    }
+    .error-message {
+        margin: 10px;
+        text-align: left;
+        color: $danger;
+    }
+    // ION SEARCH BAR
+    ion-searchbar {
+        background: none !important;
+        border: none !important;
+        .searchbar-input {
+            border-bottom: 1px solid $primary-light !important;
+        }
+    }
+    .searchbar-input-container {
+        .searchbar-input {
+            background: white !important;
+            border: 1px solid $primary-light !important;
+            -webkit-border-radius: 4.4em !important;
+            border-radius: 4.4rem !important;
+            color: $dark !important;
+            padding-left: 35px;
+            padding-right: 35px;
+        }
+    }
+    // ION DATE TIME
+    ion-datetime {
+        border: 1px solid $primary-light !important;
+        -webkit-border-radius: 4.4em !important;
+        border-radius: 4.4rem !important;
+        height: 35px !important;
+        min-height: 35px !important;
+        width: 100%;
+        button {
+            border-radius: 4.4rem !important;
+        }
+        &.datetime-ios {
+            padding: 0;
+        }
+        &.datetime-md {
+            padding: 0;
+        }
+        .datetime-text {
+            padding: 9px 15px;
+        }
+    }
+    // Invalid Ion Datetime that are not dirty, invalid and not disabled
+    ion-datetime:not(.ng-dirty).ng-invalid:not(.item-input-disabled) {
+        display: inline-block;
+        border: 1px solid $primary-light !important;
+    }
+    // Invalid Ion Datetime that are invalid and not disabled
+    ion-datetime.ng-invalid:not(.item-input-disabled) {
+        display: inline-block;
+        border: 1px solid $danger !important;
+    }
+}
+
+.control-bar {
+    ion-row {
+        background-color: $primary;
+        button {
+            color: $accent;
+        }
+    }
+    &.minimize {
+        ion-row {
             transition: 3s;
             position: fixed;
             z-index: 1;
@@ -404,74 +341,80 @@ ion-content{
 }
 
 form {
-
-	.form-label{
-		font-weight: bold;
-	}
-
-	.form-link {
-		font-weight: bold;
-	}
-
-	.contact-control{
-		ion-col{
-			&:last-child{
-				text-align: right;
-			}	
-		}	
-	}
-
-	.contact-header{
-		padding: 0 10px;
-	}
-
-	.contact-details{
-		padding: 0 10px;
-		ion-col:last-child{
-			text-align: right;
-			ion-icon{
-				font-size: 28px;
-			}
-		}
-	}
-
-	.form-group{
-		margin:3px;
-	}
-
-	ion-col.col {
-		padding-left: 5px;
-		padding-right: 5px;
-	}
+    .form-label {
+        font-weight: bold;
+    }
+    .form-link {
+        font-weight: bold;
+    }
+    .contact-control {
+        ion-col {
+            &:last-child {
+                text-align: right;
+            }
+        }
+    }
+    .contact-header {
+        padding: 0 10px;
+    }
+    .contact-details {
+        padding: 0 10px;
+        ion-col:last-child {
+            text-align: right;
+            ion-icon {
+                font-size: 28px;
+            }
+        }
+    }
+    .form-group {
+        margin: 3px;
+    }
+    ion-col.col {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
 }
 
-button,ion-label ion-icon{
-	margin-right: 5px;
+button,
+ion-label ion-icon {
+    margin-right: 5px;
 }
 
-div [frame]{
-	padding: 5px;
-	border: dashed 1px $primary-light;
-	border-radius: 4px;
+div [frame] {
+    padding: 5px;
+    border: dashed 1px $primary-light;
+    border-radius: 4px;
 }
 
-ion-icon[text]{
-	font-family: 'arial';
-	font-size: .3rem;
+ion-icon[text] {
+    font-family: 'arial';
+    font-size: .3rem;
 }
 
-ion-item, button[ion-item]{
-	margin-top: 1px;
-	margin-bottom: 1px;
+ion-item,
+button[ion-item] {
+    margin-top: 1px;
+    margin-bottom: 1px;
 }
 
 .speil {
-	padding: 20px;
-	ion-label{
-		white-space: normal;
-	}
+    padding: 20px;
+    ion-label {
+        white-space: normal;
+    }
 }
 
 .tab-margin {
-	margin-top: 46px;
+    margin-top: 46px;
+}
+
+.picker-wrapper {
+    .picker-above-highlight {
+        border-bottom: 2px solid #c8c7cc !important;
+        display: block;
+    }
+    .picker-below-highlight {
+        border-top: 2px solid #c8c7cc !important;
+        display: block;
+    }
 }
