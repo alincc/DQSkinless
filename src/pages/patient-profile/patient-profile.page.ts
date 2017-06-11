@@ -8,6 +8,8 @@ import { PatientProfileService } from './patient-profile.service';
 import { NavParams } from "ionic-angular";
 import { Utilities } from '../../utilities/utilities';
 
+import { PatientInformationPage } from '../../pages/patient-information/patient-information.page';
+
 @Component({
 	selector: 'patient-profile-page',
 	templateUrl: 'patient-profile.html',
@@ -48,6 +50,7 @@ export class PatientProfilePage {
 		this.service.getPatientDetails(this.patientId).subscribe(response =>{
 			if(response.status){
 				
+				this.patientId = response.result.patientId;
 				this.address = response.result.address;
 				this.patientName = Utilities.getFullName(response.result);
 				this.address = response.result.address;
@@ -55,5 +58,9 @@ export class PatientProfilePage {
 				this.registrationDate = response.result.startDate != null ? Utilities.transformDate( new Date(response.result.startDate)) : "unknown";
 			}
 		})
+	}
+
+	private gotoEditPatient(){
+		this.rootNav.push(PatientInformationPage, this.patientId);
 	}
 }
