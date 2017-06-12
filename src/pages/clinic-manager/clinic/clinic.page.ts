@@ -33,6 +33,8 @@ export class ClinicPage implements OnInit {
 
     private address: AbstractControl;
     private clinicName: AbstractControl;
+    private affiliate: AbstractControl;
+    private affiliateCode: AbstractControl;
     private stack: StackedServices;
 
     private clinic: any;
@@ -64,7 +66,9 @@ export class ClinicPage implements OnInit {
             clinicName: '',
             address: '',
             schedule: '',
-            contact: ''
+            contact: '',
+            affiliate: '',
+            affiliateCode: ''
         }
 
         this.mode = 'Add';
@@ -76,11 +80,15 @@ export class ClinicPage implements OnInit {
     private createClinicForm() {
         this.clinicForm = this.formBuilder.group({
             clinicName: [this.clinic.clinicName, [Validators.required]],
-            address: [this.clinic.address, [Validators.required]]
+            address: [this.clinic.address, [Validators.required]],
+            affiliate: '',
+            affiliateCode: ''
         });
 
         this.clinicName = this.clinicForm.get('clinicName');
         this.address = this.clinicForm.get('address');
+        this.affiliate = this.clinicForm.get('affiliate');
+        this.affiliateCode = this.clinicForm.get('affiliateCode');
 
         this.clinicName.valueChanges.subscribe(newValue => {
             this.errors.clinicName = this.clinicName.hasError('required') ? 'Clinic Name is required' : '';
@@ -279,8 +287,10 @@ export class ClinicPage implements OnInit {
 
             if (this.mode === MODE.add) {
                 const newClinic = {
-                    clinicName: this.clinicForm.get('clinicName').value,
-                    address: this.clinicForm.get('address').value,
+                    clinicName: this.clinicName.value,
+                    affiliate: this.affiliate.value,
+                    affiliateCode: this.affiliateCode.value,
+                    address: this.address.value,
                     schedules: this.schedules.value,
                     contacts: this.contacts.value
                 };
@@ -319,8 +329,10 @@ export class ClinicPage implements OnInit {
 
                 const modifiedClinic = {
                     clinicId: this.clinic.clinicId,
-                    clinicName: this.clinicForm.get('clinicName').value,
-                    address: this.clinicForm.get('address').value,
+                    clinicName: this.clinicName.value,
+                    affiliate: this.affiliate.value,
+                    affiliateCode: this.affiliateCode.value,
+                    address: this.address.value,
                 }
 
                 this.stack.push(this.clinicManagerService.updateClinicDetailRecord(modifiedClinic));
