@@ -1,19 +1,19 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LoadingController, ModalController } from 'ionic-angular';
-import { LOVS } from '../../constants/constants';
+import { LoadingController, ModalController, NavParams } from 'ionic-angular';
+import { LOVS, MODE } from '../../constants/constants';
 import { REGEX } from '../../config/config';
 
 import { ContactModal } from '../contact-modal/contact-modal.component';
 import { ArraySubject } from '../../shared/model/model';
 
-import { PatientService } from './patient-form.service';
+import { PatientFormService } from './patient-form.service';
 import { StackedServices, Utilities } from '../../utilities/utilities';
 
 @Component({
   selector: 'patient-form',
   templateUrl: 'patient-form.html',
-  providers: [PatientService]
+  providers: [PatientFormService]
 })
 export class PatientForm implements OnInit {
 
@@ -25,6 +25,7 @@ export class PatientForm implements OnInit {
   public contactType: any[];
   public genderList: any[];
   public legalStatusList: any[];
+  public mode: string;
 
   private firstName: AbstractControl;
   private lastName: AbstractControl;
@@ -43,15 +44,18 @@ export class PatientForm implements OnInit {
 
   private errors: any;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
+    private formBuilder: FormBuilder,
     private loadingController: LoadingController,
     private modalController: ModalController,
-    private service: PatientService, ) {
+    private params: NavParams,
+    private patientService: PatientFormService) {
     this.getDefaults();
   }
 
   public ngOnInit() {
     this.patient = {};
+    this.mode = this.params.get('mode') ? this.params.get('mode') : MODE.add;
     this.createForm();
     this.contactType = LOVS.CONTACT_TYPE;
   }
@@ -195,10 +199,10 @@ export class PatientForm implements OnInit {
     event.preventDefault();
 
     this.contacts.splice(idx, 1);
+    this.hasContact();
+
     if (item.id) {
-      // TODO delete patient contact by patient id + contact id
-      // this.stack.push(this.service.deleteContacts(item.id));
-      this.hasContact();
+      this.stack.push(this.patientService.deleteContacts(item.id));
     }
 
     this.patientForm.get('middleName').markAsDirty();
@@ -216,22 +220,38 @@ export class PatientForm implements OnInit {
   private submitForm(event) {
     this.markFormAsDirty();
     this.validateForm();
+    this.bindPatientDetails();
 
     if (this.patientForm.valid) {
-      this.bindPatientDetails();
-      this.patient.contacts = this.contacts.value;
-      this.stack.push(this.service.addPatientDetails(this.patient));
 
-      this.stack.executeFork().subscribe(response => {
-        if (response) {
-          const submit = response[this.stack.lastIndex];
+      if (this.mode === MODE.add && this.hasContact()) {
+        const customPatient = {
+          patient: this.patient,
+          contacts: this.contacts.value
+        };
 
-          if (submit && submit.status) {
+        this.patientService.createPatient(customPatient).subscribe(response => {
+          if (response && response.status) {
             this.onSubmit.emit(this.patient);
           }
-        }
-        event.dismissLoading();
-      }, err => event.dismissLoading());
+          event.dismissLoading();
+        }, err => event.dismissLoading());
+      } else {
+
+        // TODO EDIT MODE BEHAVIOR
+
+        this.stack.executeFork().subscribe(response => {
+          if (response) {
+            const submit = response[this.stack.lastIndex];
+
+            if (submit && submit.status) {
+              this.onSubmit.emit(this.patient);
+            }
+          }
+          event.dismissLoading();
+        }, err => event.dismissLoading());
+      }
+
     }
     else {
       event.dismissLoading();

@@ -237,9 +237,10 @@ export class ProfileForm implements OnInit {
         event.preventDefault();
 
         this.contacts.splice(idx, 1);
+        this.hasContact();
+
         if (item.id) {
             this.stack.push(this.service.deleteContacts(item.id));
-            this.hasContact();
         }
 
         this.profileForm.get('address').markAsDirty();
