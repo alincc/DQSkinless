@@ -4,32 +4,32 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <ion-label>Date of Visit</ion-label>
+  <ion-label>Date of Visit :</ion-label>
   <!-- defaulted to date of schedule -->
   <ion-item round>
     <ion-input round></ion-input>
   </ion-item>
-  <ion-label>Concern</ion-label>
+  <ion-label>Concern :</ion-label>
   <ion-item round>
     <ion-input round></ion-input>
   </ion-item>
 
   <!-- insert dynamic form here -->
 
-  <ion-label>Impression/Diagnosis</ion-label>
+  <ion-label>Impression/Diagnosis :</ion-label>
   <ion-item round>
     <ion-textarea></ion-textarea>
   </ion-item>
-  <ion-label>Plan</ion-label>
+  <ion-label>Plan :</ion-label>
   <ion-item round>
     <ion-textarea></ion-textarea>
   </ion-item>
-  <ion-label>Follow Up On:</ion-label>
+  <ion-label>Follow Up On :</ion-label>
   <ion-item round>
     <ion-input round></ion-input>
   </ion-item>
   <hr>
-  <ion-label>Attachment</ion-label>
+  <ion-label>Attachment :</ion-label>
   <div text-center>
     <div frame *ngFor="let img of images">
       <img [src]="img">
