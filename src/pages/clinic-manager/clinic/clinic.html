@@ -18,6 +18,24 @@
                         {{ errors.clinicName }}
                     </div>
                 </ion-col>
+                <ion-col col-12 col-sm-12 col-md-4>
+                    <ion-label class="form-label">Affiliate :</ion-label>
+                    <ion-item round>
+                        <ion-input name="affiliate" formControlName="affiliate"></ion-input>
+                    </ion-item>
+                    <div class="error-message" *ngIf="affiliate.dirty &&  affiliate.invalid">
+                        {{ errors.affiliate }}
+                    </div>
+                </ion-col>
+                <ion-col col-12 col-sm-12 col-md-4>
+                    <ion-label class="form-label">Affiliate Code :</ion-label>
+                    <ion-item round>
+                        <ion-input name="affiliateCode" formControlName="affiliateCode"></ion-input>
+                    </ion-item>
+                    <div class="error-message" *ngIf="affiliateCode.dirty &&  affiliateCode.invalid">
+                        {{ errors.affiliateCode }}
+                    </div>
+                </ion-col>
             </ion-row>
             <ion-row>
                 <ion-col>
