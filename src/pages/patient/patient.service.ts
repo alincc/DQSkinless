@@ -24,6 +24,7 @@ export class PatientService {
     }
 
     public getPatients() {
-        return this.http.get(CONFIG.API.getPatientsByDoctorId, [this.getUserId()]);
+        // TODO
+        
     }
 }

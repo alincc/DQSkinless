@@ -27,6 +27,6 @@ export class ManagerService {
     }
 
     public getClinicAcessByUserIdAndClinicId(clinciId) {
-        return this.http.get(CONFIG.API.clinicaccess, [`u/${this.getUserId()}`, `c/${clinciId}`]);
+        return this.http.get(CONFIG.API.clinicAccess, [`u/${this.getUserId()}`, `c/${clinciId}`]);
     }
 }
