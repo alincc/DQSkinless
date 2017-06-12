@@ -132,7 +132,7 @@ export class PatientForm implements OnInit {
     });
 
     this.email.valueChanges.subscribe(newValue => {
-      this.errors.email = this.email.hasError('required') ? 'Email is required' : '';
+      this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
     });
 
     this.registrationDate.valueChanges.subscribe(newValue => {
@@ -152,7 +152,7 @@ export class PatientForm implements OnInit {
     this.errors.gender = this.gender.hasError('required') ? 'Gender is required' : '';
     this.errors.address = this.address.hasError('required') ? 'Address is required' : '';
     this.errors.registrationDate = this.registrationDate.hasError('required') ? 'Registration date is required' : '';
-    this.errors.email = this.email.hasError('required') ? 'Email is required' : '';
+    this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
     this.errors.birthDate = this.birthDate.hasError('required') ? 'Birth Date is required' : '';
     this.errors.contactNo = this.hasContact() ? '' : "Contact is required";
   }
@@ -222,9 +222,9 @@ export class PatientForm implements OnInit {
     this.validateForm();
     this.bindPatientDetails();
 
-    if (this.patientForm.valid) {
+    if (this.patientForm.valid && this.hasContact()) {
 
-      if (this.mode === MODE.add && this.hasContact()) {
+      if (this.mode === MODE.add) {
         const customPatient = {
           patient: this.patient,
           contacts: this.contacts.value
