@@ -164,16 +164,16 @@ export class PatientForm implements OnInit {
   }
 
   private bindPatientDetails() {
-    this.patient.firstname = this.patientForm.get('firstName').value;
-    this.patient.lastname = this.patientForm.get('lastName').value;
-    this.patient.middlename = this.patientForm.get('middleName').value;
-    this.patient.age = this.patientForm.get('age').value;
-    this.patient.legalStatus = this.patientForm.get('legalStatus').value;
-    this.patient.gender = this.patientForm.get('gender').value;
-    this.patient.address = this.patientForm.get('address').value;
-    this.patient.email = this.patientForm.get('email').value;
-    this.patient.startDate = this.patientForm.get('registrationDate').value ? Utilities.transformDate(new Date(this.patientForm.get('registrationDate').value)) : Utilities.transformDate(new Date());
-    this.patient.birthDate = this.patientForm.get('birthDate').value;
+    this.patient.firstname = this.firstName.value;
+    this.patient.lastname = this.lastName.value;
+    this.patient.middlename = this.middleName.value;
+    this.patient.age = this.age.value;
+    this.patient.legalStatus = this.legalStatus.value;
+    this.patient.gender = this.gender.value;
+    this.patient.address = this.address.value;
+    this.patient.email = this.email.value;
+    this.patient.startDate = this.registrationDate.value ? Utilities.transformDate(new Date(this.registrationDate.value)) : Utilities.transformDate(new Date());
+    this.patient.birthDate = this.birthDate.value;
   }
 
   public addContact(event: Event): void {
