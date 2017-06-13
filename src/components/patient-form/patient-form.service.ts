@@ -25,6 +25,10 @@ export class PatientService {
         return this.http.post(CONFIG.API.patientDetails, _parameter);
     }
 
+    public setPatientDetails(_patient){
+        return this.http.put(CONFIG.API.patientDetails, _patient);
+    }
+
     public createPatientAcess(patientId) {
         // TODO BE MODIFIED FOR PROPER IMPLEMENTATION
         const payload = {
@@ -41,5 +45,9 @@ export class PatientService {
 
     public addContacts(_parameter) {
         return this.http.post(CONFIG.API.patientContacts, _parameter);
+    }
+
+    public getPatientDetails(patientId) {
+        return this.http.get(CONFIG.API.patientDetails, [patientId]);
     }
 }

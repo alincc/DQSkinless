@@ -7,12 +7,21 @@ import { RootNavController } from '../../services';
   templateUrl: 'patient-information.html',
 })
 export class PatientInformationPage {
+ 
+
+  public patientId;
+  private hasPatientId;
 
   constructor( 
     private navParams: NavParams,
     private rootNav: RootNavController
     ) {
+      this.patientId = navParams.data;
+
+        this.hasPatientId = !isNaN(this.patientId);
   }
+
+  
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PatientInformation');

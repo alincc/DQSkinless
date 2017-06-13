@@ -1,12 +1,13 @@
 <ion-header>
 
     <ion-navbar>
-        <ion-title>Add Patient</ion-title>
+        <ion-title *ngIf="!hasPatientId">Add Patient</ion-title>
+        <ion-title *ngIf="hasPatientId">Edit Patient</ion-title>
     </ion-navbar>
 
 </ion-header>
 
 
 <ion-content #Content padding>
-    <patient-form (onSubmit)="submit($event)"></patient-form>
+    <patient-form (onSubmit)="submit($event)" [patientId]="patientId"></patient-form>
 </ion-content>

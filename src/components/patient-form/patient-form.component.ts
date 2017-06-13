@@ -9,6 +9,9 @@ import { ArraySubject } from '../../shared/model/model';
 
 import { PatientService } from './patient-form.service';
 import { StackedServices, Utilities } from '../../utilities/utilities';
+import { RootNavController } from '../../services';
+
+import { PatientProfilePage } from '../../pages/patient-profile/patient-profile.page';
 
 @Component({
   selector: 'patient-form',
@@ -18,6 +21,7 @@ import { StackedServices, Utilities } from '../../utilities/utilities';
 export class PatientForm implements OnInit {
 
   @Input() patient: any;
+  @Input() patientId: any;
 
   @Output() onSubmit = new EventEmitter();
 
@@ -39,6 +43,7 @@ export class PatientForm implements OnInit {
   private birthDate: AbstractControl;
   private stack: StackedServices;
 
+
   private contacts: ArraySubject = new ArraySubject([]);
 
   private errors: any;
@@ -46,7 +51,8 @@ export class PatientForm implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private loadingController: LoadingController,
     private modalController: ModalController,
-    private service: PatientService, ) {
+    private service: PatientService, 
+    private rootNav: RootNavController) {
     this.getDefaults();
   }
 
@@ -54,6 +60,10 @@ export class PatientForm implements OnInit {
     this.patient = {};
     this.createForm();
     this.contactType = LOVS.CONTACT_TYPE;
+
+    if(!isNaN(this.patientId)){
+      this.getPatientDetails();
+    }
   }
 
   private getDefaults() {
@@ -172,6 +182,17 @@ export class PatientForm implements OnInit {
     this.patient.birthDate = this.patientForm.get('birthDate').value;
   }
 
+  private bindPatientFormValues(){
+    this.patientForm.get('address').setValue(this.patient.address);
+    this.patientForm.get('age').setValue(this.patient.age);
+    this.patientForm.get('firstName').setValue(this.patient.firstname);
+    this.patientForm.get('lastName').setValue(this.patient.lastname);
+    this.patientForm.get('middleName').setValue(this.patient.middlename);
+    this.patientForm.get('gender').setValue(this.patient.gender);
+    this.patientForm.get('legalStatus').setValue(this.patient.legalStatus);
+    this.patientForm.get('birthDate').setValue(new Date(+this.patient.birthDate).toISOString());
+  }
+
   public addContact(event: Event): void {
     event.preventDefault();
 
@@ -220,21 +241,56 @@ export class PatientForm implements OnInit {
     if (this.patientForm.valid) {
       this.bindPatientDetails();
       this.patient.contacts = this.contacts.value;
-      this.stack.push(this.service.addPatientDetails(this.patient));
 
-      this.stack.executeFork().subscribe(response => {
-        if (response) {
-          const submit = response[this.stack.lastIndex];
+      if (isNaN(this.patientId)) {
+        this.stack.push(this.service.addPatientDetails(this.patient));
 
-          if (submit && submit.status) {
-            this.onSubmit.emit(this.patient);
+        this.stack.executeFork().subscribe(response => {
+          if (response) {
+            const submit = response[this.stack.lastIndex];
+
+            if (submit && submit.status) {
+              this.onSubmit.emit(this.patient);
+            }
           }
-        }
-        event.dismissLoading();
-      }, err => event.dismissLoading());
+          event.dismissLoading();
+
+          this.rootNav.pop();
+        }, err => event.dismissLoading());
+      }
+      else {
+        this.patient.patientId = this.patientId;
+        this.stack.push(this.service.setPatientDetails(this.patient));
+
+        this.stack.executeFork().subscribe(response => {
+          if (response) {
+            const submit = response[this.stack.lastIndex];
+
+            if (submit && submit.status) {
+              this.onSubmit.emit(this.patient);
+            }
+          }
+          event.dismissLoading();
+          // this.rootNav.push(PatientProfilePage, this.patientId);
+          this.rootNav.pop();
+        }, err => event.dismissLoading());
+      }
     }
     else {
       event.dismissLoading();
     }
+
+    this.stack.clearStack();
+  }
+
+  private getPatientDetails(){
+      this.stack.push(this.service.getPatientDetails(this.patientId));
+
+      this.stack.executeFork().subscribe(response => {
+        if(response){
+          this.patient = response[0].result;
+          this.bindPatientFormValues();
+        }
+      })
   }
 }
