@@ -28,26 +28,26 @@ export class ProfileForm implements OnInit {
     @Output() onSubmit = new EventEmitter();
 
 
-    private profileForm: FormGroup;
+    public profileForm: FormGroup;
+    public contacts: ArraySubject = new ArraySubject();
 
     public contactType: any[];
-    public days: any[];
     public genderList: any[];
     public medicalArts: any[];
-    public months: any[];
-    public years: any[];
     public errors: any;
 
-    private contacts: ArraySubject = new ArraySubject();
     private today = new Date();
     private prc: AbstractControl;
+    private ptr: AbstractControl;
     private medicalArt: AbstractControl;
     private specialization: AbstractControl;
     private email: AbstractControl;
     private lastName: AbstractControl;
     private firstName: AbstractControl;
+    private middleName: AbstractControl;
     private gender: AbstractControl;
     private birthDate: AbstractControl;
+    private address: AbstractControl;
     private stack: StackedServices;
 
     public isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -104,52 +104,24 @@ export class ProfileForm implements OnInit {
         };
 
         this.contactType = LOVS.CONTACT_TYPE;
-        this.years = [];
-        this.months = [];
-        this.days = [];
         this.genderList = LOVS.GENDER;
         this.medicalArts = LOVS.MEDICAL_ARTS;
-        this.createDateLov();
-
         this.stack = new StackedServices([]);
     }
 
-    private createDateLov() {
-        let minYear = this.today.getFullYear() - 100;
-
-        for (let i = 0; i <= YEAR_RANGE; i++) {
-            this.years.push(minYear.toString());
-            minYear++;
-        }
-
-        for (let i = 1; i <= 12; i++) {
-
-            this.months.push((i.toString().length < 2 ? '0' : '') + i.toString());
-        }
-
-        this.createDaysLov(31);
-    }
-
-    private createDaysLov(maxDay) {
-        this.days = [];
-        for (let i = 1; i <= maxDay; i++) {
-            this.days.push((i.toString().length < 2 ? '0' : '') + i.toString());
-        }
-    }
-
     private bindProfileFormValues() {
-        this.profileForm.get('prc').setValue(this.profile.prcNum);
-        this.profileForm.get('ptr').setValue(this.profile.ptr);
-        this.profileForm.get('medicalArt').setValue(this.profile.medicalArt);
-        this.profileForm.get('specialization').setValue(this.profile.specialization);
-        this.profileForm.get('email').setValue(this.profile.email);
-        this.profileForm.get('lastName').setValue(this.profile.lastname);
-        this.profileForm.get('firstName').setValue(this.profile.firstname);
-        this.profileForm.get('middleName').setValue(this.profile.middlename);
-        this.profileForm.get('gender').setValue(this.profile.gender);
-        const bday = this.profile.birthdate ? Utilities.getISODate(new Date(+this.profile.birthdate)) : '';
-        this.profileForm.get('birthDate').setValue(bday);
-        this.profileForm.get('address').setValue(this.profile.address);
+        this.prc.setValue(this.profile.prcNum);
+        this.ptr.setValue(this.profile.ptr);
+        this.medicalArt.setValue(this.profile.medicalArt);
+        this.specialization.setValue(this.profile.specialization);
+        this.email.setValue(this.profile.email);
+        this.lastName.setValue(this.profile.lastname);
+        this.firstName.setValue(this.profile.firstname);
+        this.middleName.setValue(this.profile.middlename);
+        this.gender.setValue(this.profile.gender);
+        const bday = this.profile.birthdate ? new Date(+this.profile.birthdate).toISOString() : '';
+        this.birthDate.setValue(bday);
+        this.address.setValue(this.profile.address);
     }
 
     private createProfileForm() {
@@ -168,13 +140,16 @@ export class ProfileForm implements OnInit {
         });
 
         this.prc = this.profileForm.get('prc');
+        this.ptr = this.profileForm.get('ptr');
         this.medicalArt = this.profileForm.get('medicalArt');
         this.specialization = this.profileForm.get('specialization');
         this.email = this.profileForm.get('email');
         this.lastName = this.profileForm.get('lastName');
         this.firstName = this.profileForm.get('firstName');
+        this.middleName = this.profileForm.get('middleName');
         this.gender = this.profileForm.get('gender');
         this.birthDate = this.profileForm.get('birthDate');
+        this.address = this.profileForm.get('address');
 
         this.prc.valueChanges.subscribe(newValue => {
             this.errors.prc = this.prc.hasError('required') ? 'PRC is required' : '';
@@ -225,7 +200,7 @@ export class ProfileForm implements OnInit {
         modal.onDidDismiss(contact => {
             if (contact) {
                 this.contacts.push(contact);
-                this.profileForm.get('address').markAsDirty();
+                this.address.markAsDirty();
                 this.hasContact();
             }
         });
@@ -237,12 +212,13 @@ export class ProfileForm implements OnInit {
         event.preventDefault();
 
         this.contacts.splice(idx, 1);
+        this.hasContact();
+
         if (item.id) {
             this.stack.push(this.service.deleteContacts(item.id));
-            this.hasContact();
         }
 
-        this.profileForm.get('address').markAsDirty();
+        this.address.markAsDirty();
     }
 
     public hasContact() {
@@ -273,17 +249,17 @@ export class ProfileForm implements OnInit {
     }
 
     private bindProfileDetails() {
-        this.profile.prcNum = this.profileForm.get('prc').value;
-        this.profile.ptr = this.profileForm.get('ptr').value;
-        this.profile.medicalArt = this.profileForm.get('medicalArt').value;
-        this.profile.specialization = this.profileForm.get('specialization').value;
-        this.profile.email = this.profileForm.get('email').value;
-        this.profile.lastname = this.profileForm.get('lastName').value;
-        this.profile.firstname = this.profileForm.get('firstName').value;
-        this.profile.middlename = this.profileForm.get('middleName').value;
-        this.profile.gender = this.profileForm.get('gender').value;
-        this.profile.birthdate = this.profileForm.get('birthDate').value;
-        this.profile.address = this.profileForm.get('address').value;
+        this.profile.prcNum = this.prc.value;
+        this.profile.ptr = this.ptr.value;
+        this.profile.medicalArt = this.medicalArt.value;
+        this.profile.specialization = this.specialization.value;
+        this.profile.email = this.email.value;
+        this.profile.lastname = this.lastName.value;
+        this.profile.firstname = this.firstName.value;
+        this.profile.middlename = this.middleName.value;
+        this.profile.gender = this.gender.value;
+        this.profile.birthdate = this.birthDate.value;
+        this.profile.address = this.address.value;
     }
 
     public submitForm(event) {

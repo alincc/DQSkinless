@@ -343,9 +343,11 @@ ion-content {
 form {
     .form-label {
         font-weight: bold;
+        font-size: $h3;
     }
     .form-link {
         font-weight: bold;
+        font-size: $h3;
     }
     .contact-control {
         ion-col {

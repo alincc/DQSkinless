@@ -9,16 +9,14 @@ import { RootNavController } from '../../services';
 export class PatientInformationPage {
  
 
-  public patientId;
   private hasPatientId;
 
   constructor( 
     private navParams: NavParams,
     private rootNav: RootNavController
     ) {
-      this.patientId = navParams.data;
 
-        this.hasPatientId = !isNaN(this.patientId);
+        this.hasPatientId = !navParams.get('patientId');
   }
 
   
