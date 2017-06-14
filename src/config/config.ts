@@ -19,12 +19,12 @@ export const CONFIG = {
         queue: '/queue',
         queueBoard: '/queue-board',
 
-        clinicaccess: '/clinicaccess',
+        clinicAccess: '/clinicaccess',
         updateAccessExpiryProcess: '/clinicaccess/accessroleexp',
         clinicDetailRecord: '/clinicdetails',
         clinicTimeSlots: '/clinictimeslots',
         clinicContacts: '/cliniccontacts',
-        customclinic: '/customclinic',
+        customClinic: '/customclinic',
         getClinicAccessByUserId: '/clinicaccess/u/gbcid',
         getClinicRecordByUserId: '/clinicdetails/u',
         getClinicTimeSlotByClinicId: '/clinictimeslots/cidli',
@@ -33,7 +33,7 @@ export const CONFIG = {
         patientDetails: '/patientdetails',
         patientAccess: '/patientaccess',
         patientContacts: 'patientcontacts',
-        getPatientsByDoctorId: '/patientdetails/d'
+        customPatient: '/custompatient/pdmetc'
     },
     SOCKETS: {
         queue: '/queue-socket'

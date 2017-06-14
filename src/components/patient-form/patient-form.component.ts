@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LoadingController, ModalController } from 'ionic-angular';
-import { LOVS } from '../../constants/constants';
+import { LoadingController, ModalController, NavParams } from 'ionic-angular';
+import { LOVS, MODE } from '../../constants/constants';
 import { REGEX } from '../../config/config';
 
 import { ContactModal } from '../contact-modal/contact-modal.component';
 import { ArraySubject } from '../../shared/model/model';
 
-import { PatientService } from './patient-form.service';
+import { PatientFormService } from './patient-form.service';
 import { StackedServices, Utilities } from '../../utilities/utilities';
 import { RootNavController } from '../../services';
 
@@ -16,12 +16,11 @@ import { PatientProfilePage } from '../../pages/patient-profile/patient-profile.
 @Component({
   selector: 'patient-form',
   templateUrl: 'patient-form.html',
-  providers: [PatientService]
+  providers: [PatientFormService]
 })
 export class PatientForm implements OnInit {
 
   @Input() patient: any;
-  @Input() patientId: any;
 
   @Output() onSubmit = new EventEmitter();
 
@@ -29,6 +28,8 @@ export class PatientForm implements OnInit {
   public contactType: any[];
   public genderList: any[];
   public legalStatusList: any[];
+  public mode: string;
+  @Input() patientId: any;
 
   private firstName: AbstractControl;
   private lastName: AbstractControl;
@@ -48,20 +49,25 @@ export class PatientForm implements OnInit {
 
   private errors: any;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
+    private formBuilder: FormBuilder,
     private loadingController: LoadingController,
     private modalController: ModalController,
-    private service: PatientService, 
-    private rootNav: RootNavController) {
+    private rootNav: RootNavController,
+    private params: NavParams,
+    private patientService: PatientFormService) {
     this.getDefaults();
   }
 
   public ngOnInit() {
     this.patient = {};
+    this.mode = this.params.get('mode') ? this.params.get('mode') : MODE.add;
+    this.patientId = this.params.get('patientId');
     this.createForm();
     this.contactType = LOVS.CONTACT_TYPE;
-
-    if(!isNaN(this.patientId)){
+    
+    if(this.patientId){
+      
       this.getPatientDetails();
     }
   }
@@ -73,7 +79,7 @@ export class PatientForm implements OnInit {
       lastName: '',
       middleName: '',
       confirm: '',
-      age: '',
+      // age: '',
       legalStatus: '',
       gender: '',
       address: '',
@@ -98,7 +104,7 @@ export class PatientForm implements OnInit {
       gender: ['', Validators.required],
       address: ['', Validators.required],
       email: ['', [Validators.required, Validators.pattern(REGEX.EMAIL)]],
-      registrationDate: [Utilities.getISODate(new Date()), Validators.required],
+      registrationDate: [Utilities.getISODateToday(), Validators.required],
       birthDate: ['', Validators.required]
     });
 
@@ -121,9 +127,7 @@ export class PatientForm implements OnInit {
       this.errors.lastName = this.lastName.hasError('required') ? 'Last Name is required' : '';
     });
 
-    this.age.valueChanges.subscribe(newValue => {
-      this.errors.age = this.age.hasError('required') ? 'Age is required' : '';
-    });
+    this.age.disable();
 
     this.legalStatus.valueChanges.subscribe(newValue => {
       this.errors.legalStatus = this.legalStatus.hasError('required') ? 'Marital Status is required' : '';
@@ -138,7 +142,7 @@ export class PatientForm implements OnInit {
     });
 
     this.email.valueChanges.subscribe(newValue => {
-      this.errors.email = this.email.hasError('required') ? 'Email is required' : '';
+      this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
     });
 
     this.registrationDate.valueChanges.subscribe(newValue => {
@@ -147,18 +151,19 @@ export class PatientForm implements OnInit {
 
     this.birthDate.valueChanges.subscribe(newValue => {
       this.errors.birthDate = this.birthDate.hasError('required') ? 'Birth Date is required' : '';
+      this.age.setValue(Utilities.getAge(this.birthDate.value));
     });
   }
 
   private validateForm() {
     this.errors.lastName = this.lastName.hasError('required') ? 'Last Name is required' : '';
     this.errors.firstName = this.firstName.hasError('required') ? 'First Name is required' : '';
-    this.errors.age = this.age.hasError('required') ? 'Age is required' : '';
+    // this.errors.age = this.age.hasError('required') ? 'Age is required' : '';
     this.errors.legalStatus = this.legalStatus.hasError('required') ? 'Marital Status is required' : '';
     this.errors.gender = this.gender.hasError('required') ? 'Gender is required' : '';
     this.errors.address = this.address.hasError('required') ? 'Address is required' : '';
     this.errors.registrationDate = this.registrationDate.hasError('required') ? 'Registration date is required' : '';
-    this.errors.email = this.email.hasError('required') ? 'Email is required' : '';
+    this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
     this.errors.birthDate = this.birthDate.hasError('required') ? 'Birth Date is required' : '';
     this.errors.contactNo = this.hasContact() ? '' : "Contact is required";
   }
@@ -170,16 +175,16 @@ export class PatientForm implements OnInit {
   }
 
   private bindPatientDetails() {
-    this.patient.firstname = this.patientForm.get('firstName').value;
-    this.patient.lastname = this.patientForm.get('lastName').value;
-    this.patient.middlename = this.patientForm.get('middleName').value;
-    this.patient.age = this.patientForm.get('age').value;
-    this.patient.legalStatus = this.patientForm.get('legalStatus').value;
-    this.patient.gender = this.patientForm.get('gender').value;
-    this.patient.address = this.patientForm.get('address').value;
-    this.patient.email = this.patientForm.get('email').value;
-    this.patient.startDate = this.patientForm.get('registrationDate').value ? Utilities.transformDate(new Date(this.patientForm.get('registrationDate').value)) : Utilities.transformDate(new Date());
-    this.patient.birthDate = this.patientForm.get('birthDate').value;
+    this.patient.firstname = this.firstName.value;
+    this.patient.lastname = this.lastName.value;
+    this.patient.middlename = this.middleName.value;
+    this.patient.age = this.age.value;
+    this.patient.legalStatus = this.legalStatus.value;
+    this.patient.gender = this.gender.value;
+    this.patient.address = this.address.value;
+    this.patient.email = this.email.value;
+    this.patient.startDate = this.registrationDate.value ? Utilities.transformDate(new Date(this.registrationDate.value)) : Utilities.transformDate(new Date());
+    this.patient.birthDate = this.birthDate.value;
   }
 
   private bindPatientFormValues(){
@@ -216,10 +221,10 @@ export class PatientForm implements OnInit {
     event.preventDefault();
 
     this.contacts.splice(idx, 1);
+    this.hasContact();
+
     if (item.id) {
-      // TODO delete patient contact by patient id + contact id
-      // this.stack.push(this.service.deleteContacts(item.id));
-      this.hasContact();
+      this.stack.push(this.patientService.deleteContacts(item.id));
     }
 
     this.patientForm.get('middleName').markAsDirty();
@@ -237,30 +242,52 @@ export class PatientForm implements OnInit {
   private submitForm(event) {
     this.markFormAsDirty();
     this.validateForm();
+    this.bindPatientDetails();
 
-    if (this.patientForm.valid) {
-      this.bindPatientDetails();
-      this.patient.contacts = this.contacts.value;
+// <<<<<<< HEAD
+//     if (this.patientForm.valid) {
+//       this.bindPatientDetails();
+//       this.patient.contacts = this.contacts.value;
 
-      if (isNaN(this.patientId)) {
-        this.stack.push(this.service.addPatientDetails(this.patient));
+//       if (isNaN(this.patientId)) {
+//         this.stack.push(this.service.addPatientDetails(this.patient));
 
-        this.stack.executeFork().subscribe(response => {
-          if (response) {
-            const submit = response[this.stack.lastIndex];
+//         this.stack.executeFork().subscribe(response => {
+//           if (response) {
+//             const submit = response[this.stack.lastIndex];
 
-            if (submit && submit.status) {
-              this.onSubmit.emit(this.patient);
-            }
+//             if (submit && submit.status) {
+//               this.onSubmit.emit(this.patient);
+//             }
+//           }
+//           event.dismissLoading();
+
+//           this.rootNav.pop();
+//         }, err => event.dismissLoading());
+//       }
+//       else {
+//         this.patient.patientId = this.patientId;
+//         this.stack.push(this.service.setPatientDetails(this.patient));
+// =======
+    if (this.patientForm.valid && this.hasContact()) {
+
+      if (this.mode === MODE.add) {
+        const customPatient = {
+          patient: this.patient,
+          contacts: this.contacts.value
+        };
+
+        this.patientService.createPatient(customPatient).subscribe(response => {
+          if (response && response.status) {
+            this.onSubmit.emit(this.patient);
           }
           event.dismissLoading();
-
-          this.rootNav.pop();
         }, err => event.dismissLoading());
-      }
-      else {
+      } else {
+
+        // TODO EDIT MODE BEHAVIOR
         this.patient.patientId = this.patientId;
-        this.stack.push(this.service.setPatientDetails(this.patient));
+        this.stack.push(this.patientService.setPatientDetails(this.patient));
 
         this.stack.executeFork().subscribe(response => {
           if (response) {
@@ -271,8 +298,6 @@ export class PatientForm implements OnInit {
             }
           }
           event.dismissLoading();
-          // this.rootNav.push(PatientProfilePage, this.patientId);
-          this.rootNav.pop();
         }, err => event.dismissLoading());
       }
     }
@@ -284,7 +309,7 @@ export class PatientForm implements OnInit {
   }
 
   private getPatientDetails(){
-      this.stack.push(this.service.getPatientDetails(this.patientId));
+      this.stack.push(this.patientService.getPatientDetails(this.patientId));
 
       this.stack.executeFork().subscribe(response => {
         if(response){

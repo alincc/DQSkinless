@@ -34,11 +34,11 @@ export class ClinicManagerService {
 
     public createClinic(clinic) {
         clinic.userId = this.getUserId();
-        return this.http.post(CONFIG.API.customclinic, clinic);
+        return this.http.post(CONFIG.API.customClinic, clinic);
     }
 
     public deleteClinic(clinicId) {
-        return this.http.delete(CONFIG.API.customclinic, [clinicId]);
+        return this.http.delete(CONFIG.API.customClinic, [clinicId]);
     }
 
     public getClinicRecord() {
@@ -181,7 +181,7 @@ export class ClinicManagerService {
             userRole: userRole
         };
 
-        return this.http.post(CONFIG.API.clinicaccess, payload);
+        return this.http.post(CONFIG.API.clinicAccess, payload);
     }
 
     public associateMember(clinicId, userId, accessRole, userRole) {
@@ -192,7 +192,7 @@ export class ClinicManagerService {
             userRole: userRole
         };
 
-        return this.http.post(CONFIG.API.clinicaccess, payload);
+        return this.http.post(CONFIG.API.clinicAccess, payload);
     }
 
     public getClinicMember(clinicId) {
@@ -201,7 +201,7 @@ export class ClinicManagerService {
 
     public deleteClinicAccessByClinIdUserId(clinicId, userId) {
         const param = `/u/${userId}/c/${clinicId}`;
-        return this.http.delete(CONFIG.API.clinicaccess + param);
+        return this.http.delete(CONFIG.API.clinicAccess + param);
     }
 
     public getClinicAccessByUserId() {
@@ -209,6 +209,6 @@ export class ClinicManagerService {
     }
 
     public getClinicAcessByUserIdAndClinicId(clinciId) {
-        return this.http.get(CONFIG.API.clinicaccess, [`u/${this.getUserId()}`, `c/${clinciId}`]);
+        return this.http.get(CONFIG.API.clinicAccess, [`u/${this.getUserId()}`, `c/${clinciId}`]);
     }
 }

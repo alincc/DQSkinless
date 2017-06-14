@@ -5,6 +5,7 @@ import { ConsultationFormPage } from '../consultation-form/consultation-form';
 import { PatientProfileService } from './patient-profile.service';
 import { NavParams } from "ionic-angular";
 import { Utilities } from '../../utilities/utilities';
+import { MODE } from '../../constants/constants';
 
 import { PatientInformationPage } from '../../pages/patient-information/patient-information.page';
 
@@ -53,6 +54,6 @@ export class PatientProfilePage {
 	}
 
 	private gotoEditPatient(){
-		this.rootNav.push(PatientInformationPage, this.patientId);
+		this.rootNav.push(PatientInformationPage, {patientId: this.patientId, mode: MODE.edit});
 	}
 }

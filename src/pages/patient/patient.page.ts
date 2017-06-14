@@ -28,13 +28,14 @@ export class PatientPage implements OnInit {
 	}
 
 	public ngOnInit() {
-		this.isLoading.next(true);
-		this.patientService.getPatients().subscribe(response => {
-			if (response && response.status) {
-				console.log(response);
-			}
-			this.isLoading.next(false)
-		}, err => this.isLoading.next(false));
+		// TODO
+		// this.isLoading.next(true);
+		// this.patientService.getPatients().subscribe(response => {
+		// 	if (response && response.status) {
+		// 		console.log(response);
+		// 	}
+		// 	this.isLoading.next(false);
+		// }, err => this.isLoading.next(false));		
 	}
 
 	private goToAdd() {

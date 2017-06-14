@@ -16,7 +16,7 @@ export class ScheduleHistoryPage {
 	private ws: any;
 	private connection: any;
 	private queueBoard: any;
-	private myDate: String = Utilities.getISODate(new Date());
+	private myDate: String = Utilities.getISODateToday();
 	private clinicId: any;
 	constructor(
 		private service: ScheduleService,
