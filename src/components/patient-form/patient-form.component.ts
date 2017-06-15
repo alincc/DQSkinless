@@ -255,7 +255,8 @@ export class PatientForm implements OnInit {
 
         this.patientService.createPatient(customPatient).subscribe(response => {
           if (response && response.status) {
-            
+            this.patient["id"] = response.result;
+            this.onSubmit.emit(this.patient);
             this.rootNav.pop();
           }
           event.dismissLoading();
@@ -270,8 +271,11 @@ export class PatientForm implements OnInit {
         this.stack.executeFork().subscribe(response => {
           if (response) {
             const submit = response[this.stack.lastIndex];
-
             if (submit && submit.status) {
+              
+              this.patient["id"] = response[this.stack.lastIndex].result;
+              this.onSubmit.emit(this.patient);
+
               const callback = this.params.get('callback');
               callback(this.patientId).then(() => {
                 this.rootNav.pop();
