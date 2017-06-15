@@ -119,7 +119,7 @@ export class ProfileForm implements OnInit {
         this.firstName.setValue(this.profile.firstname);
         this.middleName.setValue(this.profile.middlename);
         this.gender.setValue(this.profile.gender);
-        const bday = this.profile.birthdate ? new Date(+this.profile.birthdate).toISOString() : '';
+        const bday = this.profile.birthdate ? Utilities.getISODate(this.profile.birthdate) : '';
         this.birthDate.setValue(bday);
         this.address.setValue(this.profile.address);
     }

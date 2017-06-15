@@ -103,14 +103,14 @@ export class ScheduleHistoryPage {
 		var addDay = new Date(this.myDate.toString());
 		addDay.setDate(addDay.getDate() + 1);
 
-		this.myDate = addDay.toISOString();
+		this.myDate = Utilities.getISODate(addDay);
 	}
 
 	private getPreviousDay() {
 		var addDay = new Date(this.myDate.toString());
 		addDay.setDate(addDay.getDate() - 1);
 
-		this.myDate = addDay.toISOString();
+		this.myDate = Utilities.getISODate(addDay);
 	}
 
 

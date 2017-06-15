@@ -51,15 +51,6 @@
                         {{ errors.gender }}
                     </div>
                 </ion-col>
-                <ion-col col-4 col-sm-4 col-md-1>
-                    <ion-label class="form-label">Age* :</ion-label>
-                    <ion-item round>
-                        <ion-input type="number" name="age" formControlName="age"></ion-input>
-                    </ion-item>
-                    <div class="error-message" *ngIf="patientForm.get('age')?.dirty &&  patientForm.get('age').invalid">
-                        {{ errors.age }}
-                    </div>
-                </ion-col>
                 <ion-col col-8 col-sm-8 col-md-3>
                     <ion-label class="form-label">Birth Date* :</ion-label>
                     <ion-item clean>
@@ -68,6 +59,15 @@
                             {{ errors.birthDate }}
                         </div>
                     </ion-item>
+                </ion-col>
+                <ion-col col-4 col-sm-4 col-md-1>
+                    <ion-label class="form-label">Age* :</ion-label>
+                    <ion-item round>
+                        <ion-input type="number" name="age" formControlName="age"></ion-input>
+                    </ion-item>
+                    <div class="error-message" *ngIf="patientForm.get('age')?.dirty &&  patientForm.get('age').invalid">
+                        {{ errors.age }}
+                    </div>
                 </ion-col>
             </ion-row>
             <ion-row class="contact-control">

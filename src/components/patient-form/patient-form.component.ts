@@ -195,7 +195,8 @@ export class PatientForm implements OnInit {
     this.patientForm.get('middleName').setValue(this.patient.middlename);
     this.patientForm.get('gender').setValue(this.patient.gender);
     this.patientForm.get('legalStatus').setValue(this.patient.legalStatus);
-    this.patientForm.get('birthDate').setValue(new Date(+this.patient.birthDate).toISOString());
+    this.patientForm.get('birthDate').setValue(Utilities.getISODate(this.patient.birthDate));
+    this.patientForm.get('registrationDate').setValue(Utilities.getISODate(this.patient.startDate));
   }
 
   public addContact(event: Event): void {
@@ -244,31 +245,6 @@ export class PatientForm implements OnInit {
     this.validateForm();
     this.bindPatientDetails();
 
-// <<<<<<< HEAD
-//     if (this.patientForm.valid) {
-//       this.bindPatientDetails();
-//       this.patient.contacts = this.contacts.value;
-
-//       if (isNaN(this.patientId)) {
-//         this.stack.push(this.service.addPatientDetails(this.patient));
-
-//         this.stack.executeFork().subscribe(response => {
-//           if (response) {
-//             const submit = response[this.stack.lastIndex];
-
-//             if (submit && submit.status) {
-//               this.onSubmit.emit(this.patient);
-//             }
-//           }
-//           event.dismissLoading();
-
-//           this.rootNav.pop();
-//         }, err => event.dismissLoading());
-//       }
-//       else {
-//         this.patient.patientId = this.patientId;
-//         this.stack.push(this.service.setPatientDetails(this.patient));
-// =======
     if (this.patientForm.valid && this.hasContact()) {
 
       if (this.mode === MODE.add) {
@@ -279,7 +255,8 @@ export class PatientForm implements OnInit {
 
         this.patientService.createPatient(customPatient).subscribe(response => {
           if (response && response.status) {
-            this.onSubmit.emit(this.patient);
+            
+            this.rootNav.pop();
           }
           event.dismissLoading();
         }, err => event.dismissLoading());
@@ -287,6 +264,7 @@ export class PatientForm implements OnInit {
 
         // TODO EDIT MODE BEHAVIOR
         this.patient.patientId = this.patientId;
+        
         this.stack.push(this.patientService.setPatientDetails(this.patient));
 
         this.stack.executeFork().subscribe(response => {
@@ -294,7 +272,10 @@ export class PatientForm implements OnInit {
             const submit = response[this.stack.lastIndex];
 
             if (submit && submit.status) {
-              this.onSubmit.emit(this.patient);
+              const callback = this.params.get('callback');
+              callback(this.patientId).then(() => {
+                this.rootNav.pop();
+              });
             }
           }
           event.dismissLoading();
@@ -305,7 +286,6 @@ export class PatientForm implements OnInit {
       event.dismissLoading();
     }
 
-    this.stack.clearStack();
   }
 
   private getPatientDetails(){

@@ -16,7 +16,7 @@ export class PatientInformationPage {
     private rootNav: RootNavController
     ) {
 
-        this.hasPatientId = !navParams.get('patientId');
+        this.hasPatientId = navParams.get('patientId');
   }
 
   

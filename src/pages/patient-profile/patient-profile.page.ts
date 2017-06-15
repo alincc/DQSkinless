@@ -31,16 +31,16 @@ export class PatientProfilePage {
 
 		this.patientId = navParams.data;
 
-		this.fetchPatientInformation();
+		this.fetchPatientInformation(this.patientId);
 	}
 
 	open() {
 		this.rootNav.push(ConsultationFormPage);
 	}
 
-	private fetchPatientInformation() {
+	private fetchPatientInformation(patientId) {
 
-		this.service.getPatientDetails(this.patientId).subscribe(response =>{
+		this.service.getPatientDetails(patientId).subscribe(response =>{
 			if(response.status){
 				
 				this.patientId = response.result.patientId;
@@ -54,6 +54,21 @@ export class PatientProfilePage {
 	}
 
 	private gotoEditPatient(){
-		this.rootNav.push(PatientInformationPage, {patientId: this.patientId, mode: MODE.edit});
+		this.rootNav.push(
+			PatientInformationPage, 
+			{
+				patientId: this.patientId, 
+				mode: MODE.edit,
+				callback: this.patientProfileCallback});
+	}
+
+	public patientProfileCallback = (navParams) => {
+		return new Promise((resolve, reject) => {
+			if (this.navParams.data) {
+				this.fetchPatientInformation(this.navParams.data);
+			}
+
+			resolve();
+		});
 	}
 }
