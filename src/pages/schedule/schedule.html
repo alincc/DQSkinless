@@ -22,7 +22,7 @@
                     {{getDefaultAvatar(serving)}}
                 </div>
             </ion-avatar>
-            <h2 color="accent" (click)="view(0)">{{serving?.lastName}}, {{serving?.firstName}} {{serving?.middleName}}</h2>
+            <h2 color="accent" (click)="view(serving.patientId)">{{serving?.lastName}}, {{serving?.firstName}} {{serving?.middleName}}</h2>
             <p>{{serving?.time | date: 'hh:mm a'}} </p>
         </ion-item>
     </div>
@@ -91,10 +91,10 @@
                     <ion-icon name="eye-off"></ion-icon>
                     No Show
                 </xhr-button>
-                <button ion-button color="secondary" (click)="addOrEditQueue( customer)">
+                <!-- <button ion-button color="secondary" (click)="addOrEditQueue( customer)">
 					<ion-icon name="md-create"></ion-icon>
 					Edit
-				</button>
+				</button> -->
             </ion-item-options>
             <ion-item-options side="right">
                 <xhr-button color="secondary" *ngFor="let button of getButtons(customer)" (xhrClick)="button.clickFn($event, customer)">
@@ -112,7 +112,7 @@
     <ion-fab bottom right>
         <button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
         <ion-fab-list side="left">
-            <button color="accent-light" ion-fab (click)="addOrEditQueue()"><ion-icon name="person-add"></ion-icon></button>
+            <button color="accent-light" ion-fab (click)="addNewPatient()"><ion-icon name="person-add"></ion-icon></button>
             <button color="accent-light" ion-fab><ion-icon name="search"></ion-icon>
 			</button>
         </ion-fab-list>
