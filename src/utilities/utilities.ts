@@ -19,6 +19,10 @@ export class Utilities {
 		return localISOTime;
 	}
 
+	public static getISODate(date: Date){
+		return new Date(new Date(date).toString() +" GMT").toISOString()
+	}
+
 	public static padDigits(number, digits) {
 		return Array(Math.max(digits - String(number).length + 1, 0)).join("0") + number;
 	}
