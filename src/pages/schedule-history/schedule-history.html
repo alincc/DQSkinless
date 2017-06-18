@@ -12,6 +12,7 @@
         </ion-datetime>
         <button ion-button clear icon-only (click)="getNextDay()"><ion-icon name="arrow-forward"></ion-icon></button>
     </div>
+    <content-with-loading [isLoading]="!queue">
         <ion-grid>
             <ion-row>
                 <ion-col col-sm-12 col-md-6 col-12 *ngFor="let customer of queue;trackBy:TrackByPatientId">
@@ -35,9 +36,10 @@
                 </ion-col>
             </ion-row>
         </ion-grid>
-    <div class="speil" *ngIf="queue?.length === 0" text-center>
-        <ion-label>
-            There is no activity on this date.
-        </ion-label>
-    </div>
+        <div class="speil" *ngIf="queue?.length == 0" text-center>
+            <ion-label>
+                There is no activity on this date.
+            </ion-label>
+        </div>
+    </content-with-loading>
 </ion-content>

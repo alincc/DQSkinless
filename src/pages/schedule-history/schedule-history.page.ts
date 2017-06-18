@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
-import { ScheduleService } from './schedule.service';
+import { ScheduleService } from './schedule-history.service';
 import { Storage } from '../../services';
 import { Utilities } from '../../utilities/utilities';
 import { QUEUE } from '../../constants/constants'
@@ -13,44 +12,33 @@ import { PatientProfilePage } from '../patient-profile/patient-profile.page';
 	providers: [ScheduleService]
 })
 export class ScheduleHistoryPage {
-	public scheduleForm: FormGroup;
 	public queue: any[];
-	private ws: any;
-	private connection: any;
 	private queueBoard: any;
 	private myDate: String = Utilities.getISODateToday();
 	private clinicId: any;
 	constructor(
 		private service: ScheduleService,
 		private storage: Storage,
-		private formBuilder: FormBuilder,
 		private nav: NavController) {
-
 		// this.myDate.setValue(Utilities.clearTime(new Date()).toISOString());
 		this.storage.clinicSubject.subscribe(clinic => {
 
 			this.clinicId = clinic.clinicId;
 			this.fetchHistory();
 		})
-
 	}
 
 	private fetchHistory() {
-
+		this.queue = null;
 		this.service.getQueueBoardByClinicAndDateNoCreate(this.clinicId, Utilities.clearTime(new Date(this.myDate.toString()))).subscribe(response => {
 
 			if (response.status) {
-
 				//set queue board
 				this.queueBoard = response.result;
-
 				this.fetchQueue(response => {
 						console.log("fetched Queue");
 					});
-				
-
 			}
-
 		}, err => {
 			console.error(err);
 		})
