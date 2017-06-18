@@ -1,9 +1,11 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { ScheduleService } from './schedule.service';
 import { Storage } from '../../services';
 import { Utilities } from '../../utilities/utilities';
 import { QUEUE } from '../../constants/constants'
+import { NavController } from 'ionic-angular';
+import { PatientProfilePage } from '../patient-profile/patient-profile.page';
 
 @Component({
 	selector: 'schedule-history',
@@ -21,8 +23,8 @@ export class ScheduleHistoryPage {
 	constructor(
 		private service: ScheduleService,
 		private storage: Storage,
-		private detector: ChangeDetectorRef,
-		private formBuilder: FormBuilder) {
+		private formBuilder: FormBuilder,
+		private nav: NavController) {
 
 		// this.myDate.setValue(Utilities.clearTime(new Date()).toISOString());
 		this.storage.clinicSubject.subscribe(clinic => {
@@ -66,7 +68,6 @@ export class ScheduleHistoryPage {
 				if (callback) {
 					callback(response);
 				}
-				this.detector.detectChanges();
 			}
 		}, err => {
 			if (errorHandler) {
@@ -111,6 +112,11 @@ export class ScheduleHistoryPage {
 		addDay.setDate(addDay.getDate() - 1);
 
 		this.myDate = Utilities.getISODate(addDay);
+	}
+
+
+	public view(patientId) {
+		this.nav.push(PatientProfilePage, patientId);
 	}
 
 

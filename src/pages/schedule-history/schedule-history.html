@@ -9,16 +9,14 @@
     <div class="sub-header" text-center>
         <button ion-button clear icon-only (click)="getPreviousDay()"><ion-icon name="arrow-back"></ion-icon></button>
         <ion-datetime displayFormat="MMMM DD, YYYY DDDD" [(ngModel)]="myDate" (ionChange)="fetchHistory()">
-
         </ion-datetime>
         <button ion-button clear icon-only (click)="getNextDay()"><ion-icon name="arrow-forward"></ion-icon></button>
     </div>
-    <ion-list>
         <ion-grid>
             <ion-row>
                 <ion-col col-sm-12 col-md-6 col-12 *ngFor="let customer of queue;trackBy:TrackByPatientId">
                     <ion-card>
-                        <ion-item>
+                        <ion-item (click)="view(customer.patientId)">
                             <ion-avatar item-left color="primary">
                                 <img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
                             </ion-avatar>
@@ -37,7 +35,6 @@
                 </ion-col>
             </ion-row>
         </ion-grid>
-    </ion-list>
     <div class="speil" *ngIf="queue?.length === 0" text-center>
         <ion-label>
             There is no activity on this date.
