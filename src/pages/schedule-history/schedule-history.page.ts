@@ -95,7 +95,7 @@ export class ScheduleHistoryPage {
 			case QUEUE.TYPE.SCHEDULED:
 				return 'Scheduled';
 			case QUEUE.TYPE.WALKIN:
-				return 'Wakn-In';
+				return 'Walk-In';
 		}
 	}
 
