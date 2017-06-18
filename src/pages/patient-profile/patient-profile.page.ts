@@ -5,7 +5,7 @@ import { ConsultationFormPage } from '../consultation-form/consultation-form';
 import { PatientProfileService } from './patient-profile.service';
 import { NavParams } from "ionic-angular";
 import { Utilities } from '../../utilities/utilities';
-import { MODE } from '../../constants/constants';
+import { MODE, LOVS } from '../../constants/constants';
 
 import { PatientInformationPage } from '../../pages/patient-information/patient-information.page';
 
@@ -17,12 +17,11 @@ import { PatientInformationPage } from '../../pages/patient-information/patient-
 export class PatientProfilePage {
 	public timeline: any;
 
-	private patientName;
-	private registrationDate;
-	private contact;
-	private age;
-	private address;
 	private patientId;
+	private patient : any;
+
+	private gender = LOVS.GENDER;
+	private legal = LOVS.LEGAL_STATUS;
 
 	constructor(private rootNav: RootNavController,
 		private service: PatientProfileService,
@@ -30,7 +29,6 @@ export class PatientProfilePage {
 		this.timeline = timeline;
 
 		this.patientId = navParams.data;
-
 		this.fetchPatientInformation(this.patientId);
 	}
 
@@ -42,13 +40,7 @@ export class PatientProfilePage {
 
 		this.service.getPatientDetails(patientId).subscribe(response =>{
 			if(response.status){
-				
-				this.patientId = response.result.patientId;
-				this.address = response.result.address;
-				this.patientName = Utilities.getFullName(response.result);
-				this.address = response.result.address;
-				this.age = response.result.birthDate != null ? Utilities.getAge(response.result.birthDate) : "unknown";
-				this.registrationDate = response.result.startDate != null ? Utilities.transformDate(new Date(response.result.startDate)) : "unknown";
+				this.patient = response.result;
 			}
 		})
 	}
