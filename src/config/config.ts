@@ -33,7 +33,9 @@ export const CONFIG = {
         patientDetails: '/patientdetails',
         patientAccess: '/patientaccess',
         patientContacts: 'patientcontacts',
-        customPatient: '/custompatient/pdmetc'
+        customPatient: '/custompatient/pdmetc',
+
+        imageBucket: "/aws"
     },
     SOCKETS: {
         queue: '/queue-socket'
