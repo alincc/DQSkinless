@@ -11,7 +11,7 @@ import { ProfilePage } from '../profile/profile.page';
 import { ClinicManagerPage } from '../clinic-manager/clinic-manager.page';
 import { ChangePasswordPage } from '../change-password/change-password.page';
 
-import { RootNavController, Storage, Images } from '../../services';
+import { RootNavController, Storage, Images,IMG_BUCKET } from '../../services';
 
 @Component({
 	selector: 'tabs',
@@ -49,9 +49,15 @@ export class TabsPage {
 		storage.accountSubject.subscribe(account => {
 			if (account) {
 				this.account = account;
-				this.images.getImage(this.account.userId + "_profile_pic.jpg").then(response => {
-					this.profilepic = response;
-				});
+				//commented due to saving of s3 connection
+				// this.images.getImage({
+				// 	bucketName : IMG_BUCKET.USER,
+				// 	folderName : account.userId,
+				// 	ownerId : account.userId,
+				// 	imageId : "13"
+				// }).then(response => {
+				// 	this.profilepic = response;
+				// });
 			}
 		});
 
