@@ -50,14 +50,14 @@ export class TabsPage {
 			if (account) {
 				this.account = account;
 				//commented due to saving of s3 connection
-				// this.images.getImage({
-				// 	bucketName : IMG_BUCKET.USER,
-				// 	folderName : account.userId,
-				// 	ownerId : account.userId,
-				// 	imageId : "13"
-				// }).then(response => {
-				// 	this.profilepic = response;
-				// });
+				this.images.getImage({
+					bucketName : IMG_BUCKET.USER,
+					folderName : account.userId,
+					ownerId : account.userId,
+					cacheId : [account.userId]
+				}).then(response => {
+					this.profilepic = response;
+				});
 			}
 		});
 

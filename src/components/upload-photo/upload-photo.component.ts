@@ -78,7 +78,8 @@ export class UploadPhoto {
 			content : [this.content],
 			bucketName : IMG_BUCKET.USER,
 			folderName : this.storage.account.userId,
-			ownerId : this.storage.account.userId
+			ownerId : this.storage.account.userId,
+			cacheId : [this.storage.account.userId]
 		}).then(
 			resolve => {
 				this.onSubmit.emit(resolve);

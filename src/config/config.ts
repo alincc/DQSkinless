@@ -30,12 +30,15 @@ export const CONFIG = {
         getClinicTimeSlotByClinicId: '/clinictimeslots/cidli',
         getClinicContactByClinicId: '/cliniccontacts/cidli',
         getClinicMember: '/members/clnid',
+
         patientDetails: '/patientdetails',
         patientAccess: '/patientaccess',
         patientContacts: 'patientcontacts',
         customPatient: '/custompatient/pdmetc',
 
-        imageBucket: "/aws"
+        imageBucket: "/aws",
+
+        verifyAffiliateCode: '/affiliates/vrfpcd'
     },
     SOCKETS: {
         queue: '/queue-socket'
