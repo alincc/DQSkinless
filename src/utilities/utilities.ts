@@ -13,22 +13,22 @@ export class Utilities {
 		return timeless;
 	}
 
-	public static getISODateToday(){
+	public static getISODateToday() {
 		var tzoffset = (new Date).getTimezoneOffset() * 60000; //offset in milliseconds
-		var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
+		var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
 		return localISOTime;
 	}
 
-	public static getISODate(date: Date){
-		return new Date(new Date(date).toString() +" GMT").toISOString()
+	public static getISODate(date: Date) {
+		return new Date(new Date(date).toString() + " GMT").toISOString()
 	}
 
 	public static padDigits(number, digits) {
 		return Array(Math.max(digits - String(number).length + 1, 0)).join("0") + number;
 	}
-	
-	public static transformDate(date: Date) {
-		const d = new DatePipe('pt-PT').transform(date, 'yyyy-MM-dd');
+
+	public static transformDate(date: Date, format?: string) {
+		const d = new DatePipe('pt-PT').transform(date, format ? format : 'yyyy-MM-dd');
 		return d;
 	}
 
@@ -43,7 +43,7 @@ export class Utilities {
 		return dateNow.getFullYear() + '-' + (month.length < 2 ? '0' : '') + month + '-' + dateNow.getDate();
 	}
 
-	public static getAge(dob: number){
+	public static getAge(dob: number) {
 		let dateNow = Utilities.clearTime(new Date());
 		let birthDate = Utilities.clearTime(new Date(dob));
 
@@ -51,16 +51,11 @@ export class Utilities {
 
 		let dateCompare = Utilities.clearTime(new Date(dateNow.setFullYear(dateNow.getFullYear() - age)));
 
-		if(birthDate.getDate() > dateCompare.getDate()){
+		if (birthDate.getDate() > dateCompare.getDate()) {
 			age--;
 		}
 
 		return age;
-	}
-
-	public static transformDate2(date: Date, format: string){
-		const d = new DatePipe('pt-PT').transform(date, format);
-		return d;
 	}
 }
 
