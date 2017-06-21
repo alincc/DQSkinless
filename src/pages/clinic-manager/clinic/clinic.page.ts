@@ -305,7 +305,6 @@ export class ClinicPage implements OnInit {
         if (this.clinicForm.valid && this.hasContact() && this.hasSchedule()) {
 
             if (this.mode === MODE.add) {
-
                 this.clinicManagerService
                     .verifyAffiliateCode(this.affiliateName.value, this.affiliateCode.value)
                     .flatMap(response => {
@@ -336,7 +335,6 @@ export class ClinicPage implements OnInit {
                     .verifyAffiliateCode(this.affiliateName.value, this.affiliateCode.value)
                     .flatMap(response => {
                         if (response && response.status) {
-
                             this.contacts.value.filter(contact => !contact.id).forEach(contact => {
                                 this.stack.push(this.clinicManagerService.createClinicContact({
                                     clinicId: this.clinic.clinicId,
