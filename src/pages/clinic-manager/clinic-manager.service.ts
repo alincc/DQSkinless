@@ -213,11 +213,18 @@ export class ClinicManagerService {
     }
 
     public verifyAffiliateCode(affiliateName, affiliateCode) {
-        const payload = {
-            affiliateName: affiliateName,
-            affiliateCode: affiliateCode
-        };
+        if (affiliateName && affiliateCode) {
+            const payload = {
+                affiliateName: affiliateName.toUpperCase(),
+                affiliateCode: affiliateCode.toUpperCase()
+            };
 
-        return this.http.post(CONFIG.API.verifyAffiliateCode, payload);
+            return this.http.post(CONFIG.API.verifyAffiliateCode, payload);
+        } else {
+            return Observable.of({
+                result: null,
+                status: 1
+            });
+        }
     }
 }

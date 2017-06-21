@@ -305,70 +305,81 @@ export class ClinicPage implements OnInit {
         if (this.clinicForm.valid && this.hasContact() && this.hasSchedule()) {
 
             if (this.mode === MODE.add) {
-                const newClinic = {
-                    clinicName: this.clinicName.value,
-                    affiliate: this.affiliateName.value,
-                    affiliateCode: this.affiliateCode.value,
-                    address: this.address.value,
-                    schedules: this.schedules.value,
-                    contacts: this.contacts.value
-                };
 
-                this.clinicManagerService.createClinic(newClinic).subscribe(response => {
-                    if (response && response.status) {
+                this.clinicManagerService
+                    .verifyAffiliateCode(this.affiliateName.value, this.affiliateCode.value)
+                    .flatMap(response => {
+                        if (response && response.status) {
+                            const newClinic = {
+                                clinicName: this.clinicName.value,
+                                address: this.address.value,
+                                affiliateId: response.result,
+                                schedules: this.schedules.value,
+                                contacts: this.contacts.value
+                            };
 
-                        const callback = this.params.get('callback');
-                        callback(response).then(() => {
-                            this.rootNav.pop();
-                        });
-                    }
-                    event.dismissLoading();
-                }, err => event.dismissLoading());
+                            return this.clinicManagerService.createClinic(newClinic);
+                        }
+                    }).subscribe(response => {
+                        if (response && response.status) {
 
-            } else {
-
-                this.contacts.value.filter(contact => !contact.id).forEach(contact => {
-                    this.stack.push(this.clinicManagerService.createClinicContact({
-                        clinicId: this.clinic.clinicId,
-                        contact: contact.contact,
-                        contactType: contact.contactType,
-                    }));
-                });
-
-                this.schedules.value.forEach(schedule => {
-                    schedule.timeSlot.filter(time => !time.id).forEach(time => {
-                        this.stack.push(this.clinicManagerService.createClinicTimeslot({
-                            clinicId: this.clinic.clinicId,
-                            dayOfWeek: schedule.dayOfWeek,
-                            startTime: time.startTime,
-                            endTime: time.endTime,
-                        }));
-                    });
-                });
-
-                const modifiedClinic = {
-                    clinicId: this.clinic.clinicId,
-                    clinicName: this.clinicName.value,
-                    affiliate: this.affiliateName.value,
-                    affiliateCode: this.affiliateCode.value,
-                    address: this.address.value,
-                }
-
-                this.stack.push(this.clinicManagerService.updateClinicDetailRecord(modifiedClinic));
-
-                this.stack.executeFork().subscribe(response => {
-                    if (response) {
-                        const submit = response[this.stack.lastIndex];
-
-                        if (submit && submit.status) {
                             const callback = this.params.get('callback');
                             callback(response).then(() => {
                                 this.rootNav.pop();
                             });
                         }
-                    }
-                    event.dismissLoading();
-                }, err => event.dismissLoading());
+                        event.dismissLoading();
+                    }, err => event.dismissLoading());
+
+            } else {
+                this.clinicManagerService
+                    .verifyAffiliateCode(this.affiliateName.value, this.affiliateCode.value)
+                    .flatMap(response => {
+                        if (response && response.status) {
+
+                            this.contacts.value.filter(contact => !contact.id).forEach(contact => {
+                                this.stack.push(this.clinicManagerService.createClinicContact({
+                                    clinicId: this.clinic.clinicId,
+                                    contact: contact.contact,
+                                    contactType: contact.contactType,
+                                }));
+                            });
+
+                            this.schedules.value.forEach(schedule => {
+                                schedule.timeSlot.filter(time => !time.id).forEach(time => {
+                                    this.stack.push(this.clinicManagerService.createClinicTimeslot({
+                                        clinicId: this.clinic.clinicId,
+                                        dayOfWeek: schedule.dayOfWeek,
+                                        startTime: time.startTime,
+                                        endTime: time.endTime,
+                                    }));
+                                });
+                            });
+
+                            const modifiedClinic = {
+                                clinicId: this.clinic.clinicId,
+                                clinicName: this.clinicName.value,
+                                address: this.address.value,
+                                affiliateId: response.result,
+                            }
+
+                            this.stack.push(this.clinicManagerService.updateClinicDetailRecord(modifiedClinic));
+
+                            return this.stack.executeFork();
+                        }
+                    }).subscribe(response => {
+                        if (response) {
+                            const submit = response[this.stack.lastIndex];
+
+                            if (submit && submit.status) {
+                                const callback = this.params.get('callback');
+                                callback(response).then(() => {
+                                    this.rootNav.pop();
+                                });
+                            }
+                        }
+                        event.dismissLoading();
+                    }, err => event.dismissLoading());
             }
         } else {
             event.dismissLoading();
