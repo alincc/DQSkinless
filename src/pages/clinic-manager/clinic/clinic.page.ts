@@ -33,11 +33,12 @@ export class ClinicPage implements OnInit {
 
     private address: AbstractControl;
     private clinicName: AbstractControl;
-    private affiliate: AbstractControl;
+    private affiliateName: AbstractControl;
     private affiliateCode: AbstractControl;
     private stack: StackedServices;
 
     private clinic: any;
+    private hasAffiliate: boolean;
 
     constructor(
         private alertController: AlertController,
@@ -67,27 +68,27 @@ export class ClinicPage implements OnInit {
             address: '',
             schedule: '',
             contact: '',
-            affiliate: '',
-            affiliateCode: ''
+            affiliate: ''
         }
 
         this.mode = 'Add';
         this.days = LOVS.DAYS;
         this.contactTypes = LOVS.CONTACT_TYPE;
         this.stack = new StackedServices([]);
+        this.hasAffiliate = false;
     }
 
     private createClinicForm() {
         this.clinicForm = this.formBuilder.group({
             clinicName: [this.clinic.clinicName, [Validators.required]],
             address: [this.clinic.address, [Validators.required]],
-            affiliate: '',
+            affiliateName: '',
             affiliateCode: ''
         });
 
         this.clinicName = this.clinicForm.get('clinicName');
         this.address = this.clinicForm.get('address');
-        this.affiliate = this.clinicForm.get('affiliate');
+        this.affiliateName = this.clinicForm.get('affiliateName');
         this.affiliateCode = this.clinicForm.get('affiliateCode');
 
         this.clinicName.valueChanges.subscribe(newValue => {
@@ -96,6 +97,10 @@ export class ClinicPage implements OnInit {
 
         this.address.valueChanges.subscribe(newValue => {
             this.errors.address = this.address.hasError('required') ? 'Address is required' : '';
+        });
+
+        this.affiliateName.valueChanges.subscribe(newValue => {
+            this.affiliateCode.setValue('');
         });
     }
 
@@ -278,17 +283,32 @@ export class ClinicPage implements OnInit {
         this.errors.address = this.address.hasError('required') ? 'Address is required' : '';
         this.errors.contact = this.hasContact() ? '' : "Contact is required";
         this.errors.schedule = this.hasSchedule() ? '' : "Schedule is required";
+
+        if (this.affiliateName.value) {
+            if (this.affiliateCode.value) {
+                this.affiliateCode.setErrors(null);
+                this.errors.affiliate = '';
+            } else {
+                this.affiliateCode.setErrors({ required: true });
+                this.errors.affiliate = 'Affiliate Code is required';
+            }
+        } else {
+            this.affiliateCode.setErrors(null);
+            this.errors.affiliate = '';
+        }
     }
 
     public submitForm(event) {
         this.markFormAsDirty();
         this.validateForm();
+        event.dismissLoading();
+
         if (this.clinicForm.valid && this.hasContact() && this.hasSchedule()) {
 
             if (this.mode === MODE.add) {
                 const newClinic = {
                     clinicName: this.clinicName.value,
-                    affiliate: this.affiliate.value,
+                    affiliate: this.affiliateName.value,
                     affiliateCode: this.affiliateCode.value,
                     address: this.address.value,
                     schedules: this.schedules.value,
@@ -330,7 +350,7 @@ export class ClinicPage implements OnInit {
                 const modifiedClinic = {
                     clinicId: this.clinic.clinicId,
                     clinicName: this.clinicName.value,
-                    affiliate: this.affiliate.value,
+                    affiliate: this.affiliateName.value,
                     affiliateCode: this.affiliateCode.value,
                     address: this.address.value,
                 }

@@ -211,4 +211,13 @@ export class ClinicManagerService {
     public getClinicAcessByUserIdAndClinicId(clinciId) {
         return this.http.get(CONFIG.API.clinicAccess, [`u/${this.getUserId()}`, `c/${clinciId}`]);
     }
+
+    public verifyAffiliateCode(affiliateName, affiliateCode) {
+        const payload = {
+            affiliateName: affiliateName,
+            affiliateCode: affiliateCode
+        };
+
+        return this.http.post(CONFIG.API.verifyAffiliateCode, payload);
+    }
 }
