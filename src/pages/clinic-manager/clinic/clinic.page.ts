@@ -301,7 +301,6 @@ export class ClinicPage implements OnInit {
     public submitForm(event) {
         this.markFormAsDirty();
         this.validateForm();
-        event.dismissLoading();
 
         if (this.clinicForm.valid && this.hasContact() && this.hasSchedule()) {
 
