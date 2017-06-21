@@ -27,7 +27,8 @@ interface image {
 	ownerId : string,
 	imageId? : string,
 	content? : string[],
-	contentType? : string
+	contentType? : string,
+	cacheId? : string[]
 }
 
 @Injectable()
@@ -49,7 +50,7 @@ export class Images {
 				if(this.platform.is("cordova")){
 					//saving to cache
 					if(response.status && response.result){
-						this.saveToCache(image.content, response.result,image.contentType).then(_response => {
+						this.saveToCache(image.content, image.cacheId,image.contentType).then(_response => {
 							resolve(_response);
 						});	
 					}
@@ -80,7 +81,7 @@ export class Images {
 					console.log("Access to the directory granted succesfully");
 					image.forEach((content, idx) => {
 						let DataBlob = this.b64toBlob(content, contentType);
-						this.file.writeFile(ImgPath, imageId[idx] + ".jpg", DataBlob, {}).then(file => {
+						this.file.writeFile(ImgPath, imageId[idx] + ".jpg", DataBlob, {replace: true}).then(file => {
 							console.log("File created succesfully.", file);
 							// resolve(file);
 							overallFiles.push(file);
@@ -154,15 +155,16 @@ export class Images {
 	public getImage(image: image): Promise<string> {
 		return new Promise((resolve, reject) => {
 			if(this.platform.is('cordova')){
-				this.getFromCache(image.imageId).then(response => {
+				this.getFromCache(image.cacheId[0]).then(response => {
 					resolve(response);
 				}, err => {
 					console.log(err);
 					// reject(err);
-					if(err.code === GET_FROM_CACHE_ERROR.FILE_NOT_FOUND){
+					if(err.code === GET_FROM_CACHE_ERROR.FILE_NOT_FOUND
+						|| err.code === GET_FROM_CACHE_ERROR.DIRECTORY_NOT_FOUND){
 						this.getFromCloud(image).subscribe(response => {
 							if(response.status){
-								this.saveToCache([response.result],[image.imageId], image.contentType).then(_response => {
+								this.saveToCache([response.result],image.cacheId, image.contentType).then(_response => {
 									resolve('data:image/jpeg;base64,'+response.result);
 								}, err => {
 									reject(err)
@@ -196,7 +198,7 @@ export class Images {
 				let imgPath = dataPath + IMG_PATH;
 				this.checkDirectory(dataPath, response => {
 					this.file.resolveDirectoryUrl(imgPath).then((dir) => {
-						this.file.readAsDataURL(imgPath, fileName).then(file => {
+						this.file.readAsDataURL(imgPath, fileName + ".jpg").then(file => {
 							resolve(file);
 						}, err => {
 							reject({
@@ -213,7 +215,7 @@ export class Images {
 					});
 				}, err => {
 					console.log("Directory not found, maybe not created due to no existing img")
-					resolve({
+					reject({
 						error : "Directory not found, maybe not created due to no existing img",
 						code : GET_FROM_CACHE_ERROR.DIRECTORY_NOT_FOUND
 					});

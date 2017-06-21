@@ -19,21 +19,18 @@
                     </div>
                 </ion-col>
                 <ion-col col-12 col-sm-12 col-md-4>
-                    <ion-label class="form-label">Affiliate :</ion-label>
+                    <ion-label class="form-label">Affiliate Name:</ion-label>
                     <ion-item round>
-                        <ion-input name="affiliate" formControlName="affiliate"></ion-input>
+                        <ion-input name="affiliateName" formControlName="affiliateName"></ion-input>
                     </ion-item>
-                    <div class="error-message" *ngIf="affiliate.dirty &&  affiliate.invalid">
-                        {{ errors.affiliate }}
-                    </div>
                 </ion-col>
                 <ion-col col-12 col-sm-12 col-md-4>
                     <ion-label class="form-label">Affiliate Code :</ion-label>
                     <ion-item round>
-                        <ion-input name="affiliateCode" formControlName="affiliateCode"></ion-input>
+                        <ion-input name="affiliateCode" formControlName="affiliateCode" [disabled]="!affiliateName.value"></ion-input>
                     </ion-item>
                     <div class="error-message" *ngIf="affiliateCode.dirty &&  affiliateCode.invalid">
-                        {{ errors.affiliateCode }}
+                        {{ errors.affiliate }}
                     </div>
                 </ion-col>
             </ion-row>

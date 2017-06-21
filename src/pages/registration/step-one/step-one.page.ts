@@ -3,20 +3,16 @@ import { NavController, NavParams } from 'ionic-angular';
 
 import { StepTwoPage } from '../step-two/step-two.page';
 
-import { RegistrationService } from '../registration.service';
-
 @Component({
     selector: 'step-one',
-    templateUrl: 'step-one.html',
-    providers: [RegistrationService]
+    templateUrl: 'step-one.html'
 })
 export class StepOnePage {
 
 
     constructor(
         private nav: NavController,
-        private params: NavParams,
-        private registrationService: RegistrationService) {
+        private params: NavParams) {
         params.data.parent.step = 1;
     }
 
