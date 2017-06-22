@@ -10,6 +10,7 @@ import { ContactModal } from '../../../components/contact-modal/contact-modal.co
 import { ScheduleModal } from '../../../components/schedule-modal/schedule-modal.component';
 
 import { ClinicManagerService } from '../clinic-manager.service';
+import { Storage } from '../../../services/storage';
 import { StackedServices } from '../../../utilities/utilities';
 
 import { ArraySubject } from '../../../shared/model/model'
@@ -38,6 +39,7 @@ export class ClinicPage implements OnInit {
     private stack: StackedServices;
 
     private clinic: any;
+    private modifiedClinic: any;
     private hasAffiliate: boolean;
 
     constructor(
@@ -46,7 +48,8 @@ export class ClinicPage implements OnInit {
         private modalController: ModalController,
         private params: NavParams,
         private rootNav: RootNavController,
-        private clinicManagerService: ClinicManagerService) {
+        private clinicManagerService: ClinicManagerService,
+        private storage: Storage) {
         this.getDefaults();
     }
 
@@ -298,6 +301,12 @@ export class ClinicPage implements OnInit {
         }
     }
 
+    private updateClinicDetailStorage() {
+        if (this.modifiedClinic) {
+            this.storage.clinic = this.modifiedClinic;
+        }
+    }
+
     public submitForm(event) {
         this.markFormAsDirty();
         this.validateForm();
@@ -354,14 +363,14 @@ export class ClinicPage implements OnInit {
                                 });
                             });
 
-                            const modifiedClinic = {
+                            this.modifiedClinic = {
                                 clinicId: this.clinic.clinicId,
                                 clinicName: this.clinicName.value,
                                 address: this.address.value,
                                 affiliateId: response.result,
                             }
 
-                            this.stack.push(this.clinicManagerService.updateClinicDetailRecord(modifiedClinic));
+                            this.stack.push(this.clinicManagerService.updateClinicDetailRecord(this.modifiedClinic));
 
                             return this.stack.executeFork();
                         }
@@ -371,6 +380,13 @@ export class ClinicPage implements OnInit {
 
                             if (submit && submit.status) {
                                 const callback = this.params.get('callback');
+
+                                const clinicSubject = this.storage.getClinicSubjectValue();
+
+                                if (clinicSubject && clinicSubject.clinicId === this.clinic.clinicId) {
+                                    this.updateClinicDetailStorage();
+                                }
+
                                 callback(response).then(() => {
                                     this.rootNav.pop();
                                 });
