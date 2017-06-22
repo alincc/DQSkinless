@@ -36,6 +36,24 @@ export class Utilities {
 		return user.lastname ? (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '') : 'Unregistered';
 	}
 
+	public static formatName(name) {
+		if (name) {
+
+			const splitName = name.split(' ');
+			let formattedName = '';
+
+			splitName.forEach((sn, index) => {
+				if (sn) {
+					formattedName += sn.substring(0, 1).toUpperCase() + sn.substring(1).toLowerCase() + (index !== splitName.length - 1 ? ' ' : '');
+				}
+			});
+
+			return formattedName;
+		}
+
+		return name;
+	}
+
 	public static getMinDate(): any {
 		let dateNow = Utilities.clearTime(new Date());
 		dateNow.setDate(dateNow.getDate() + 1);
