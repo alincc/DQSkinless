@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProfileFormService } from './profile-form.service';
-import { ModalController } from 'ionic-angular';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ModalController } from 'ionic-angular';
+
+import { ProfileFormService } from './profile-form.service';
+import { Storage } from '../../services/storage';
 
 import { LOVS } from '../../constants/constants';
 import { REGEX, YEAR_RANGE } from '../../config/config';
-
 
 import { ContactModal } from '../contact-modal/contact-modal.component';
 import { ArraySubject } from '../../shared/model/model';
@@ -52,9 +53,11 @@ export class ProfileForm implements OnInit {
 
     public isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-    constructor(private formBuilder: FormBuilder,
+    constructor(
+        private formBuilder: FormBuilder,
+        private modalController: ModalController,
         private service: ProfileFormService,
-        private modalController: ModalController) {
+        private storage: Storage) {
         this.getDefaults();
     }
 
@@ -262,6 +265,15 @@ export class ProfileForm implements OnInit {
         this.profile.address = this.address.value;
     }
 
+    private updateUserDetailStorage() {
+        if (this.profile.birthdate) {
+            const birthdate = new Date(this.profile.birthdate);
+            this.profile.birthdate = birthdate.getTime() - (Math.abs(birthdate.getTimezoneOffset() * 60 * 1000));
+        }
+
+        this.storage.userDetails = this.profile;
+    }
+
     public submitForm(event) {
         this.markFormAsDirty();
         this.validateForm();
@@ -284,6 +296,7 @@ export class ProfileForm implements OnInit {
                     const submit = response[this.stack.lastIndex];
 
                     if (submit && submit.status) {
+                        this.updateUserDetailStorage();
                         this.onSubmit.emit(this.profile);
                     }
                 }
