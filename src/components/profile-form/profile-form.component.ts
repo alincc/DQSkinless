@@ -254,9 +254,9 @@ export class ProfileForm implements OnInit {
         this.profile.medicalArt = this.medicalArt.value;
         this.profile.specialization = this.specialization.value;
         this.profile.email = this.email.value;
-        this.profile.lastname = this.lastName.value;
-        this.profile.firstname = this.firstName.value;
-        this.profile.middlename = this.middleName.value;
+        this.profile.lastname = Utilities.formatName(this.lastName.value);
+        this.profile.firstname = Utilities.formatName(this.firstName.value);
+        this.profile.middlename = Utilities.formatName(this.middleName.value);
         this.profile.gender = this.gender.value;
         this.profile.birthdate = this.birthDate.value;
         this.profile.address = this.address.value;
