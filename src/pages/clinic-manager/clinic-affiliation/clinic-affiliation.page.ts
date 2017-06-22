@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, NavParams } from 'ionic-angular';
+import { AlertController, LoadingController, NavParams } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { ClinicManagerService } from '../clinic-manager.service';
+import { RootNavController } from '../../../services';
 
 @Component({
     selector: 'clinic-affiliation',
@@ -12,26 +15,45 @@ import { ClinicManagerService } from '../clinic-manager.service';
 export class ClinicAffiliationPage implements OnInit {
 
     public affiliateForm: FormGroup;
-    public errors: any;
+
+    public isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     private affiliateName: AbstractControl;
     private affiliateCode: AbstractControl;
 
     private affiliateId: any;
     private clinic: any;
+    private loading: any;
 
     constructor(
         private formBuilder: FormBuilder,
         private alertController: AlertController,
+        private loadingController: LoadingController,
         private params: NavParams,
-        private clinicManagerService: ClinicManagerService) { }
+        private clinicManagerService: ClinicManagerService,
+        private rootNav: RootNavController) { }
 
     public ngOnInit() {
         this.clinic = this.params.get('clinic') ? Object.assign({}, this.params.get('clinic')) : {};
         this.affiliateId = this.clinic.affiliateId;
         this.createAffiliateForm();
+
+        if (this.affiliateId) {
+            this.isLoading.next(true);
+            this.clinicManagerService.getAffiliate(this.affiliateId).subscribe(response => {
+                if (response && response.status) {
+                    this.bindAffiliateFormValues(response.result);
+                }
+
+                this.isLoading.next(false);
+            }, err => this.isLoading.next(false));
+        }
     }
 
+    private bindAffiliateFormValues(affiliate) {
+        this.affiliateName.setValue(affiliate.affiliateName);
+        this.affiliateCode.setValue(affiliate.affiliateName);
+    }
     private createAffiliateForm() {
         this.affiliateForm = this.formBuilder.group({
             affiliateName: '',
@@ -46,39 +68,65 @@ export class ClinicAffiliationPage implements OnInit {
         });
     }
 
+    private showLoading() {
+        this.loading = this.loadingController.create({
+            spinner: 'crescent',
+            cssClass: 'xhr-loading'
+        });
+        this.loading.present();
+    }
+
+    private dismissLoading() {
+        if (this.loading) {
+            this.loading.dismiss();
+        }
+    }
+
     private markFormAsDirty() {
         Object.keys(this.affiliateForm.controls).forEach(key => {
             this.affiliateForm.get(key).markAsDirty();
         });
     }
 
-    private validateForm() {
-        this.errors.affiliateName = this.affiliateName.hasError('required') ? 'Affiliate Name is required.' : '';
-        this.errors.affiliateCode = this.affiliateCode.hasError('required') ? 'Affiliate Code is required.' : '';
-    }
-
     public submitForm(event) {
         this.markFormAsDirty();
-        this.validateForm();
-        event.dismissLoading();
-        // if (this.affiliateForm.valid) {
-        //     this.showLoading();
-        //     this.accountCreationModalService.createAccount(this.email.value).subscribe(response => {
-        //         if (response && response.status) {
-        //             this.alertController.create({
-        //                 message: `Account created! Pre-generated password sent to ${this.email.value}`,
-        //                 buttons: [
-        //                     {
-        //                         text: 'OK',
-        //                         handler: () => {
-        //                             this.viewController.dismiss(response.result).catch(() => { });
-        //                         }
-        //                     }
-        //                 ]
-        //             }).present();
-        //         }
-        //         this.dismissLoading();
-        //     }, err => this.dismissLoading());
-        // }
+
+        if (this.affiliateName.value) {
+            this.clinicManagerService.verifyAffiliateCode(this.affiliateForm.value).flatMap(response => {
+                return Observable.of(response);
+            }).subscribe(response => {
+                if (response && response.status) {
+                    const callback = this.params.get('callback');
+                    callback(response).then(() => {
+                        this.rootNav.pop();
+                    });
+                }
+
+                event.dismissLoading();
+            }, err => event.dismissLoading());
+        } else {
+            event.dismissLoading();
+            this.alertController.create({
+                message: `Remove Affiliation?`,
+                buttons: [
+                    {
+                        text: 'NO',
+                        role: 'cancel',
+                    },
+                    {
+                        text: 'YES',
+                        handler: () => {
+                            this.showLoading();
+                            // TODO remove affiliation
+                            this.dismissLoading();
+                            const callback = this.params.get('callback');
+                            callback('todo').then(() => {
+                                this.rootNav.pop();
+                            });
+                        }
+                    }
+                ]
+            }).present();
+        }
     }
 }
