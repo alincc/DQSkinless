@@ -1,0 +1,33 @@
+<ion-header>
+    <ion-toolbar color="secondary">
+        <ion-title>
+            Clinic Affiliation
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content #Content padding>
+    <form [formGroup]="affiliateForm" #form="ngForm">
+        <ion-grid>
+            <ion-row>
+                <ion-col col-12 col-sm-12 col-md-4>
+                    <ion-label class="form-label">Affiliate Name* :</ion-label>
+                    <ion-item round>
+                        <ion-input name="affiliateName" formControlName="affiliateName"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-12 col-sm-12 col-md-4>
+                    <ion-label class="form-label">Affiliate Code* :</ion-label>
+                    <ion-item round>
+                        <ion-input name="affiliateCode" type="password" formControlName="affiliateCode"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <div text-center>
+            <xhr-button #xhr round large color="accent" type="submit" [disabled]="mode !== 'Edit' && (affiliateForm.pristine || form.pristine)"
+                (xhrClick)="submitForm($event)">
+                Done
+            </xhr-button>
+        </div>
+    </form>
+</ion-content>

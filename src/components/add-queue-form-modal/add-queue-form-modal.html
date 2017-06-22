@@ -16,7 +16,7 @@
 		<ion-grid>
 			<!-- <ion-row>
 				<ion-col col-12 col-sm-6 col-md-6>
-					<div class="form-group">
+					<div >
 						<ion-label class="form-label">Last Name* :</ion-label>
 						<ion-item round>
 							<ion-input name="lastName" formControlName="lastName"></ion-input>
@@ -27,7 +27,7 @@
 					</div>
 				</ion-col>
 				<ion-col col-12 col-sm-6 col-md-6>
-					<div class="form-group">
+					<div >
 						<ion-label class="form-label">First Name* : </ion-label>
 						<ion-item round>
 							<ion-input name="firstName" formControlName="firstName"></ion-input>
@@ -38,7 +38,7 @@
 					</div>
 				</ion-col>
 				<ion-col col-12 col-sm-6 col-md-6>
-					<div class="form-group">
+					<div >
 						<ion-label class="form-label">Middle Name : </ion-label>
 						<ion-item round>
 							<ion-input name="middleName" formControlName="middleName"></ion-input>
@@ -53,7 +53,7 @@
 			</ion-card>
 			<ion-row>
 				<ion-col col-12 col-sm-12 col-md-12>
-					<ion-list radio-group class="form-group" formControlName="isServeNow">
+					<ion-list radio-group formControlName="isServeNow">
 						<ion-item>
 							<ion-label>Queue Now</ion-label>
 							<ion-radio class="form-control" [value]="true" checked></ion-radio>
@@ -67,14 +67,14 @@
 			</ion-row>
 			<ion-row>
 				<ion-col col-12 col-sm-6 col-md-6>
-					<div class="form-group">
+					<div>
 						<ion-label>Date :</ion-label>
 						<ion-datetime displayFormat="MMMM DD YYYY" formControlName="schedule" [disabled]="isServeNow.value" [min]="getMinDate()">
 						</ion-datetime>
 					</div>
 				</ion-col>
 				<ion-col col-12 col-sm-6 col-md-6>
-					<div class="form-group">
+					<div>
 						<ion-label>Time :</ion-label>
 						<ion-datetime pickerFormat="hh:mm A" formControlName="timeSlot" [disabled]="isServeNow.value">
 						</ion-datetime>
