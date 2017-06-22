@@ -1,0 +1,13 @@
+reminder{
+	ion-card-header{
+		background: $secondary;
+		h2{
+			font-weight: bold !important;
+		}
+	}
+	ion-card-content{
+		h3{
+			white-space: normal;
+		}
+	}
+}

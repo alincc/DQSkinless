@@ -3,6 +3,10 @@
     <ion-navbar>
         <ion-title *ngIf="!hasPatientId">Add Patient</ion-title>
         <ion-title *ngIf="hasPatientId">Edit Patient</ion-title>
+        <ion-buttons end>
+        	<button ion-button clear icon-only (click)="toggleLock()"><ion-icon [name]="lock?'lock':'unlock'" color="accent" ></ion-icon>
+        	</button>
+        </ion-buttons>
     </ion-navbar>
 
 </ion-header>
