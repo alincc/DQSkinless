@@ -56,12 +56,14 @@ export class ClinicManagerService {
                 Observable.forkJoin([
                     this.getClinicTimeSlotByClinicId(clinic.clinicId),
                     this.getClinicContactByClinicId(clinic.clinicId)
+                    // ,this.getAffiliate(clinic.affiliateId)
                 ]).map((data: any[]) => {
                     clinic.schedules = [];
                     clinic.contacts = [];
 
                     const clinicSchedules = data[0]
                     const clinicContacts = data[1];
+                    // const affiliate = data[2];
 
                     if (clinicSchedules && clinicSchedules.status) {
                         clinicSchedules.result.forEach(clinicSchedule => {
@@ -75,6 +77,9 @@ export class ClinicManagerService {
                         });
                     }
 
+                    // clinic.affiliateName = affiliate && affiliate.status ? affiliate.result.affiliateName || '' : '';
+
+                    // console.log(JSON.stringify(clinic));
                     return clinic;
 
                 }).subscribe();
@@ -225,6 +230,14 @@ export class ClinicManagerService {
                 result: null,
                 status: 1
             });
+        }
+    }
+
+    public getAffiliate(affiliateId) {
+        if (affiliateId) {
+            return this.http.get(CONFIG.API.affiliates, [affiliateId]);
+        } else {
+            return Observable.of(undefined);
         }
     }
 }
