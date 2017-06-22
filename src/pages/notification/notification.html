@@ -4,15 +4,10 @@
 			<ion-icon name="menu"></ion-icon>
 		</button>
 		<ion-title>
-			Notification Board
+			Dashboard
 		</ion-title>
 	</ion-navbar>
 </ion-header>
 <ion-content>
-	<ion-list>
-		<ion-card  ion-item *ngFor="let item of notificationList; let idx = index" (swipe)="remove(idx)">
-			<ion-card-header>{{item.title}}</ion-card-header>
-			<ion-card-content>{{item.body}}</ion-card-content>
-		</ion-card>
-	</ion-list>
+	<reminder></reminder>
 </ion-content>
