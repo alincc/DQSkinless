@@ -217,20 +217,13 @@ export class ClinicManagerService {
         return this.http.get(CONFIG.API.clinicAccess, [`u/${this.getUserId()}`, `c/${clinciId}`]);
     }
 
-    public verifyAffiliateCode(affiliateName, affiliateCode) {
-        if (affiliateName && affiliateCode) {
-            const payload = {
-                affiliateName: affiliateName.toUpperCase(),
-                affiliateCode: affiliateCode.toUpperCase()
-            };
+    public verifyAffiliateCode(affiliate) {
+        const payload = {
+            affiliateName: affiliate.affiliateName.toUpperCase(),
+            affiliateCode: affiliate.affiliateCode.toUpperCase()
+        };
 
-            return this.http.post(CONFIG.API.verifyAffiliateCode, payload);
-        } else {
-            return Observable.of({
-                result: null,
-                status: 1
-            });
-        }
+        return this.http.post(CONFIG.API.verifyAffiliateCode, payload);
     }
 
     public getAffiliate(affiliateId) {
