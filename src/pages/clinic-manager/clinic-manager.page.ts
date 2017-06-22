@@ -157,32 +157,40 @@ export class ClinicManagerPage implements OnInit {
 	}
 
 	public deleteClinic(clinic, i) {
-		this.alertController.create({
-			message: `Delete ${clinic.clinicName}?`,
-			buttons: [
-				{
-					text: 'NO',
-					role: 'cancel',
-				},
-				{
-					text: 'YES',
-					handler: () => {
-						this.showLoading();
-						this.clinicManagerService.deleteClinic(clinic.clinicId).subscribe(response => {
-							if (response && response.status) {
-								this.clinics.splice(i, 1);
-								this.ownedClinics.splice(0, 1);
+		const clinicSubject = this.storage.getClinicSubjectValue();
 
-								if (this.params.data.parent && this.clinics.length === 0) {
-									this.params.data.parent.completedRegistration = false;
+		if (clinicSubject && clinicSubject.clinicId === clinic.clinicId) {
+			this.alertController.create({
+				message: `You are currently at ${clinic.clinicName}. Please transfer to another clinic in order to delete this clinic.`
+			}).present();
+		} else {
+			this.alertController.create({
+				message: `Delete ${clinic.clinicName}?`,
+				buttons: [
+					{
+						text: 'NO',
+						role: 'cancel',
+					},
+					{
+						text: 'YES',
+						handler: () => {
+							this.showLoading();
+							this.clinicManagerService.deleteClinic(clinic.clinicId).subscribe(response => {
+								if (response && response.status) {
+									this.clinics.splice(i, 1);
+									this.ownedClinics.splice(0, 1);
+
+									if (this.params.data.parent && this.clinics.length === 0) {
+										this.params.data.parent.completedRegistration = false;
+									}
 								}
-							}
-							this.dismissLoading();
-						}, err => this.dismissLoading());
+								this.dismissLoading();
+							}, err => this.dismissLoading());
+						}
 					}
-				}
-			]
-		}).present();
+				]
+			}).present();
+		}
 	}
 
 	public associateMember(clinic) {
