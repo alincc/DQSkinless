@@ -65,9 +65,9 @@ export class PatientForm implements OnInit {
     this.patientId = this.params.get('patientId');
     this.createForm();
     this.contactType = LOVS.CONTACT_TYPE;
-    
-    if(this.patientId){
-      
+
+    if (this.patientId) {
+
       this.getPatientDetails();
     }
   }
@@ -175,9 +175,9 @@ export class PatientForm implements OnInit {
   }
 
   private bindPatientDetails() {
-    this.patient.firstname = this.firstName.value;
-    this.patient.lastname = this.lastName.value;
-    this.patient.middlename = this.middleName.value;
+    this.patient.firstname = Utilities.formatName(this.firstName.value);
+    this.patient.lastname = Utilities.formatName(this.lastName.value);
+    this.patient.middlename = Utilities.formatName(this.middleName.value);
     this.patient.age = this.age.value;
     this.patient.legalStatus = this.legalStatus.value;
     this.patient.gender = this.gender.value;
@@ -187,7 +187,7 @@ export class PatientForm implements OnInit {
     this.patient.birthDate = this.birthDate.value;
   }
 
-  private bindPatientFormValues(){
+  private bindPatientFormValues() {
     this.patientForm.get('address').setValue(this.patient.address);
     this.patientForm.get('age').setValue(this.patient.age);
     this.patientForm.get('firstName').setValue(this.patient.firstname);
@@ -265,14 +265,14 @@ export class PatientForm implements OnInit {
 
         // TODO EDIT MODE BEHAVIOR
         this.patient.patientId = this.patientId;
-        
+
         this.stack.push(this.patientService.setPatientDetails(this.patient));
 
         this.stack.executeFork().subscribe(response => {
           if (response) {
             const submit = response[this.stack.lastIndex];
             if (submit && submit.status) {
-              
+
               this.patient["id"] = response[this.stack.lastIndex].result;
               this.onSubmit.emit(this.patient);
 
@@ -292,14 +292,14 @@ export class PatientForm implements OnInit {
 
   }
 
-  private getPatientDetails(){
-      this.stack.push(this.patientService.getPatientDetails(this.patientId));
+  private getPatientDetails() {
+    this.stack.push(this.patientService.getPatientDetails(this.patientId));
 
-      this.stack.executeFork().subscribe(response => {
-        if(response){
-          this.patient = response[0].result;
-          this.bindPatientFormValues();
-        }
-      })
+    this.stack.executeFork().subscribe(response => {
+      if (response) {
+        this.patient = response[0].result;
+        this.bindPatientFormValues();
+      }
+    })
   }
 }

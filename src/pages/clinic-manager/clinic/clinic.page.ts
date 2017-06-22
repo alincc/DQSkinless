@@ -10,6 +10,7 @@ import { ContactModal } from '../../../components/contact-modal/contact-modal.co
 import { ScheduleModal } from '../../../components/schedule-modal/schedule-modal.component';
 
 import { ClinicManagerService } from '../clinic-manager.service';
+import { Storage } from '../../../services/storage';
 import { StackedServices } from '../../../utilities/utilities';
 
 import { ArraySubject } from '../../../shared/model/model'
@@ -33,12 +34,10 @@ export class ClinicPage implements OnInit {
 
     private address: AbstractControl;
     private clinicName: AbstractControl;
-    private affiliateName: AbstractControl;
-    private affiliateCode: AbstractControl;
     private stack: StackedServices;
 
     private clinic: any;
-    private hasAffiliate: boolean;
+    private modifiedClinic: any;
 
     constructor(
         private alertController: AlertController,
@@ -46,12 +45,12 @@ export class ClinicPage implements OnInit {
         private modalController: ModalController,
         private params: NavParams,
         private rootNav: RootNavController,
-        private clinicManagerService: ClinicManagerService) {
+        private clinicManagerService: ClinicManagerService,
+        private storage: Storage) {
         this.getDefaults();
     }
 
     public ngOnInit() {
-
         this.clinic = this.params.get('clinic') ? Object.assign({}, this.params.get('clinic')) : {};
         this.schedules.value = this.clinic.schedules ? Object.assign([], this.clinic.schedules) : [];
         this.contacts.value = this.clinic.contacts ? Object.assign([], this.clinic.contacts) : [];
@@ -75,21 +74,16 @@ export class ClinicPage implements OnInit {
         this.days = LOVS.DAYS;
         this.contactTypes = LOVS.CONTACT_TYPE;
         this.stack = new StackedServices([]);
-        this.hasAffiliate = false;
     }
 
     private createClinicForm() {
         this.clinicForm = this.formBuilder.group({
             clinicName: [this.clinic.clinicName, [Validators.required]],
-            address: [this.clinic.address, [Validators.required]],
-            affiliateName: '',
-            affiliateCode: ''
+            address: [this.clinic.address, [Validators.required]]
         });
 
         this.clinicName = this.clinicForm.get('clinicName');
         this.address = this.clinicForm.get('address');
-        this.affiliateName = this.clinicForm.get('affiliateName');
-        this.affiliateCode = this.clinicForm.get('affiliateCode');
 
         this.clinicName.valueChanges.subscribe(newValue => {
             this.errors.clinicName = this.clinicName.hasError('required') ? 'Clinic Name is required' : '';
@@ -97,10 +91,6 @@ export class ClinicPage implements OnInit {
 
         this.address.valueChanges.subscribe(newValue => {
             this.errors.address = this.address.hasError('required') ? 'Address is required' : '';
-        });
-
-        this.affiliateName.valueChanges.subscribe(newValue => {
-            this.affiliateCode.setValue('');
         });
     }
 
@@ -115,7 +105,6 @@ export class ClinicPage implements OnInit {
             if (schedule) {
                 this.addSchedule(schedule);
                 this.hasSchedule();
-                // this.clinicForm.markAsDirty();
             }
         });
     }
@@ -225,7 +214,6 @@ export class ClinicPage implements OnInit {
                     contactType: contact.contactType
                 });
                 this.hasContact();
-                // this.clinicForm.markAsDirty();
             }
         });
         modal.present();
@@ -283,18 +271,11 @@ export class ClinicPage implements OnInit {
         this.errors.address = this.address.hasError('required') ? 'Address is required' : '';
         this.errors.contact = this.hasContact() ? '' : "Contact is required";
         this.errors.schedule = this.hasSchedule() ? '' : "Schedule is required";
+    }
 
-        if (this.affiliateName.value) {
-            if (this.affiliateCode.value) {
-                this.affiliateCode.setErrors(null);
-                this.errors.affiliate = '';
-            } else {
-                this.affiliateCode.setErrors({ required: true });
-                this.errors.affiliate = 'Affiliate Code is required';
-            }
-        } else {
-            this.affiliateCode.setErrors(null);
-            this.errors.affiliate = '';
+    private updateClinicDetailStorage() {
+        if (this.modifiedClinic) {
+            this.storage.clinic = this.modifiedClinic;
         }
     }
 
@@ -307,8 +288,6 @@ export class ClinicPage implements OnInit {
             if (this.mode === MODE.add) {
                 const newClinic = {
                     clinicName: this.clinicName.value,
-                    affiliate: this.affiliateName.value,
-                    affiliateCode: this.affiliateCode.value,
                     address: this.address.value,
                     schedules: this.schedules.value,
                     contacts: this.contacts.value
@@ -326,7 +305,6 @@ export class ClinicPage implements OnInit {
                 }, err => event.dismissLoading());
 
             } else {
-
                 this.contacts.value.filter(contact => !contact.id).forEach(contact => {
                     this.stack.push(this.clinicManagerService.createClinicContact({
                         clinicId: this.clinic.clinicId,
@@ -346,15 +324,14 @@ export class ClinicPage implements OnInit {
                     });
                 });
 
-                const modifiedClinic = {
+                this.modifiedClinic = {
                     clinicId: this.clinic.clinicId,
                     clinicName: this.clinicName.value,
-                    affiliate: this.affiliateName.value,
-                    affiliateCode: this.affiliateCode.value,
                     address: this.address.value,
+                    affiliateId: this.clinic.affiliateId
                 }
 
-                this.stack.push(this.clinicManagerService.updateClinicDetailRecord(modifiedClinic));
+                this.stack.push(this.clinicManagerService.updateClinicDetailRecord(this.modifiedClinic));
 
                 this.stack.executeFork().subscribe(response => {
                     if (response) {
@@ -362,6 +339,13 @@ export class ClinicPage implements OnInit {
 
                         if (submit && submit.status) {
                             const callback = this.params.get('callback');
+
+                            const clinicSubject = this.storage.getClinicSubjectValue();
+
+                            if (clinicSubject && clinicSubject.clinicId === this.clinic.clinicId) {
+                                this.updateClinicDetailStorage();
+                            }
+
                             callback(response).then(() => {
                                 this.rootNav.pop();
                             });
