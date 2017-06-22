@@ -10,8 +10,9 @@ import { StackedServices } from '../../utilities/utilities';
 
 import { LOVS, MODE } from '../../constants/constants'
 
-import { ClinicPage } from './clinic/clinic.page';
 import { AssociateMemberPage } from './associate-member/associate-member.page';
+import { ClinicAffiliationPage } from './clinic-affiliation/clinic-affiliation.page';
+import { ClinicPage } from './clinic/clinic.page';
 
 import { ClinicManagerService } from './clinic-manager.service';
 
@@ -129,6 +130,18 @@ export class ClinicManagerPage implements OnInit {
 		}
 	}
 
+	public displayTime(timeSlot) {
+		if (timeSlot && timeSlot.length > 0) {
+			let formattedTimeSlot = '';
+
+			timeSlot.forEach(time => {
+				formattedTimeSlot += `${time.startTime} to ${time.endTime}, `;
+			});
+			return formattedTimeSlot.substring(1, formattedTimeSlot.length - 2);
+		}
+		return '';
+	}
+
 	public clinicManagerCallback = (params) => {
 		return new Promise((resolve, reject) => {
 			this.getClinics();
@@ -153,6 +166,21 @@ export class ClinicManagerPage implements OnInit {
 			callback: this.clinicManagerCallback,
 			clinic: clinic,
 			mode: MODE.edit
+		});
+	}
+
+	public associateMember(clinic) {
+		this.rootNav.push(AssociateMemberPage, {
+			clinicId: clinic.clinicId,
+			accessRole: clinic.accessRole,
+			isManager: this.isManager
+		});
+	}
+
+	public affiliateClinic(clinic) {
+		this.rootNav.push(ClinicAffiliationPage, {
+			callback: this.clinicManagerCallback,
+			clinic: clinic
 		});
 	}
 
@@ -191,25 +219,5 @@ export class ClinicManagerPage implements OnInit {
 				]
 			}).present();
 		}
-	}
-
-	public associateMember(clinic) {
-		this.rootNav.push(AssociateMemberPage, {
-			clinicId: clinic.clinicId,
-			accessRole: clinic.accessRole,
-			isManager: this.isManager
-		});
-	}
-
-	public displayTime(timeSlot) {
-		if (timeSlot && timeSlot.length > 0) {
-			let formattedTimeSlot = '';
-
-			timeSlot.forEach(time => {
-				formattedTimeSlot += `${time.startTime} to ${time.endTime}, `;
-			});
-			return formattedTimeSlot.substring(1, formattedTimeSlot.length - 2);
-		}
-		return '';
 	}
 }

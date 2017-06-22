@@ -79,9 +79,7 @@ export class ClinicPage implements OnInit {
     private createClinicForm() {
         this.clinicForm = this.formBuilder.group({
             clinicName: [this.clinic.clinicName, [Validators.required]],
-            address: [this.clinic.address, [Validators.required]],
-            affiliateName: '',
-            affiliateCode: ''
+            address: [this.clinic.address, [Validators.required]]
         });
 
         this.clinicName = this.clinicForm.get('clinicName');
