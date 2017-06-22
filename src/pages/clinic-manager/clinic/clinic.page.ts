@@ -34,13 +34,10 @@ export class ClinicPage implements OnInit {
 
     private address: AbstractControl;
     private clinicName: AbstractControl;
-    private affiliateName: AbstractControl;
-    private affiliateCode: AbstractControl;
     private stack: StackedServices;
 
     private clinic: any;
     private modifiedClinic: any;
-    private hasAffiliate: boolean;
 
     constructor(
         private alertController: AlertController,
@@ -54,7 +51,6 @@ export class ClinicPage implements OnInit {
     }
 
     public ngOnInit() {
-
         this.clinic = this.params.get('clinic') ? Object.assign({}, this.params.get('clinic')) : {};
         this.schedules.value = this.clinic.schedules ? Object.assign([], this.clinic.schedules) : [];
         this.contacts.value = this.clinic.contacts ? Object.assign([], this.clinic.contacts) : [];
@@ -78,7 +74,6 @@ export class ClinicPage implements OnInit {
         this.days = LOVS.DAYS;
         this.contactTypes = LOVS.CONTACT_TYPE;
         this.stack = new StackedServices([]);
-        this.hasAffiliate = false;
     }
 
     private createClinicForm() {
@@ -91,8 +86,6 @@ export class ClinicPage implements OnInit {
 
         this.clinicName = this.clinicForm.get('clinicName');
         this.address = this.clinicForm.get('address');
-        this.affiliateName = this.clinicForm.get('affiliateName');
-        this.affiliateCode = this.clinicForm.get('affiliateCode');
 
         this.clinicName.valueChanges.subscribe(newValue => {
             this.errors.clinicName = this.clinicName.hasError('required') ? 'Clinic Name is required' : '';
@@ -100,10 +93,6 @@ export class ClinicPage implements OnInit {
 
         this.address.valueChanges.subscribe(newValue => {
             this.errors.address = this.address.hasError('required') ? 'Address is required' : '';
-        });
-
-        this.affiliateName.valueChanges.subscribe(newValue => {
-            this.affiliateCode.setValue('');
         });
     }
 
@@ -118,7 +107,6 @@ export class ClinicPage implements OnInit {
             if (schedule) {
                 this.addSchedule(schedule);
                 this.hasSchedule();
-                // this.clinicForm.markAsDirty();
             }
         });
     }
@@ -228,7 +216,6 @@ export class ClinicPage implements OnInit {
                     contactType: contact.contactType
                 });
                 this.hasContact();
-                // this.clinicForm.markAsDirty();
             }
         });
         modal.present();
@@ -286,19 +273,6 @@ export class ClinicPage implements OnInit {
         this.errors.address = this.address.hasError('required') ? 'Address is required' : '';
         this.errors.contact = this.hasContact() ? '' : "Contact is required";
         this.errors.schedule = this.hasSchedule() ? '' : "Schedule is required";
-
-        if (this.affiliateName.value) {
-            if (this.affiliateCode.value) {
-                this.affiliateCode.setErrors(null);
-                this.errors.affiliate = '';
-            } else {
-                this.affiliateCode.setErrors({ required: true });
-                this.errors.affiliate = 'Affiliate Code is required';
-            }
-        } else {
-            this.affiliateCode.setErrors(null);
-            this.errors.affiliate = '';
-        }
     }
 
     private updateClinicDetailStorage() {
@@ -314,86 +288,73 @@ export class ClinicPage implements OnInit {
         if (this.clinicForm.valid && this.hasContact() && this.hasSchedule()) {
 
             if (this.mode === MODE.add) {
-                this.clinicManagerService
-                    .verifyAffiliateCode(this.affiliateName.value, this.affiliateCode.value)
-                    .flatMap(response => {
-                        if (response && response.status) {
-                            const newClinic = {
-                                clinicName: this.clinicName.value,
-                                address: this.address.value,
-                                affiliateId: response.result,
-                                schedules: this.schedules.value,
-                                contacts: this.contacts.value
-                            };
+                const newClinic = {
+                    clinicName: this.clinicName.value,
+                    address: this.address.value,
+                    schedules: this.schedules.value,
+                    contacts: this.contacts.value
+                };
 
-                            return this.clinicManagerService.createClinic(newClinic);
-                        }
-                    }).subscribe(response => {
-                        if (response && response.status) {
+                this.clinicManagerService.createClinic(newClinic).subscribe(response => {
+                    if (response && response.status) {
 
+                        const callback = this.params.get('callback');
+                        callback(response).then(() => {
+                            this.rootNav.pop();
+                        });
+                    }
+                    event.dismissLoading();
+                }, err => event.dismissLoading());
+
+            } else {
+                this.contacts.value.filter(contact => !contact.id).forEach(contact => {
+                    this.stack.push(this.clinicManagerService.createClinicContact({
+                        clinicId: this.clinic.clinicId,
+                        contact: contact.contact,
+                        contactType: contact.contactType,
+                    }));
+                });
+
+                this.schedules.value.forEach(schedule => {
+                    schedule.timeSlot.filter(time => !time.id).forEach(time => {
+                        this.stack.push(this.clinicManagerService.createClinicTimeslot({
+                            clinicId: this.clinic.clinicId,
+                            dayOfWeek: schedule.dayOfWeek,
+                            startTime: time.startTime,
+                            endTime: time.endTime,
+                        }));
+                    });
+                });
+
+                this.modifiedClinic = {
+                    clinicId: this.clinic.clinicId,
+                    clinicName: this.clinicName.value,
+                    address: this.address.value,
+                    affiliateId: this.clinic.affiliateId
+                }
+
+                this.stack.push(this.clinicManagerService.updateClinicDetailRecord(this.modifiedClinic));
+
+                this.stack.executeFork().subscribe(response => {
+                    if (response) {
+                        const submit = response[this.stack.lastIndex];
+
+                        if (submit && submit.status) {
                             const callback = this.params.get('callback');
+
+                            const clinicSubject = this.storage.getClinicSubjectValue();
+
+                            if (clinicSubject && clinicSubject.clinicId === this.clinic.clinicId) {
+                                this.updateClinicDetailStorage();
+                            }
+
                             callback(response).then(() => {
                                 this.rootNav.pop();
                             });
                         }
-                        event.dismissLoading();
-                    }, err => event.dismissLoading());
-
-            } else {
-                this.clinicManagerService
-                    .verifyAffiliateCode(this.affiliateName.value, this.affiliateCode.value)
-                    .flatMap(response => {
-                        if (response && response.status) {
-                            this.contacts.value.filter(contact => !contact.id).forEach(contact => {
-                                this.stack.push(this.clinicManagerService.createClinicContact({
-                                    clinicId: this.clinic.clinicId,
-                                    contact: contact.contact,
-                                    contactType: contact.contactType,
-                                }));
-                            });
-
-                            this.schedules.value.forEach(schedule => {
-                                schedule.timeSlot.filter(time => !time.id).forEach(time => {
-                                    this.stack.push(this.clinicManagerService.createClinicTimeslot({
-                                        clinicId: this.clinic.clinicId,
-                                        dayOfWeek: schedule.dayOfWeek,
-                                        startTime: time.startTime,
-                                        endTime: time.endTime,
-                                    }));
-                                });
-                            });
-
-                            this.modifiedClinic = {
-                                clinicId: this.clinic.clinicId,
-                                clinicName: this.clinicName.value,
-                                address: this.address.value,
-                                affiliateId: response.result,
-                            }
-
-                            this.stack.push(this.clinicManagerService.updateClinicDetailRecord(this.modifiedClinic));
-
-                            return this.stack.executeFork();
-                        }
-                    }).subscribe(response => {
-                        if (response) {
-                            const submit = response[this.stack.lastIndex];
-
-                            if (submit && submit.status) {
-                                const callback = this.params.get('callback');
-
-                                const clinicSubject = this.storage.getClinicSubjectValue();
-
-                                if (clinicSubject && clinicSubject.clinicId === this.clinic.clinicId) {
-                                    this.updateClinicDetailStorage();
-                                }
-
-                                callback(response).then(() => {
-                                    this.rootNav.pop();
-                                });
-                            }
-                        }
-                        event.dismissLoading();
-                    }, err => event.dismissLoading());
+                    }
+                    event.dismissLoading();
+                }, err => event.dismissLoading());
             }
         } else {
             event.dismissLoading();
