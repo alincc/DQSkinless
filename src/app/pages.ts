@@ -1,6 +1,6 @@
 import { AssociateMemberPage } from '../pages/clinic-manager/associate-member/associate-member.page';
-import { BlankPage } from '../pages/blank/blank.page';
 import { ChatPage } from '../pages/chat/chat.page';
+import { ClinicAffiliationPage } from '../pages/clinic-manager/clinic-affiliation/clinic-affiliation.page';
 import { ClinicManagerPage } from '../pages/clinic-manager/clinic-manager.page';
 import { ClinicPage } from '../pages/clinic-manager/clinic/clinic.page';
 import { ConsultationFormPage } from '../pages/consultation-form/consultation-form';
@@ -25,9 +25,9 @@ import { ChangePasswordPage } from '../pages/change-password/change-password.pag
 
 export const pages: any[] = [
 	AssociateMemberPage,
-	BlankPage,
 	ChangePasswordPage,
 	ChatPage,
+	ClinicAffiliationPage,
 	ClinicPage,
 	ClinicManagerPage,
 	ConsultationFormPage,

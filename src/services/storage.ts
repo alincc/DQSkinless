@@ -64,6 +64,10 @@ export class Storage {
 		this.push.sendTag('clinic', data.id);
 	}
 
+	public getClinicSubjectValue() {
+		return this._clinicSubject.getValue();
+	}
+
 	// access role
 	private _accessRoleSubject = new BehaviorSubject<any>(undefined);
 	public accessRoleSubject: Observable<any> = this._accessRoleSubject.asObservable();

@@ -38,6 +38,7 @@ export const CONFIG = {
 
         imageBucket: "/aws",
 
+        affiliates: '/affiliates',
         verifyAffiliateCode: '/affiliates/vrfpcd'
     },
     SOCKETS: {
