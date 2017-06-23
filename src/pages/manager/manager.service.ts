@@ -38,9 +38,15 @@ export class ManagerService {
         return this.http.get(CONFIG.API.getClinicMember, [clinicId]).flatMap(response => {
             if (response && response.status) {
                 const owner = response.result.find(m => m.accessRole === 0);
-                return Observable.of(owner ? owner.userId : undefined);
+                return Observable.of({
+                    status: owner ? 1 : 0,
+                    result: owner ? owner.userId : null
+                });
             } else {
-                return Observable.of(undefined);
+                return Observable.of({
+                    status: 0,
+                    result: null
+                });
             }
         });
     }

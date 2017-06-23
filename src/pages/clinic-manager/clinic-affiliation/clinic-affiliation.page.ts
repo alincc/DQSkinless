@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { ClinicManagerService } from '../clinic-manager.service';
 import { RootNavController } from '../../../services';
+import { Storage } from '../../../services';
 
 @Component({
     selector: 'clinic-affiliation',
@@ -31,7 +32,8 @@ export class ClinicAffiliationPage implements OnInit {
         private loadingController: LoadingController,
         private params: NavParams,
         private clinicManagerService: ClinicManagerService,
-        private rootNav: RootNavController) { }
+        private rootNav: RootNavController,
+        private storage: Storage) { }
 
     public ngOnInit() {
         this.clinic = this.params.get('clinic') ? Object.assign({}, this.params.get('clinic')) : {};
@@ -106,17 +108,27 @@ export class ClinicAffiliationPage implements OnInit {
         });
     }
 
+    private updatePatientOwnerStorage(patientOwner) {
+        const clinicSubject = this.storage.getClinicSubjectValue();
+
+        if (clinicSubject && clinicSubject.clinicId === this.clinic.clinicId) {
+            this.storage.patientOwner = patientOwner;
+        }
+    }
+
     public submitForm(event) {
         this.markFormAsDirty();
 
         if (this.affiliateName.value) {
             this.clinicManagerService.verifyAffiliateCode(this.affiliateForm.value).flatMap(response => {
                 if (response && response.status) {
+                    this.affiliateId = response.result;
                     return this.updateAffiliate(response.result);
                 }
                 return Observable.of(response);
             }).subscribe(response => {
                 if (response && response.status) {
+                    this.updatePatientOwnerStorage(this.affiliateId);
                     this.popPage(response);
                 }
                 event.dismissLoading();
@@ -134,9 +146,14 @@ export class ClinicAffiliationPage implements OnInit {
                         text: 'YES',
                         handler: () => {
                             this.showLoading();
-                            // TODO remove affiliation
-                            this.updateAffiliate(null).subscribe(response => {
+                            this.updateAffiliate(null).flatMap(response => {
                                 if (response && response.status) {
+                                    return this.clinicManagerService.getClinicOwner(this.clinic.clinicId);
+                                }
+                                return Observable.of(response);
+                            }).subscribe(response => {
+                                if (response && response.status) {
+                                    this.updatePatientOwnerStorage(response.result);
                                     this.popPage(response);
                                 }
                                 this.dismissLoading();

@@ -73,7 +73,12 @@ export class ManagerPage implements OnInit {
 					this.storage.accessRole = { accessRole: clinicAccessResponse.result.accessRole };
 				}
 
-				this.storage.patientOwner = clinicOwnerResponse ? clinicOwnerResponse : clinic.affiliateId;
+				if (clinicOwnerResponse && clinicOwnerResponse.status) {
+					this.storage.patientOwner = clinicOwnerResponse.result;
+				} else {
+					this.storage.patientOwner = clinic.affiliateId;
+				}
+
 				this.app.getRootNav().setRoot(TabsPage);
 			}
 			this.dismissLoading();
