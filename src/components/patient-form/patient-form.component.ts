@@ -65,9 +65,9 @@ export class PatientForm implements OnInit {
     this.patientId = this.params.get('patientId');
     this.createForm();
     this.contactType = LOVS.CONTACT_TYPE;
-    
+
     if(this.patientId){
-      
+
       this.getPatientDetails();
     }
   }
@@ -103,7 +103,7 @@ export class PatientForm implements OnInit {
       legalStatus: ['', Validators.required],
       gender: ['', Validators.required],
       address: ['', Validators.required],
-      email: ['', [Validators.required, Validators.pattern(REGEX.EMAIL)]],
+      email: ['', Validators.pattern(REGEX.EMAIL)],
       registrationDate: [Utilities.getISODateToday(), Validators.required],
       birthDate: ['', Validators.required]
     });
@@ -265,22 +265,28 @@ export class PatientForm implements OnInit {
 
         // TODO EDIT MODE BEHAVIOR
         this.patient.patientId = this.patientId;
-        
+
+        this.contacts.value.filter(contact => !contact.id).forEach(contact => {
+                this.stack.push(this.patientService.addContacts(contact));
+            });
+
         this.stack.push(this.patientService.setPatientDetails(this.patient));
+
 
         this.stack.executeFork().subscribe(response => {
           if (response) {
-            const submit = response[this.stack.lastIndex];
-            if (submit && submit.status) {
-              
+            const patientResponse = response[this.stack.lastIndex];
+            if (patientResponse && patientResponse.status) {
+
               this.patient["id"] = response[this.stack.lastIndex].result;
               this.onSubmit.emit(this.patient);
+            }
 
-              const callback = this.params.get('callback');
+            this.stack.clearStack();
+            const callback = this.params.get('callback');
               callback(this.patientId).then(() => {
                 this.rootNav.pop();
               });
-            }
           }
           event.dismissLoading();
         }, err => event.dismissLoading());
@@ -294,12 +300,26 @@ export class PatientForm implements OnInit {
 
   private getPatientDetails(){
       this.stack.push(this.patientService.getPatientDetails(this.patientId));
+      // this.stack.push(this.patientService.getPatientContactDetails(this.patientId));
 
       this.stack.executeFork().subscribe(response => {
         if(response){
-          this.patient = response[0].result;
+
+          const getPatientDetails = response[0];
+          // const getPatientContacts = response[1].result;
+
+          if(getPatientDetails && getPatientDetails.status){
+            this.patient = getPatientDetails.result;
+          }
+
+          // if(getPatientContacts && getPatientContacts.status){
+          //   this.contacts = getPatientContacts;
+          // }
           this.bindPatientFormValues();
+
         }
-      })
+
+        this.stack.clearStack();
+      });
   }
 }
