@@ -146,7 +146,7 @@ export class ClinicManagerService {
     }
 
     public updateClinicDetailRecord(clinic) {
-        return this.http.put(CONFIG.API.clinicDetailRecord, clinic);
+        return this.http.put(CONFIG.API.clinicDetails, clinic);
     }
 
     public getClinicTimeSlotByClinicId(clinicId) {
@@ -232,5 +232,9 @@ export class ClinicManagerService {
         } else {
             return Observable.of(undefined);
         }
+    }
+
+    public updateAffiliate(affiliateId, clinicId) {
+        return this.http.put(CONFIG.API.clinicDetails + `/c/${clinicId}/a/${affiliateId}`, {});
     }
 }

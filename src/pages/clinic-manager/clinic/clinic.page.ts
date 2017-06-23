@@ -279,6 +279,13 @@ export class ClinicPage implements OnInit {
         }
     }
 
+    private popPage(response) {
+        const callback = this.params.get('callback');
+        callback(response).then(() => {
+            this.rootNav.pop();
+        });
+    }
+
     public submitForm(event) {
         this.markFormAsDirty();
         this.validateForm();
@@ -295,11 +302,7 @@ export class ClinicPage implements OnInit {
 
                 this.clinicManagerService.createClinic(newClinic).subscribe(response => {
                     if (response && response.status) {
-
-                        const callback = this.params.get('callback');
-                        callback(response).then(() => {
-                            this.rootNav.pop();
-                        });
+                        this.popPage(response);
                     }
                     event.dismissLoading();
                 }, err => event.dismissLoading());
@@ -329,7 +332,7 @@ export class ClinicPage implements OnInit {
                     clinicName: this.clinicName.value,
                     address: this.address.value,
                     affiliateId: this.clinic.affiliateId
-                }
+                };
 
                 this.stack.push(this.clinicManagerService.updateClinicDetailRecord(this.modifiedClinic));
 
@@ -338,17 +341,13 @@ export class ClinicPage implements OnInit {
                         const submit = response[this.stack.lastIndex];
 
                         if (submit && submit.status) {
-                            const callback = this.params.get('callback');
-
                             const clinicSubject = this.storage.getClinicSubjectValue();
 
                             if (clinicSubject && clinicSubject.clinicId === this.clinic.clinicId) {
                                 this.updateClinicDetailStorage();
                             }
 
-                            callback(response).then(() => {
-                                this.rootNav.pop();
-                            });
+                            this.popPage(response);
                         }
                     }
                     event.dismissLoading();

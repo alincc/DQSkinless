@@ -88,20 +88,37 @@ export class ClinicAffiliationPage implements OnInit {
         });
     }
 
+    private updateAffiliate(affiliateId) {
+        const modifiedClinic = {
+            clinicId: this.clinic.clinicId,
+            clinicName: this.clinic.clinicName,
+            address: this.clinic.address,
+            affiliateId: affiliateId
+        };
+
+        return this.clinicManagerService.updateClinicDetailRecord(modifiedClinic);
+    }
+
+    private popPage(response) {
+        const callback = this.params.get('callback');
+        callback(response).then(() => {
+            this.rootNav.pop();
+        });
+    }
+
     public submitForm(event) {
         this.markFormAsDirty();
 
         if (this.affiliateName.value) {
             this.clinicManagerService.verifyAffiliateCode(this.affiliateForm.value).flatMap(response => {
+                if (response && response.status) {
+                    return this.updateAffiliate(response.result);
+                }
                 return Observable.of(response);
             }).subscribe(response => {
                 if (response && response.status) {
-                    const callback = this.params.get('callback');
-                    callback(response).then(() => {
-                        this.rootNav.pop();
-                    });
+                    this.popPage(response);
                 }
-
                 event.dismissLoading();
             }, err => event.dismissLoading());
         } else {
@@ -118,11 +135,12 @@ export class ClinicAffiliationPage implements OnInit {
                         handler: () => {
                             this.showLoading();
                             // TODO remove affiliation
-                            this.dismissLoading();
-                            const callback = this.params.get('callback');
-                            callback('todo').then(() => {
-                                this.rootNav.pop();
-                            });
+                            this.updateAffiliate(null).subscribe(response => {
+                                if (response && response.status) {
+                                    this.popPage(response);
+                                }
+                                this.dismissLoading();
+                            }, err => this.dismissLoading());
                         }
                     }
                 ]
