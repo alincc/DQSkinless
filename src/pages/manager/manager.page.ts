@@ -6,6 +6,7 @@ import { TabsPage } from '../tabs/tabs';
 
 import { ManagerService } from './manager.service';
 import { RootNavController, Storage } from '../../services';
+import { StackedServices } from '../../utilities/utilities';
 
 @Component({
 	selector: 'manager-page',
@@ -17,6 +18,8 @@ export class ManagerPage implements OnInit {
 	private clinics: any[];
 	private loading: any;
 
+	private stack: StackedServices;
+
 	constructor(
 		private app: App,
 		private alertController: AlertController,
@@ -24,13 +27,14 @@ export class ManagerPage implements OnInit {
 		private managerService: ManagerService,
 		private root: RootNavController,
 		private storage: Storage) {
+		this.stack = new StackedServices([]);
 	}
 
 	public ngOnInit() {
 		this.managerService.getClinicRecordByUserId().subscribe(response => {
 			if (response && response.status) {
 				this.clinics = response.result;
-			}else{
+			} else {
 				this.clinics = [];
 			}
 		}, err => console.error(err));
@@ -52,12 +56,27 @@ export class ManagerPage implements OnInit {
 
 	public go(clinic) {
 		this.showLoading();
-		this.managerService.getClinicAcessByUserIdAndClinicId(clinic.clinicId).subscribe(response => {
-			if (response && response.status) {
-				this.storage.accessRole = { accessRole: response.result.accessRole };
+		this.stack.clearStack();
+		this.stack.push(this.managerService.getClinicAcessByUserIdAndClinicId(clinic.clinicId));
+		if (!clinic.affiliateId) {
+			this.stack.push(this.managerService.getClinicOwner(clinic.clinicId));
+		}
+
+		this.stack.executeFork().subscribe(response => {
+			if (response) {
+				const clinicAccessResponse = response[0];
+				const clinicOwnerResponse = response[1];
+
 				this.storage.clinic = clinic;
+
+				if (clinicAccessResponse && clinicAccessResponse.status) {
+					this.storage.accessRole = { accessRole: clinicAccessResponse.result.accessRole };
+				}
+
+				this.storage.patientOwner = clinicOwnerResponse ? clinicOwnerResponse : clinic.affiliateId;
 				this.app.getRootNav().setRoot(TabsPage);
-			} this.dismissLoading();
+			}
+			this.dismissLoading();
 		}, err => this.dismissLoading());
 	}
 
