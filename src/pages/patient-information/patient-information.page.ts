@@ -7,80 +7,79 @@ import { RootNavController } from '../../services';
   templateUrl: 'patient-information.html',
 })
 export class PatientInformationPage {
- 
+
 
   private hasPatientId;
   private lock: boolean;
 
-  constructor( 
+  constructor(
     private navParams: NavParams,
     private rootNav: RootNavController,
-    private nav : NavController,
-    private alert : AlertController
-    ) {
+    private nav: NavController,
+    private alert: AlertController) {
 
-        this.hasPatientId = navParams.get('patientId');
+    this.hasPatientId = navParams.get('patientId');
   }
 
-  
+  // ionViewDidLoad() {
+  //   console.log('ionViewDidLoad PatientInformation');
+  // }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PatientInformation');
-  }
-
-	public submit(response) {
-		// this.rootNav.pop();
+  public submit(response) {
+    // this.rootNav.pop();
     this.nav.pop();
-    this.navParams.data.addOrEditQueue(response);
-	}
-
-  toggleLock(){
-    if(this.lock){
-      return this.validatePassword().then(response => {
-        this.lock = !response;
-      })
-    }else{
-      this.lock = true;  
+    if (this.navParams.data) {
+      this.navParams.data.addOrEditQueue(response);
     }
   }
 
-  ionViewCanLeave(){
-    if(this.lock){
+  toggleLock() {
+    if (this.lock) {
+      return this.validatePassword().then(response => {
+        this.lock = !response;
+      })
+    } else {
+      this.lock = true;
+    }
+  }
+
+  ionViewCanLeave() {
+    if (this.lock) {
       return this.validatePassword();
-    }else{
+    } else {
       return true;
     }
   }
 
-  validatePassword(){
+  validatePassword() {
     return new Promise((resolve, reject) => {
-         let alert = this.alert.create({
-          message: "Enter Password",
-          inputs: [{
-            name: 'password',
-            placeholder: 'Password Here',
-            type: 'password'
-          }],
-          buttons: [{
-            text: 'Cancel',
-            role: 'cancel',
-            handler: data => {
-              resolve(false);
-            }
-          },{
-            text: 'Proceed',
-            handler: data => {
-              if(data.password === 'admin'){
-                resolve(true);
-              }else{
-                return false;
-              }
+      let alert = this.alert.create({
+        message: "Enter Password",
+        inputs: [{
+          name: 'password',
+          placeholder: 'Password Here',
+          type: 'password'
+        }],
+        buttons: [{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            resolve(false);
+          }
+        }, {
+          text: 'Proceed',
+          handler: data => {
+            if (data.password === 'admin') {
+              resolve(true);
+            } else {
+              return false;
             }
           }
-          ]
-        });
-        alert.present();
-      })
+        }
+        ]
+      });
+      alert.present();
+    })
   }
 
 }
