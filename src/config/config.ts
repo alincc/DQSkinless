@@ -21,7 +21,7 @@ export const CONFIG = {
 
         clinicAccess: '/clinicaccess',
         updateAccessExpiryProcess: '/clinicaccess/accessroleexp',
-        clinicDetailRecord: '/clinicdetails',
+        clinicDetails: '/clinicdetails',
         clinicTimeSlots: '/clinictimeslots',
         clinicContacts: '/cliniccontacts',
         customClinic: '/customclinic',
