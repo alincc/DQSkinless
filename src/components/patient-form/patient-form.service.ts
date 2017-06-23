@@ -56,4 +56,8 @@ export class PatientFormService {
     public deleteContacts(_parameter) {
         return this.http.delete(CONFIG.API.patientContacts, _parameter);
     }
+
+    public getPatientContactDetails(patientId){
+        return this.http.get(CONFIG.API.patientContacts, [patientId]);
+    }
 }
