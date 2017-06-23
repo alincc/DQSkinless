@@ -234,7 +234,20 @@ export class ClinicManagerService {
         }
     }
 
-    public updateAffiliate(affiliateId, clinicId) {
-        return this.http.put(CONFIG.API.clinicDetails + `/c/${clinicId}/a/${affiliateId}`, {});
+    public getClinicOwner(clinicId) {
+        return this.http.get(CONFIG.API.getClinicMember, [clinicId]).flatMap(response => {
+            if (response && response.status) {
+                const owner = response.result.find(m => m.accessRole === 0);
+                return Observable.of({
+                    status: owner ? 1 : 0,
+                    result: owner ? owner.userId : null
+                });
+            } else {
+                return Observable.of({
+                    status: 0,
+                    result: null
+                });
+            }
+        });
     }
 }
