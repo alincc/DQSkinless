@@ -9,15 +9,8 @@
     </ion-navbar>
 </ion-header>
 <ion-content #Content padding>
-    <ion-searchbar></ion-searchbar>
-    <content-with-loading [isLoading]="isLoading | async">
-        <ion-list>
-            <button ion-item>
-			<h3>1. Name of Patient</h3>
-		</button>
-        </ion-list>
-        <ion-fab bottom right (click)="goToAdd()">
-            <button ion-fab round color="accent"><ion-icon name="person-add" ></ion-icon></button>
-        </ion-fab>
-    </content-with-loading>
+    <patient-list></patient-list>
+    <ion-fab bottom right (click)="goToAdd()">
+        <button ion-fab round color="accent"><ion-icon name="person-add" ></ion-icon></button>
+    </ion-fab>
 </ion-content>
