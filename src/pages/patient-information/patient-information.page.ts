@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { NavParams, NavController, AlertController } from 'ionic-angular';
+
 import { RootNavController } from '../../services';
+
+import { SchedulePage } from '../schedule/schedule.page';
 
 @Component({
   selector: 'page-patient-information',
@@ -28,7 +31,7 @@ export class PatientInformationPage {
   public submit(response) {
     // this.rootNav.pop();
     this.nav.pop();
-    if (this.navParams.data) {
+    if (this.navParams.data && this.navParams.data instanceof SchedulePage) {
       this.navParams.data.addOrEditQueue(response);
     }
   }
