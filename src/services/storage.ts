@@ -11,6 +11,7 @@ export const STORAGE_KEYS = {
 	CONFIG: 'config',
 	CLINIC: 'clinic',
 	ACCESS_ROLE: 'accessRole',
+	PATIENT_OWNER: 'patientOwner',
 	CLINIC_MEMBERS: 'clinicMembers'
 }
 
@@ -64,6 +65,10 @@ export class Storage {
 		this.push.sendTag('clinic', data.id);
 	}
 
+	public getClinicSubjectValue() {
+		return this._clinicSubject.getValue();
+	}
+
 	// access role
 	private _accessRoleSubject = new BehaviorSubject<any>(undefined);
 	public accessRoleSubject: Observable<any> = this._accessRoleSubject.asObservable();
@@ -75,6 +80,23 @@ export class Storage {
 	public set accessRole(data) {
 		this._accessRoleSubject.next(data);
 		this.local.store(STORAGE_KEYS.ACCESS_ROLE, data);
+	}
+
+	// patient owner
+	private _patientOwnerSubject = new BehaviorSubject<any>(undefined);
+	public patientOwnerSubject: Observable<any> = this._patientOwnerSubject.asObservable();
+
+	public get patientOwner() {
+		return this.local.retrieve(STORAGE_KEYS.PATIENT_OWNER);
+	}
+
+	public set patientOwner(data) {
+		this._patientOwnerSubject.next(data);
+		this.local.store(STORAGE_KEYS.PATIENT_OWNER, data);
+	}
+
+	public getPatientOwnerSubjectValue() {
+		return this._patientOwnerSubject.getValue();
 	}
 
 	private _clinicMembersSubject = new BehaviorSubject<any>(undefined);

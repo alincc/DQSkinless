@@ -21,7 +21,7 @@ export const CONFIG = {
 
         clinicAccess: '/clinicaccess',
         updateAccessExpiryProcess: '/clinicaccess/accessroleexp',
-        clinicDetailRecord: '/clinicdetails',
+        clinicDetails: '/clinicdetails',
         clinicTimeSlots: '/clinictimeslots',
         clinicContacts: '/cliniccontacts',
         customClinic: '/customclinic',
@@ -36,6 +36,9 @@ export const CONFIG = {
         patientContacts: 'patientcontacts',
         customPatient: '/custompatient/pdmetc',
 
+        imageBucket: "/aws",
+
+        affiliates: '/affiliates',
         verifyAffiliateCode: '/affiliates/vrfpcd'
     },
     SOCKETS: {
