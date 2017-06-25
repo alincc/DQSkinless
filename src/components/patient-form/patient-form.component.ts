@@ -23,7 +23,7 @@ import { PatientProfilePage } from '../../pages/patient-profile/patient-profile.
   providers: [PatientFormService]
 })
 export class PatientForm implements OnInit {
-  
+
   @Input() patient: any;
   @Input() patientId: any;
 
@@ -35,7 +35,7 @@ export class PatientForm implements OnInit {
   public legalStatusList: any[];
   public disableSubmit: boolean;
   public mode: string;
-  public contacts: ArraySubject = new ArraySubject([]); 
+  public contacts: ArraySubject = new ArraySubject([]);
 
   private firstName: AbstractControl;
   private lastName: AbstractControl;
@@ -278,14 +278,12 @@ export class PatientForm implements OnInit {
         }, err => event.dismissLoading());
 
       } else {
-
-        // TODO EDIT MODE BEHAVIOR
         this.patient.patientId = this.patientId;
 
         this.contacts.value.filter(contact => !contact.patientId).forEach(contact => {
-                contact.patientId = this.patientId;
-                this.stack.push(this.patientService.addContacts(contact));
-            });
+          contact.patientId = this.patientId;
+          this.stack.push(this.patientService.addContacts(contact));
+        });
 
         this.stack.push(this.patientService.setPatientDetails(this.patient));
 
@@ -296,9 +294,11 @@ export class PatientForm implements OnInit {
             if (patientResponse && patientResponse.status) {
 
               const callback = this.params.get('callback');
+              if (callback) {
                 callback(this.patientId).then(() => {
                   this.rootNav.pop();
                 });
+              }
             }
           }
           event.dismissLoading();
@@ -311,28 +311,28 @@ export class PatientForm implements OnInit {
 
   }
 
-  private getPatientDetails(){
-      this.stack.push(this.patientService.getPatientDetails(this.patientId));
-      this.stack.push(this.patientService.getPatientContactDetails(this.patientId));
+  private getPatientDetails() {
+    this.stack.push(this.patientService.getPatientDetails(this.patientId));
+    this.stack.push(this.patientService.getPatientContactDetails(this.patientId));
 
-      this.stack.executeFork().subscribe(response => {
-        if(response){
+    this.stack.executeFork().subscribe(response => {
+      if (response) {
 
-          const getPatientDetails = response[0];
-          const getPatientContacts = response[1];
+        const getPatientDetails = response[0];
+        const getPatientContacts = response[1];
 
-          if(getPatientDetails && getPatientDetails.status){
-            this.patient = getPatientDetails.result;
-          }
-
-          if(getPatientContacts && getPatientContacts.status){
-            this.contacts.value = getPatientContacts.result;
-          }
-          this.bindPatientFormValues();
-
+        if (getPatientDetails && getPatientDetails.status) {
+          this.patient = getPatientDetails.result;
         }
 
-        this.stack.clearStack();
-      });
+        if (getPatientContacts && getPatientContacts.status) {
+          this.contacts.value = getPatientContacts.result;
+        }
+        this.bindPatientFormValues();
+
+      }
+
+      this.stack.clearStack();
+    });
   }
 }
