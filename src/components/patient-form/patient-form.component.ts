@@ -289,14 +289,11 @@ export class PatientForm implements OnInit {
             const patientResponse = response[this.stack.lastIndex];
             if (patientResponse && patientResponse.status) {
 
-              this.patient["id"] = this.patientId;
-              // this.onSubmit.emit(this.patient);
+              const callback = this.params.get('callback');
+                callback(this.patientId).then(() => {
+                  this.rootNav.pop();
+                });
             }
-
-            const callback = this.params.get('callback');
-              callback(this.patientId).then(() => {
-                this.rootNav.pop();
-              });
           }
           event.dismissLoading();
         }, err => event.dismissLoading());
