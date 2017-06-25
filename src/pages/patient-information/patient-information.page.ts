@@ -1,23 +1,27 @@
 import { Component } from '@angular/core';
-import { NavParams, NavController, AlertController } from 'ionic-angular';
+import { AlertController, NavController, NavParams } from 'ionic-angular';
+
+import { PatientInformationService } from './patient-information.service';
 import { RootNavController } from '../../services';
+
+import { SchedulePage } from '../schedule/schedule.page';
 
 @Component({
   selector: 'page-patient-information',
   templateUrl: 'patient-information.html',
+  providers: [PatientInformationService]
 })
 export class PatientInformationPage {
 
-
   private hasPatientId;
-  private lock: boolean;
+  public lock: boolean;
 
   constructor(
+    private alert: AlertController,
     private navParams: NavParams,
-    private rootNav: RootNavController,
     private nav: NavController,
-    private alert: AlertController) {
-
+    private patientInformationService: PatientInformationService,
+    private rootNav: RootNavController) {
     this.hasPatientId = navParams.get('patientId');
   }
 
@@ -28,7 +32,7 @@ export class PatientInformationPage {
   public submit(response) {
     // this.rootNav.pop();
     this.nav.pop();
-    if (this.navParams.data) {
+    if (this.navParams.data && this.navParams.data instanceof SchedulePage) {
       this.navParams.data.addOrEditQueue(response);
     }
   }
@@ -60,22 +64,25 @@ export class PatientInformationPage {
           placeholder: 'Password Here',
           type: 'password'
         }],
-        buttons: [{
-          text: 'Cancel',
-          role: 'cancel',
-          handler: data => {
-            resolve(false);
-          }
-        }, {
-          text: 'Proceed',
-          handler: data => {
-            if (data.password === 'admin') {
-              resolve(true);
-            } else {
-              return false;
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: data => {
+              resolve(false);
+            }
+          },
+          {
+            text: 'Proceed',
+            handler: data => {
+              this.patientInformationService.verifyPassword(data.password).subscribe(response => {
+                if (response && response.status) {
+                  resolve(true);
+                }
+                resolve(false);
+              });
             }
           }
-        }
         ]
       });
       alert.present();
