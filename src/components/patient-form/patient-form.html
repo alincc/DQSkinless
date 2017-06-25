@@ -138,7 +138,7 @@
         </ion-row>
     </ion-grid>
     <div text-center>
-        <xhr-button #xhr round large color="accent" type="submit" [disabled]="patientForm.pristine || form.pristine" (xhrClick)="submitForm($event)">
+        <xhr-button #xhr round large color="accent" type="submit" [disabled]="patientForm.pristine || form.pristine || disableSubmit" (xhrClick)="submitForm($event)">
             Done
         </xhr-button>
     </div>

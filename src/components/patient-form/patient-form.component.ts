@@ -23,7 +23,7 @@ import { PatientProfilePage } from '../../pages/patient-profile/patient-profile.
   providers: [PatientFormService]
 })
 export class PatientForm implements OnInit {
-
+  
   @Input() patient: any;
   @Input() patientId: any;
 
@@ -33,6 +33,7 @@ export class PatientForm implements OnInit {
   public contactType: any[];
   public genderList: any[];
   public legalStatusList: any[];
+  public disableSubmit: boolean;
   public mode: string;
 
   private firstName: AbstractControl;
@@ -94,6 +95,7 @@ export class PatientForm implements OnInit {
     this.genderList = LOVS.GENDER;
     this.legalStatusList = LOVS.LEGAL_STATUS;
     this.stack = new StackedServices([]);
+    this.disableSubmit = false;
   }
 
   private createForm() {
@@ -265,6 +267,10 @@ export class PatientForm implements OnInit {
           return Observable.of(response);
         }).subscribe(response => {
           if (response && response.status) {
+            if (!this.disableSubmit) {
+              this.disableSubmit = true;
+            }
+
             this.onSubmit.emit(this.patient);
             this.rootNav.pop();
           }
