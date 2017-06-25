@@ -20,24 +20,23 @@ export class PatientFormService {
         }
         return this.userId;
     }
-    
+
     public addPatientDetails(_parameter) {
         return this.http.post(CONFIG.API.patientDetails, _parameter);
     }
 
-    public setPatientDetails(_patient){
+    public setPatientDetails(_patient) {
         return this.http.put(CONFIG.API.patientDetails, _patient);
     }
 
-    public createPatientAcess(patientId) {
-        // TODO BE MODIFIED FOR PROPER IMPLEMENTATION
+    public createPatientAcess(ownerId, patientId) {
         const payload = {
-            userId: this.getUserId(),
+            ownerId: ownerId,
             patientId: patientId,
             startDate: new Date(),
             endDate: null,
-            access: 1, // for 1 - doctor 2 - assistant
-            type: 0 // refer to constants PD_RELATIONSHIP
+            access: 1, // TODO
+            type: 0
         };
 
         return this.http.post(CONFIG.API.patientAccess, payload);

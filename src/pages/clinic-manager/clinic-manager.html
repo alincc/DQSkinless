@@ -38,9 +38,13 @@
                             </ion-row>
                             <ion-row class="actions-container">
                                 <ion-col col-12 col-sm-12 col-md-12>
-                                    <a *ngIf="!isManager || clinic.accessRole !== 2" (click)="editClinic(clinic, i)" color="accent-dark">Edit&nbsp;&nbsp;&nbsp;</a>
-                                    <a *ngIf="ownedClinics.length > 1 && (!isManager || clinic.accessRole === 0)" (click)="deleteClinic(clinic, i)" color="accent-dark">Delete&nbsp;&nbsp;&nbsp;</a>
-                                    <a (click)="associateMember(clinic)" color="accent-dark">Associated Member</a>
+                                    <ion-icon class="action-icons" name="md-create" *ngIf="!isManager || clinic.accessRole !== 2" (click)="editClinic(clinic, i)"
+                                        color="accent"></ion-icon>
+                                    <ion-icon class="action-icons" name="people" (click)="associateMember(clinic)" color="accent-dark"></ion-icon>
+                                    <ion-icon class="action-icons" name="git-merge" *ngIf="!isManager || clinic.accessRole === 0" (click)="affiliateClinic(clinic)"
+                                        color="accent-dark"></ion-icon>
+                                    <ion-icon class="action-icons" name="trash" *ngIf="ownedClinics.length > 1 && (!isManager || clinic.accessRole === 0)" (click)="deleteClinic(clinic, i)"
+                                        color="accent-dark"></ion-icon>
                                 </ion-col>
                             </ion-row>
                         </ion-grid>
