@@ -59,27 +59,28 @@ export class MyApp {
       
       network.onConnect().subscribe(() => {
         setTimeout(() => {
-          this.toast.dismiss();
-          this.presentToast("Connected");
+          if (this.toast) {
+            this.toast.dismiss();
+          }
+          if (network.type != null)
+            this.presentToast("Connected to " + network.type);
+          else {
+            this.presentToast("Connected");
+          }
         }, 1000);
-
-        // setTimeout(() => {
-        //   if(network.type != null)
-        //   this.presentToast(network.type);
-        // }, 1000);
       });
 
       network.onDisconnect().subscribe(() => {
-        setTimeout(() => {
+        setTimeout(() => {          
           this.presentToast(MESSAGES.ERROR.NO_INTERNET);
-        }, 3000);
+        }, 1000);
       });
 
     });
   }
 
   public presentToast(message){
-
+    
     if (message === "Connected") {
       this.toast = this.toastCtrl.create({
         message: message,

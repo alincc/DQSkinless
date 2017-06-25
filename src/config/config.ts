@@ -33,7 +33,8 @@ export const CONFIG = {
 
         patientDetails: '/patientdetails',
         patientAccess: '/patientaccess',
-        patientContacts: 'patientcontacts',
+        patientContacts: '/patientcontacts',
+        getpatientContacts: '/patientcontacts/p',
         customPatient: '/custompatient/pdmetc',
 
         imageBucket: "/aws",
