@@ -159,6 +159,31 @@ export class PatientForm implements OnInit {
     });
   }
 
+  private getPatientDetails() {
+    this.stack.push(this.patientService.getPatientDetails(this.patientId));
+    this.stack.push(this.patientService.getPatientContactDetails(this.patientId));
+
+    this.stack.executeFork().subscribe(response => {
+      if (response) {
+
+        const getPatientDetails = response[0];
+        const getPatientContacts = response[1];
+
+        if (getPatientDetails && getPatientDetails.status) {
+          this.patient = getPatientDetails.result;
+        }
+
+        if (getPatientContacts && getPatientContacts.status) {
+          this.contacts.value = getPatientContacts.result;
+        }
+        this.bindPatientFormValues();
+
+      }
+
+      this.stack.clearStack();
+    });
+  }
+
   private validateForm() {
     this.errors.lastName = this.lastName.hasError('required') ? 'Last Name is required' : '';
     this.errors.firstName = this.firstName.hasError('required') ? 'First Name is required' : '';
@@ -308,31 +333,5 @@ export class PatientForm implements OnInit {
     else {
       event.dismissLoading();
     }
-
-  }
-
-  private getPatientDetails() {
-    this.stack.push(this.patientService.getPatientDetails(this.patientId));
-    this.stack.push(this.patientService.getPatientContactDetails(this.patientId));
-
-    this.stack.executeFork().subscribe(response => {
-      if (response) {
-
-        const getPatientDetails = response[0];
-        const getPatientContacts = response[1];
-
-        if (getPatientDetails && getPatientDetails.status) {
-          this.patient = getPatientDetails.result;
-        }
-
-        if (getPatientContacts && getPatientContacts.status) {
-          this.contacts.value = getPatientContacts.result;
-        }
-        this.bindPatientFormValues();
-
-      }
-
-      this.stack.clearStack();
-    });
   }
 }
