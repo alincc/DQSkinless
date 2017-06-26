@@ -146,7 +146,7 @@ export class PatientForm implements OnInit {
     });
 
     this.email.valueChanges.subscribe(newValue => {
-      this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
+      this.errors.email = this.email.hasError('pattern') ? 'Invalid email address format' : '';
     });
 
     this.registrationDate.valueChanges.subscribe(newValue => {
@@ -192,7 +192,7 @@ export class PatientForm implements OnInit {
     this.errors.gender = this.gender.hasError('required') ? 'Gender is required' : '';
     this.errors.address = this.address.hasError('required') ? 'Address is required' : '';
     this.errors.registrationDate = this.registrationDate.hasError('required') ? 'Registration date is required' : '';
-    this.errors.email = this.email.hasError('required') ? 'Email is required.' : this.email.hasError('pattern') ? 'Invalid email address format' : '';
+    this.errors.email = this.email.hasError('pattern') ? 'Invalid email address format' : '';
     this.errors.birthDate = this.birthDate.hasError('required') ? 'Birth Date is required' : '';
     this.errors.contactNo = this.hasContact() ? '' : "Contact is required";
   }
@@ -297,7 +297,7 @@ export class PatientForm implements OnInit {
             }
 
             this.onSubmit.emit(this.patient);
-            this.rootNav.pop();
+            // this.rootNav.pop();
           }
           event.dismissLoading();
         }, err => event.dismissLoading());
@@ -318,12 +318,13 @@ export class PatientForm implements OnInit {
             const patientResponse = response[this.stack.lastIndex];
             if (patientResponse && patientResponse.status) {
 
-              const callback = this.params.get('callback');
-              if (callback) {
-                callback(this.patientId).then(() => {
-                  this.rootNav.pop();
-                });
-              }
+              // const callback = this.params.get('callback');
+              // if (callback) {
+              //   callback(this.patientId).then(() => {
+              //     this.rootNav.pop();
+              //   });
+              // }
+              this.onSubmit.emit(this.patient)
             }
           }
           event.dismissLoading();

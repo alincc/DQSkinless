@@ -63,13 +63,12 @@
             </ion-item-divider>
             <ion-item *ngFor="let transaction of group.transactions" (click)="open(transaction)">
                 <ion-card>
-                    <div class="spot"></div>
+                    <div class="spot">{{transaction.timestamp | date:"MMM dd"}}</div>
                     <div class="stem"></div>
                     <ion-card-header>
                         {{transaction.description}}
                     </ion-card-header>
                     <ion-card-content>
-                        <p>Timestamp: {{transaction.timestamp}}</p>
                         <p>Clinic: {{transaction.clinic}}</p>
                     </ion-card-content>
                 </ion-card>

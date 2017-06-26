@@ -12,7 +12,8 @@ export const STORAGE_KEYS = {
 	CLINIC: 'clinic',
 	ACCESS_ROLE: 'accessRole',
 	PATIENT_OWNER: 'patientOwner',
-	CLINIC_MEMBERS: 'clinicMembers'
+	CLINIC_MEMBERS: 'clinicMembers',
+	LOCK : 'lock'
 }
 
 @Injectable()
@@ -117,6 +118,10 @@ export class Storage {
 
 	public get config() { return this.local.retrieve(STORAGE_KEYS.CONFIG); }
 	public set config(data) { this.local.store(STORAGE_KEYS.CONFIG, data); }
+
+	//patient form lock
+	public get lock() { return this.session.retrieve(STORAGE_KEYS.LOCK);}
+	public set lock(data) { this.session.store(STORAGE_KEYS.LOCK, data)}
 
 
 	public clear() {

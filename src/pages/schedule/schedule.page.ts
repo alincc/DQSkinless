@@ -1,4 +1,4 @@
-import { Component, ViewChild, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, Input, EventEmitter } from '@angular/core';
 import { PopoverController, Content, ModalController, LoadingController, AlertController, Loading, NavController } from 'ionic-angular';
 import { MoreMenuPopover } from './more.popover';
 
@@ -358,7 +358,11 @@ export class SchedulePage {
 	}
 
 	private addNewPatient(){
-		this.nav.push(PatientInformationPage, this);
+		let callback = new EventEmitter<any>();
+		this.nav.push(PatientInformationPage, {callback: callback});
+		callback.subscribe(response => {
+			this.addOrEditQueue(response);
+		})
 	}
 
 	public addOrEditQueue(customer?: any) {
