@@ -39,15 +39,22 @@ patient-profile-page{
 	ion-card{
 		margin-left: 50px !important;
 		.spot{
-			background: $accent;
-			height: 12px;
-			width: 12px;
+			background: $light;
+			border: $accent solid 2px;
+			height: 50px;
+			width: 50px;
 			border-radius: 50%;
 			position: absolute;
-			margin-top: -6px;
-			margin-left: -6px;
+			margin-top: -25px;
+			margin-left: -25px;
 			top: 50%;
-			left: 25px;
+			left: 30px;
+			white-space: pre-line;
+			padding: 7px;
+			text-align: center;
+			vertical-align: middle;
+			z-index: 99;
+			font-weight: bold;
 		}
 		.stem{
 			height: 100%;
@@ -55,7 +62,7 @@ patient-profile-page{
 			background: $accent;
 			position: absolute;
 			margin-left: -1px;
-			left: 25px;
+			left: 30px;
 			top: 0;
 		}
 

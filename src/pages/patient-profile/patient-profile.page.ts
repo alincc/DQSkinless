@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { RootNavController } from '../../services';
 import { timeline } from './timeline.mock';
 import { ConsultationFormPage } from '../consultation-form/consultation-form';
@@ -46,21 +46,18 @@ export class PatientProfilePage {
 	}
 
 	private gotoEditPatient(){
+		let callback = new EventEmitter<any>();
 		this.rootNav.push(
 			PatientInformationPage, 
 			{
 				patientId: this.patientId, 
 				mode: MODE.edit,
-				callback: this.patientProfileCallback});
-	}
-
-	public patientProfileCallback = (navParams) => {
-		return new Promise((resolve, reject) => {
+				callback: callback});
+		callback.subscribe(response => {
 			if (this.navParams.data) {
-				this.fetchPatientInformation(this.navParams.data);
+				this.fetchPatientInformation(response.patientId);
 			}
-
-			resolve();
-		});
+		})
 	}
+
 }

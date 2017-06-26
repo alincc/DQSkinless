@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { AlertController, NavController, NavParams } from 'ionic-angular';
 
 import { PatientInformationService } from './patient-information.service';
-import { RootNavController } from '../../services';
+import { RootNavController, Storage } from '../../services';
 
 import { SchedulePage } from '../schedule/schedule.page';
+
 
 @Component({
   selector: 'page-patient-information',
@@ -21,7 +22,8 @@ export class PatientInformationPage {
     private navParams: NavParams,
     private nav: NavController,
     private patientInformationService: PatientInformationService,
-    private rootNav: RootNavController) {
+    private rootNav: RootNavController,
+    private storage : Storage) {
     this.hasPatientId = navParams.get('patientId');
   }
 
@@ -30,10 +32,12 @@ export class PatientInformationPage {
   // }
 
   public submit(response) {
-    // this.rootNav.pop();
     this.nav.pop();
-    if (this.navParams.data && this.navParams.data instanceof SchedulePage) {
-      this.navParams.data.addOrEditQueue(response);
+    // if (this.navParams.data && this.navParams.data instanceof SchedulePage) {
+    //   this.navParams.data.addOrEditQueue(response);
+    // }
+    if(this.navParams.data.callback && this.navParams.data.callback instanceof EventEmitter){
+      this.navParams.data.callback.emit(response);
     }
   }
 
@@ -41,9 +45,11 @@ export class PatientInformationPage {
     if (this.lock) {
       return this.validatePassword().then(response => {
         this.lock = !response;
+        this.storage.lock = !response;
       })
     } else {
       this.lock = true;
+      this.storage.lock = true;
     }
   }
 

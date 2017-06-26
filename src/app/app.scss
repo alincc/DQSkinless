@@ -228,21 +228,24 @@ ion-content {
             ion-radio {
                 margin-left: 2px !important;
                 .radio-icon {
-                    background-color: $secondary;
+                   
                     border: 1px solid $primary-light;
                     border-radius: 50%;
                     height: 21px;
                     width: 21px;
-                    &.radio-checked .radio-inner {
-                        border-radius: 50% !important;
-                        height: 15px !important;
-                        width: 15px !important;
-                        left: 12%;
-                        top: 11%;
-                        background-color: $primary;
-                        border-width: 0px !important;
-                        -webkit-transform: none !important;
-                        transform: none !important;
+                    &.radio-checked{
+                        border-color: $accent;
+                        .radio-inner {
+                            border-radius: 50% !important;
+                            height: 15px !important;
+                            width: 15px !important;
+                            left: 12%;
+                            top: 11%;
+                            background-color: $accent;
+                            border-width: 0px !important;
+                            -webkit-transform: none !important;
+                            transform: none !important;
+                        } 
                     }
                 }
             }
@@ -416,4 +419,11 @@ button[ion-item] {
         border-top: 2px solid #c8c7cc !important;
         display: block;
     }
+}
+
+*[no-padding]{
+    padding: 0;
+}
+*[no-margin]{
+    margin: 0;
 }

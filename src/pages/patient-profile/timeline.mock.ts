@@ -6,31 +6,31 @@ export const timeline = [
         "id": 0,
         "description": "Surgery",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       },
       {
         "id": 1,
         "description": "Consultation",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       },
       {
         "id": 2,
         "description": "Consultation",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       },
       {
         "id": 3,
         "description": "Consultation",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       },
       {
         "id": 4,
         "description": "Consultation",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       }
     ]
   },
@@ -41,25 +41,25 @@ export const timeline = [
         "id": 0,
         "description": "Consultation",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       },
       {
         "id": 1,
         "description": "Consultation",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       },
       {
         "id": 2,
         "description": "Consultation",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       },
       {
         "id": 3,
         "description": "Surgery",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       }
     ]
   },
@@ -70,31 +70,31 @@ export const timeline = [
         "id": 0,
         "description": "Surgery",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       },
       {
         "id": 1,
         "description": "Consultation",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       },
       {
         "id": 2,
         "description": "Surgery",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       },
       {
         "id": 3,
         "description": "Consultation",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       },
       {
         "id": 4,
         "description": "Consultation",
         "clinic": "Pasay",
-        "timestamp": "February, 19  11:35 pm"
+        "timestamp": new Date()
       }
     ]
   }

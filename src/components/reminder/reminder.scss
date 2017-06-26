@@ -1,11 +1,12 @@
 reminder{
 	ion-card-header{
-		background: $secondary;
-		h2{
-			font-weight: bold !important;
+		background: $primary-light;
+		ion-label{
+			color: $light;
 		}
 	}
 	ion-card-content{
+	    padding-top: 3px !important;
 		h3{
 			white-space: normal;
 		}
