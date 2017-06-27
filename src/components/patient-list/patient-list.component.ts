@@ -29,7 +29,7 @@ export class PatientList {
     private getDefaults() {
         this.currentPage = 1;
         this.previousPage = 0;
-        this.limit = 10;
+        this.limit = 20;
         this.patients = [];
         this.oldPatients = [];
         this.name = '';
