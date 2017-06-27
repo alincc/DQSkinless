@@ -16,55 +16,40 @@ export class AddQueueFormModal {
     private schedule: AbstractControl;
     private timeSlot: AbstractControl;
     private errors: any;
+    private forAsst: AbstractControl;
+    private forDoctor: AbstractControl;
+    private doctorRequested : AbstractControl;
 
     constructor(private formBuilder: FormBuilder,
         private view: ViewController,
         private param: NavParams) {
-        console.log(param.data);
         this.initFormGroup(param.data);
-        this.lastName = param.data.lastname;
-        this.firstName = param.data.firstname;
-        this.middleName = param.data.middlename;
     }
 
     private initFormGroup(data?) {
+        this.lastName = data.lastname;
+        this.firstName = data.firstname;
+        this.middleName = data.middlename;
+
         this.queueForm = this.formBuilder.group({
-            // lastName: [data.lastName || "", Validators.required],
-            // firstName: [data.firstName || "", Validators.required],
-            // middleName: data.middleName || "",
             isServeNow: [data.type ? (data.type === QUEUE.TYPE.WALKIN ? true : false) : true],
             schedule: [data.schedule || new Date()],
-            timeSlot: [data.timeSlot || new Date()]
+            timeSlot: [data.timeSlot || new Date()],
+            forAsst: [false],
+            forDoctor : [false],
+            doctorRequested : [0]
         });
 
-        // this.lastName = this.queueForm.get('lastName');
-        // this.firstName = this.queueForm.get('firstName');
-        // this.middleName = this.queueForm.get('middleName');
         this.isServeNow = this.queueForm.get('isServeNow');
         this.schedule = this.queueForm.get('schedule');
         this.timeSlot = this.queueForm.get('timeSlot');
+        this.forAsst = this.queueForm.get('forAsst');
+        this.forDoctor = this.queueForm.get('forDoctor');
+        this.doctorRequested = this.queueForm.get('doctorRequested');
+
 
         this.errors = {};
-        // this.lastName.valueChanges.subscribe(
-        //     newValue => {
-        //         if (this.lastName.hasError('required')) {
-        //             this.errors.lastName = 'Last Name is required';
-        //         } else {
-        //             this.errors.lastName = '';
-        //         }
-        //     }
-        // );
-
-        // this.firstName.valueChanges.subscribe(
-        //     newValue => {
-        //         if (this.firstName.hasError('required')) {
-        //             this.errors.firstName = 'First Name is required';
-        //         } else {
-        //             this.errors.firstName = '';
-        //         }
-        //     }
-        // );
-
+        
         this.isServeNow.valueChanges.subscribe(
             newValue => {
                 if (newValue) {
@@ -76,6 +61,13 @@ export class AddQueueFormModal {
                 }
             }
         );
+
+        this.forDoctor.valueChanges.subscribe(
+            newValue => {
+                if(!newValue){
+                    this.doctorRequested.setValue(0);
+                }
+            })
 
     }
 
@@ -89,19 +81,22 @@ export class AddQueueFormModal {
                 patientId : this.param.data.id,
                 isServeNow: this.isServeNow.value,
                 schedule: this.schedule.value,
-                timeSlot: this.timeSlot.value
+                timeSlot: this.timeSlot.value,
+                doneWith: 0,
+                queuedFor: (this.forAsst.value ? 1 : 0) + (this.forDoctor.value ? 2 : 0),
+                doctorRequested: this.forDoctor.value ? this.doctorRequested.value : '0'
             })
         }
     }
 
     private validateForm() {
-        // if (this.lastName.hasError('required')) {
-        //     this.errors.lastName = 'Last Name is required';
-        // }
-        // if (this.firstName.hasError('required')) {
-        //     this.errors.firstName = 'First Name is required';
-        // }
-        return !Boolean(this.errors.lastName || this.errors.firstName);
+        if(this.forAsst.value || this.forDoctor.value){
+            this.errors.for = null;
+        }else{
+            this.errors.for = "Please select either one to serve the patient.";
+        }
+
+        return !Boolean(this.errors.for);
     }
 
     public getMinDate(): any {
