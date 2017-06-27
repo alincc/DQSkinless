@@ -21,23 +21,28 @@
 					<ion-list no-lines>
 						<ion-item>
 							<ion-label>Assistant</ion-label>
-							<ion-checkbox color="accent" checked="true"></ion-checkbox>
+							<ion-checkbox color="accent" formControlName="forAsst"></ion-checkbox>
 						</ion-item>
 						<ion-item>
 							<ion-label>Doctor</ion-label>
-							<ion-checkbox color="accent" checked="true"></ion-checkbox>
+							<ion-checkbox color="accent" formControlName="forDoctor"></ion-checkbox>
 						</ion-item>
 					</ion-list>
 				</ion-col>
 				<ion-col  col-12 col-sm-12 col-md-12>
 					<ion-item>
 						<ion-label>Doctor</ion-label>
-						<ion-select placeholder="Choose your Doctor">
-							<ion-option>Any</ion-option>
+						<ion-select placeholder="Choose your Doctor" formControlName="doctorRequested" [disabled]="!forDoctor.value">
+							<ion-option value="0">Any</ion-option>
 						</ion-select>
 					</ion-item>
 				</ion-col>
 			</ion-row>	
+			<ion-row>
+				<ion-col>
+					{{errors.for}}
+				</ion-col>
+			</ion-row>
 		</ion-grid>
 		<ion-label>Queued on:</ion-label>
 		<ion-grid>

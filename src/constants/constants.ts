@@ -153,6 +153,12 @@ export const QUEUE = {
     TYPE: {
         WALKIN: "W",
         SCHEDULED: "S"
+    },
+    DONE_WITH: {
+        NONE: 0,
+        ASST: 1,
+        DOCTOR: 2,
+        BOTH: 3
     }
 }
 
