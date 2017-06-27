@@ -12,45 +12,53 @@
             <hr/>
         </div>
         <div class="clinic-container">
-            <ion-card *ngFor="let clinic of clinics;let i=index">
-                <ion-card-content>
-                    <accordion [header]="clinic?.clinicName" [subHeader]="clinic?.address" [numbering]="i+1">
-                        <ion-grid>
-                            <ion-row>
-                                <ion-col col-4 col-sm-2 col-md-2>
-                                    <b>Schedule:</b>
-                                </ion-col>
-                                <ion-col col-8 col-sm-10 col-md-10>
-                                    <ul>
-                                        <li *ngFor="let schedule of clinic?.schedules">{{ days[schedule?.dayOfWeek] }} : {{ displayTime(schedule?.timeSlot) }}</li>
-                                    </ul>
-                                </ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col col-4 col-sm-2 col-md-2>
-                                    <b>Contact Us:</b>
-                                </ion-col>
-                                <ion-col col-8 col-sm-10 col-md-10>
-                                    <ul>
-                                        <li *ngFor="let contact of clinic?.contacts">{{ contactType[contact?.contactType] }} : {{ contact?.contact }}</li>
-                                    </ul>
-                                </ion-col>
-                            </ion-row>
-                            <ion-row class="actions-container">
-                                <ion-col col-12 col-sm-12 col-md-12>
-                                    <ion-icon class="action-icons" name="md-create" *ngIf="!isManager || clinic.accessRole !== 2" (click)="editClinic(clinic, i)"
-                                        color="accent"></ion-icon>
-                                    <ion-icon class="action-icons" name="people" (click)="associateMember(clinic)" color="accent-dark"></ion-icon>
-                                    <ion-icon class="action-icons" name="git-merge" *ngIf="!isManager || clinic.accessRole === 0" (click)="affiliateClinic(clinic)"
-                                        color="accent-dark"></ion-icon>
-                                    <ion-icon class="action-icons" name="trash" *ngIf="ownedClinics.length > 1 && (!isManager || clinic.accessRole === 0)" (click)="deleteClinic(clinic, i)"
-                                        color="accent-dark"></ion-icon>
-                                </ion-col>
-                            </ion-row>
-                        </ion-grid>
-                    </accordion>
-                </ion-card-content>
-            </ion-card>
+            <ion-grid>
+                <ion-row>
+                    <ion-col col-sm-12 col-md-6 col-12 *ngFor="let clinic of clinics;let i=index">
+                        <ion-card>
+                            <ion-card-content>
+                                <accordion [header]="clinic?.clinicName" [subHeader]="clinic?.address" [numbering]="i+1">
+                                    <ion-grid>
+                                        <ion-row>
+                                            <ion-col col-4 col-sm-2 col-md-2>
+                                                <b>Schedule:</b>
+                                            </ion-col>
+                                            <ion-col col-8 col-sm-10 col-md-10>
+                                                <ul>
+                                                    <li *ngFor="let schedule of clinic?.schedules">{{ days[schedule?.dayOfWeek] }} : {{ displayTime(schedule?.timeSlot)
+                                                        }}
+                                                    </li>
+                                                </ul>
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-col col-4 col-sm-2 col-md-2>
+                                                <b>Contact Us:</b>
+                                            </ion-col>
+                                            <ion-col col-8 col-sm-10 col-md-10>
+                                                <ul>
+                                                    <li *ngFor="let contact of clinic?.contacts">{{ contactType[contact?.contactType] }} : {{ contact?.contact }}</li>
+                                                </ul>
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row class="actions-container">
+                                            <ion-col col-12 col-sm-12 col-md-12>
+                                                <ion-icon class="action-icons" name="md-create" *ngIf="!isManager || clinic.accessRole !== 2" (click)="editClinic(clinic, i)"
+                                                    color="accent"></ion-icon>
+                                                <ion-icon class="action-icons" name="people" (click)="associateMember(clinic)" color="accent-dark"></ion-icon>
+                                                <ion-icon class="action-icons" name="git-merge" *ngIf="!isManager || clinic.accessRole === 0" (click)="affiliateClinic(clinic)"
+                                                    color="accent-dark"></ion-icon>
+                                                <ion-icon class="action-icons" name="trash" *ngIf="ownedClinics.length > 1 && (!isManager || clinic.accessRole === 0)" (click)="deleteClinic(clinic, i)"
+                                                    color="accent-dark"></ion-icon>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-grid>
+                                </accordion>
+                            </ion-card-content>
+                        </ion-card>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
         </div>
         <div class="speil" *ngIf="clinics?.length === 0" text-center>
             <ion-label>

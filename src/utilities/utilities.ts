@@ -23,10 +23,6 @@ export class Utilities {
 		return new Date(new Date(date).toString() + " GMT").toISOString()
 	}
 
-	public static padDigits(number, digits) {
-		return Array(Math.max(digits - String(number).length + 1, 0)).join("0") + number;
-	}
-
 	public static transformDate(date: Date, format?: string) {
 		const d = new DatePipe('pt-PT').transform(date, format ? format : 'yyyy-MM-dd');
 		return d;
@@ -35,6 +31,26 @@ export class Utilities {
 	public static getFullName(user) {
 		return user.lastname ? (user.lastname ? user.lastname + ', ' : '') + (user.firstname ? user.firstname + ' ' : '') + ' ' + (user.middlename ? user.middlename : '') : 'Unregistered';
 	}
+
+	public static getConcatenatedContacts(contancts) {
+		if (contancts && contancts.length > 0) {
+			let formattedContacts = '';
+
+			contancts.forEach(contact => {
+				formattedContacts += `${contact.contact}, `;
+			});
+			return formattedContacts.substring(1, formattedContacts.length - 2);
+		}
+		return '';
+	}
+
+	public static getDefaultAvatar(user) {
+        if (user && user.lastname) {
+            return user.lastname.substring(0, 1).toUpperCase() + user.firstname.substring(0, 1).toUpperCase();
+        } else {
+            return "?";
+        }
+    }
 
 	public static formatName(name) {
 		if (name) {

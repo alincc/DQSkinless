@@ -91,11 +91,7 @@ export class AssociateMemberPage implements OnInit {
 	}
 
 	public getDefaultAvatar(member) {
-		if (member && member.lastname) {
-			return member.lastname.substring(0, 1).toUpperCase() + member.firstname.substring(0, 1).toUpperCase();
-		} else {
-			return "?";
-		}
+		return Utilities.getDefaultAvatar(member);
 	}
 
 	public getFullName(user) {

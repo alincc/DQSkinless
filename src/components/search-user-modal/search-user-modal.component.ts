@@ -82,11 +82,7 @@ export class SearchUserModal implements OnInit {
     }
 
     public getDefaultAvatar(member) {
-        if (member && member.lastname) {
-            return member.lastname.substring(0, 1).toUpperCase() + member.firstname.substring(0, 1).toUpperCase();
-        } else {
-            return "?";
-        }
+        return Utilities.getDefaultAvatar(member);
     }
 
     public getFullName(user) {
@@ -94,15 +90,7 @@ export class SearchUserModal implements OnInit {
     }
 
     public displayContacts(userContacts) {
-        if (userContacts && userContacts.length > 0) {
-            let formattedUserContacts = '';
-
-            userContacts.forEach(userContact => {
-                formattedUserContacts += `${userContact.contact}, `;
-            });
-            return formattedUserContacts.substring(1, formattedUserContacts.length - 2);
-        }
-        return '';
+        return Utilities.getConcatenatedContacts(userContacts);
     }
 
     public selectCriteria(response) {

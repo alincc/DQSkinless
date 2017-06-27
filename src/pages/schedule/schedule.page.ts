@@ -357,9 +357,9 @@ export class SchedulePage {
 		});
 	}
 
-	private addNewPatient(){
+	private addNewPatient() {
 		let callback = new EventEmitter<any>();
-		this.nav.push(PatientInformationPage, {callback: callback});
+		this.nav.push(PatientInformationPage, { callback: callback });
 		callback.subscribe(response => {
 			this.addOrEditQueue(response);
 		})
@@ -378,8 +378,8 @@ export class SchedulePage {
 			var parameter: any = item;
 			let parameterFactory = new Promise((resolve, reject) => {
 
-					parameter.type = QUEUE.TYPE.WALKIN;
-					parameter.boardId = this.queueBoard.id;
+				parameter.type = QUEUE.TYPE.WALKIN;
+				parameter.boardId = this.queueBoard.id;
 
 				if (item.isServeNow) {
 					// if (customer) {
@@ -388,25 +388,25 @@ export class SchedulePage {
 					// 	parameter.status = customer.status;
 					// resolve(parameter);
 					// } else {
-						parameter.order = this.getNewOrder();
-						parameter.time = new Date();
-						parameter.status = QUEUE.STATUS.QUEUED;
-						// parameter.patientId = this.AddPatientDetails(parameter);
+					parameter.order = this.getNewOrder();
+					parameter.time = new Date();
+					parameter.status = QUEUE.STATUS.QUEUED;
+					// parameter.patientId = this.AddPatientDetails(parameter);
 
-						// this.patient.firstname = parameter.firstName;
-						// this.patient.middlename = parameter.middleName;
-						// this.patient.lastname = parameter.lastName;
-						// this.service.addPatientDetails(this.patient).subscribe(response => {
-						// 	if (response.status) {
-						// 		parameter.patientId = response.result;
-								resolve(parameter);
-						// 	}
-						// 	else {
-						// 		reject(parameter);
-						// 	}
-						// }, err => {
-						// 	reject(err);
-						// });
+					// this.patient.firstname = parameter.firstName;
+					// this.patient.middlename = parameter.middleName;
+					// this.patient.lastname = parameter.lastName;
+					// this.service.addPatientDetails(this.patient).subscribe(response => {
+					// 	if (response.status) {
+					// 		parameter.patientId = response.result;
+					resolve(parameter);
+					// 	}
+					// 	else {
+					// 		reject(parameter);
+					// 	}
+					// }, err => {
+					// 	reject(err);
+					// });
 					// }
 
 				} else {
@@ -428,12 +428,12 @@ export class SchedulePage {
 				}
 			})
 
-		parameterFactory.then(parameter => {
+			parameterFactory.then(parameter => {
 				let serviceCallback;
 				// if (customer) {
 				// 	serviceCallback = this.service.updateQueue(parameter)
 				// } else {
-					serviceCallback = this.service.addQueue(parameter)
+				serviceCallback = this.service.addQueue(parameter)
 				// }
 				serviceCallback.subscribe(
 					response => {
@@ -454,15 +454,11 @@ export class SchedulePage {
 				loading.dismiss();
 			});
 		});
-			modal.present();
+		modal.present();
 	}
 
-	public getDefaultAvatar(member) {
-		if (member) {
-			return member.lastName.substring(0, 1).toUpperCase() + member.firstName.substring(0, 1).toUpperCase();
-		} else {
-			return "?";
-		}
+	public getDefaultAvatar(patient) {
+		return Utilities.getDefaultAvatar(patient);
 	}
 
 	private getNewOrder() {
