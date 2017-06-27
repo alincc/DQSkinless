@@ -109,7 +109,30 @@ export class PatientList {
         // TODO
     }
 
+    public patientListCallback = (params) => {
+        return new Promise((resolve, reject) => {
+            for (let i = 1; i <= this.currentPage; i++) {
+                this.isLoading.next(true);
+                this.patientListService.seachPatient(Utilities.formatName(this.name), i, this.limit).subscribe(response => {
+                    if (response && response.status) {
+                        if (i === 1) {
+                            this.patients = response.result;
+                        } else {
+                            this.patients = this.patients.concat(response.result);
+                        }
+                        this.incrementPage(response);
+                    }
+                    this.isLoading.next(false);
+                }, err => this.isLoading.next(false));
+            }
+            resolve();
+        });
+    }
+
     public view(patient) {
-        this.rootNav.push(PatientProfilePage, patient.patientId);
+        this.rootNav.push(PatientProfilePage, {
+            patientId: patient.patientId,
+            patientListCallback: this.patientListCallback
+        });
     }
 }
