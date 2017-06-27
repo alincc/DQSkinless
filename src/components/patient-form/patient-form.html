@@ -60,13 +60,10 @@
                 </ion-item>
             </ion-col>
             <ion-col col-4 col-sm-4 col-md-1>
-                <ion-label class="form-label">Age* :</ion-label>
+                <ion-label class="form-label">Age :</ion-label>
                 <ion-item round>
                     <ion-input type="number" name="age" formControlName="age"></ion-input>
                 </ion-item>
-                <div class="error-message" *ngIf="patientForm.get('age')?.dirty &&  patientForm.get('age').invalid">
-                    {{ errors.age }}
-                </div>
             </ion-col>
         </ion-row>
         <ion-row class="contact-control">
@@ -138,7 +135,8 @@
         </ion-row>
     </ion-grid>
     <div text-center>
-        <xhr-button #xhr round large color="accent" type="submit" [disabled]="patientForm.pristine || form.pristine || disableSubmit" (xhrClick)="submitForm($event)">
+        <xhr-button #xhr round large color="accent" type="submit" [disabled]="patientForm.pristine || form.pristine || disableSubmit"
+            (xhrClick)="submitForm($event)">
             Done
         </xhr-button>
     </div>

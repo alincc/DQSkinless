@@ -82,7 +82,6 @@ export class PatientForm implements OnInit {
       lastName: '',
       middleName: '',
       confirm: '',
-      // age: '',
       legalStatus: '',
       gender: '',
       address: '',
@@ -103,7 +102,7 @@ export class PatientForm implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       middleName: '',
-      age: ['', Validators.required],
+      age: '',
       legalStatus: ['', Validators.required],
       gender: ['', Validators.required],
       address: ['', Validators.required],
@@ -165,7 +164,6 @@ export class PatientForm implements OnInit {
 
     this.stack.executeFork().subscribe(response => {
       if (response) {
-
         const getPatientDetails = response[0];
         const getPatientContacts = response[1];
 
@@ -177,7 +175,6 @@ export class PatientForm implements OnInit {
           this.contacts.value = getPatientContacts.result;
         }
         this.bindPatientFormValues();
-
       }
 
       this.stack.clearStack();
@@ -187,7 +184,6 @@ export class PatientForm implements OnInit {
   private validateForm() {
     this.errors.lastName = this.lastName.hasError('required') ? 'Last Name is required' : '';
     this.errors.firstName = this.firstName.hasError('required') ? 'First Name is required' : '';
-    // this.errors.age = this.age.hasError('required') ? 'Age is required' : '';
     this.errors.legalStatus = this.legalStatus.hasError('required') ? 'Marital Status is required' : '';
     this.errors.gender = this.gender.hasError('required') ? 'Gender is required' : '';
     this.errors.address = this.address.hasError('required') ? 'Address is required' : '';
@@ -295,9 +291,7 @@ export class PatientForm implements OnInit {
             if (!this.disableSubmit) {
               this.disableSubmit = true;
             }
-
             this.onSubmit.emit(this.patient);
-            // this.rootNav.pop();
           }
           event.dismissLoading();
         }, err => event.dismissLoading());
@@ -312,18 +306,10 @@ export class PatientForm implements OnInit {
 
         this.stack.push(this.patientService.setPatientDetails(this.patient));
 
-
         this.stack.executeFork().subscribe(response => {
           if (response) {
             const patientResponse = response[this.stack.lastIndex];
             if (patientResponse && patientResponse.status) {
-
-              // const callback = this.params.get('callback');
-              // if (callback) {
-              //   callback(this.patientId).then(() => {
-              //     this.rootNav.pop();
-              //   });
-              // }
               this.onSubmit.emit(this.patient)
             }
           }
