@@ -31,13 +31,13 @@
         <ion-grid>
             <ion-row>
                 <ion-col>
-                    <xhr-button icon-only clear full [disabled]="!serving || account.role != 1" (xhrClick)="done($event)">
+                    <xhr-button icon-only clear full [disabled]="!serving" (xhrClick)="done($event)">
                         <ion-icon name="thumbs-up" color="accent"></ion-icon>
                         Done
                     </xhr-button>
                 </ion-col>
                 <ion-col>
-                    <xhr-button icon-only clear full [disabled]="!hasForQueue() || account.role != 1" (xhrClick)="next($event)">
+                    <xhr-button icon-only clear full [disabled]="!canQueue" (xhrClick)="next($event)">
                         <ion-icon name="swap" color="accent"></ion-icon>
                         Next
                     </xhr-button>
@@ -49,13 +49,13 @@
 					</button>
                 </ion-col>
                 <ion-col col-0>
-                    <xhr-button #queueAgainBtn icon-only clear full [disabled]="!serving || account.role != 1" (xhrClick)="queueAgain($event)">
+                    <xhr-button #queueAgainBtn icon-only clear full [disabled]="!serving" (xhrClick)="queueAgain($event)">
                         <ion-icon name="return-left" color="accent"></ion-icon>
                         Queue Again
                     </xhr-button>
                 </ion-col>
                 <ion-col col-0>
-                    <xhr-button #removeBtn icon-only clear full [disabled]="!serving || account.role != 1" (xhrClick)="noShow($event)">
+                    <xhr-button #removeBtn icon-only clear full [disabled]="!serving" (xhrClick)="noShow($event)">
                         <ion-icon name="eye-off" color="accent"></ion-icon>
                         No-Show
                     </xhr-button>
@@ -101,7 +101,7 @@
                     <ion-icon [name]="button.icon"></ion-icon>
                     {{button.name}}
                 </xhr-button>
-                <xhr-button color="secondary" (xhrClick)="serveNow($event, customer)" *ngIf="account.role == 1">
+                <xhr-button color="secondary" (xhrClick)="serveNow($event, customer)" [disabled]="!customer.canServeNow">
                     <ion-icon name="clipboard"></ion-icon>
                     Serve Now
                 </xhr-button>

@@ -83,7 +83,7 @@ export class AddQueueFormModal {
                 schedule: this.schedule.value,
                 timeSlot: this.timeSlot.value,
                 doneWith: 0,
-                queuedFor: (this.forAsst.value ? 1 : 0) + (this.forDoctor.value ? 2 : 0),
+                queuedFor: (this.forAsst.value ? 2 : 0) + (this.forDoctor.value ? 1 : 0),
                 doctorRequested: this.forDoctor.value ? this.doctorRequested.value : '0'
             })
         }
