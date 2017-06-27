@@ -1,8 +1,31 @@
-<ion-searchbar></ion-searchbar>
+<ion-searchbar [(ngModel)]="name" (ionInput)="search($event)" placeholder="Name"></ion-searchbar>
 <content-with-loading [isLoading]="isLoading | async">
-    <ion-list>
-        <button ion-item>
-			<h3>1. Name of Patient</h3>
-		</button>
-    </ion-list>
+    <div *ngIf="patients && patients.length > 0 && hasValidInput">
+        <ion-list>
+            <ion-item *ngFor="let patient of patients;let i=index">
+                <ion-avatar item-left>
+                    <!--<img src="{{ user.img }}">-->
+                    <div>
+                        {{ getDefaultAvatar(patient) }}
+                    </div>
+                </ion-avatar>
+                <p> {{ i + 1 }}. {{ getFullName(patient) }}</p>
+            </ion-item>
+            <!--<button ion-item *ngFor="let patient of patients;let i=index">
+                {{ i + 1 }}. {{ getFullName(patient) }}
+		    </button>-->
+        </ion-list>
+
+        <ion-infinite-scroll (ionInfinite)="doInfiniteSearch($event)">
+            <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+    </div>
+
+    <div class="speil" text-center *ngIf="patients && patients.length === 0 && hasValidInput">
+        No Patient(s) found
+    </div>
+
+    <div class="speil" text-center *ngIf="!hasValidInput">
+        Name should have atleast 2 characters
+    </div>
 </content-with-loading>

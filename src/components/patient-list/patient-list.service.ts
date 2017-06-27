@@ -21,4 +21,14 @@ export class PatientListService {
         }
         return this.patientOwner;
     }
+
+    public seachPatient(name, page, limit) {
+        const payload = {
+            name: name,
+            page: page,
+            limit: limit
+        };
+
+        return this.http.post(CONFIG.API.searchPatient, payload);
+    }
 }
