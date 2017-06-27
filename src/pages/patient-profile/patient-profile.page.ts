@@ -28,8 +28,17 @@ export class PatientProfilePage {
 		private navParams: NavParams) {
 		this.timeline = timeline;
 
-		this.patientId = navParams.data;
+		this.patientId = navParams.get('patientId');
 		this.fetchPatientInformation(this.patientId);
+	}
+
+	ionViewCanLeave() {
+		const patientListCallback = this.navParams.get('patientListCallback');
+		if (patientListCallback) {
+			patientListCallback(true).then(() => {
+				return true;
+			});
+		}
 	}
 
 	private fetchPatientInformation(patientId) {
