@@ -15,13 +15,13 @@ import { PatientInformationPage } from '../../pages/patient-information/patient-
 	providers: [PatientProfileService]
 })
 export class PatientProfilePage {
+
 	public timeline: any;
+	public gender = LOVS.GENDER;
+	public legal = LOVS.LEGAL_STATUS;
 
-	private patientId;
-	private patient : any;
-
-	private gender = LOVS.GENDER;
-	private legal = LOVS.LEGAL_STATUS;
+	private patient: any;
+	private patientId: any;
 
 	constructor(private rootNav: RootNavController,
 		private service: PatientProfileService,
@@ -32,27 +32,23 @@ export class PatientProfilePage {
 		this.fetchPatientInformation(this.patientId);
 	}
 
-	open() {
-		this.rootNav.push(ConsultationFormPage);
-	}
-
 	private fetchPatientInformation(patientId) {
-
-		this.service.getPatientDetails(patientId).subscribe(response =>{
-			if(response.status){
+		this.service.getPatientDetails(patientId).subscribe(response => {
+			if (response.status) {
 				this.patient = response.result;
 			}
 		})
 	}
 
-	private gotoEditPatient(){
+	public gotoEditPatient() {
 		let callback = new EventEmitter<any>();
 		this.rootNav.push(
-			PatientInformationPage, 
+			PatientInformationPage,
 			{
-				patientId: this.patientId, 
+				patientId: this.patientId,
 				mode: MODE.edit,
-				callback: callback});
+				callback: callback
+			});
 		callback.subscribe(response => {
 			if (this.navParams.data) {
 				this.fetchPatientInformation(response.patientId);
@@ -60,4 +56,7 @@ export class PatientProfilePage {
 		})
 	}
 
+	public open() {
+		this.rootNav.push(ConsultationFormPage);
+	}
 }

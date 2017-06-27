@@ -23,20 +23,13 @@ export class PatientInformationPage {
     private nav: NavController,
     private patientInformationService: PatientInformationService,
     private rootNav: RootNavController,
-    private storage : Storage) {
+    private storage: Storage) {
     this.hasPatientId = navParams.get('patientId');
   }
 
-  // ionViewDidLoad() {
-  //   console.log('ionViewDidLoad PatientInformation');
-  // }
-
   public submit(response) {
     this.nav.pop();
-    // if (this.navParams.data && this.navParams.data instanceof SchedulePage) {
-    //   this.navParams.data.addOrEditQueue(response);
-    // }
-    if(this.navParams.data.callback && this.navParams.data.callback instanceof EventEmitter){
+    if (this.navParams.data.callback && this.navParams.data.callback instanceof EventEmitter) {
       this.navParams.data.callback.emit(response);
     }
   }

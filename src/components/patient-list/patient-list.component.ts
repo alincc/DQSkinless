@@ -1,14 +1,22 @@
 import { Component } from '@angular/core';
+import { Loading, LoadingController, ModalController } from 'ionic-angular';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { PatientListService } from './patient-list.service';
+import { RootNavController } from '../../services/root-nav-controller';
 
+import { PatientListService } from './patient-list.service';
+import { ScheduleService } from '../../pages/schedule/schedule.service';
+
+import { AddQueueFormModal } from '../add-queue-form-modal/add-queue-form.modal.component';
+import { PatientProfilePage } from '../../pages/patient-profile/patient-profile.page';
+
+import { QUEUE } from '../../constants/constants'
 import { Utilities } from '../../utilities/utilities'
 
 @Component({
     selector: 'patient-list',
     templateUrl: 'patient-list.html',
-    providers: [PatientListService]
+    providers: [PatientListService, ScheduleService]
 })
 export class PatientList {
 
@@ -22,7 +30,12 @@ export class PatientList {
     private oldPatients: any;
     private limit: any;
 
-    constructor(private patientListService: PatientListService) {
+    constructor(
+        private loadingController: LoadingController,
+        private modalController: ModalController,
+        private rootNav: RootNavController,
+        private patientListService: PatientListService,
+        private scheduleService: ScheduleService) {
         this.getDefaults();
     }
 
@@ -90,5 +103,13 @@ export class PatientList {
             }
             infiniteScroll.complete();
         }, err => infiniteScroll.complete());
+    }
+
+    public queue(patient) {
+        // TODO
+    }
+
+    public view(patient) {
+        this.rootNav.push(PatientProfilePage, patient.patientId);
     }
 }
