@@ -78,6 +78,7 @@ export class SchedulePage {
 	private servingState: string;
 	private loading: any;
 	private account: any;
+	private canQueue : boolean;
 	@Input() patient: any;
 	constructor(private popover: PopoverController,
 		private rootNav: RootNavController,
@@ -144,6 +145,7 @@ export class SchedulePage {
 						this.fetchQueue(response => {
 							console.log("fetched Queue");
 							// loading.dismiss();
+								this.hasForQueue();
 						});
 					} else {
 						if (this.requestForRefresh) {
@@ -151,7 +153,9 @@ export class SchedulePage {
 						}
 						this.requestForRefresh = setTimeout(() => {
 							this.requestForRefresh = null;
-							this.fetchQueue();
+							this.fetchQueue(response => {
+								this.hasForQueue();
+							});
 						}, 3000);
 					}
 				}, err => {
@@ -178,6 +182,8 @@ export class SchedulePage {
 						case QUEUE.STATUS.QUEUED:
 						case QUEUE.STATUS.EN_ROUTE:
 						case QUEUE.STATUS.OUT:
+							let canQueue = (item.queuedFor - item.doneWith);
+							item.canServeNow = canQueue === this.account.role || canQueue === 3;
 							newQueueList.push(item);
 							break;
 					}
@@ -332,13 +338,10 @@ export class SchedulePage {
 	}
 
 	public hasForQueue() {
-		if (this.queue) {
-			return Boolean(this.queue.find(item => {
-				return item.status === QUEUE.STATUS.QUEUED;
-			}))
-		} else {
-			return false;
-		}
+		let role = this.account.role;
+		this.canQueue = Boolean(this.queue.find(item => {
+			return item.status === QUEUE.STATUS.QUEUED && item.canServeNow;
+		}));
 	}
 
 	public queueAgain(xhr) {
@@ -552,6 +555,7 @@ export class SchedulePage {
 		customer.status = QUEUE.STATUS.QUEUED;
 		this.updateQueue(xhr, customer, () => {
 			this.ws.send(QUEUE.MAP.DONE);
+			this.hasForQueue();
 		});
 	}
 
@@ -559,6 +563,7 @@ export class SchedulePage {
 		customer.status = QUEUE.STATUS.OUT;
 		this.updateQueue(xhr, customer, () => {
 			this.ws.send(QUEUE.MAP.DONE);
+			this.hasForQueue();
 		});
 	}
 
