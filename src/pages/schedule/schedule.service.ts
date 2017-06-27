@@ -4,10 +4,10 @@ import { CONFIG } from '../../config/config';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
-export class ScheduleService{
+export class ScheduleService {
 
-	constructor( private websocketFactory : WebSocketFactory,
-		private http : HttpService){}
+	constructor(private websocketFactory: WebSocketFactory,
+		private http: HttpService) { }
 
 	public connectToQueue(): any {
 		return this.websocketFactory.connect(CONFIG.SOCKETS.queue);
@@ -22,7 +22,6 @@ export class ScheduleService{
 	}
 
 	public addQueue(queue: any) {
-
 		return this.http.post(CONFIG.API.queue, queue);
 	}
 

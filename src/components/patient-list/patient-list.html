@@ -9,11 +9,12 @@
                         {{ getDefaultAvatar(patient) }}
                     </div>
                 </ion-avatar>
-                <p> {{ i + 1 }}. {{ getFullName(patient) }}</p>
+                <h3>{{ i + 1 }}. {{ getFullName(patient) }}</h3>
+                <div item-right>
+                    <button ion-button clear item-end color="accent" (click)="queue(patient)">Queue</button>
+                    <button ion-button clear item-end color="accent" (click)="view(patient)">View</button>
+                </div>
             </ion-item>
-            <!--<button ion-item *ngFor="let patient of patients;let i=index">
-                {{ i + 1 }}. {{ getFullName(patient) }}
-		    </button>-->
         </ion-list>
 
         <ion-infinite-scroll (ionInfinite)="doInfiniteSearch($event)">
