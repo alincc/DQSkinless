@@ -13,7 +13,7 @@ export class PatientListService {
 
     private getPatientOwner() {
         if (!this.patientOwner) {
-            this.storage.patientOwner.subscribe(patientOwner => {
+            this.storage.patientOwnerSubject.subscribe(patientOwner => {
                 if (patientOwner) {
                     this.patientOwner = patientOwner;
                 }
@@ -26,7 +26,8 @@ export class PatientListService {
         const payload = {
             name: name,
             page: page,
-            limit: limit
+            limit: limit,
+            ownerId: this.getPatientOwner()
         };
 
         return this.http.post(CONFIG.API.searchPatient, payload);
