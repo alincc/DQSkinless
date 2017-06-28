@@ -1,4 +1,4 @@
-<ion-searchbar [(ngModel)]="name" (ionInput)="search($event)" placeholder="Name"></ion-searchbar>
+<ion-searchbar [(ngModel)]="name" (ionInput)="search($event)" [debounce]="2000" placeholder="Name"></ion-searchbar>
 <content-with-loading [isLoading]="isLoading | async">
     <div *ngIf="patients && patients.length > 0 && hasValidInput">
         <ion-list>

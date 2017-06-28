@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Loading, LoadingController, ModalController } from 'ionic-angular';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subscription } from 'rxjs/Subscription';
 
 import { RootNavController } from '../../services/root-nav-controller';
 
@@ -29,6 +30,7 @@ export class PatientList {
     private previousPage: any;
     private oldPatients: any;
     private limit: any;
+    private seachPatientSubs: Subscription;
 
     constructor(
         private loadingController: LoadingController,
@@ -71,19 +73,21 @@ export class PatientList {
         this.currentPage = 1;
         this.oldPatients = [];
 
+        if (this.seachPatientSubs) {
+            this.seachPatientSubs.unsubscribe();
+        }
+
         if (this.hasValidInput) {
-            setTimeout(function () {
-                this.isLoading.next(true);
-                this.patientListService.seachPatient(Utilities.formatName(this.name), this.currentPage, this.limit).subscribe(response => {
-                    if (response && response.status) {
-                        this.patients = response.result;
-                        this.incrementPage(response);
-                    } else {
-                        this.patients = [];
-                    }
-                    this.isLoading.next(false);
-                }, err => this.isLoading.next(false));
-            }.bind(this), 2000);
+            this.isLoading.next(true);
+            this.seachPatientSubs = this.patientListService.seachPatient(Utilities.formatName(this.name), this.currentPage, this.limit).subscribe(response => {
+                if (response && response.status) {
+                    this.patients = response.result;
+                    this.incrementPage(response);
+                } else {
+                    this.patients = [];
+                }
+                this.isLoading.next(false);
+            }, err => this.isLoading.next(false));
         } else {
             this.patients = [];
         }
