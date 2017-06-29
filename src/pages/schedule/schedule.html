@@ -22,7 +22,7 @@
                     {{getDefaultAvatar(serving)}}
                 </div>
             </ion-avatar>
-            <h2 color="accent" (click)="view(serving.patientId)">{{serving?.lastName}}, {{serving?.firstName}} {{serving?.middleName}}</h2>
+            <h2 color="accent" (click)="view(serving?.patientId)">{{serving?.lastName}}, {{serving?.firstName}} {{serving?.middleName}}</h2>
             <p>{{serving?.time | date: 'hh:mm a'}} </p>
         </ion-item>
     </div>
@@ -61,7 +61,7 @@
                     </xhr-button>
                 </ion-col>
                 <ion-col col-0>
-                    <button ion-button icon-only clear full (click)="toggleReOrder()" [disabled]="account.role != 1">
+                    <button ion-button icon-only clear full (click)="toggleReOrder()" [disabled]="account?.role != 1">
 						<ion-icon name="shuffle" color="accent" ></ion-icon>
 						Re-Order
 					</button>

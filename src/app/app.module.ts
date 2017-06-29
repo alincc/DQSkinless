@@ -29,7 +29,8 @@ import { Network } from '@ionic-native/network';
 import { OneSignal } from '@ionic-native/onesignal';
 import { SQLite } from '@ionic-native/sqlite';
 import { BackgroundMode } from '@ionic-native/background-mode';
-
+//store
+import { QueueStore } from '../store';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,10 @@ import { BackgroundMode } from '@ionic-native/background-mode';
     SQLite,
     OneSignal,
     Network,
-    BackgroundMode
+    BackgroundMode,
+
+    //store
+    QueueStore
   ]
 })
 export class AppModule { }
