@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Loading, LoadingController, ModalController } from 'ionic-angular';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription } from 'rxjs/Subscription';
@@ -11,7 +11,7 @@ import { ScheduleService } from '../../pages/schedule/schedule.service';
 import { AddQueueFormModal } from '../add-queue-form-modal/add-queue-form.modal.component';
 import { PatientProfilePage } from '../../pages/patient-profile/patient-profile.page';
 
-import { QUEUE } from '../../constants/constants'
+import { Storage } from '../../services';
 import { Utilities } from '../../utilities/utilities'
 
 @Component({
@@ -19,7 +19,7 @@ import { Utilities } from '../../utilities/utilities'
     templateUrl: 'patient-list.html',
     providers: [PatientListService, ScheduleService]
 })
-export class PatientList {
+export class PatientList implements OnInit {
 
     public isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     public patients: any;
@@ -37,18 +37,33 @@ export class PatientList {
         private modalController: ModalController,
         private rootNav: RootNavController,
         private patientListService: PatientListService,
-        private scheduleService: ScheduleService) {
+        private scheduleService: ScheduleService,
+        private storage: Storage) {
         this.getDefaults();
     }
 
     private getDefaults() {
-        this.currentPage = 1;
-        this.previousPage = 0;
         this.limit = 20;
+        this.resetPatientTabVariables();
+    }
+
+    private resetPatientTabVariables() {
+        this.name = '';
+        this.hasValidInput = false;
         this.patients = [];
         this.oldPatients = [];
-        this.name = '';
-        this.hasValidInput = true;
+
+        this.previousPage = 0;
+        this.currentPage = 1;
+    }
+
+    public ngOnInit() {
+        this.storage.patientOwnerSubject.subscribe(patientOwnerSubject => {
+            this.name = '';
+            this.hasValidInput = false;
+            this.patients = [];
+            this.oldPatients = [];
+        });
     }
 
     public getFullName(patient) {
@@ -67,6 +82,10 @@ export class PatientList {
         }
     }
 
+    private checkResult(result) {
+        return result ? result : [];
+    }
+
     public search(event) {
         this.hasValidInput = this.name && this.name.length >= 2;
         this.previousPage = 0;
@@ -81,7 +100,7 @@ export class PatientList {
             this.isLoading.next(true);
             this.seachPatientSubs = this.patientListService.seachPatient(Utilities.formatName(this.name), this.currentPage, this.limit).subscribe(response => {
                 if (response && response.status) {
-                    this.patients = response.result;
+                    this.patients = this.checkResult(response.result);
                     this.incrementPage(response);
                 } else {
                     this.patients = [];
@@ -97,11 +116,11 @@ export class PatientList {
         this.patientListService.seachPatient(Utilities.formatName(this.name), this.currentPage, this.limit).subscribe(response => {
             if (response && response.status) {
                 if (this.currentPage === 1) {
-                    this.patients = response.result;
+                    this.patients = this.checkResult(response.result);
                 } else if (this.currentPage === this.previousPage) {
-                    this.patients = this.oldPatients.concat(response.result);
+                    this.patients = this.oldPatients.concat(this.checkResult(response.result));
                 } else {
-                    this.patients = this.patients.concat(response.result);
+                    this.patients = this.patients.concat(this.checkResult(response.result));
                 }
                 this.incrementPage(response);
             }
