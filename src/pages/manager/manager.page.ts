@@ -79,7 +79,12 @@ export class ManagerPage implements OnInit {
 					this.storage.patientOwner = clinic.affiliateId;
 				}
 
-				this.app.getRootNav().setRoot(TabsPage);
+				let nav = this.app.getRootNav();
+				if(nav.getByIndex(0).name === "TabsPage"){
+					nav.pop();
+				}else{
+					nav.setRoot(TabsPage);
+				}
 			}
 			this.dismissLoading();
 		}, err => this.dismissLoading());

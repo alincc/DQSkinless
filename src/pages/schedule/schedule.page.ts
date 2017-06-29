@@ -21,6 +21,7 @@ import {
 } from '@angular/animations';
 import { Utilities } from '../../utilities/utilities';
 import { Storage } from '../../services';
+import { QueueStore } from '../../store';
 
 
 
@@ -65,19 +66,18 @@ export class SchedulePage {
 	private removeBtn: XHRButton;
 	@ViewChild('queueAgainBtn')
 	private queueAgainBtn: XHRButton;
-	private ws: any;
+	// private ws: any;
 	private servingNow: any;
 	private queueTopOffset: number;
 	public controlCss: boolean;
 	private isReOrder: boolean;
 	private queueBoard: any;
 	private serving: any;
-	private connection: any;
+	// private connection: any;
 	private requestForRefresh: any;
 	private clinicId: any;
 	private servingState: string;
 	private loading: any;
-	private account: any;
 	private canQueue : boolean;
 	@Input() patient: any;
 	constructor(private popover: PopoverController,
@@ -88,117 +88,49 @@ export class SchedulePage {
 		private loadingCtrl: LoadingController,
 		private alert: AlertController,
 		private storage: Storage,
-		private nav: NavController) {
+		private nav: NavController,
+		private store : QueueStore
+		) {
 
-		this.storage.clinicSubject.subscribe(clinic => {
-			if (clinic) {
-				this.initSchedule(clinic.clinicId);
-			}
-		})
-
-		this.storage.accountSubject.subscribe(account => {
-			if (account) {
-				this.account = account;
+		store.queueListSubject.subscribe(queueList => {
+			if(queueList){
+				this.queue = null;
+				this.initQueue(queueList);
+				this.hasForQueue();
+				detector.detectChanges();
 			}
 		})
 
 		this.patient = {};
 	}
 
-	public initSchedule(clinicId) {
-		// let loading = this.createLoading();
-		// loading.present();
-		this.queue = null;
 
-		this.controlCss = false;
-		this.isReOrder = false;
-		if (this.ws) {
-			this.ws.close();
+	private initQueue(queueList){
+		let account = this.storage.account;
+		let newQueueList = [];
+		let currentServing = null;
+		for (let queue of queueList) {
+			switch (queue.status) {
+				case QUEUE.STATUS.SERVING:
+					if(queue.queuedBy === account.userId){
+						currentServing = queue;
+					}
+					break;
+				case QUEUE.STATUS.QUEUED:
+				case QUEUE.STATUS.EN_ROUTE:
+				case QUEUE.STATUS.OUT:
+					let canQueue = (queue.queuedFor - queue.doneWith);
+					queue.canServeNow = (canQueue === account.role || canQueue === 3) && 
+						((account.role === 1 && (queue.doctorRequested === 0 || queue.doctorRequested === account.userId) ||
+							account.role === 2))
+						;
+					newQueueList.push(queue);
+					break;
+			}
 		}
-		if (this.connection) {
-			this.connection.unsubscribe();
-		}
 
-		this.clinicId = clinicId;
-
-		var currentDate = Utilities.clearTime(new Date());
-		console.log("fetching Queue Board by clinic id and date");
-		this.service.getQueueBoardByIdAndClinic(clinicId, currentDate).subscribe(response => {
-			if (response.status) {
-
-				//set queue board
-				this.queueBoard = response.result;
-
-				// connect to web socket
-				this.ws = this.service.connectToQueue()
-				this.ws.then(
-					response => {
-						this.ws.send(clinicId);
-					}
-				);
-				// subscribe to sock
-				console.log("subscribing to sock")
-				this.connection = this.ws.connection.subscribe(response => {
-					console.log("subcsribed to sock with response ", response);
-					if (response === "A") {
-						console.log("fetching Queue");
-						this.fetchQueue(response => {
-							console.log("fetched Queue");
-							// loading.dismiss();
-								this.hasForQueue();
-						});
-					} else {
-						if (this.requestForRefresh) {
-							clearTimeout(this.requestForRefresh);
-						}
-						this.requestForRefresh = setTimeout(() => {
-							this.requestForRefresh = null;
-							this.fetchQueue(response => {
-								this.hasForQueue();
-							});
-						}, 3000);
-					}
-				}, err => {
-					console.error(err);
-				}, () => {
-					console.log("closed");
-				})
-
-			}
-		});
-	}
-
-
-	public fetchQueue(callback?, errorHandler?) {
-		return this.service.getQueueByBoardID(this.queueBoard.id).subscribe(response => {
-			if (response.status) {
-				let newQueueList = [];
-				this.serving = null;
-				for (let item of response.result) {
-					switch (item.status) {
-						case QUEUE.STATUS.SERVING:
-							this.serving = item;
-							break;
-						case QUEUE.STATUS.QUEUED:
-						case QUEUE.STATUS.EN_ROUTE:
-						case QUEUE.STATUS.OUT:
-							let canQueue = (item.queuedFor - item.doneWith);
-							item.canServeNow = canQueue === this.account.role || canQueue === 3;
-							newQueueList.push(item);
-							break;
-					}
-				}
-				this.queue = newQueueList;
-				if (callback) {
-					callback(response);
-				}
-				this.detector.detectChanges();
-			}
-		}, err => {
-			if (errorHandler) {
-				errorHandler(err);
-			}
-		})
+		this.serving = currentServing;
+		this.queue = newQueueList;
 	}
 
 	public ngAfterViewInit() {
@@ -236,14 +168,14 @@ export class SchedulePage {
 
 		this.queue.splice(indexes.to, 0, element);
 		this.updateQueue(null, element, response => {
-			this.ws.send(QUEUE.MAP.FETCH);
+			this.store.send(QUEUE.MAP.FETCH);
 		});
 	}
 
 	public showMore(event) {
 		let popover = this.popover.create(MoreMenuPopover, {
 			disableButtons: !this.serving,
-			isAsst: this.account.role == 2
+			isAsst: this.storage.account.role == 2
 		});
 		popover.present({
 			ev: event
@@ -265,7 +197,7 @@ export class SchedulePage {
 	}
 
 	public view(patientId) {
-		this.rootNav.push(PatientProfilePage, patientId);
+		this.rootNav.push(PatientProfilePage, {patientId: patientId});
 	}
 
 	public toggleReOrder() {
@@ -279,7 +211,7 @@ export class SchedulePage {
 	public updateQueue(xhr, element, callback?, errCallback?) {
 		this.updateQueueObservable(element).subscribe(
 			response => {
-				this.fetchQueue(
+				this.store.fetchQueue(
 					response => {
 						if (xhr) {
 							xhr.dismissLoading();
@@ -313,7 +245,7 @@ export class SchedulePage {
 		this.serving.status = QUEUE.STATUS.DONE;
 		this.servingState = 'done';
 		this.updateServing(xhr, () => {
-			this.ws.send(QUEUE.MAP.DONE);
+			this.store.send(QUEUE.MAP.DONE);
 		});
 	}
 
@@ -321,14 +253,19 @@ export class SchedulePage {
 		this.preHookServingDone().then(response => {
 			if (response) {
 				for (var i = 0; i < this.queue.length; i++) {
-					if (this.queue[i].status === QUEUE.STATUS.QUEUED) {
+					if (this.queue[i].status === QUEUE.STATUS.QUEUED &&	
+						this.queue[i].canServeNow) {
 						let serving = Object.assign({}, this.queue.splice(i, 1)[0]);
 						serving.status = QUEUE.STATUS.SERVING
+						serving.queuedBy = this.storage.account.userId;
 						this.updateQueue(xhr, serving, () => {
-							this.ws.send(QUEUE.MAP.NEXT);
+							this.store.send(QUEUE.MAP.NEXT);
 							this.serving = serving;
+							xhr.dismissLoading();
 						});
 						return;
+					}else{
+						xhr.dismissLoading();
 					}
 				}
 			} else {
@@ -338,7 +275,6 @@ export class SchedulePage {
 	}
 
 	public hasForQueue() {
-		let role = this.account.role;
 		this.canQueue = Boolean(this.queue.find(item => {
 			return item.status === QUEUE.STATUS.QUEUED && item.canServeNow;
 		}));
@@ -348,7 +284,7 @@ export class SchedulePage {
 		this.serving.status = QUEUE.STATUS.EN_ROUTE;
 		this.servingState = 'reque';
 		this.updateServing(xhr, () => {
-			this.ws.send(QUEUE.MAP.DONE);
+			this.store.send(QUEUE.MAP.DONE);
 		});
 	}
 
@@ -356,7 +292,7 @@ export class SchedulePage {
 		this.serving.status = QUEUE.STATUS.NO_SHOW;
 		this.servingState = 'done';
 		this.updateServing(xhr, () => {
-			this.ws.send(QUEUE.MAP.DONE);
+			this.store.send(QUEUE.MAP.DONE);
 		});
 	}
 
@@ -381,37 +317,14 @@ export class SchedulePage {
 			var parameter: any = item;
 			let parameterFactory = new Promise((resolve, reject) => {
 
-				parameter.type = QUEUE.TYPE.WALKIN;
-				parameter.boardId = this.queueBoard.id;
+				parameter.boardId = this.store.queueBoard.id;
 
 				if (item.isServeNow) {
-					// if (customer) {
-					// 	parameter.order = customer.order;
-					// 	parameter.time = customer.time;
-					// 	parameter.status = customer.status;
-					// resolve(parameter);
-					// } else {
+					parameter.type = QUEUE.TYPE.WALKIN;
 					parameter.order = this.getNewOrder();
 					parameter.time = new Date();
 					parameter.status = QUEUE.STATUS.QUEUED;
-					// parameter.patientId = this.AddPatientDetails(parameter);
-
-					// this.patient.firstname = parameter.firstName;
-					// this.patient.middlename = parameter.middleName;
-					// this.patient.lastname = parameter.lastName;
-					// this.service.addPatientDetails(this.patient).subscribe(response => {
-					// 	if (response.status) {
-					// 		parameter.patientId = response.result;
 					resolve(parameter);
-					// 	}
-					// 	else {
-					// 		reject(parameter);
-					// 	}
-					// }, err => {
-					// 	reject(err);
-					// });
-					// }
-
 				} else {
 					this.service.getQueueBoardByIdAndClinic(this.clinicId, new Date(item.schedule))
 						.subscribe(response => {
@@ -441,8 +354,8 @@ export class SchedulePage {
 				serviceCallback.subscribe(
 					response => {
 						if (response.status) {
-							this.ws.send(QUEUE.MAP.FETCH);
-							this.fetchQueue(response => {
+							this.store.send(QUEUE.MAP.FETCH);
+							this.store.fetchQueue(response => {
 								loading.dismiss();
 							}, err => {
 								loading.dismiss();
@@ -503,7 +416,7 @@ export class SchedulePage {
 				let serving = Object.assign({}, customer);
 				serving.status = QUEUE.STATUS.SERVING
 				this.updateQueue(xhr, serving, () => {
-					this.ws.send(QUEUE.MAP.NEXT);
+					this.store.send(QUEUE.MAP.NEXT);
 					this.serving = serving;
 				});
 			} else {
@@ -547,14 +460,14 @@ export class SchedulePage {
 	private delete(xhr, customer) {
 		customer.status = QUEUE.STATUS.NO_SHOW;
 		this.updateQueue(xhr, customer, () => {
-			this.ws.send(QUEUE.MAP.DONE);
+			this.store.send(QUEUE.MAP.DONE);
 		});
 	}
 
 	private arrived(xhr, customer) {
 		customer.status = QUEUE.STATUS.QUEUED;
 		this.updateQueue(xhr, customer, () => {
-			this.ws.send(QUEUE.MAP.DONE);
+			this.store.send(QUEUE.MAP.DONE);
 			this.hasForQueue();
 		});
 	}
@@ -562,7 +475,7 @@ export class SchedulePage {
 	private out(xhr, customer) {
 		customer.status = QUEUE.STATUS.OUT;
 		this.updateQueue(xhr, customer, () => {
-			this.ws.send(QUEUE.MAP.DONE);
+			this.store.send(QUEUE.MAP.DONE);
 			this.hasForQueue();
 		});
 	}

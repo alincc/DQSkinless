@@ -9,9 +9,9 @@ export class ScheduleService {
 	constructor(private websocketFactory: WebSocketFactory,
 		private http: HttpService) { }
 
-	public connectToQueue(): any {
-		return this.websocketFactory.connect(CONFIG.SOCKETS.queue);
-	}
+	// public connectToQueue(): any {
+	// 	return this.websocketFactory.connect(CONFIG.SOCKETS.queue);
+	// }
 
 	public getQueueBoardByIdAndClinic(clinicId, date) {
 		return this.http.get(CONFIG.API.queueBoard, [clinicId, date]);
