@@ -7,6 +7,8 @@ queue-widget{
 	}
 	ion-card-content{
 	    padding-top: 3px !important;
+        min-height: 70px;
+	    position: relative;
 		.total{
 			position: absolute;
 			left: 0;
