@@ -5,7 +5,10 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
-import { Ng2Webstorage, LocalStorageService, SessionStorageService } from 'ngx-webstorage'
+//external
+import { Ng2Webstorage, LocalStorageService, SessionStorageService } from 'ngx-webstorage';
+import { ChartsModule } from 'ng2-charts';
+
 import { components } from './components';
 import { pages } from './pages';
 // services
@@ -45,7 +48,8 @@ import { QueueStore } from '../store';
     FormsModule,
     ReactiveFormsModule,
     Ng2Webstorage,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ChartsModule
   ], 
   bootstrap: [IonicApp],
   entryComponents: [

@@ -35,6 +35,11 @@ $dark: #000000;
 $light: #FFFFFF;
 $danger: #F44336;
 
+$away: #EF5350;
+$serving: #42A5F5;
+$queued: #FFEE58;
+$done: #66BB6A;
+
 $colors: (
   primary:    $primary,
   primary-light: $primary-light,
@@ -45,7 +50,11 @@ $colors: (
   accent-light: $accent-light,
   danger:     $danger,
   light:      $light,
-  dark:       $dark
+  dark:       $dark,
+  away: $away,
+  serving: $serving,
+  queued: $queued,
+  done : $done
 );
 
 

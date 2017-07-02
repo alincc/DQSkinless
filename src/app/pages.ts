@@ -7,7 +7,7 @@ import { ConsultationFormPage } from '../pages/consultation-form/consultation-fo
 import { LoginPage } from '../pages/login/login.page';
 import { ManagerPage } from '../pages/manager/manager.page';
 import { MoreMenuPopover } from '../pages/schedule/more.popover';
-import { NotificationPage } from '../pages/notification/notification.page';
+import { DashboardPage } from '../pages/dashboard/dashboard.page';
 import { PatientPage } from '../pages/patient/patient.page';
 import { PatientProfilePage } from '../pages/patient-profile/patient-profile.page';
 import { ProfilePage } from '../pages/profile/profile.page';
@@ -33,7 +33,7 @@ export const pages: any[] = [
 	ConsultationFormPage,
 	LoginPage,
 	ManagerPage,
-	NotificationPage,
+	DashboardPage,
 	PatientPage,
 	PatientProfilePage,
 	MoreMenuPopover,
