@@ -4,7 +4,7 @@
             Patient Profile
         </ion-title>
         <ion-buttons end>
-            
+
             <button ion-button icon-only (click)="gotoEditPatient()">
                 <ion-icon name="md-create" color="accent"></ion-icon>
             </button>
@@ -16,7 +16,7 @@
 </ion-header>
 <ion-content>
     <div class="patient-profile">
-       <!--  <div class="profile-picture">
+        <!--  <div class="profile-picture">
             <img src="http://gomerblog.com/wp-content/uploads/2015/12/angry-patient.jpg">
         </div> -->
         <h4>{{patient?.lastname}}, {{patient?.firstname}} {{patient?.middlename}}</h4>
@@ -56,6 +56,7 @@
             </ion-col>
         </ion-row>
     </div>
+    <consultation-segment></consultation-segment>
     <ion-list no-lines>
         <ion-item-group *ngFor="let group of timeline">
             <ion-item-divider>

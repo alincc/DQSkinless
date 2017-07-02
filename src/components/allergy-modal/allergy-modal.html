@@ -1,0 +1,30 @@
+<ion-header>
+    <ion-toolbar color="secondary">
+        <ion-buttons start>
+            <button ion-button icon-only navPop><ion-icon name="close"></ion-icon></button>
+        </ion-buttons>
+        <ion-title>
+            {{header}}
+        </ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="save()"><ion-icon name="checkmark"></ion-icon></button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content #Content padding>
+    <form #form="ngForm" (ngSubmit)="save()" [formGroup]="allergyForm">
+        <ion-grid>
+            <ion-row>
+                <ion-col col-12 col-sm-12 col-md-12>
+                    <ion-label class="form-label">Description* :</ion-label>
+                    <ion-item round>
+                        <ion-input name="description" formControlName="description"></ion-input>
+                    </ion-item>
+                    <div class="error-message" *ngIf="errors.description">
+                        {{ errors.description }}
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+</ion-content>

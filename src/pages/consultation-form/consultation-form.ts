@@ -17,7 +17,8 @@ export class ConsultationFormPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private modal: ModalController,
     private camera: Camera,
-    private actionSheet: ActionSheet) { }
+    private actionSheet: ActionSheet,
+    private nav: NavController,) { }
 
   addAttachment() {
     this.actionSheet.show({
