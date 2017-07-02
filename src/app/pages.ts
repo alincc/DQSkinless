@@ -4,6 +4,7 @@ import { ClinicAffiliationPage } from '../pages/clinic-manager/clinic-affiliatio
 import { ClinicManagerPage } from '../pages/clinic-manager/clinic-manager.page';
 import { ClinicPage } from '../pages/clinic-manager/clinic/clinic.page';
 import { ConsultationFormPage } from '../pages/consultation-form/consultation-form';
+import { ConsultationInformationPage } from '../pages/consultation-information/consultation-information.page';
 import { LoginPage } from '../pages/login/login.page';
 import { ManagerPage } from '../pages/manager/manager.page';
 import { MoreMenuPopover } from '../pages/schedule/more.popover';
@@ -31,6 +32,7 @@ export const pages: any[] = [
 	ClinicPage,
 	ClinicManagerPage,
 	ConsultationFormPage,
+	ConsultationInformationPage,
 	LoginPage,
 	ManagerPage,
 	NotificationPage,

@@ -1,0 +1,13 @@
+<button ion-button block color="accent" (click)="addAllergy($event)"><ion-icon name="add" >Add Allergy</ion-icon></button>
+<div>
+    <ion-list>
+        <ion-item class="allergy" *ngFor="let allergy of allergies.value;let idx=index">
+            <div>
+                {{allergy?.description}}
+            </div>
+            <div item-right>
+                <ion-icon name="close" (click)="removeItem($event,allergy, idx)" color="accent-dark"></ion-icon>
+            </div>
+        </ion-item>
+    </ion-list>
+</div>
