@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { Storage } from '../../services'
 
 @Component({
-	selector: 'reminder',
-	templateUrl: 'reminder.html'
+	selector: 'reminder-widget',
+	templateUrl: 'reminder-widget.html'
 })
-export class ReminderComponent{
+export class ReminderWidgetComponent{
 	notificationList:any[];
 	constructor(private storage: Storage){
 		this.notificationList = [{
