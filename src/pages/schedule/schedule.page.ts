@@ -97,7 +97,11 @@ export class SchedulePage {
 				this.queue = null;
 				this.initQueue(queueList);
 				this.hasForQueue();
-				detector.detectChanges();
+				try{
+					detector.detectChanges();
+				}catch(err){
+					detector.reattach();
+				}
 			}
 		})
 

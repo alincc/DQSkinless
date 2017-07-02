@@ -14,9 +14,10 @@ import { PatientList } from '../components/patient-list/patient-list.component';
 import { ProfileForm } from '../components/profile-form/profile-form.component';
 import { ScheduleModal } from '../components/schedule-modal/schedule-modal.component';
 import { SearchUserModal } from '../components/search-user-modal/search-user-modal.component';
-import { ReminderComponent } from '../components/reminder/reminder.component';
+import { ReminderWidgetComponent } from '../components/reminder-widget/reminder-widget.component';
 import { UploadPhoto } from '../components/upload-photo/upload-photo.component';
 import { XHRButton } from '../components/xhr-button/xhr-button.component';
+import { QueueWidgetComponent } from '../components/queue-widget/queue-widget.component';
 
 import { PatientAllergy } from '../components/patient-allergy/patient-allergy.component';
 
@@ -34,7 +35,8 @@ export const components = [
     PatientForm,
     PatientList,
     ProfileForm,
-    ReminderComponent,
+    ReminderWidgetComponent,
+    QueueWidgetComponent,
     SearchUserModal,
     ScheduleModal,
     UploadPhoto,
