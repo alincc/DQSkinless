@@ -1,0 +1,72 @@
+queue-widget{
+	ion-card-header{
+		background: $primary-light;
+		ion-label{
+			color: $light;
+		}
+	}
+	ion-card-content{
+	    padding-top: 3px !important;
+        min-height: 70px;
+	    position: relative;
+		.total{
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			padding: 26% 0;
+			.digit{
+				width: 100%;
+				text-align: center;
+				font-size: 14vw;
+				line-height: 1;
+			}
+			.label{
+				width: 100%;
+				font-size: 5vw;
+				text-align: center;
+			}
+		}
+
+		.legend{
+			display: table;
+			height: 100%;
+			padding: 10px 10px 10px 20px;
+			width: 100%;
+			div{
+				display: table-row;
+				padding: 5px;
+				position: relative;
+				.description {
+					vertical-align: middle;
+					width: 60%;
+					display: table-cell;
+					padding-left: 16px;
+				}
+				.value {
+					vertical-align: middle;
+					text-align: center;
+					width: 30%;
+					display: table-cell;
+					font-size: 5vw;
+					// border-right: dashed 1px;
+
+				}
+				.dot{
+					height: 15px;
+					width: 10%;
+					display: table-cell;
+					vertical-align: middle;
+					text-align: center;
+					// position: absolute;
+					// margin-left: -10px;
+					// margin-top: -10px;
+					// left: 33%;
+					// top: 50%;
+					// border-radius: 50%;
+				}
+			}
+		}
+	}
+}
