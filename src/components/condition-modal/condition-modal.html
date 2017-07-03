@@ -4,7 +4,7 @@
             <button ion-button icon-only navPop><ion-icon name="close"></ion-icon></button>
         </ion-buttons>
         <ion-title>
-            Add Allergy
+            Add Condition
         </ion-title>
         <ion-buttons end>
             <button ion-button icon-only (click)="save()"><ion-icon name="checkmark"></ion-icon></button>
@@ -12,7 +12,7 @@
     </ion-toolbar>
 </ion-header>
 <ion-content #Content padding>
-    <form #form="ngForm" (ngSubmit)="save()" [formGroup]="allergyForm">
+    <form #form="ngForm" (ngSubmit)="save()" [formGroup]="conditionForm">
         <ion-grid>
             <ion-row>
                 <ion-col col-12 col-sm-12 col-md-12>
@@ -22,6 +22,18 @@
                     </ion-item>
                     <div class="error-message" *ngIf="errors.description">
                         {{ errors.description }}
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-12 col-sm-12 col-md-12>
+                    <ion-label class="form-label">Date Diagnosed* :</ion-label>
+                    <ion-item clean>
+                        <ion-datetime displayFormat="MMMM DD, YYYY" formControlName="diagnosed"></ion-datetime>
+
+                    </ion-item>
+                    <div class="error-message" *ngIf="conditionForm.get('diagnosed')?.dirty &&  conditionForm.get('diagnosed').invalid">
+                        {{ errors.diagnosed }}
                     </div>
                 </ion-col>
             </ion-row>

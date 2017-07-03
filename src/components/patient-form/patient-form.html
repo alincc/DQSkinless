@@ -127,16 +127,15 @@
                 <ion-label class="form-label">Registration Date :</ion-label>
                 <ion-item clean>
                     <ion-datetime displayFormat="MMMM DD, YYYY" formControlName="registrationDate"></ion-datetime>
-                    <div class="error-message" *ngIf="patientForm.get('registrationDate')?.dirty &&  patientForm.get('registrationDate').invalid">
-                        {{ errors.registrationDate }}
-                    </div>
                 </ion-item>
+                <div class="error-message" *ngIf="patientForm.get('registrationDate')?.dirty &&  patientForm.get('registrationDate').invalid">
+                    {{ errors.registrationDate }}
+                </div>
             </ion-col>
         </ion-row>
     </ion-grid>
     <div text-center>
-        <xhr-button #xhr round large color="accent" type="submit" [disabled]="patientForm.pristine || form.pristine || disableSubmit"
-            (xhrClick)="submitForm($event)">
+        <xhr-button #xhr round large color="accent" type="submit" [disabled]="patientForm.pristine || form.pristine || disableSubmit" (xhrClick)="submitForm($event)">
             Done
         </xhr-button>
     </div>
