@@ -1,0 +1,13 @@
+<button ion-button block color="accent" (click)="addCondition($event)"><ion-icon name="add" >Add Condition</ion-icon></button>
+<div>
+    <ion-list>
+        <ion-item class="condition" *ngFor="let condition of conditions.value;let idx=index">
+            <div>
+                {{condition?.description}}
+            </div>
+            <div item-right>
+                <ion-icon name="close" (click)="removeItem($event,condition, idx)" color="accent-dark"></ion-icon>
+            </div>
+        </ion-item>
+    </ion-list>
+</div>
