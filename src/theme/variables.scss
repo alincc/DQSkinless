@@ -34,11 +34,12 @@ $accent-light: #FFE57F;
 $dark: #000000;
 $light: #FFFFFF;
 $danger: #F44336;
+$default: #E0E0E0;
 
-$away: #EF5350;
-$serving: #42A5F5;
-$queued: #FFEE58;
-$done: #66BB6A;
+$away: #E57373;
+$serving: #FFF176;
+$queued: #64B5F6;
+$done: #AED581;
 
 $colors: (
   primary:    $primary,
@@ -49,6 +50,7 @@ $colors: (
   accent: $accent,
   accent-light: $accent-light,
   danger:     $danger,
+  default: $default,
   light:      $light,
   dark:       $dark,
   away: $away,
