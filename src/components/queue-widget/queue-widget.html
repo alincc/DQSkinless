@@ -1,75 +1,88 @@
 <ion-card>
 	<ion-card-header>
 		<ion-label no-padding no-margin>
-		<ion-icon name = "people"></ion-icon>
-		Queue
+			<ion-icon name = "people"></ion-icon>
+			Queue
 		</ion-label>
 	</ion-card-header>
 	<ion-card-content>
-		<content-with-loading [isLoading]="!queueTotal">
+		<content-with-loading [isLoading]="queueTotal === undefined">
 			<ion-grid>
 				<ion-row>
 					<ion-col col-6 col-sm-6 col-md-6>
 						<canvas baseChart 
-			              [data]="queueBreakdown"
-			              [labels]="doughnutChartLabels"
-			              chartType="doughnut"
-			              [legend]="false"
-			              [options]="doughnutChartOptions"
-			              [colors]="doughnutChartColors"></canvas>
-			            <div class="total">
-			            	<div class="digit">{{queueTotal}}</div>
-			            	<div class="label">TOTAL</div>
-			            </div>
+						[data]="queueBreakdown"
+						[labels]="doughnutChartLabels"
+						chartType="doughnut"
+						[legend]="false"
+						[options]="doughnutChartOptions"
+						[colors]="doughnutChartColors"></canvas>
+						<div class="total">
+							<div class="digit">{{queueTotal}}</div>
+							<div class="label">TOTAL</div>
+						</div>
 					</ion-col>
 					<ion-col col-6 col-sm-6 col-md-6>
 						<div class="legend">
-							<div class="done">
-								<div class="value">
-									{{queueBreakdown? queueBreakdown[0] : 0}}
-								</div>
-								<div class="dot">
-									<ion-icon name="radio-button-on" color="done"></ion-icon>
-								</div>
-								<div class="description">
-									DONE
-								</div>
-							</div>
-							<div class="serving">
-								<div class="value">
-									{{queueBreakdown? queueBreakdown[1] : 0}}
-								</div>
-								<div class="dot">
-									<ion-icon name="radio-button-on" color="serving"></ion-icon>
-								</div>
-								<div class="description">
-									SERVING
-								</div>
-							</div>
-							<div class="queued">
-								<div class="value">
-									{{queueBreakdown? queueBreakdown[2] : 0}}
-									<!-- {{queueBreakdown[2]}} -->
-								</div>
-								<div class="dot">
-									<ion-icon name="radio-button-on" color="queued"></ion-icon>
-								</div>
-								<div class="description">
-									QUEUED
-								</div>
-							</div>
-							<div class="away">
-								<div class="value">
-									{{queueBreakdown? queueBreakdown[3] : 0}}
-									<!-- {{queueBreakdown[3]}}	 -->
-								</div>
-								<div class="dot">
-									<ion-icon name="radio-button-on" color="away"></ion-icon>
-								</div>
-								<div class="description">
-									AWAY
-								</div>
-							</div>
+							<ion-grid>
+								<ion-row>
+									<ion-col col-12 col-sm-12 col-md-6>
+										<div class="done">
+											<div class="dot">
+												<ion-icon name="radio-button-on" color="done"></ion-icon>
+											</div>
+											<div class="description">
+												DONE
+											</div>
+											<div class="value">
+												{{queueBreakdown? queueBreakdown[0] : 0}}
+											</div>
+										</div>
+									</ion-col>
+									<ion-col col-12 col-sm-12 col-md-6>
+										<div class="serving">
+											<div class="dot">
+												<ion-icon name="radio-button-on" color="serving"></ion-icon>
+											</div>
+											<div class="description">
+												SERVING
+											</div>
+											<div class="value">
+												{{queueBreakdown? queueBreakdown[1] : 0}}
+											</div>
+										</div>
+									</ion-col>
+									<ion-col col-12 col-sm-12 col-md-6>
+
+										<div class="queued">
+											<div class="dot">
+												<ion-icon name="radio-button-on" color="queued"></ion-icon>
+											</div>
+											<div class="description">
+												QUEUED
+											</div>
+											<div class="value">
+												{{queueBreakdown? queueBreakdown[2] : 0}}
+												<!-- {{queueBreakdown[2]}} -->
+											</div>
+										</div>
+									</ion-col>
+									<ion-col col-12 col-sm-12 col-md-6>
+										<div class="away">
+											<div class="dot">
+												<ion-icon name="radio-button-on" color="away"></ion-icon>
+											</div>
+											<div class="description">
+												AWAY
+											</div>
+											<div class="value">
+												{{queueBreakdown? queueBreakdown[3] : 0}}
+												<!-- {{queueBreakdown[3]}}	 -->
+											</div>
+										</div>
+									</ion-col>
+								</ion-row>
+							</ion-grid>
 						</div>
 					</ion-col>
 				</ion-row>

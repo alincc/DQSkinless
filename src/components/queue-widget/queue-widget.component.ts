@@ -16,13 +16,13 @@ export class QueueWidgetComponent{
 	private doughnutChartColors:any= [{
 		backgroundColor: [
 			//done
-				'#66BB6A',
+				'#AED581',
 			//serving
-				'#42A5F5',
+				'#FFF176',
 			//queued
-				'#FFEE58',
+				'#64B5F6',
 			//away
-				'#EF5350'
+				'#E57373'
 		]
 	}];
 

@@ -57,26 +57,31 @@
         </ion-row>
     </div>
     <consultation-segment></consultation-segment>
-    <ion-list no-lines>
-        <ion-item-group *ngFor="let group of timeline">
-            <ion-item-divider>
-                {{group.yearGroup}}
-            </ion-item-divider>
-            <ion-item *ngFor="let transaction of group.transactions" (click)="open(transaction)">
-                <ion-card>
-                    <div class="spot">{{transaction.timestamp | date:"MMM dd"}}</div>
-                    <div class="stem"></div>
-                    <ion-card-header>
-                        {{transaction.description}}
-                    </ion-card-header>
-                    <ion-card-content>
-                        <p>Clinic: {{transaction.clinic}}</p>
-                    </ion-card-content>
-                </ion-card>
-            </ion-item>
-        </ion-item-group>
-    </ion-list>
-    <ion-fab bottom right>
-        <button ion-fab color="accent"><ion-icon name="add"></ion-icon></button>
-    </ion-fab>
+    <ion-card class="timeline">
+        <ion-card-header>
+            <ion-label>Timeline</ion-label>
+            <button ion-button clear icon-only><ion-icon name="ios-create" color="accent"></ion-icon></button>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-list no-lines>
+                <ion-item-group *ngFor="let group of timeline">
+                    <ion-item-divider>
+                        {{group.yearGroup}}
+                    </ion-item-divider>
+                    <ion-item *ngFor="let transaction of group.transactions" (click)="open(transaction)">
+                        <ion-card>
+                            <div class="spot">{{transaction.timestamp | date:"MMM dd"}}</div>
+                            <div class="stem"></div>
+                            <ion-card-header>
+                                {{transaction.description}}
+                            </ion-card-header>
+                            <ion-card-content>
+                                <p>Clinic: {{transaction.clinic}}</p>
+                            </ion-card-content>
+                        </ion-card>
+                    </ion-item>
+                </ion-item-group>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
 </ion-content>

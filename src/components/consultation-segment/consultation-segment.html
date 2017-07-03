@@ -1,27 +1,32 @@
-<ion-toolbar>
-    <ion-segment [(ngModel)]="segment">
-        <ion-segment-button value="segment1">Allergies</ion-segment-button>
-        <ion-segment-button value="segment2">Condition</ion-segment-button>
-        <ion-segment-button value="segment3">Medication</ion-segment-button>
-    </ion-segment>
-</ion-toolbar>
+<ion-card>
+    <ion-card-header>
+        <ion-toolbar>
+            <ion-segment [(ngModel)]="segment">
+                <ion-segment-button value="segment1">Allergies</ion-segment-button>
+                <ion-segment-button value="segment2">Condition</ion-segment-button>
+                <ion-segment-button value="segment3">Medication</ion-segment-button>
+            </ion-segment>
+        </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content>
+        <div [ngSwitch]="segment">
+            <div *ngSwitchCase="'segment1'">
+                <patient-allergy></patient-allergy>
+            </div>
 
-<div [ngSwitch]="segment">
-    <div *ngSwitchCase="'segment1'">
-        <patient-allergy></patient-allergy>
-    </div>
+            <div *ngSwitchCase="'segment2'">
+                <ion-list>
+                    <ion-item class="allergy">
+                    </ion-item>
+                </ion-list>
+            </div>
 
-    <div *ngSwitchCase="'segment2'">
-        <ion-list>
-            <ion-item class="allergy">
-            </ion-item>
-        </ion-list>
-    </div>
-
-    <div *ngSwitchCase="'segment3'">
-        <ion-list>
-            <ion-item class="allergy">
-            </ion-item>
-        </ion-list>
-    </div>
-</div>
+            <div *ngSwitchCase="'segment3'">
+                <ion-list>
+                    <ion-item class="allergy">
+                    </ion-item>
+                </ion-list>
+            </div>
+        </div>
+    </ion-card-content>
+</ion-card>

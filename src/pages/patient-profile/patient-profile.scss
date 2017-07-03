@@ -35,40 +35,60 @@ patient-profile-page{
 			height: 100%;
 		}
 	}
+	.timeline{
 
-	ion-card{
-		margin-left: 50px !important;
-		.spot{
-			background: $light;
-			border: $accent solid 2px;
-			height: 50px;
-			width: 50px;
-			border-radius: 50%;
-			position: absolute;
-			margin-top: -25px;
-			margin-left: -25px;
-			top: 50%;
-			left: 30px;
-			white-space: pre-line;
-			padding: 7px;
-			text-align: center;
-			vertical-align: middle;
-			z-index: 99;
-			font-weight: bold;
+
+		>ion-card-header{
+			background: $primary-light;
+			display: flex;
+			ion-label{
+				color: $light;
+			    margin: auto;
+			}
+			button ion-icon{
+				font-size: 32px;
+			}
 		}
-		.stem{
-			height: 100%;
-			width: 2px;
-			background: $accent;
-			position: absolute;
-			margin-left: -1px;
-			left: 30px;
-			top: 0;
+		>ion-card-content{
+			padding: 0px !important;
 		}
 
-	}
+		ion-card{
+			width: calc(100% - 50px);
+			margin-left: 50px !important;
+			.spot{
+				background: $light;
+				border: $accent solid 2px;
+				height: 50px;
+				width: 50px;
+				border-radius: 50%;
+				position: absolute;
+				margin-top: -25px;
+				margin-left: -25px;
+				top: 50%;
+				left: 30px;
+				white-space: pre-line;
+				padding: 7px;
+				text-align: center;
+				vertical-align: middle;
+				z-index: 99;
+				font-weight: bold;
+			}
+			.stem{
+				height: 100%;
+				width: 2px;
+				background: $accent;
+				position: absolute;
+				margin-left: -1px;
+				left: 30px;
+				top: 0;
+			}
 
-	ion-item-group:last-child ion-item:last-child .stem{
-			height: 50%;
+		}
+
+		ion-item-group:last-child ion-item:last-child .stem{
+				height: 50%;
+		}
+
 	}
 }
