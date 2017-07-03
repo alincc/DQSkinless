@@ -1,0 +1,13 @@
+<button ion-button block color="accent" (click)="addMedication($event)"><ion-icon name="add" >Add Medication</ion-icon></button>
+<div>
+    <ion-list>
+        <ion-item class="medication" *ngFor="let medication of medications.value;let idx=index">
+            <div>
+                {{medication?.description}}
+            </div>
+            <div item-right>
+                <ion-icon name="close" (click)="removeItem($event,medication, idx)" color="accent-dark"></ion-icon>
+            </div>
+        </ion-item>
+    </ion-list>
+</div>
