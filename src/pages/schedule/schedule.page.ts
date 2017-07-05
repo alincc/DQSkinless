@@ -56,12 +56,6 @@ import { QueueStore } from '../../store';
 })
 export class SchedulePage {
 	public queue: any[];
-	@ViewChild(Content)
-	private content: Content;
-	@ViewChild('ServingNow')
-	private set _servingNow(dom) {
-		this.servingNow = dom.nativeElement;
-	}
 	@ViewChild('removeBtn')
 	private removeBtn: XHRButton;
 	@ViewChild('queueAgainBtn')
@@ -136,25 +130,6 @@ export class SchedulePage {
 		this.serving = currentServing;
 		this.queue = newQueueList;
 	}
-
-	public ngAfterViewInit() {
-		this.queueTopOffset = this.servingNow.clientHeight;
-		this.content.ionScroll.subscribe(event => {
-			if (event.scrollTop > this.queueTopOffset) {
-				if (!this.controlCss) {
-					this.controlCss = true;
-					this.detector.detectChanges();
-				}
-			} else {
-				if (this.controlCss) {
-					this.controlCss = false;
-					this.detector.detectChanges();
-				}
-			}
-		});
-
-	}
-
 
 	public reorderItems(indexes) {
 		let element = this.queue.splice(indexes.from, 1)[0];
@@ -259,15 +234,14 @@ export class SchedulePage {
 				for (var i = 0; i < this.queue.length; i++) {
 					if (this.queue[i].status === QUEUE.STATUS.QUEUED &&	
 						this.queue[i].canServeNow) {
-						let serving = Object.assign({}, this.queue.splice(i, 1)[0]);
+						let serving = Object.assign({}, this.queue[i]);
 						serving.status = QUEUE.STATUS.SERVING
 						serving.queuedBy = this.storage.account.userId;
 						this.updateQueue(xhr, serving, () => {
 							this.store.send(QUEUE.MAP.NEXT);
 							this.serving = serving;
-							xhr.dismissLoading();
+							this.queue.splice(i,1);
 						});
-						return;
 					}else{
 						xhr.dismissLoading();
 					}
