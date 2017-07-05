@@ -324,25 +324,6 @@ ion-content {
     }
 }
 
-.control-bar {
-    ion-row {
-        background-color: $primary;
-        button {
-            color: $accent;
-        }
-    }
-    &.minimize {
-        ion-row {
-            transition: 3s;
-            position: fixed;
-            z-index: 1;
-            width: 100%;
-            /* top: 0; */
-            top: 44px;
-        }
-    }
-}
-
 form {
     .form-label {
         font-weight: bold;
