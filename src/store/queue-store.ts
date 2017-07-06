@@ -14,6 +14,7 @@ export class QueueStore{
 	private connection;
 	private requestForRefresh: any;
 
+	public pendingQueue : any;
 	private _queueBoard: any;
 	private _queueBoardSubject = new BehaviorSubject<any>(undefined);
 	public queueBoardSubject: Observable<any> = this._queueBoardSubject.asObservable();

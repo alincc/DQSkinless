@@ -167,4 +167,5 @@ export class PatientList implements OnInit {
             patientListCallback: this.patientListCallback
         });
     }
+
 }

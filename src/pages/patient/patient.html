@@ -9,7 +9,7 @@
     </ion-navbar>
 </ion-header>
 <ion-content #Content padding>
-    <patient-list></patient-list>
+    <patient-list [params]="params.data"></patient-list>
     <ion-fab bottom right (click)="goToAdd()">
         <button ion-fab round color="accent"><ion-icon name="person-add" ></ion-icon></button>
     </ion-fab>

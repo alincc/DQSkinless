@@ -51,8 +51,8 @@
   </ion-content>
 </ion-menu>
 <ion-tabs #sideMenu>
-  <ion-tab [root]="dashboard" tabTitle="Dashboard" tabIcon="stats"></ion-tab>
-  <ion-tab [root]="schedule" tabTitle="Schedule" tabIcon="time" color="accent-dark"></ion-tab>
-  <ion-tab [root]="patient" tabTitle="Patient" tabIcon="body" color="accent-dark"></ion-tab>
-  <ion-tab [root]="chat" tabTitle="Chat" tabIcon="chatbubbles" color="accent-dark"></ion-tab>
+  <ion-tab [root]="dashboard" [rootParams]="params" tabTitle="Dashboard" tabIcon="stats"></ion-tab>
+  <ion-tab [root]="schedule" [rootParams]="params" tabTitle="Schedule" tabIcon="time" color="accent-dark"></ion-tab>
+  <ion-tab [root]="patient" [rootParams]="params" tabTitle="Patient" tabIcon="body" color="accent-dark"></ion-tab>
+  <ion-tab [root]="chat" [rootParams]="params" tabTitle="Chat" tabIcon="chatbubbles" color="accent-dark"></ion-tab>
 </ion-tabs>
