@@ -2,10 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, NavParams, ViewController } from 'ionic-angular';
 import { ArraySubject } from '../../shared/model/model';
 import { MedicationModal } from '../medication-modal/medication-modal.component';
+import { PatientMedicationService } from './patient-medication.service';
+import { Utilities } from '../../utilities/utilities';
 
 @Component({
   selector: 'patient-medication',
-  templateUrl: 'patient-medication.html'
+  templateUrl: 'patient-medication.html',
+  providers: [PatientMedicationService]
 })
 export class PatientMedication implements OnInit{
 
@@ -16,7 +19,8 @@ export class PatientMedication implements OnInit{
   constructor(
     private modalController: ModalController,
     private params: NavParams,
-    private view: ViewController
+    private view: ViewController,
+    private patientMedicationService: PatientMedicationService
   ) {
     
   }
@@ -24,9 +28,11 @@ export class PatientMedication implements OnInit{
   public removeItem(event: Event, item, idx) {
     event.preventDefault();
 
-    this.medications.splice(idx, 1);
-    //call delete service api
-
+    this.patientMedicationService.deletePatientMedicationById(item.id).subscribe(response => {
+      if(response && response.status){
+        this.getPatientMedication();
+      }
+    })
 
   }
 
@@ -37,11 +43,11 @@ export class PatientMedication implements OnInit{
 
     modal.onDidDismiss(medication => {
       if (medication) {
-        medication.patientId = this.patientId;
-        
-        //temporary
-        this.medications.push(medication);
-        //call add service api
+        this.medication.patientId = this.patientId;
+        this.medication.description = medication.description;
+        this.medication.startDate = medication.startDate ? Utilities.transformDate(new Date(medication.startDate)) : Utilities.transformDate(new Date());
+                
+        this.createPatientMedication();
         
       }
     });
@@ -52,15 +58,26 @@ export class PatientMedication implements OnInit{
 
   public ngOnInit(){
      this.patientId = this.params.get('patientId');
-  }
-
-  private bindDetails(){
-    this.medication.patientId = this.patientId;
+     this.medication = {};
+     this.getPatientMedication();
   }
 
   private getPatientMedication(){
 
+    this.patientMedicationService.getPatientMedicationByPatientId(this.patientId).subscribe(response => {
+      if(response && response.status){
+        this.medications.value = response.result;
+      }
+    })
   }
 
+  private createPatientMedication(){
+
+    this.patientMedicationService.createPatientMedication(this.medication).subscribe(response => {
+      if(response && response.status){
+        this.getPatientMedication();
+      }
+    })
+  }
 
 }
