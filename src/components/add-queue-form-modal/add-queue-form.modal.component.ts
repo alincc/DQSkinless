@@ -78,7 +78,7 @@ export class AddQueueFormModal {
                 lastName: this.param.data.lastname,
                 firstName: this.param.data.firstname,
                 middleName: this.param.data.middlename,
-                patientId : this.param.data.id,
+                patientId : this.param.data.id || this.param.data.patientId,
                 isServeNow: this.isServeNow.value,
                 schedule: this.schedule.value,
                 timeSlot: this.timeSlot.value,
