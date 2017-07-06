@@ -4,9 +4,18 @@
             <div>
                 {{medication?.description}}
             </div>
+            <div>{{medication?.startDate | date:"MMM dd"}}</div>
             <div item-right>
                 <ion-icon name="close" (click)="removeItem($event,medication, idx)" color="accent-dark"></ion-icon>
             </div>
+            <!--<ion-card>
+                <ion-card-header>
+                    {{medication?.startDate | date:"MMM dd"}}
+                </ion-card-header>
+                <ion-card-content>
+                    {{medication?.description}}
+                </ion-card-content>
+            </ion-card>-->
         </ion-item>
     </ion-list>
     <div text-right class="buttons">

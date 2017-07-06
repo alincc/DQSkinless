@@ -2,10 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, NavParams, ViewController } from 'ionic-angular';
 import { ArraySubject } from '../../shared/model/model';
 import { ConditionModal } from '../condition-modal/condition-modal.component';
+import { PatientConditionService } from './patient-condition.service';
+import { Utilities } from '../../utilities/utilities';
 
 @Component({
   selector: 'patient-condition',
-  templateUrl: 'patient-condition.html'
+  templateUrl: 'patient-condition.html',
+  providers: [PatientConditionService]
 })
 export class PatientCondition {
 
@@ -16,7 +19,8 @@ export class PatientCondition {
   constructor(
     private modalController: ModalController,
     private params: NavParams,
-    private view: ViewController
+    private view: ViewController,
+    private patientConditionService: PatientConditionService
   ) {
 
   }
@@ -24,9 +28,11 @@ export class PatientCondition {
   public removeItem(event: Event, item, idx) {
     event.preventDefault();
 
-    this.conditions.splice(idx, 1);
-    //call delete service api
-
+    this.patientConditionService.deletePatientConditionById(item.id).subscribe(response => {
+      if(response && response.status){
+        this.getPatientConditions();
+      }
+    })
 
   }
 
@@ -37,11 +43,11 @@ export class PatientCondition {
 
     modal.onDidDismiss(condition => {
       if (condition) {
-        condition.patientId = this.patientId;
+        this.condition.patientId = this.patientId;
+        this.condition.description = condition.description;
+        this.condition.diagnosed = condition.diagnosed ? Utilities.transformDate(new Date(condition.diagnosed)) : Utilities.transformDate(new Date());
         
-        //temporary
-        this.conditions.push(condition);
-        //call add service api
+        this.createPatientCondition();
         
       }
     });
@@ -52,14 +58,29 @@ export class PatientCondition {
 
   public ngOnInit(){
      this.patientId = this.params.get('patientId');
+     this.condition = {};
+     this.getPatientConditions();
   }
 
-  private bindDetails(){
-    this.condition.patientId = this.patientId;
+  private getPatientConditions(){
+
+    this.patientConditionService.getPatientConditionByPatientId(this.patientId).subscribe(response => {
+      if(response && response.status){
+        this.conditions.value = response.result;
+      }
+    });
+
   }
 
-  private getPatientAllergy(){
+  private createPatientCondition(){
 
+    this.patientConditionService.createPatientCondition(this.condition).subscribe(response => {
+      if(response && response.status){
+        this.getPatientConditions();
+      }
+    }, err => {
+      
+    })
   }
 
 }

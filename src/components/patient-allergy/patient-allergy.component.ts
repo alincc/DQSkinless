@@ -2,10 +2,12 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, NavParams, ViewController } from 'ionic-angular';
 import { ArraySubject } from '../../shared/model/model';
 import { AllergyModal } from '../allergy-modal/allergy-modal.component';
+import { PatientAllergyService } from './patient-allergy.service';
 
 @Component({
   selector: 'patient-allergy',
-  templateUrl: 'patient-allergy.html'
+  templateUrl: 'patient-allergy.html',
+  providers:[PatientAllergyService]
 })
 export class PatientAllergy implements OnInit{
 
@@ -16,7 +18,8 @@ export class PatientAllergy implements OnInit{
   constructor(
     private modalController: ModalController,
     private params: NavParams,
-    private view: ViewController
+    private view: ViewController,
+    private patientAllergyService: PatientAllergyService
   ) {
     
   }
@@ -24,10 +27,11 @@ export class PatientAllergy implements OnInit{
   public removeItem(event: Event, item, idx) {
     event.preventDefault();
 
-    this.allergies.splice(idx, 1);
-    //call delete service api
-
-
+    this.patientAllergyService.deletePatientAllergyRecord(item.id).subscribe(response => {
+      if(response && response.status){
+        this.getPatientAllergies();
+      }
+    })
   }
 
   public addAllergy(event: Event): void {
@@ -37,12 +41,10 @@ export class PatientAllergy implements OnInit{
 
     modal.onDidDismiss(allergy => {
       if (allergy) {
-        allergy.patientId = this.patientId;
+        this.allergy.patientId = this.patientId;
+        this.allergy.description = allergy.description
         
-        //temporary
-        this.allergies.push(allergy);
-        //call add service api
-        
+        this.createPatientAllergy();
       }
     });
     if (!isNaN(this.patientId)) {
@@ -52,14 +54,26 @@ export class PatientAllergy implements OnInit{
 
   public ngOnInit(){
      this.patientId = this.params.get('patientId');
+     this.allergy = {};
+     this.getPatientAllergies();
   }
 
-  private bindDetails(){
-    this.allergy.patientId = this.patientId;
+  private getPatientAllergies(){
+    this.patientAllergyService.getPatientAllergy(this.patientId).subscribe(response => {
+      
+      if(response && response.status){
+        this.allergies.value = response.result;
+      }
+    });
   }
 
-  private getPatientAllergy(){
+  private createPatientAllergy(){
 
+    this.patientAllergyService.createPatientAllergy(this.allergy).subscribe(response => {
+      if(response && response.status){
+        this.getPatientAllergies();
+      }
+    });
   }
 
 
