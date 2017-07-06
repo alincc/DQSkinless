@@ -1,14 +1,14 @@
 {
-  "proxy": {
-  	"environment": "http://localhost:8100/api"
-  },
-  "local":{
-  	"environment" : "http://localhost:8080/MedAppWS"
-  },
-  "pandong": {
-  	"environment": "http://192.168.137.131:8080/medappws"
-  },
-  "heroku": {
-  	"environment":"https://dqmedapp.herokuapp.com"
-  }
+    "proxy": {
+        "environment": "http://localhost:8100/api"
+    },
+    "local": {
+        "environment": "http://localhost:8080/medappws"
+    },
+    "pandong": {
+        "environment": "http://192.168.137.131:8080/medappws"
+    },
+    "heroku": {
+        "environment": "https://dqmedapp.herokuapp.com"
+    }
 }

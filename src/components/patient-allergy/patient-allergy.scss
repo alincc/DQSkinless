@@ -1,12 +1,15 @@
 patient-allergy {
     .buttons {
         position: absolute;
-	    bottom: 0;
-	    width: 100%;
-	    left: 0;
-	    button{
-	    	font-size: 1.4rem !important;
-	    	color: $accent;
-	    }
+        bottom: 0;
+        width: 100%;
+        left: 0;
+        button {
+            font-size: 1.4rem !important;
+            color: $accent;
+        }
+    }
+    >div {
+        margin-bottom: 10%;
     }
 }

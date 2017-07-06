@@ -39,6 +39,10 @@ export const CONFIG = {
         customPatient: '/custompatient/pdmetc',
         searchPatient: '/custompatient/search',
 
+        patientAllergy: '/patient/info/a',
+        patientCondition: '/patient/info/c',
+        patientMedication: '/patient/info/m',
+
         imageBucket: "/aws",
 
         affiliates: '/affiliates',

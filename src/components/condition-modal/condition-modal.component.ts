@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ViewController } from 'ionic-angular';
+import { Utilities } from '../../utilities/utilities';
 
 @Component({
   selector: 'condition-modal',
@@ -31,7 +32,7 @@ export class ConditionModal implements OnInit{
   private createForm(){
     this.conditionForm = this.formBuilder.group({
       description: ['', Validators.required],
-      diagnosed: ['', Validators.required]
+      diagnosed: [Utilities.getISODateToday(), Validators.required]
     });
 
     this.description = this.conditionForm.get('description');
