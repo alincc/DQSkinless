@@ -5,6 +5,7 @@ schedule-page{
 
 	}
 	ion-content{
+		position: relative;
 		.serving{
 			background-color: $primary;
 		}
@@ -46,12 +47,23 @@ schedule-page{
 		}
 
 		ion-list{
+			&.padWhenMinimize{
+				padding-top: 52.1px;
+			}
 			button[ion-item]{
 				background-color: $secondary-light;
 			}
 		}
 	}
 	.control-bar{
+		ion-row {
+	        background-color: $primary;
+	        button {
+	            color: $accent;
+	        }
+	    }
 		z-index: 99999;
+		position: sticky;
+		top:0;
 	}
 }
