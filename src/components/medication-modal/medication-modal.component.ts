@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ViewController } from 'ionic-angular';
+import { Utilities } from '../../utilities/utilities';
 
 @Component({
   selector: 'medication-modal',
@@ -31,7 +32,7 @@ export class MedicationModal implements OnInit{
   private createForm(){
     this.medicationForm = this.formBuilder.group({
       description: ['', Validators.required],
-      startDate: ['', Validators.required]
+      startDate: [Utilities.getISODateToday(), Validators.required]
     });
 
     this.description = this.medicationForm.get('description');
