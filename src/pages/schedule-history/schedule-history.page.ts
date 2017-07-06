@@ -14,8 +14,9 @@ import { PatientProfilePage } from '../patient-profile/patient-profile.page';
 export class ScheduleHistoryPage {
 	public queue: any[];
 	private queueBoard: any;
-	private myDate: String = Utilities.getISODateToday();
+	private myDate: any = Utilities.clearTime(new Date()).toISOString();
 	private clinicId: any;
+	private ongoingHttp: any;
 	constructor(
 		private service: ScheduleService,
 		private storage: Storage,
@@ -30,12 +31,15 @@ export class ScheduleHistoryPage {
 
 	private fetchHistory() {
 		this.queue = null;
-		this.service.getQueueBoardByClinicAndDateNoCreate(this.clinicId, Utilities.clearTime(new Date(this.myDate.toString()))).subscribe(response => {
+		if(this.ongoingHttp){
+			this.ongoingHttp.unsubscribe();
+		}
+		this.ongoingHttp = this.service.getQueueBoardByClinicAndDateNoCreate(this.clinicId, new Date(this.myDate)).subscribe(response => {
 
 			if (response.status) {
 				//set queue board
 				this.queueBoard = response.result;
-				this.fetchQueue(response => {
+				this.ongoingHttp = this.fetchQueue(response => {
 						console.log("fetched Queue");
 					});
 			}
@@ -89,22 +93,22 @@ export class ScheduleHistoryPage {
 	}
 
 	private getNextDay() {
-		var addDay = new Date(this.myDate.toString());
+		var addDay = new Date(this.myDate);
 		addDay.setDate(addDay.getDate() + 1);
 
-		this.myDate = Utilities.getISODate(addDay);
+		this.myDate = addDay.toISOString();
 	}
 
 	private getPreviousDay() {
-		var addDay = new Date(this.myDate.toString());
+		var addDay = new Date(this.myDate);
 		addDay.setDate(addDay.getDate() - 1);
 
-		this.myDate = Utilities.getISODate(addDay);
+		this.myDate = addDay.toISOString();
 	}
 
 
 	public view(patientId) {
-		this.nav.push(PatientProfilePage, patientId);
+		this.nav.push(PatientProfilePage, {patientId: patientId});
 	}
 
 
