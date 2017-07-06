@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { App, AlertController, NavController } from 'ionic-angular';
+import { Component, ViewChild, EventEmitter } from '@angular/core';
+import { App, AlertController, NavController, Tabs } from 'ionic-angular';
 
 import { SchedulePage } from '../schedule/schedule.page';
 import { PatientPage } from '../patient/patient.page';
@@ -30,6 +30,16 @@ export class TabsPage {
 	private userDetails: any;
 	private account: any;
 	private clinic: any;
+	@ViewChild(Tabs)
+	private Tabs: Tabs;
+	private addQueueEmitter: EventEmitter<any> = new EventEmitter<any>();
+	private params: any = {
+		addQueueEmitter : this.addQueueEmitter
+	};
+
+	ngAfterViewInit(){
+		this.params.tabs = this.Tabs
+	}
 	constructor(
 		private app: App,
 		private alertController: AlertController,

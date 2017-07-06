@@ -1,5 +1,5 @@
 import { Component, ViewChild, ChangeDetectorRef, Input, EventEmitter } from '@angular/core';
-import { PopoverController, Content, ModalController, LoadingController, AlertController, Loading, NavController } from 'ionic-angular';
+import { PopoverController, Content, ModalController, LoadingController, AlertController, Loading, NavController, NavParams } from 'ionic-angular';
 import { MoreMenuPopover } from './more.popover';
 
 import { PatientProfilePage } from '../patient-profile/patient-profile.page';
@@ -83,7 +83,8 @@ export class SchedulePage {
 		private alert: AlertController,
 		private storage: Storage,
 		private nav: NavController,
-		private store : QueueStore
+		private store : QueueStore,
+		private params : NavParams
 		) {
 
 		store.queueListSubject.subscribe(queueList => {
@@ -97,7 +98,14 @@ export class SchedulePage {
 					detector.reattach();
 				}
 			}
+		});
+
+		params.data.addQueueEmitter.subscribe( patient => {
+			this.addOrEditQueue(patient);
 		})
+		if(store.pendingQueue){
+			this.addOrEditQueue(store.pendingQueue);
+		}
 
 		this.patient = {};
 	}
@@ -517,6 +525,10 @@ export class SchedulePage {
 		// 		return null;
 		// 	}
 		// })
+	}
+
+	private search(){
+		this.params.data.tabs.select(2);
 	}
 
 }

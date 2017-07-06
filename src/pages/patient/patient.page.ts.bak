@@ -18,4 +18,5 @@ export class PatientPage {
 	private goToAdd() {
 		this.rootNav.push(PatientInformationPage);
 	}
+
 }
