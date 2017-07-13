@@ -219,8 +219,8 @@ export class ClinicManagerService {
 
     public verifyAffiliateCode(affiliate) {
         const payload = {
-            affiliateName: affiliate.affiliateName.toUpperCase(),
-            affiliateCode: affiliate.affiliateCode.toUpperCase()
+            affiliateName: affiliate.affiliateName,
+            affiliateCode: affiliate.affiliateCode
         };
 
         return this.http.post(CONFIG.API.verifyAffiliateCode, payload);
