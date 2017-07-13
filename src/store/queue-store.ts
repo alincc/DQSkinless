@@ -6,6 +6,12 @@ import { QUEUE } from '../constants/constants';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
+const WS_ACTIONS = {
+	CONNECT: "CONNECT",
+	MESSAGE : "MSG",
+	INIT : "INIT"
+}
+
 
 @Injectable()
 export class QueueStore{
@@ -47,7 +53,6 @@ export class QueueStore{
 
 
 		this.storage.clinicSubject.subscribe(clinic => {
-			this.disconnect();
 			if(clinic){
 				this.initStore(clinic);
 			}
@@ -58,34 +63,41 @@ export class QueueStore{
 		this.http.get(CONFIG.API.queueBoard, [clinic.clinicId, currentDate]).subscribe(response => {
 			if(response.status){
 				this.queueBoard = response.result;
-				this.connectToQueue(clinic.clinicId).subscribe(_response=>{
-					console.log("subcsribed to sock with response ", _response);
-					if (_response === "A") {
-						console.log("fetching Queue");
-						this.fetchQueue();
-					} else {
-						if (this.requestForRefresh) {
-							clearTimeout(this.requestForRefresh);
-						}
-						this.requestForRefresh = setTimeout(() => {
-							this.requestForRefresh = null;
+				if(this.ws){
+					this.configConnection(clinic.clinicId);
+					this.fetchQueue();
+				}else{
+					this.connectToQueue(clinic.clinicId).subscribe(_response=>{
+						console.log("subcsribed to sock with response ", _response);
+						if (_response === WS_ACTIONS.INIT) {
 							this.fetchQueue();
-						}, 3000);
-					}
-				});
+						} else {
+							if (this.requestForRefresh) {
+								clearTimeout(this.requestForRefresh);
+							}
+							this.requestForRefresh = setTimeout(() => {
+								this.requestForRefresh = null;
+								this.fetchQueue();
+							}, 3000);
+						}
+					});
+				}
 			}
 		})
 	}
 
 	private connectToQueue(clinicId){
-		
 		this.ws = this.websocketFactory.connect(CONFIG.SOCKETS.queue)
 		this.ws.then(
 			response => {
-				this.ws.send(clinicId);
+				this.configConnection(clinicId);
 			}
 		);
 		return this.ws.connection;
+	}
+
+	private configConnection(clinicId){
+		this.ws.send(WS_ACTIONS.CONNECT+":"+clinicId);
 	}
 
 	private disconnect(){
@@ -117,7 +129,7 @@ export class QueueStore{
 
 
 	public send(msg){
-		this.ws.send(msg);
+		this.ws.send(WS_ACTIONS.MESSAGE+":"+msg);
 	}
 
 
