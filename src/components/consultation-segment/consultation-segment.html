@@ -2,25 +2,17 @@
     <ion-card-header>
         <ion-toolbar>
             <ion-segment [(ngModel)]="segment">
-                <ion-segment-button value="segment1">Allergies</ion-segment-button>
-                <ion-segment-button value="segment2">Condition</ion-segment-button>
-                <ion-segment-button value="segment3">Medication</ion-segment-button>
+                <ion-segment-button [value]="segmentList.ALLERGIES">Allergies</ion-segment-button>
+                <ion-segment-button [value]="segmentList.CONDITION">Condition</ion-segment-button>
+                <ion-segment-button [value]="segmentList.MEDICATION">Medication</ion-segment-button>
             </ion-segment>
         </ion-toolbar>
     </ion-card-header>
     <ion-card-content>
         <div class="segment-container" [ngSwitch]="segment">
-            <div *ngSwitchCase="'segment1'">
-                <patient-allergy></patient-allergy>
-            </div>
-
-            <div *ngSwitchCase="'segment2'">
-                <patient-condition> </patient-condition>
-            </div>
-
-            <div *ngSwitchCase="'segment3'">
-                <patient-medication></patient-medication>
-            </div>
+            <patient-allergy [(model)]="allergies" [patientId]="patientId"  *ngSwitchCase="segmentList.ALLERGIES"></patient-allergy>
+            <patient-condition *ngSwitchCase="segmentList.CONDITION"> </patient-condition>
+            <patient-medication *ngSwitchCase="segmentList.MEDICATION"></patient-medication>
         </div>
     </ion-card-content>
 </ion-card>

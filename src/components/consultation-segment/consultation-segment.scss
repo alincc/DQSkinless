@@ -1,4 +1,8 @@
 consultation-segment {
+	ion-toolbar{
+		padding: 0;
+	}
+
     ion-list {
         overflow-y: auto;
         height: 120px;
