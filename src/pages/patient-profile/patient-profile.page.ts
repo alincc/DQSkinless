@@ -27,7 +27,6 @@ export class PatientProfilePage {
 		private service: PatientProfileService,
 		private navParams: NavParams) {
 		this.timeline = timeline;
-
 		this.patientId = navParams.get('patientId');
 		this.fetchPatientInformation(this.patientId);
 	}

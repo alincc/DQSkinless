@@ -1,14 +1,12 @@
-<div>
-    <ion-list>
-        <ion-item class="allergy" *ngFor="let allergy of allergies.value;let idx=index">
+<div class="patient-allergy">
+    <div class="allergy-list">
+        <div class="allergy"  *ngFor="let allergy of model;let idx=index">
             <div>
                 {{allergy?.description}}
             </div>
-            <div item-right>
-                <ion-icon name="close" (click)="removeItem($event,allergy, idx)" color="accent-dark"></ion-icon>
-            </div>
-        </ion-item>
-    </ion-list>
+            <ion-icon name="close" (click)="removeItem($event,allergy)" color="accent-dark"></ion-icon>
+        </div>
+    </div>
     <div text-right class="buttons">
         <button ion-button clear (click)="addAllergy($event)"><ion-icon name="add" color="accent"></ion-icon>Add Allergy</button>
     </div>

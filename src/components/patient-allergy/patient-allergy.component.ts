@@ -1,6 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ModalController, NavParams, ViewController } from 'ionic-angular';
-import { ArraySubject } from '../../shared/model/model';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ModalController, ViewController } from 'ionic-angular';
 import { AllergyModal } from '../allergy-modal/allergy-modal.component';
 import { PatientAllergyService } from './patient-allergy.service';
 
@@ -9,24 +8,24 @@ import { PatientAllergyService } from './patient-allergy.service';
   templateUrl: 'patient-allergy.html',
   providers:[PatientAllergyService]
 })
-export class PatientAllergy implements OnInit{
+export class PatientAllergy{
 
-  @Input() allergy: any;
-  @Input() patientId: any;
-  private allergies: ArraySubject = new ArraySubject([]);
+  @Input()
+  private model : any[];
+  @Output()
+  private modelChange : EventEmitter<any> = new EventEmitter<any>();
+
+  @Input()
+  private patientId: number;
 
   constructor(
     private modalController: ModalController,
-    private params: NavParams,
     private view: ViewController,
     private patientAllergyService: PatientAllergyService
-  ) {
-    
-  }
+  ) {}
 
-  public removeItem(event: Event, item, idx) {
+  public removeItem(event: Event, item) {
     event.preventDefault();
-
     this.patientAllergyService.deletePatientAllergyRecord(item.id).subscribe(response => {
       if(response && response.status){
         this.getPatientAllergies();
@@ -36,40 +35,36 @@ export class PatientAllergy implements OnInit{
 
   public addAllergy(event: Event): void {
     event.preventDefault();
-
-    let modal = this.modalController.create(AllergyModal);
-
-    modal.onDidDismiss(allergy => {
-      if (allergy) {
-        this.allergy.patientId = this.patientId;
-        this.allergy.description = allergy.description
-        
-        this.createPatientAllergy();
-      }
-    });
     if (!isNaN(this.patientId)) {
+      let modal = this.modalController.create(AllergyModal);
+      modal.onDidDismiss(allergy => {
+        if (allergy) {
+          allergy.patientId = this.patientId;
+          allergy.description = allergy.description
+          this.createPatientAllergy(allergy);
+        }
+      });
       modal.present();
     }
   }
 
-  public ngOnInit(){
-     this.patientId = this.params.get('patientId');
-     this.allergy = {};
-     this.getPatientAllergies();
+  public ngAfterViewInit(){
+     if(!this.model && !isNaN(this.patientId)){
+       this.getPatientAllergies();
+     }
   }
 
   private getPatientAllergies(){
     this.patientAllergyService.getPatientAllergy(this.patientId).subscribe(response => {
-      
       if(response && response.status){
-        this.allergies.value = response.result;
+        this.model = response.result;
+        this.modelChange.emit(this.model);
       }
     });
   }
 
-  private createPatientAllergy(){
-
-    this.patientAllergyService.createPatientAllergy(this.allergy).subscribe(response => {
+  private createPatientAllergy(allergy){
+    this.patientAllergyService.createPatientAllergy(allergy).subscribe(response => {
       if(response && response.status){
         this.getPatientAllergies();
       }
