@@ -44,6 +44,7 @@ export const CONFIG = {
         patientMedication: '/patient/info/m',
 
         imageBucket: "/aws",
+        getImageIdsFromFolder: "/aws/list/f",
 
         affiliates: '/affiliates',
         verifyAffiliateCode: '/affiliates/vrfpcd'

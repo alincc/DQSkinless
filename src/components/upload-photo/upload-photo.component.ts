@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
-import { Images, Storage, IMG_BUCKET } from '../../services';
+import { Images, Storage, IMG_BUCKET, BASE64_PREFIX } from '../../services';
 @Component({
 	selector: 'upload-photo',
 	templateUrl: 'upload-photo.html'
@@ -57,7 +57,7 @@ export class UploadPhoto {
 			destinationType: this.camera.DestinationType.DATA_URL,
 			correctOrientation: true
 		}).then((imageData) => {
-			this.image ='data:image/jpeg;base64,' + imageData;
+			this.image = BASE64_PREFIX + imageData;
 			this.content = imageData;
 			this.isLoading = false;
 		}, (err) => {
