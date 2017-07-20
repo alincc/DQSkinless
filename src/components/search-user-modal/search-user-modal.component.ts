@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, NavParams, ViewController } from "ionic-angular";
+import { Subscription } from 'rxjs/Subscription';
 
 import { SearchUserModalService } from './search-user-modal.service';
 
@@ -24,6 +25,11 @@ export class SearchUserModal implements OnInit {
     private message: any;
     private pageHeader: any;
     private role: any;
+    private currentPage: any;
+    private previousPage: any;
+    private oldUsers: any;
+    private limit: any;
+    private searchUserSubs: Subscription;
 
     public criteria: AbstractControl;
     public username: AbstractControl;
@@ -57,6 +63,11 @@ export class SearchUserModal implements OnInit {
             firstname: ''
         };
         this.haveSearched = false;
+        this.limit = 20;
+        this.oldUsers = [];
+
+        this.previousPage = 0;
+        this.currentPage = 1;
     }
 
     private createSearchForm() {
@@ -154,19 +165,56 @@ export class SearchUserModal implements OnInit {
         }
     }
 
+    private incrementPage(response) {
+        this.previousPage = this.currentPage;
+        if (response.result && response.result.length > 0 && response.result.length === this.limit) {
+            this.currentPage++;
+            this.oldUsers = Object.assign([], this.users);
+        }
+    }
+
+    private checkResult(result) {
+        return result ? result : [];
+    }
+
     public search(event) {
         this.criteria.markAsDirty();
         this.validateForm();
+
         if (this.searchForm.valid) {
+
+            this.previousPage = 0;
+            this.currentPage = 1;
+            this.oldUsers = [];
+
+            if (this.searchUserSubs) {
+                this.searchUserSubs.unsubscribe();
+            }
             this.haveSearched = true;
-            this.searchUserModalService.getUsers(this.searchForm.value, this.role).subscribe(response => {
-                if (response) {
-                    this.users = this.removeMySelf(response);
+            this.searchUserSubs = this.searchUserModalService.getUsers(this.searchForm.value, this.role, this.currentPage, this.limit).subscribe(response => {
+                if (response && response.status) {
+                    this.users = this.removeMySelf(response.result);
                 }
                 event.dismissLoading()
             });
         } else {
             event.dismissLoading();
         }
+    }
+
+    public doInfiniteSearch(infiniteScroll) {
+        this.searchUserModalService.getUsers(this.searchForm.value, this.role, this.currentPage, this.limit).subscribe(response => {
+            if (response && response.status) {
+                if (this.currentPage === 1) {
+                    this.users = this.checkResult(response.result);
+                } else if (this.currentPage === this.previousPage) {
+                    this.users = this.oldUsers.concat(this.checkResult(response.result));
+                } else {
+                    this.users = this.users.concat(this.checkResult(response.result));
+                }
+                this.incrementPage(response);
+            }
+            infiniteScroll.complete();
+        }, err => infiniteScroll.complete());
     }
 }

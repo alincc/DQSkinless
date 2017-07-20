@@ -31,10 +31,9 @@ export class PatientList implements OnInit {
     private previousPage: any;
     private oldPatients: any;
     private limit: any;
-    private seachPatientSubs: Subscription;
+    private searchPatientSubs: Subscription;
 
-    @Input()
-    private params;
+    @Input() private params;
 
     constructor(
         private loadingController: LoadingController,
@@ -97,13 +96,13 @@ export class PatientList implements OnInit {
         this.currentPage = 1;
         this.oldPatients = [];
 
-        if (this.seachPatientSubs) {
-            this.seachPatientSubs.unsubscribe();
+        if (this.searchPatientSubs) {
+            this.searchPatientSubs.unsubscribe();
         }
 
         if (this.hasValidInput) {
             this.isLoading.next(true);
-            this.seachPatientSubs = this.patientListService.seachPatient(Utilities.formatName(this.name), this.currentPage, this.limit).subscribe(response => {
+            this.searchPatientSubs = this.patientListService.seachPatient(Utilities.formatName(this.name), this.currentPage, this.limit).subscribe(response => {
                 if (response && response.status) {
                     this.patients = this.checkResult(response.result);
                     this.incrementPage(response);
@@ -134,11 +133,9 @@ export class PatientList implements OnInit {
     }
 
     public queue(patient) {
-        // TODO
         this.store.pendingQueue = patient;
         this.params.tabs.select(1);
         this.params.addQueueEmitter.emit(patient);
-
     }
 
     public patientListCallback = (params) => {

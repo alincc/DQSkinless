@@ -61,7 +61,7 @@
         </div>
     </form>
     <div class="user-list">
-        <div *ngIf="haveSearched && users && users.length === 0">User(s) not found</div>
+        <div class="speil" *ngIf="haveSearched && users && users.length === 0">User(s) not found</div>
         <ion-card *ngFor="let user of users" (click)="selectUser(user)">
             <ion-item>
                 <ion-avatar item-left>
@@ -75,5 +75,9 @@
                 <p>Contact No: {{ displayContacts(user.userContacts) }}</p>
             </ion-item>
         </ion-card>
+
+        <ion-infinite-scroll (ionInfinite)="doInfiniteSearch($event)">
+            <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
     </div>
 </ion-content>

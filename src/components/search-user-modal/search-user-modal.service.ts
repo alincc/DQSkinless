@@ -9,7 +9,7 @@ import { CONFIG } from '../../config/config';
 
 @Injectable()
 export class SearchUserModalService {
-    
+
     private userId: any;
     constructor(
         private http: HttpService,
@@ -29,56 +29,45 @@ export class SearchUserModalService {
     }
 
 
-    public getUsers(criteria, role) {
-        const doctorCriteria = this.createCriteria(criteria, 1);
-        const assistantCriteria = this.createCriteria(criteria, 2);
-        this.transformCriteria(doctorCriteria);
-        this.transformCriteria(assistantCriteria);
-
+    public getUsers(criteria, role, page, limit) {
         if (role === 1) {
+            const doctorCriteria = this.createCriteria(criteria, 1, page, limit);
+            this.transformCriteria(doctorCriteria);
+
             return this.getDoctors(doctorCriteria);
         } else if (role === 2) {
+            const assistantCriteria = this.createCriteria(criteria, 2, page, limit);
+            this.transformCriteria(assistantCriteria);
+
             return this.getAssistants(assistantCriteria);
         } else {
-            const users = [];
+            const allCriteria = this.createCriteria(criteria, undefined, page, limit);
+            this.transformCriteria(allCriteria);
 
-            return Observable.forkJoin([
-                this.getDoctors(doctorCriteria),
-                this.getAssistants(assistantCriteria)
-            ]).flatMap((data: any[]) => {
-
-                const doctors = data[0];
-                const assistants = data[1];
-
-                if (doctors && doctors.status) {
-                    doctors.result.forEach(doctor => users.push(doctor));
-                }
-
-                if (assistants && assistants.status) {
-                    assistants.result.forEach(assistant => users.push(assistant));
-                }
-
-                return Observable.of(users);
-            });
+            return this.getAll(allCriteria);
         }
     }
 
     private getDoctors(criteria) {
-        criteria.role = 1;
         return this.http.post(CONFIG.API.searchUser, criteria);
     }
 
     private getAssistants(criteria) {
-        criteria.role = 2;
         return this.http.post(CONFIG.API.searchUser, criteria);
     }
 
-    private createCriteria(criteria, role) {
+    private getAll(criteria) {
+        return this.http.post(CONFIG.API.searchUser, criteria);
+    }
+
+    private createCriteria(criteria, role, page, limit) {
         return {
             username: criteria.username,
             firstname: criteria.firstname,
             lastname: criteria.lastname,
-            role: role
+            role: role,
+            page: page,
+            limit: limit
         };
     }
 
