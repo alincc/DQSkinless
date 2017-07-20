@@ -14,6 +14,9 @@ export class ChatPage{
 	private msg: string;
 	@ViewChild(Content)
 	private content: Content;
+
+	@ViewChild('chatbox')
+	private chatbox: any;
 	private sending: boolean;
 
 	constructor(private service : ChatServices,
@@ -53,5 +56,10 @@ export class ChatPage{
 			console.log(err);
 			this.sending = false;
 		})
+	}
+
+	private shouldAdjustHeight(evt){
+		console.log(evt);
+		this.chatbox.getElementRef().clientHeight = evt.target.scrollHeight;
 	}
 }

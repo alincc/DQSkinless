@@ -6,11 +6,19 @@ chat-page{
 
 	.form-inline{
 		display: flex;
-		ion-input{
+		textarea{
 			background: $light;
+		    background: white;
+		    margin: 5px;
+		    border-radius: 3px;
+		    height: auto;
+		    padding: 8px;
+		    line-height: 15px;
+		    vertical-align: text-bottom;
 		}
 		.button{
 			width: 42px;
+			height: initial;
 		}
 	}
 

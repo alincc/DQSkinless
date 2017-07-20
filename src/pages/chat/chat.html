@@ -36,8 +36,8 @@
 <ion-footer>
 	<ion-toolbar color="secondary">
 	<form class="form-inline" (submit)="send()">
-	<ion-input placholder="Type a message" [(ngModel)]="msg" name="msg" [disabled]="sending"></ion-input>
-	<button ion-button clear icon-only [disabled]="!msg || sending"><ion-icon name="send"  [hidden]="sending" ></ion-icon><ion-spinner name="dots" [hidden]="!sending"></ion-spinner></button>
+	<ion-textarea #chatbox placholder="Type a message" [(ngModel)]="msg" name="msg" [disabled]="sending" rows="1" (keypress)="shouldAdjustHeight($event)"></ion-textarea>
+	<button ion-button clear icon-only [disabled]="!msg || sending" ><ion-icon name="send"  [hidden]="sending" ></ion-icon><ion-spinner name="dots" [hidden]="!sending"></ion-spinner></button>
 	
 	</form>
 	</ion-toolbar>

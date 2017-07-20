@@ -159,7 +159,7 @@ export class Images {
 		return new Promise((resolve, reject) => {
 			if(this.platform.is('cordova')){
 				this.getFromCache(image.imageId).then(response => {
-					resolve(response);
+					resolve(BASE64_PREFIX+response);
 				}, err => {
 					console.log(err);
 					// reject(err);
