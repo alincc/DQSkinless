@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ModalController, NavParams, ViewController } from 'ionic-angular';
 import { ArraySubject } from '../../shared/model/model';
 import { ConditionModal } from '../condition-modal/condition-modal.component';
@@ -12,9 +12,12 @@ import { Utilities } from '../../utilities/utilities';
 })
 export class PatientCondition {
 
-  @Input() condition: any;
+  @Input()
+  private model : any[];
+  @Output()
+  private modelChange : EventEmitter<any> = new EventEmitter<any>();
+
   @Input() patientId: any;
-  private conditions: ArraySubject = new ArraySubject([]);
 
   constructor(
     private modalController: ModalController,
@@ -43,11 +46,10 @@ export class PatientCondition {
 
     modal.onDidDismiss(condition => {
       if (condition) {
-        this.condition.patientId = this.patientId;
-        this.condition.description = condition.description;
-        this.condition.diagnosed = condition.diagnosed ? Utilities.transformDate(new Date(condition.diagnosed)) : Utilities.transformDate(new Date());
+        condition.patientId = this.patientId;
+        condition.diagnosed = condition.diagnosed ? Utilities.transformDate(new Date(condition.diagnosed)) : Utilities.transformDate(new Date());
         
-        this.createPatientCondition();
+        this.createPatientCondition(condition);
         
       }
     });
@@ -58,23 +60,24 @@ export class PatientCondition {
 
   public ngOnInit(){
      this.patientId = this.params.get('patientId');
-     this.condition = {};
+     
      this.getPatientConditions();
   }
 
   private getPatientConditions(){
 
     this.patientConditionService.getPatientConditionByPatientId(this.patientId).subscribe(response => {
-      if(response && response.status){
-        this.conditions.value = response.result;
+      if(response && response.status){        
+        this.model = response.result;
+        this.modelChange.emit(this.model);
       }
     });
 
   }
 
-  private createPatientCondition(){
+  private createPatientCondition(condition){
 
-    this.patientConditionService.createPatientCondition(this.condition).subscribe(response => {
+    this.patientConditionService.createPatientCondition(condition).subscribe(response => {
       if(response && response.status){
         this.getPatientConditions();
       }

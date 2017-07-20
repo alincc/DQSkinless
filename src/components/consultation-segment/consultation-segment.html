@@ -10,9 +10,9 @@
     </ion-card-header>
     <ion-card-content>
         <div class="segment-container" [ngSwitch]="segment">
-            <patient-allergy [(model)]="allergies" [patientId]="patientId"  *ngSwitchCase="segmentList.ALLERGIES"></patient-allergy>
-            <patient-condition *ngSwitchCase="segmentList.CONDITION"> </patient-condition>
-            <patient-medication *ngSwitchCase="segmentList.MEDICATION"></patient-medication>
+            <patient-allergy [(model)]="allergies" [patientId]="patientId" *ngSwitchCase="segmentList.ALLERGIES"></patient-allergy>
+            <patient-condition [(model)]="condition" [patientId]="patientId" *ngSwitchCase="segmentList.CONDITION"> </patient-condition>
+            <patient-medication [(model)]="medication" [patientId]="patientId" *ngSwitchCase="segmentList.MEDICATION"></patient-medication>
         </div>
     </ion-card-content>
 </ion-card>

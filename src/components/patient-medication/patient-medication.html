@@ -1,23 +1,15 @@
-<div>
-    <ion-list>
-        <ion-item class="medication" *ngFor="let medication of medications.value;let idx=index">
+<div class="patient-medication">
+    <div class="medication-list">
+        <div class="medication" *ngFor="let medication of model;let idx=index">
             <div>
-                {{medication?.description}}
-            </div>
-            <div>{{medication?.startDate | date:"MMM dd"}}</div>
-            <div item-right>
-                <ion-icon name="close" (click)="removeItem($event,medication, idx)" color="accent-dark"></ion-icon>
-            </div>
-            <!--<ion-card>
-                <ion-card-header>
-                    {{medication?.startDate | date:"MMM dd"}}
-                </ion-card-header>
-                <ion-card-content>
+                <h2>{{medication?.startDate | date:"MMM dd"}}</h2>
+                <p>
                     {{medication?.description}}
-                </ion-card-content>
-            </ion-card>-->
-        </ion-item>
-    </ion-list>
+                </p>
+            </div>
+            <ion-icon name="close" (click)="removeItem($event,medication, idx)" color="accent-dark"></ion-icon>
+        </div>
+    </div>
     <div text-right class="buttons">
         <button ion-button clear (click)="addMedication($event)"><ion-icon name="add" color="accent"></ion-icon>Add Medication</button>
     </div>

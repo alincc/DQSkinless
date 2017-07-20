@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ModalController, NavParams, ViewController } from 'ionic-angular';
 import { ArraySubject } from '../../shared/model/model';
 import { MedicationModal } from '../medication-modal/medication-modal.component';
@@ -12,9 +12,12 @@ import { Utilities } from '../../utilities/utilities';
 })
 export class PatientMedication implements OnInit{
 
-  @Input() medication: any;
+  @Input()
+  private model : any[];
+  @Output()
+  private modelChange : EventEmitter<any> = new EventEmitter<any>();
+
   @Input() patientId: any;
-  private medications: ArraySubject = new ArraySubject([]);
 
   constructor(
     private modalController: ModalController,
@@ -43,11 +46,10 @@ export class PatientMedication implements OnInit{
 
     modal.onDidDismiss(medication => {
       if (medication) {
-        this.medication.patientId = this.patientId;
-        this.medication.description = medication.description;
-        this.medication.startDate = medication.startDate ? Utilities.transformDate(new Date(medication.startDate)) : Utilities.transformDate(new Date());
+        medication.patientId = this.patientId;
+        medication.startDate = medication.startDate ? Utilities.transformDate(new Date(medication.startDate)) : Utilities.transformDate(new Date());
                 
-        this.createPatientMedication();
+        this.createPatientMedication(medication);
         
       }
     });
@@ -57,8 +59,7 @@ export class PatientMedication implements OnInit{
   }
 
   public ngOnInit(){
-     this.patientId = this.params.get('patientId');
-     this.medication = {};
+     this.patientId = this.params.get('patientId');     
      this.getPatientMedication();
   }
 
@@ -66,14 +67,16 @@ export class PatientMedication implements OnInit{
 
     this.patientMedicationService.getPatientMedicationByPatientId(this.patientId).subscribe(response => {
       if(response && response.status){
-        this.medications.value = response.result;
+        // this.medications.value = response.result;
+        this.model = response.result;
+        this.modelChange.emit(this.model);
       }
     })
   }
 
-  private createPatientMedication(){
+  private createPatientMedication(medication){
 
-    this.patientMedicationService.createPatientMedication(this.medication).subscribe(response => {
+    this.patientMedicationService.createPatientMedication(medication).subscribe(response => {
       if(response && response.status){
         this.getPatientMedication();
       }

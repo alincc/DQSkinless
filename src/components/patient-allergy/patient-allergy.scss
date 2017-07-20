@@ -1,5 +1,4 @@
 patient-allergy {
-
     .buttons {
         position: absolute;
         bottom: 0;
@@ -13,19 +12,23 @@ patient-allergy {
     >div {
         margin-bottom: 10%;
     }
-    .allergy-list{
+    .allergy-list {
         min-height: 100px;
-        padding: 5px;
-         .allergy{
+        padding: 0px 5px;
+        overflow-y: auto;
+        height: 120px;
+        .allergy {
             font-size: 14px;
             height: auto;
             display: flex;
             justify-content: space-between;
             line-height: 25px;
-            ion-icon{
+            margin: 14px 0;
+            ion-icon {
                 font-size: 24px;
             }
+            border-bottom: 2px;
+            border-bottom-style: solid;
         }
     }
-   
 }

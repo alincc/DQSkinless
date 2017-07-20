@@ -1,14 +1,15 @@
-<div>
-    <ion-list>
-        <ion-item class="condition" *ngFor="let condition of conditions.value;let idx=index">
+<div class="patient-condition">
+    <div class="condition-list">
+        <div class="condition" *ngFor="let condition of model;let idx=index">
             <div>
-                {{condition?.description}}
+                <h2>{{condition?.diagnosed | date:"MMM dd"}}</h2>
+                <p>
+                    {{condition?.description}}
+                </p>
             </div>
-            <div item-right>
-                <ion-icon name="close" (click)="removeItem($event,condition, idx)" color="accent-dark"></ion-icon>
-            </div>
-        </ion-item>
-    </ion-list>
+            <ion-icon name="close" (click)="removeItem($event,condition, idx)" color="accent-dark"></ion-icon>
+        </div>
+    </div>
     <div text-right class="buttons">
         <button ion-button clear (click)="addCondition($event)"><ion-icon name="add" color="accent"></ion-icon>Add Condition</button>
     </div>
