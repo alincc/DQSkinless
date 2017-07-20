@@ -21,15 +21,21 @@ export class UploadPhoto {
 		private alert: AlertController,
 		private platform : Platform) {
 		//commented due to saving of s3 connection
-		// this.images.getImage({
-		// 	bucketName : IMG_BUCKET.USER,
-		// 	folderName : this.storage.account.userId,
-		// 	ownerId : this.storage.account.userId,
-		// 	imageId : "13"
-		// }).then(response => {
-		// 	console.log(response);
-		// 	this. image= response;
-		// })
+		let account = this.storage.account;
+		this.images.getImageIDsOnFolder(IMG_BUCKET.USER, account.userId).subscribe(response =>{
+			if(response.status && response.result && response.result.length>0){
+				this.images.getImage({
+					bucketName : IMG_BUCKET.USER,
+					folderName : account.userId,
+					ownerId : account.userId,
+					imageId : response.result[0]
+				}).then(response => {
+					this.image = response;
+				});
+			}else{
+				console.log("no image found or new account is being created");
+			}
+		});
 	}
 
 	public openCamera() {
@@ -39,7 +45,7 @@ export class UploadPhoto {
 			destinationType: this.camera.DestinationType.DATA_URL,
 			correctOrientation: true
 		}).then((imageData) => {
-			this.image ='data:image/jpeg;base64,' + imageData;
+			this.image = BASE64_PREFIX + imageData;
 			this.content = imageData;
 			this.isLoading = false;
 		}, (err) => {
